@@ -27,7 +27,7 @@ import { HomeService } from 'src/app/pages/public/home/services/home.service';
 })
 export class AdvertPage implements OnInit {
   public advert$: Observable<Advert>;
-  public category$: Observable<Category>;
+  public category$: Observable<Category[]>;
   private form: FormGroup;
   private write: Subscription;
 
@@ -45,10 +45,7 @@ export class AdvertPage implements OnInit {
     this.getCategory();
   }
 
-  public selectCategory(
-    e: CustomEvent,
-    categoryAdvert: CategoryAdvert
-  ): Subscription {
+  public selectCategory(e: any, categoryAdvert: CategoryAdvert): Subscription {
     this.form = this.fb.group({
       id: categoryAdvert?.id || undefined,
       advertId: this.authAdvertService.getAdvert.id,

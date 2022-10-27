@@ -136,7 +136,7 @@ export class AdvertGaleryComponent implements OnInit {
     this.isOrder = false;
   }
 
-  public doReorder(ev: CustomEvent<ItemReorderEventDetail>): void {
+  public doReorder(ev: any): void {
     if (ev) {
       this.galery = ev.detail.complete(this.galery);
     }

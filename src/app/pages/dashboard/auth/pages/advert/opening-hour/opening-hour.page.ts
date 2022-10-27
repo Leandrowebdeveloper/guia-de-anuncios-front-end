@@ -29,7 +29,7 @@ export class OpeningHourPage implements OnInit {
   public end: string;
   public day: DaysOfTheWeek;
 
-  private form: FormGroup;
+  public form: FormGroup;
   private $openingHour: Subscription;
   private fields = {
     start: '',
@@ -93,15 +93,20 @@ export class OpeningHourPage implements OnInit {
 
   public setTime(
     setTime: 'start' | 'startInterval' | 'endInterval' | 'end',
-    dayOfTheWeek:
-      | 'domingo'
-      | 'segunda'
-      | 'terca'
-      | 'quarta'
-      | 'quinta'
-      | 'sexta'
-      | 'sabado'
+    dayOfTheWeek: string
   ): void {
+    const day = [
+      'domingo',
+      'segunda',
+      'terca',
+      'quarta',
+      'quinta',
+      'sexta',
+      'sabado',
+    ];
+    if (!day.includes(dayOfTheWeek)) {
+      return;
+    }
     const { value } = this.datetime;
     switch (dayOfTheWeek) {
       case 'domingo':

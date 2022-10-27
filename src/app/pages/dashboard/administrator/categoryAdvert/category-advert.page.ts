@@ -90,7 +90,7 @@ export class CategoryPage implements OnInit, OnDestroy {
     this.$dropd.unsubscribe();
   }
 
-  public doReorder(ev: CustomEvent<ItemReorderEventDetail>): void {
+  public doReorder(ev: any): void {
     if (ev) {
       this.sendOrder = true;
       this.category = ev.detail.complete(this.category);

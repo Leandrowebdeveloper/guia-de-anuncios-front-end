@@ -73,7 +73,7 @@
           <ion-item *ngFor="let category of categoryDrop;">
             <ion-thumbnail slot="start">
               <img
-                [src]="category.image?.url || './../../../../assets/thumbnail.svg'"
+                [src]="category?.image?.url || './../../../../assets/thumbnail.svg'"
                 title="Imagem do categorias."
                 alt="Imagem do categorias."
               />

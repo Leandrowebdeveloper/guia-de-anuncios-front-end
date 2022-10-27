@@ -6,18 +6,17 @@ import { Category } from 'src/app/interface';
   providedIn: 'root',
 })
 export class HomeService {
-  private icons = new BehaviorSubject<Category>(undefined);
-  constructor() {}
+  private category = new BehaviorSubject<Category[]>(undefined);
 
-  public get getIcons(): Category {
-    return this.icons.value;
+  public get getIcons(): Category[] {
+    return this.category.value;
   }
 
-  public set setIcons(value: Category) {
-    this.icons.next(value);
+  public set setIcons(value: Category[]) {
+    this.category.next(value);
   }
 
-  public asObservable(): Observable<Category> {
-    return this.icons.asObservable();
+  public asObservable(): Observable<Category[]> {
+    return this.category.asObservable();
   }
 }

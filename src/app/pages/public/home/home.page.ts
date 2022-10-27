@@ -10,7 +10,7 @@ import { HomeService } from './services/home.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  public category$: Observable<Category>;
+  public category$: Observable<Category[]>;
   public error$ = new Subject<boolean>();
 
   constructor(private homeService: HomeService) {}
@@ -19,12 +19,12 @@ export class HomePage implements OnInit {
     this.init();
   }
 
-  private init() {
-    this.category$ = this.homeService.asObservable().pipe(
+  private init(): Observable<Category[]> {
+    return (this.category$ = this.homeService.asObservable().pipe(
       catchError((error) => {
         this.error$.next(true);
         return EMPTY;
       })
-    );
+    ));
   }
 }

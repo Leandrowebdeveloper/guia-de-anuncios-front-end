@@ -41,7 +41,7 @@ export class AuthGuard
 
   resolve(): Observable<User[] & Category[] & Advert[]> {
     return this.init.boot().pipe(
-      tap((init: User[] & Category[] & Advert[]) => {
+      tap((init: User[] & Category[][] & Advert[]) => {
         this.homeService.setIcons = init[1];
         this.authAdvertService.setAdvert = init[2];
         this.confirmAuthenticationAndSetUser(init[0]);

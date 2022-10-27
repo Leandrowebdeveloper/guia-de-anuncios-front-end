@@ -1,11 +1,11 @@
 <app-header-component></app-header-component>
-
+<!-- 
 <ion-content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
   <ion-grid fixed>
     <ion-row *ngIf="(category$ | async);else Loading">
       <ion-col size="12" class="ion-no-padding">
         <app-search
-          *ngIf="category?.length > 10"
+          *ngIf="category && category?.length > 10"
           (search)="search($event)"
         ></app-search>
       </ion-col>
@@ -66,7 +66,7 @@
           <ion-item *ngFor="let category of categoryDrop;">
             <ion-thumbnail slot="start">
               <img
-                [src]="category.image?.url || './../../../../assets/thumbnail.svg'"
+                [src]="category?.image?.url || './../../../../assets/thumbnail.svg'"
                 title="Imagem do categorias."
                 alt="Imagem do categorias."
               />
@@ -77,7 +77,7 @@
                   [title]="'Nome: ' + category?.name"
                   [attr.data-message]="'Nome: ' + category?.name"
                 >
-                  {{ category?.name }}</ion-label
+                  {{ category?.title }}</ion-label
                 >
                 <div class="time">
                   <small>{{ category?.createdAt | time:'create' }}</small>
@@ -133,21 +133,21 @@
         </ion-card>
 
         <!-- Abilitados -->
-        <ng-template #Able>
+<!-- <ng-template #Able>
           <ion-list>
             <ion-reorder-group
               (ionItemReorder)="doReorder($event)"
               [disabled]="!isOrder"
             >
-              <ion-reorder *ngFor="let category of category">
+              <ion-reorder *ngFor="let item of category">
                 <ion-item
                   color="none"
                   button
-                  [routerLink]="['/painel-de-controle', 'admin', 'manutencao', 'categoria', category?.slug]"
+                  [routerLink]="['/painel-de-controle', 'admin', 'manutencao', 'categoria', item?.slug]"
                 >
                   <ion-thumbnail slot="start">
                     <img
-                      [src]="category.image?.url || './../../../../assets/thumbnail.svg'"
+                      [src]="item?.image?.url || './../../../../assets/thumbnail.svg'"
                       referrerpolicy="no-referrer"
                       title="Imagem do categorias."
                       alt="Imagem do categorias."
@@ -157,14 +157,14 @@
                   <div class="item">
                     <div>
                       <ion-label
-                        [title]="'Nome: ' + category?.name"
-                        [attr.data-message]="'Nome: ' + category?.name"
+                        [title]="'Nome: ' + item?.name"
+                        [attr.data-message]="'Nome: ' + item?.name"
                       >
-                        {{ category?.name }}</ion-label
+                        {{ item?.name }}</ion-label
                       >
                       <div class="time">
-                        <small>{{ category?.createdAt | time:'create' }}</small>
-                        <small>{{ category?.updatedAt | time:'update' }}</small>
+                        <small>{{ item?.createdAt | time:'create' }}</small>
+                        <small>{{ item?.updatedAt | time:'update' }}</small>
                       </div>
                     </div>
 
@@ -176,13 +176,13 @@
                         ></ion-icon>
                       </span>
                       <span
-                        [title]="category?.state ? 'Categoria está online' : 'Categoria está offline'"
-                        [attr.data-message]="category?.state ? 'Categoria está online' : 'Categoria está offline'"
+                        [title]="item?.state ? 'Categoria está online' : 'Categoria está offline'"
+                        [attr.data-message]="item?.state ? 'Categoria está online' : 'Categoria está offline'"
                       >
                         <ion-icon
                           color="medium"
                           slot="start"
-                          [name]="category?.state  ? 'eye': 'eye-off'"
+                          [name]="item?.state  ? 'eye': 'eye-off'"
                         ></ion-icon>
                       </span>
                     </div>
@@ -202,9 +202,9 @@
               </ion-text>
             </ion-card-content>
           </ion-card>
-        </ng-template>
+        </ng-template> -->
 
-        <ion-card *ngIf="!endListCategory">
+<!-- <ion-card *ngIf="!endListCategory">
           <ion-text color="primary" class="ion-text-center">
             <p>FIM</p>
             <p *ngIf="category">{{ category?.length }} categorias</p>
@@ -223,9 +223,9 @@
           </ion-infinite-scroll-content>
         </ion-infinite-scroll>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
 
-    <ng-template #Loading>
+<!-- <ng-template #Loading>
       <ion-row class="ion-margin-top">
         <ion-col size="12">
           <div *ngIf="error | async; else loadingNoError">error</div>
@@ -246,9 +246,8 @@
         </ion-col>
       </ion-row>
     </ng-template>
-  </ion-grid>
-
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  </ion-grid> -->
+<!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button
       size="small"
       color="primary"
@@ -275,6 +274,7 @@
       ><ion-icon name="save" color="light"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-</ion-content>
+</ion-content> -->
+-->
 
 <app-footer></app-footer>

@@ -72,7 +72,6 @@
               [checked]="category?.state"
               title="Alternar entre usuário conectado ou desligado."
               aria-label="Clique para alternar entre usuário conectado ou desligado."
-              [attr.aria-disabled]="'Botão alterar status ' + category?.blockade ? 'abilitado.' : 'desabilitado'"
             >
             </ion-toggle>
             <ion-icon
@@ -87,7 +86,6 @@
             (click)="name(category)"
             title="Alterar nome e sobrenome"
             aria-label="Clique para alterar nome e sobrenome"
-            [attr.aria-disabled]="'Botão alterar nome e sobrenome ' + category?.blockade ? 'abilitado.' : 'desabilitado'"
             button
           >
             <ion-icon name="create" slot="start"></ion-icon>
@@ -100,7 +98,6 @@
             (click)="destroy(category)"
             title="Excluir usuário"
             aria-label="Clique para excluir usuário"
-            [attr.aria-disabled]="'Botão excluir usuário ' + category?.blockade ? 'abilitado.' : 'desabilitado'"
             button
           >
             <ion-icon name="trash" slot="start"></ion-icon>
