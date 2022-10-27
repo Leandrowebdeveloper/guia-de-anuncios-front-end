@@ -1,0 +1,76 @@
+<ion-item-group>
+    <ion-item-divider color="primary">
+        <ion-label>Pesquizar por</ion-label>
+        <ion-icon slot="start" name="search"></ion-icon>
+    </ion-item-divider>
+
+
+        <ion-item button (click)="searchBy('firstName')" routerLink="/#" routerLinkActive="selected" detail="false"
+            routerDirection="forward" lines="inset">
+            <ion-label>Nome</ion-label>
+            <ion-icon [hidden]="!(isIcon === 'firstName')" color="success" slot="end" name="checkmark-done">
+            </ion-icon>
+        </ion-item>
+
+        <ion-item button (click)="searchBy('lastName')" routerLink="/#" routerLinkActive="selected" detail="false"
+            routerDirection="forward" lines="inset">
+            <ion-label>Sobrenome</ion-label>
+            <ion-icon [hidden]="!(isIcon === 'lastName')" color="success" slot="end" name="checkmark-done">
+            </ion-icon>
+        </ion-item>
+
+        <ion-item button (click)="searchBy('email')" routerLink="/#" routerLinkActive="selected" detail="false"
+            routerDirection="forward" lines="inset">
+            <ion-label>Email</ion-label>
+            <ion-icon [hidden]="!(isIcon === 'email')" color="success" slot="end" name="checkmark-done"></ion-icon>
+        </ion-item>
+
+        <ion-item-divider color="primary">
+            <ion-label>Ordenar por</ion-label>
+            <ion-icon slot="start" name="reorder-four"></ion-icon>
+        </ion-item-divider>
+
+        <ion-item button (click)="searchBy('name')" routerLink="/#" routerLinkActive="selected" detail="false"
+            routerDirection="forward" lines="inset">
+            <ion-label>Nome</ion-label>
+            <ion-icon [hidden]="!(isIcon === 'name')" color="success" slot="end" name="checkmark-done"></ion-icon>
+        </ion-item>
+
+        <ion-item button (click)="searchBy('state')" routerLink="/#" routerLinkActive="selected" detail="false"
+            routerDirection="forward" lines="inset">
+            <ion-label>Status</ion-label>
+            <ion-icon [hidden]="!(isIcon === 'state')" color="success" slot="end" name="checkmark-done"></ion-icon>
+        </ion-item>
+
+        <ion-item button (click)="searchBy('blockade')" routerLink="/#" routerLinkActive="selected" detail="false"
+            routerDirection="forward" lines="inset">
+            <ion-label>Bloqueados</ion-label>
+            <ion-icon [hidden]="!(isIcon === 'blockade')" color="success" slot="end" name="checkmark-done"></ion-icon>
+        </ion-item>
+
+        <ion-item-divider>
+            <ion-label>Data</ion-label>
+            <ion-icon slot="start" name="calendar"></ion-icon>
+        </ion-item-divider>
+
+        <ion-item button (click)="searchBy('createdAt')" routerLink="/#" routerLinkActive="selected" detail="false"
+            routerDirection="forward" lines="inset">
+            <ion-label>Registros</ion-label>
+            <ion-icon [hidden]="!(isIcon === 'createdAt')" color="success" slot="end" name="checkmark-done">
+            </ion-icon>
+        </ion-item>
+
+        <ion-item button (click)="searchBy('updatedAt')" routerLink="/#" routerLinkActive="selected" detail="false"
+            routerDirection="forward" lines="inset">
+            <ion-label>Atualizações</ion-label>
+            <ion-icon [hidden]="!(isIcon === 'updatedAt')" color="success" slot="end" name="checkmark-done">
+            </ion-icon>
+        </ion-item>
+
+        <ion-item button routerLink="/#" (click)="close()" routerLinkActive="selected" detail="false"
+            routerDirection="forward" lines="close">
+            <ion-label>fechar</ion-label>
+            <ion-icon slot="end" name="close"></ion-icon>
+        </ion-item>
+
+</ion-item-group>

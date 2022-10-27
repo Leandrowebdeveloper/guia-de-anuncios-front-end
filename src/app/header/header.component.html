@@ -1,0 +1,111 @@
+<ion-header [collapse]="hasIos ? 'condense' : 'fade'" [translucent]="!hasIos">
+  <ion-toolbar color="primary" *ngIf="user$ | async; let user">
+    <ion-buttons #icons slot="end">
+      <ion-button
+        *ngIf="user?.auth"
+        title="Painel de controle"
+        data-label="Painel de controle"
+        (click)="presentPopover($event)"
+      >
+        <ion-icon
+          size="large"
+          slot="icon-only"
+          name="options"
+          color="light"
+        ></ion-icon>
+      </ion-button>
+      <ion-popover #popover [isOpen]="isOpen" (didDismiss)="isOpen = false">
+        <ng-template>
+          <ion-content>
+            <ion-item-group>
+              <ion-item
+                [routerLink]="
+                  user?.level === '1'
+                    ? '/painel-de-controle/admin'
+                    : '/painel-de-controle'
+                "
+                (click)="close()"
+                button
+              >
+                <ion-label>Painel de controle</ion-label>
+                <ion-icon slot="end" name="grid"></ion-icon>
+              </ion-item>
+
+              <ion-item
+                [routerLink]="['/painel-de-controle', 'usuario']"
+                (click)="close()"
+                button
+              >
+                <ion-label>Usuário</ion-label>
+                <ion-avatar class="cursor-pointer" title="Imágem do usuário.">
+                  <ion-img
+                    [src]="user?.image?.url || './../../assets/avatar.svg'"
+                    referrerpolicy="no-referrer"
+                    [title]="'Usuário ' + user?.name"
+                    alt="Usuário"
+                  ></ion-img>
+                </ion-avatar>
+              </ion-item>
+
+              <ion-item
+                *ngIf="user?.level === '1'"
+                [routerLink]="['/painel-de-controle', 'admin', 'usuarios']"
+                routerDirection="back"
+                (click)="close()"
+                button
+              >
+                <ion-label>Usuários</ion-label>
+                <ion-icon slot="end" name="people-circle"></ion-icon>
+              </ion-item>
+
+              <ion-item
+                *ngIf="user?.level === '1'"
+                [routerLink]="['/painel-de-controle', 'admin', 'categorias']"
+                routerDirection="back"
+                (click)="close()"
+                button
+              >
+                <ion-label>Categorias</ion-label>
+                <ion-icon slot="end" name="list"></ion-icon>
+              </ion-item>
+
+              <ion-item
+                [routerLink]="
+                  user?.level === '1'
+                    ? '/painel-de-controle/admin/anuncios'
+                    : '/painel-de-controle/anuncio'
+                "
+                (click)="close()"
+                button
+              >
+                <ion-label>Anúncio</ion-label>
+                <ion-icon slot="end" name="newspaper"></ion-icon>
+              </ion-item>
+              <ion-item lines="none" (click)="close()" button>
+                <ion-label>Fechar</ion-label>
+                <ion-icon slot="end" name="close-circle"></ion-icon>
+              </ion-item>
+            </ion-item-group>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+    </ion-buttons>
+
+    <ion-buttons slot="start" class="ion-margin-start">
+      <ion-button class="logo">
+        <figure>
+          <ion-img
+            src="./../../assets/layout.svg"
+            class="cursor-pointer"
+            routerLink="/inicio"
+            routerDirection="forward"
+            alt="Montes belos"
+            title="www.montesbelos.app"
+          ></ion-img>
+        </figure>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<app-breadcrumbs></app-breadcrumbs>

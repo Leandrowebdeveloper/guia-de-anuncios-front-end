@@ -1,0 +1,186 @@
+<app-header-component></app-header-component>
+
+<ion-content [fullscreen]="true">
+  <ion-grid *ngIf="user$ | async;let user;" fixed>
+    <ion-card>
+      <!-- Avatar -->
+      <div class="container ion-margin-vertical">
+        <div
+          button
+          (click)="avatar(user)"
+          title="Adicionar á imagem do usuário."
+          aria-label="Clique para adicionar á imagem do usuário."
+          button
+        >
+          <ion-avatar>
+            <ion-img
+              [src]="user?.image?.url || './../../../../../../assets/avatar.svg'"
+              alt="Avatar"
+              title="Imagem do usuário"
+            ></ion-img>
+          </ion-avatar>
+          <ion-icon color="medium" size="large" name="camera"> </ion-icon>
+        </div>
+      </div>
+
+      <!-- Label -->
+      <ion-card-content>
+        <ion-card-header>
+          <ion-card-title>{{ user?.name }}</ion-card-title>
+          <ion-card-subtitle>
+            Plano:
+            <span [ngSwitch]="user?.plan">
+              <span *ngSwitchCase="'free'">Grátis</span>
+              <span *ngSwitchCase="'basic'">Basico</span>
+              <span *ngSwitchCase="'special'">Especial</span>
+            </span>
+            <br />
+            Tipo: {{ user?.level === '1' ? 'Administrador' : 'Colaborador' }}
+            <br />
+            Email: {{ user?.email }} <br />{{ user?.createdAt | time:'create' }}
+            <br />
+            {{ user?.updatedAt | time:'update' }}
+          </ion-card-subtitle>
+        </ion-card-header>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-item-group>
+      <ion-row>
+        <ion-col size-xl="6" size-lg="6" size-md="6" size-sm="6" size="12">
+          <ion-item-divider>
+            <ion-icon color="mediun" name="person" slot="start"></ion-icon>
+            <ion-label>Gerenciamento do usuário</ion-label>
+          </ion-item-divider>
+
+          <!-- Blockade -->
+          <ion-item>
+            <ion-label
+              >{{ user?.blockade ? 'Bloqueado' : 'Desbloqueado' }}</ion-label
+            >
+            <ion-toggle
+              slot="end"
+              (ionChange)="blockade(user)"
+              [checked]="user?.blockade"
+              title="Alternar entre usuário bloquear e desbloquear."
+              aria-label="Clique para alternar entre usuário bloquear e desbloquear."
+            ></ion-toggle>
+            <ion-icon
+              slot="start"
+              [name]="user?.blockade  ? 'stop': 'play'"
+            ></ion-icon>
+          </ion-item>
+
+          <!-- State -->
+          <ion-item [disabled]="user?.blockade">
+            <ion-label>{{ user?.state ? 'Conectado' : 'Desligado'}}</ion-label>
+            <ion-toggle
+              slot="end"
+              (ionChange)="state(user)"
+              [checked]="user?.state"
+              title="Alternar entre usuário conectado ou desligado."
+              aria-label="Clique para alternar entre usuário conectado ou desligado."
+              [attr.aria-disabled]="'Botão alterar status ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
+            >
+            </ion-toggle>
+            <ion-icon
+              slot="start"
+              [name]="user?.state  ? 'eye': 'eye-off'"
+            ></ion-icon>
+          </ion-item>
+
+          <!-- Level -->
+          <ion-item
+            [disabled]="user?.blockade"
+            detail="true"
+            (click)="level(user)"
+            title="Alterar senha"
+            aria-label="Clique para alterar senha"
+            [attr.aria-disabled]="'Botão alterar nivel do usuário ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
+            button
+          >
+            <ion-label
+              >{{ user?.level === '1' ? 'administrador' :
+              'Colaborador'}}</ion-label
+            >
+            <ion-icon
+              slot="start"
+              [name]="user?.level === '1' ? 'trophy': 'medal'"
+            ></ion-icon>
+          </ion-item>
+
+          <!-- Name -->
+          <ion-item
+            [disabled]="user?.blockade"
+            detail="true"
+            (click)="name(user)"
+            title="Alterar nome e sobrenome"
+            aria-label="Clique para alterar nome e sobrenome"
+            [attr.aria-disabled]="'Botão alterar nome e sobrenome ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
+            button
+          >
+            <ion-icon name="create" slot="start"></ion-icon>
+            <ion-label>Nome</ion-label>
+          </ion-item>
+
+          <!-- Email -->
+          <ion-item
+            [disabled]="user?.blockade"
+            detail="true"
+            (click)="email(user)"
+            title="Alterar email"
+            aria-label="Clique para alterar email"
+            [attr.aria-disabled]="'Botão alterar email ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
+            button
+          >
+            <ion-icon name="mail" slot="start"></ion-icon>
+            <ion-label>Email</ion-label>
+          </ion-item>
+
+          <!-- Passwprd -->
+          <ion-item
+            [disabled]="user?.blockade"
+            detail="true"
+            (click)="password(user)"
+            title="Alterar senha"
+            aria-label="Clique para alterar senha"
+            [attr.aria-disabled]="'Botão alterar senha ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
+            button
+          >
+            <ion-icon name="key" slot="start"></ion-icon>
+            <ion-label>Senha</ion-label>
+          </ion-item>
+
+          <!-- Delete -->
+          <ion-item
+            [disabled]="user?.blockade"
+            detail="true"
+            (click)="destroy(user)"
+            title="Excluir usuário"
+            aria-label="Clique para excluir usuário"
+            [attr.aria-disabled]="'Botão excluir usuário ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
+            button
+          >
+            <ion-icon name="trash" slot="start"></ion-icon>
+            <ion-label>Excluir</ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size-xl="6" size-lg="6" size-md="6" size-sm="6" size="12">
+          <ion-item-divider>
+            <ion-icon color="mediun" name="megaphone" slot="start"></ion-icon>
+            <ion-label>Gerenciamento do anúncio</ion-label>
+          </ion-item-divider>
+        </ion-col>
+
+        <ion-col size="12">
+          <ion-item-divider>
+            <ion-icon color="mediun" name="analytics" slot="start"></ion-icon>
+            <ion-label>Extatísticas</ion-label>
+          </ion-item-divider>
+        </ion-col>
+      </ion-row>
+    </ion-item-group>
+  </ion-grid>
+</ion-content>
+
+<app-footer></app-footer>

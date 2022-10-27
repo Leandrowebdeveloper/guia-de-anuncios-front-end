@@ -1,0 +1,167 @@
+<app-header-component-modal
+  label="Galeria de imagens"
+></app-header-component-modal>
+<ion-content>
+  <ion-accordion-group>
+    <ion-accordion value="first">
+      <ion-item (click)="onOff()" slot="header">
+        <ion-label>Armazenamento em nuvens</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <div class="col-12" *ngIf="galery.length > 0">
+          <ion-text class="info" [ngClass]="{'show': isOrder }">
+            <ul>
+              <li>1º Precione um item da lista</li>
+              <li>2º Arraste e soute na ordem desejada</li>
+              <li>3º Salve</li>
+            </ul>
+          </ion-text>
+          <ion-fab horizontal="end">
+            <ion-fab-button size="small">
+              <ion-icon name="ellipsis-vertical"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-list side="start">
+              <ion-fab-button
+                color="light"
+                size="small"
+                (click)="toggleAccordion()"
+                aria-message="Adicionar nova imagem a galeria."
+                title="Adicionar nova imagem a galeria."
+              >
+                <ion-icon name="add"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-button
+                [ngClass]="{'ion-hide': galery.length <= 1}"
+                color="light"
+                (click)="orderList()"
+                aria-message="Posicionar imagens da galeria."
+                title="Posicionar imagens da galeria."
+              >
+                <ion-icon name="reorder-three"></ion-icon>
+              </ion-fab-button>
+            </ion-fab-list>
+          </ion-fab>
+        </div>
+
+        <ion-reorder-group
+          (ionItemReorder)="doReorder($event)"
+          [disabled]="!isOrder"
+        >
+          <ion-reorder *ngFor="let file of galery; let i = index">
+            <ion-item class="list-item">
+              <ion-thumbnail slot="start">
+                <ion-img [src]="file?.url" alt="Imagem "></ion-img>
+              </ion-thumbnail>
+
+              <ion-icon
+                class="icon-order"
+                [ngClass]="{'show': isOrder}"
+                name="reorder-three"
+                color="medium"
+                slot="end"
+              ></ion-icon>
+              <ion-button
+                [ngClass]="{'ion-hide': isOrder}"
+                slot="end"
+                fill="clear"
+                (click)="destroyGalery(file, i)"
+                aria-label="Excluir imagem da galeria de anúncios."
+                title="Excluir imagem da galeria de anúncios."
+              >
+                <ion-icon slot="icon-only" name="trash"></ion-icon>
+              </ion-button>
+            </ion-item>
+          </ion-reorder>
+        </ion-reorder-group>
+
+        <div *ngIf="galery.length === 0" class="d-flex">
+          <ion-text color="primary" class="ion-text-center">
+            <p>Não a imagens em nuvens</p>
+            <ion-button (click)="toggleAccordion()" shape="round">
+              <ion-icon
+                slot="start"
+                name="image"
+                class="ion-margin-start"
+              ></ion-icon>
+              Adicionar imagens
+            </ion-button>
+          </ion-text>
+        </div>
+        <div [ngClass]="{'footer': isOrder}">
+          <ion-fab
+            class="fadeOut"
+            [ngClass]="{fadeIn: isOrder}"
+            horizontal="center"
+            slot="fixed"
+            title="Salvar ordem da galeria."
+            aria-message="Salvar ordem da galeria."
+          >
+            <ion-fab-button size="small" color="primary" (click)="saveOrder()"
+              ><ion-icon name="save" color="light"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </div>
+      </div>
+    </ion-accordion>
+
+    <ion-accordion value="second">
+      <ion-item (click)="onOff()" slot="header">
+        <ion-label>Armazenamento local</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-item
+          class="item-local"
+          *ngFor="let file of imagesStorage; let i = index"
+        >
+          <ion-spinner
+            [hidden]="!(spinner === i)"
+            name="crescent"
+          ></ion-spinner>
+          <ion-thumbnail slot="start">
+            <ion-img [src]="file?.data" alt="Imagem"></ion-img>
+          </ion-thumbnail>
+
+          <ion-button
+            slot="end"
+            fill="clear"
+            (click)="startUpload(file, i)"
+            aria-label="Salvar imagem na galeria."
+            title="Salvar imagem na galeria."
+          >
+            <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+          </ion-button>
+
+          <ion-button
+            slot="end"
+            fill="clear"
+            (click)="deleteImage(file, i)"
+            aria-label="Excluir imagem da galeria."
+            title="Excluir imagem da galeria."
+          >
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <div *ngIf="imagesStorage.length === 0">
+          <ion-text color="primary" class="ion-text-center">
+            <p>Não a imagem local armazenada</p>
+          </ion-text>
+        </div>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+  <ion-fab
+    class="fadeOut"
+    [ngClass]="{fadeIn: isButton}"
+    vertical="bottom"
+    horizontal="center"
+    slot="fixed"
+  >
+    <ion-fab-button
+      (click)="selectImage()"
+      title="Selecione um imagem"
+      aria-label="Carregar uma imagem ou tirar uma foto."
+    >
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

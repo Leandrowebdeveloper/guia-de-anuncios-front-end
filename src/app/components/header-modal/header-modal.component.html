@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons [slot]="isPlt ? 'end' : 'start'">
+      <ion-back-button
+        [icon]="isPlt ? 'close' : 'arrow-back'"
+        mode="md"
+        defaultHref=""
+        (click)="close()"
+      ></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ label }}</ion-title>
+  </ion-toolbar>
+</ion-header>

@@ -1,0 +1,52 @@
+<app-header-component-modal label="Galeria de imagens"></app-header-component-modal>
+<ion-content >
+
+
+    <ion-list class="d-flex">
+
+        <h3 class="ion-padding ion-text-center">Por favor, selecione a imagem!</h3>
+
+        <ion-item>
+            <ion-label> Imagem do usuário</ion-label>
+
+            <ion-avatar class="ion-margin-horizontal" slot="start">
+                <ion-img [src]="avatar?.url" alt="Imagem do usuário"></ion-img>
+            </ion-avatar>
+
+            <ion-button [hidden]="!avatar?.filename" slot="end" fill="clear"
+                aria-label="Excluir imagem do usuário." (click)="destroyAvatar()">
+                <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+
+        </ion-item>
+
+
+
+        <ion-item *ngFor="let file of images; let i = index">
+
+            <ion-spinner [hidden]="!(spinner === i)" name="crescent"></ion-spinner>
+            <ion-thumbnail slot="start">
+                <ion-img [src]="file?.data" alt="Imagem "></ion-img>
+            </ion-thumbnail>
+
+            <ion-button slot="end" fill="clear" (click)="startUpload(file, i)"
+                aria-label="Salvar imagem do usuário.">
+                <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+            </ion-button>
+
+            <ion-button slot="end" fill="clear" (click)="deleteImage(file, i)"
+                aria-label="Excluir imagem da galeria de usuário.">
+                <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+
+        </ion-item>
+    </ion-list>
+
+    <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+        <ion-fab-button (click)="selectImage()" title="Selecione um imagem"
+            aria-label="Carregar uma imagem ou tirar uma foto.">
+            <ion-icon name="camera"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+</ion-content>

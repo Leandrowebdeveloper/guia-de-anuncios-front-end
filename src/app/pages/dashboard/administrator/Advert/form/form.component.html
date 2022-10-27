@@ -1,0 +1,50 @@
+<app-header-component-modal [label]="label"></app-header-component-modal>
+
+<ion-content [fullscreen]="true">
+  <ion-grid fixed>
+    <!-- Email info -->
+    <ion-card [hidden]="action !== 'email'">
+      <ion-card-header color="warning">
+        <ion-card-subtitle color="light">
+          &#9679; Insira um email válido.<br />
+          &#9679; Será enviado uma menssagem com um prazo de 10 minutos a partir
+          do seu recebimento.<br />
+          &#9679; Verifique em sua caixa de entrada de emails.<br />
+          &#9679; Clique no botão alterar email.
+        </ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <!-- Destroy info -->
+    <ion-card [hidden]="action !== 'destroy'">
+      <ion-card-header color="warning">
+        <ion-card-title>Atenção!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="ion-margin-top">
+        <p>Você está prestes a excluir uma categoria.</p>
+        <p>
+          Esta ação tera um prazo de 90 dias para ser desfeita após está data
+          todos os dados serão permanentemente excluido do sistema.
+        </p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Destroy info -->
+    <ion-card [hidden]="action !== 'drop'">
+      <ion-card-header color="warning">
+        <ion-card-title>Atenção!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="ion-margin-top">
+        <p>Todos os dados da categoria serão descartados.</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Form -->
+    <app-form
+      (submitDataForm)="onSubmit($event)"
+      (exportForm)="importForm($event)"
+      [inputConfig]="config"
+      [attrButton]="attrButton"
+    ></app-form>
+  </ion-grid>
+</ion-content>

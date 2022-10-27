@@ -1,0 +1,101 @@
+<ion-footer>
+  <ion-toolbar color="primary" *ngIf="user$ | async;let user;">
+    <ion-buttons class="footer">
+      <span class="ion-text-center">
+        <ion-button
+          title="Pagína inicíal."
+          [routerLink]="['/inicio']"
+          routerLinkActive="router-link-active"
+        >
+          <ion-icon
+            size="large"
+            color="light"
+            slot="icon-only"
+            name="home"
+          ></ion-icon>
+        </ion-button>
+        <ion-title size="small">Início</ion-title>
+      </span>
+      <span class="ion-text-center">
+        <ion-button
+          title="CLassificados."
+          [routerLink]="['/categoria', 'classificados']"
+          routerLinkActive="router-link-active"
+        >
+          <ion-icon
+            size="large"
+            color="light"
+            slot="icon-only"
+            name="newspaper"
+          ></ion-icon>
+        </ion-button>
+        <ion-title size="small">Classificados</ion-title>
+      </span>
+      <span class="ion-text-center" *ngIf="user?.auth">
+        <ion-button
+          class="button-avatar"
+          [routerLink]="user.level === '1' ? '/painel-de-controle/admin/usuario' : '/painel-de-controle/usuario'"
+        >
+          <ion-avatar class="cursor-pointer" title="Imágem do usuário.">
+            <ion-img
+              [src]="user?.image?.url||'./../../assets/avatar.svg'"
+              referrerpolicy="no-referrer"
+              [title]="'Usuário ' + user?.name"
+              alt="Usuário"
+            ></ion-img>
+          </ion-avatar>
+        </ion-button>
+        <ion-title size="small">Usuário</ion-title>
+      </span>
+      <span class="ion-text-center" *ngIf="!user?.auth">
+        <ion-button
+          *ngIf="!user?.auth"
+          routerLink="/cadastrar"
+          routerLinkActive="router-link-active"
+          title="Cadastrar de usuários."
+        >
+          <ion-icon
+            size="large"
+            slot="icon-only"
+            color="light"
+            name="create"
+          ></ion-icon>
+        </ion-button>
+        <ion-title size="small">Cadastrar</ion-title>
+      </span>
+      <span class="ion-text-center" *ngIf="!user?.auth">
+        <ion-button
+          *ngIf="!user?.auth"
+          routerLink="/entrar"
+          routerLinkActive="router-link-active"
+          title="Acesso ao sistema."
+        >
+          <ion-icon
+            size="large"
+            slot="icon-only"
+            color="light"
+            name="log-in"
+          ></ion-icon>
+        </ion-button>
+        <ion-title size="small">Entrar</ion-title>
+      </span>
+      <span class="ion-text-center" *ngIf="user?.auth">
+        <ion-button
+          [class]="user?.level === '2' ? 'ion-margin-horizontal cursor-pointer' : 'ion-margin-end cursor-pointer'"
+          [routerLink]="['/sair']"
+          title="Sair do sistema"
+          data-label="Sair do sistema"
+          routerDirection="back"
+        >
+          <ion-icon
+            size="large"
+            slot="icon-only"
+            name="log-out"
+            color="light"
+          ></ion-icon>
+        </ion-button>
+        <ion-title size="small">Sair</ion-title>
+      </span>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

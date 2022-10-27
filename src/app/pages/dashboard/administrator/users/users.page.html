@@ -1,0 +1,224 @@
+<app-header-component></app-header-component>
+
+<ion-content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
+  <ion-grid fixed>
+    <ion-row *ngIf="(users$ | async);else Loading">
+      <ion-col size="12" class="ion-no-padding">
+        <app-search
+          *ngIf="users?.length > 10"
+          (search)="search($event)"
+        ></app-search>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-chip
+          [routerLink]="['/painel-de-controle', 'admin', 'usuarios']"
+          [color]="!toggleListUser ? 'success' : 'secondary'"
+          title="Usuários abilitados"
+          routerDirection="back"
+        >
+          <ion-icon
+            name="list-circle"
+            [color]="!toggleListUser ? 'success' : 'dark'"
+          ></ion-icon>
+          <ion-label>Abilitados</ion-label>
+        </ion-chip>
+
+        <ion-chip
+          [routerLink]="['/painel-de-controle', 'admin', 'usuarios', 'excluidos']"
+          [color]="toggleListUser ? 'success' : 'secondary'"
+          title="Usuários excluidos"
+          routerDirection="back"
+        >
+          <ion-icon
+            name="trash"
+            [color]="toggleListUser ? 'success' : 'dark'"
+          ></ion-icon>
+          <ion-label>Excluidos</ion-label>
+        </ion-chip>
+      </ion-col>
+
+      <!-- excluidos -->
+      <ion-col size="12">
+        <ion-list *ngIf="toggleListUser;else Able">
+          <ion-item *ngFor="let user of usersDrop;" color="none">
+            <ion-avatar slot="start">
+              <img
+                [src]="user.image?.url || './../../../../assets/avatar.svg'"
+                title="Imagem do usuário."
+                alt="Imagem do usuário."
+              />
+            </ion-avatar>
+            <div class="item">
+              <div>
+                <ion-label
+                  [title]="'Nome: ' + user?.name"
+                  [attr.data-message]="'Nome: ' + user?.name"
+                >
+                  {{ user?.name }}</ion-label
+                >
+                <div class="time">
+                  <small>{{ user?.createdAt | time:'create' }}</small>
+                  <small>{{ user?.updatedAt | time:'update' }}</small>
+                </div>
+              </div>
+            </div>
+
+            <ion-button
+              (click)="destroy(user)"
+              class="cursor-pointer"
+              title="Exclui permanentemente"
+              data-message="Exclui permanentemente"
+              color="none"
+            >
+              <ion-icon slot="icon-only" color="danger" name="trash"></ion-icon>
+            </ion-button>
+            <ion-button
+              (click)="restore(user)"
+              class="cursor-pointer"
+              title="Restaurar usuário"
+              data-message="Restaurar usuário"
+              color="none"
+            >
+              <ion-icon
+                slot="icon-only"
+                color="success"
+                name="play-back"
+              ></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+
+        <ion-card *ngIf="usersDrop?.length === 0">
+          <ion-card-content>
+            <ion-text color="primary" class="ion-text-center">
+              <p style="font-size: 1.5em">Não a usuários exluidos</p>
+              <ion-button
+                expand="block"
+                [routerLink]="['/painel-de-controle', 'admin', 'usuarios']"
+              >
+                <ion-icon slot="icon-only" name="list-circle"></ion-icon>
+                &nbsp; listar usuários
+              </ion-button>
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+
+        <!--  -->
+        <ng-template #Able>
+          <ion-list>
+            <ion-item
+              color="none"
+              button
+              *ngFor="let user of users"
+              [routerLink]="['/painel-de-controle', 'admin', 'manutencao', 'usuario', user?.slug]"
+            >
+              <ion-avatar slot="start">
+                <img
+                  [src]="user.image?.url || './../../../../assets/avatar.svg'"
+                  referrerpolicy="no-referrer"
+                  title="Imagem do usuário."
+                  alt="Imagem do usuário."
+                />
+              </ion-avatar>
+
+              <div class="item">
+                <div>
+                  <ion-label
+                    [title]="'Nome: ' + user?.name"
+                    [attr.data-message]="'Nome: ' + user?.name"
+                  >
+                    {{ user?.name }}</ion-label
+                  >
+                  <div class="time">
+                    <small>{{ user?.createdAt | time:'create' }}</small>
+                    <small>{{ user?.updatedAt | time:'update' }}</small>
+                  </div>
+                </div>
+
+                <div>
+                  <span
+                    [title]="user?.blockade ? 'Usuário está bloqueado' : 'Usuário está desbloqueado'"
+                    [attr.data-message]="user?.blockade ? 'Usuário está bloqueado' : 'Usuário está desbloqueado'"
+                  >
+                    <ion-icon
+                      color="medium"
+                      slot="start"
+                      [name]="user?.blockade  ? 'stop': 'play'"
+                    ></ion-icon>
+                  </span>
+
+                  <span
+                    [title]="user?.state ? 'Usuário está online' : 'Usuário está offline'"
+                    [attr.data-message]="user?.state ? 'Usuário está online' : 'Usuário está offline'"
+                  >
+                    <ion-icon
+                      color="medium"
+                      slot="start"
+                      [name]="user?.state  ? 'eye': 'eye-off'"
+                    ></ion-icon>
+                  </span>
+                </div>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ng-template>
+
+        <ion-card *ngIf="!endListUser">
+          <ion-text color="primary" class="ion-text-center">
+            <p>FIM</p>
+            <p *ngIf="users">{{ users?.length }} usuários</p>
+            <p *ngIf="usersDrop">{{ usersDrop?.length }} usuários</p>
+          </ion-text>
+        </ion-card>
+
+        <ion-infinite-scroll
+          (ionInfinite)="findMoreUsers($event)"
+          *ngIf="endListUser"
+        >
+          <ion-infinite-scroll-content
+            loadingSpinner="bubbles"
+            loadingText="Carregando mais dados…"
+          >
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      </ion-col>
+    </ion-row>
+
+    <ng-template #Loading>
+      <ion-row class="ion-margin-top">
+        <ion-col size="12">
+          <div *ngIf="error | async; else loadingNoError">error</div>
+          <ng-template #loadingNoError>
+            <span size="12" class="ion-padding-bottom ion-padding-horizontal">
+              <ion-skeleton-text animated class="search"></ion-skeleton-text>
+            </span>
+            <span *ngFor="let item of sizeSkeleton">
+              <div class="skeleton">
+                <ion-skeleton-text animated class="avatar"></ion-skeleton-text>
+                <div>
+                  <ion-skeleton-text animated class="title"></ion-skeleton-text>
+                  <ion-skeleton-text animated class="line"></ion-skeleton-text>
+                </div>
+              </div>
+            </span>
+          </ng-template>
+        </ion-col>
+      </ion-row>
+    </ng-template>
+  </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button
+      size="small"
+      color="primary"
+      class="fab"
+      [ngClass]="{show: fab}"
+      (click)="toTop()"
+    >
+      <ion-icon name="arrow-up-circle" color="light"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<app-footer></app-footer>
