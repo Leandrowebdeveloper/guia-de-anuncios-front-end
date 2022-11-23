@@ -298,6 +298,20 @@ export class ConfigForm {
         max: null,
       },
     },
+    plan: {
+      name: 'plan',
+      label: 'Plano',
+      placeholder: 'Selecione um plano',
+      type: 'radio',
+      actionLabel: '',
+      readonly: false,
+      msg: {
+        invalid: 'inválido!',
+        empty: 'obrigatório!',
+        min: null,
+        max: null,
+      },
+    },
     passwordCurrent: {
       name: 'passwordCurrent',
       label: 'Senha atual',

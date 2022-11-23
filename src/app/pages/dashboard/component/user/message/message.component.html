@@ -1,0 +1,19 @@
+<ion-card *ngIf="user?.blockade" class="ion-margin-vertical">
+  <ion-card-header color="warning">
+    <ion-card-subtitle>Atenção</ion-card-subtitle>
+    <ion-card-title>Usuário bloqueado</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <dl>
+      <dt style="margin-bottom: 16px"><em>Sr.ª {{ user?.name }}</em></dt>
+      <dd>
+        Você foi bloqueado temporariamente. Por motivos de violação dos termos
+        de uso do aplicativo.
+      </dd>
+      <dd>
+        Para esclarecimentos entre em contato com aplicativo:
+        <a href="http://#" target="_blank">whatsApp</a>
+      </dd>
+    </dl>
+  </ion-card-content>
+</ion-card>

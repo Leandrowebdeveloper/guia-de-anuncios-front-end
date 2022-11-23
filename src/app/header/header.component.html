@@ -10,7 +10,7 @@
         <ion-icon
           size="large"
           slot="icon-only"
-          name="options"
+          name="menu"
           color="light"
         ></ion-icon>
       </ion-button>
@@ -18,6 +18,7 @@
         <ng-template>
           <ion-content>
             <ion-item-group>
+              <!-- Painel de control -->
               <ion-item
                 [routerLink]="
                   user?.level === '1'
@@ -28,9 +29,45 @@
                 button
               >
                 <ion-label>Painel de controle</ion-label>
-                <ion-icon slot="end" name="grid"></ion-icon>
+                <ion-icon slot="end" name="speedometer"></ion-icon>
+              </ion-item>
+              <!-- Lista de usuarios  -->
+              <ion-item
+                *ngIf="user?.level === '1'"
+                [routerLink]="['/painel-de-controle', 'admin', 'usuarios']"
+                (click)="close()"
+                button
+              >
+                <ion-label>Usuários</ion-label>
+                <ion-icon slot="end" name="people-circle"></ion-icon>
+              </ion-item>
+              <!-- Categorias -->
+              <ion-item
+                *ngIf="user?.level === '1'"
+                [routerLink]="['/painel-de-controle', 'admin', 'categorias']"
+                (click)="close()"
+                button
+              >
+                <ion-label>Categorias</ion-label>
+                <ion-icon slot="end" name="list"></ion-icon>
+              </ion-item>
+              <!-- Lista de anuncios -->
+              <ion-item
+                lines="none"
+                *ngIf="user?.level === '1'"
+                [routerLink]="['/painel-de-controle', 'admin', 'anuncios']"
+                (click)="close()"
+                button
+              >
+                <ion-label>Anúncios</ion-label>
+                <ion-icon slot="end" name="megaphone"></ion-icon>
               </ion-item>
 
+              <ion-item-divider color="light" *ngIf="user?.level === '1'">
+                <ion-label color="medium"> Individual </ion-label>
+              </ion-item-divider>
+
+              <!-- Usuario -->
               <ion-item
                 [routerLink]="['/painel-de-controle', 'usuario']"
                 (click)="close()"
@@ -46,41 +83,20 @@
                   ></ion-img>
                 </ion-avatar>
               </ion-item>
-
+              <!-- Anuncio -->
               <ion-item
-                *ngIf="user?.level === '1'"
-                [routerLink]="['/painel-de-controle', 'admin', 'usuarios']"
-                routerDirection="back"
-                (click)="close()"
-                button
-              >
-                <ion-label>Usuários</ion-label>
-                <ion-icon slot="end" name="people-circle"></ion-icon>
-              </ion-item>
-
-              <ion-item
-                *ngIf="user?.level === '1'"
-                [routerLink]="['/painel-de-controle', 'admin', 'categorias']"
-                routerDirection="back"
-                (click)="close()"
-                button
-              >
-                <ion-label>Categorias</ion-label>
-                <ion-icon slot="end" name="list"></ion-icon>
-              </ion-item>
-
-              <ion-item
-                [routerLink]="
-                  user?.level === '1'
-                    ? '/painel-de-controle/admin/anuncios'
-                    : '/painel-de-controle/anuncio'
-                "
+                [routerLink]="['/painel-de-controle', 'anuncio']"
                 (click)="close()"
                 button
               >
                 <ion-label>Anúncio</ion-label>
-                <ion-icon slot="end" name="newspaper"></ion-icon>
+                <ion-icon slot="end" name="megaphone"></ion-icon>
               </ion-item>
+              <ion-item [routerLink]="['/sair']" (click)="close()" button>
+                <ion-label>Sair</ion-label>
+                <ion-icon slot="end" name="log-out"></ion-icon>
+              </ion-item>
+
               <ion-item lines="none" (click)="close()" button>
                 <ion-label>Fechar</ion-label>
                 <ion-icon slot="end" name="close-circle"></ion-icon>

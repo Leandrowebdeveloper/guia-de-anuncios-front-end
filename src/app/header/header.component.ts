@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -11,6 +12,7 @@ import {
   Animation,
   Platform,
   IonPopover,
+  NavController,
 } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
@@ -21,6 +23,7 @@ import { AuthService } from '../services/auth/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
+  @Input() hidden?: boolean;
   @ViewChild('icons', { static: false }) figure: ElementRef;
   @ViewChild('popover') popover: IonPopover;
 

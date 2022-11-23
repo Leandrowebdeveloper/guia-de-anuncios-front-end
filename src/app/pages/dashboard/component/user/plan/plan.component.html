@@ -1,0 +1,32 @@
+<!-- Plano -->
+<ion-item
+  *ngIf="pageEnbled"
+  [disabled]="user?.blockade"
+  detail="true"
+  (click)="plan()"
+  title="Alterar plano."
+  aria-label="Clique para alterar plano"
+  [attr.aria-disabled]="
+    'Botão alterar plano do usuário ' + user?.blockade
+      ? 'abilitado.'
+      : 'desabilitado.'
+  "
+  button
+>
+  <ion-label *ngIf="user?.plan === 'free'">Grátis</ion-label>
+  <ion-icon *ngIf="user?.plan === 'free'" slot="start" name="trophy"></ion-icon>
+
+  <ion-label *ngIf="user?.plan === 'basic'">Básico</ion-label>
+  <ion-icon
+    *ngIf="user?.plan === 'basic'"
+    slot="start"
+    name="trophy"
+  ></ion-icon>
+
+  <ion-label *ngIf="user?.plan === 'special'">Especial</ion-label>
+  <ion-icon
+    *ngIf="user?.plan === 'special'"
+    slot="start"
+    name="trophy"
+  ></ion-icon>
+</ion-item>

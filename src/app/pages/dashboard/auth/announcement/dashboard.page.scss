@@ -1,0 +1,18 @@
+.d-flex {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  ion-button {
+    flex: 1;
+  }
+}
+.separaitor::before {
+  content: "";
+  display: block;
+  padding-left: 0.5px;
+  padding-right: 0.5px;
+  background-color: var(--ion-color-medium);
+  height: 100vw;
+  margin-left: 5px;
+  margin-right: 5px;
+}

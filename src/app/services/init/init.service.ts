@@ -1,4 +1,4 @@
-import { Advert } from './../../interface/index';
+import { Announcement } from './../../interface/index';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from 'src/app/services/http/http.service';
@@ -12,15 +12,17 @@ import { StorageService } from '../storage/storage.service';
 })
 /**
  * @class InitService
- * @extends HttpService<User[] & Category[] & Advert[]>
+ * @extends HttpService<User[] & Category[] & Announcement[]>
  */
-export class InitService extends HttpService<User[] & Category[] & Advert[]> {
+export class InitService extends HttpService<
+  User[] & Category[] & Announcement[]
+> {
   constructor(public http: HttpClient, public storageService: StorageService) {
     super(http, storageService);
     this.setApi = `init`;
   }
 
-  public boot(): Observable<User[] & Category[] & Advert[]> {
+  public boot(): Observable<User[] & Category[] & Announcement[]> {
     return this.findAll();
   }
 }

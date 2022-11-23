@@ -10,10 +10,10 @@ const routes: Routes = [
       import('../pages/public/home/home.module').then((m) => m.HomePageModule),
   },
   {
-    path: 'categoria/:advertisement',
+    path: 'categoria/:announcement',
     loadChildren: () =>
-      import('../pages/public/advertisement/advertisement.module').then(
-        (m) => m.AdvertisementPageModule
+      import('../pages/public/announcement/announcement.module').then(
+        (m) => m.AnnouncementPageModule
       ),
   },
   {

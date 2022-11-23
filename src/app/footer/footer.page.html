@@ -1,6 +1,7 @@
 <ion-footer>
   <ion-toolbar color="primary" *ngIf="user$ | async;let user;">
     <ion-buttons class="footer">
+      <!-- Home -->
       <span class="ion-text-center">
         <ion-button
           title="Pagína inicíal."
@@ -16,6 +17,8 @@
         </ion-button>
         <ion-title size="small">Início</ion-title>
       </span>
+
+      <!-- CLassificados -->
       <span class="ion-text-center">
         <ion-button
           title="CLassificados."
@@ -26,11 +29,31 @@
             size="large"
             color="light"
             slot="icon-only"
-            name="newspaper"
+            src="./../../assets/ion-icon/classificad.svg"
           ></ion-icon>
         </ion-button>
         <ion-title size="small">Classificados</ion-title>
       </span>
+
+      <!-- Anúncio -->
+      <span class="ion-text-center" *ngIf="user?.auth">
+        <ion-button
+          [class]="user?.level === '2' ? 'ion-margin-horizontal cursor-pointer' : 'ion-margin-end cursor-pointer'"
+          [routerLink]="['/painel-de-controle', 'anuncio']"
+          title="Gerenciamento de anúncio"
+          data-label="Gerenciamento de anúncio"
+        >
+          <ion-icon
+            size="large"
+            slot="icon-only"
+            name="megaphone"
+            color="light"
+          ></ion-icon>
+        </ion-button>
+        <ion-title size="small">Anúncio</ion-title>
+      </span>
+
+      <!-- Usuário -->
       <span class="ion-text-center" *ngIf="user?.auth">
         <ion-button
           class="button-avatar"
@@ -47,6 +70,8 @@
         </ion-button>
         <ion-title size="small">Usuário</ion-title>
       </span>
+
+      <!-- Cadastrar -->
       <span class="ion-text-center" *ngIf="!user?.auth">
         <ion-button
           *ngIf="!user?.auth"
@@ -63,6 +88,8 @@
         </ion-button>
         <ion-title size="small">Cadastrar</ion-title>
       </span>
+
+      <!-- Login -->
       <span class="ion-text-center" *ngIf="!user?.auth">
         <ion-button
           *ngIf="!user?.auth"
@@ -78,23 +105,6 @@
           ></ion-icon>
         </ion-button>
         <ion-title size="small">Entrar</ion-title>
-      </span>
-      <span class="ion-text-center" *ngIf="user?.auth">
-        <ion-button
-          [class]="user?.level === '2' ? 'ion-margin-horizontal cursor-pointer' : 'ion-margin-end cursor-pointer'"
-          [routerLink]="['/sair']"
-          title="Sair do sistema"
-          data-label="Sair do sistema"
-          routerDirection="back"
-        >
-          <ion-icon
-            size="large"
-            slot="icon-only"
-            name="log-out"
-            color="light"
-          ></ion-icon>
-        </ion-button>
-        <ion-title size="small">Sair</ion-title>
       </span>
     </ion-buttons>
   </ion-toolbar>

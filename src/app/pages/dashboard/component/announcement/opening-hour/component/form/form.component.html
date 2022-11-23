@@ -1,0 +1,175 @@
+<ion-item-group>
+  <ion-item-divider>
+    <ion-label class="ion-text-capitalize">{{ dayOfTheWeek }}</ion-label>
+    <ion-button slot="end" size="small" (click)="back()" color="light">
+      <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+      voltar
+    </ion-button>
+  </ion-item-divider>
+  <ion-item id="start" detail="true" button>
+    <ion-label>Início </ion-label>
+    <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
+      form?.value[day]?.start | date: "HH:mm"
+    }}</ion-badge>
+    <ion-icon slot="start" name="time"></ion-icon>
+    <ion-popover
+      #popoverStart
+      (ionChange)="setTime('start', dayOfTheWeek)"
+      trigger="start"
+      side="right"
+    >
+      <ng-template>
+        <ion-content class="ion-padding">
+          <ion-text color="medium ion-text-center">
+            <p class="ion-no-margin">horas | minutos</p>
+          </ion-text>
+          <ion-datetime
+            [showDefaultButtons]="false"
+            presentation="time"
+            [value]="form?.value[day]?.start"
+          >
+            <ion-buttons slot="buttons">
+              <ion-button color="primary" (click)="cancel(popoverStart)"
+                >Cancelar</ion-button
+              >
+              <ion-button color="primary" (click)="confirm(popoverStart)"
+                >Confirmar</ion-button
+              >
+            </ion-buttons>
+          </ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+  </ion-item>
+  <ion-item id="startInterval" detail="true" button>
+    <ion-label>Intervalo início</ion-label>
+    <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
+      form?.value[day]?.startInterval | date: "HH:mm"
+    }}</ion-badge>
+    <ion-icon slot="start" name="stopwatch"></ion-icon>
+
+    <ion-popover
+      #popoverStartInterval
+      (ionChange)="setTime('startInterval', dayOfTheWeek)"
+      trigger="startInterval"
+      side="right"
+    >
+      <ng-template>
+        <ion-content class="ion-padding">
+          <ion-text color="medium ion-text-center">
+            <p class="ion-no-margin">horas | minutos</p>
+          </ion-text>
+          <ion-datetime
+            [showDefaultButtons]="false"
+            minuteValues="0,15,30,45"
+            presentation="time"
+            [value]="form?.value[day]?.startInterval"
+          >
+            <ion-buttons slot="buttons">
+              <ion-button color="primary" (click)="cancel(popoverStartInterval)"
+                >Cancelar</ion-button
+              >
+              <ion-button
+                color="primary"
+                (click)="confirm(popoverStartInterval)"
+                >Confirmar</ion-button
+              >
+            </ion-buttons>
+          </ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+  </ion-item>
+  <ion-item id="endInterval" detail="true" button>
+    <ion-label>Intervalo fim</ion-label>
+    <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
+      form?.value[day]?.endInterval | date: "HH:mm"
+    }}</ion-badge>
+    <ion-icon slot="start" name="stopwatch-outline"></ion-icon>
+
+    <ion-popover
+      #popoverEndInterval
+      (ionChange)="setTime('endInterval', dayOfTheWeek)"
+      trigger="endInterval"
+      side="right"
+    >
+      <ng-template>
+        <ion-content class="ion-padding">
+          <ion-text color="medium ion-text-center">
+            <p class="ion-no-margin">horas | minutos</p>
+          </ion-text>
+          <ion-datetime
+            [showDefaultButtons]="false"
+            minuteValues="0,15,30,45"
+            presentation="time"
+            [value]="form?.value[day]?.endInterval"
+          >
+            <ion-buttons slot="buttons">
+              <ion-button color="primary" (click)="cancel(popoverEndInterval)"
+                >Cancelar</ion-button
+              >
+              <ion-button color="primary" (click)="confirm(popoverEndInterval)"
+                >Confirmar</ion-button
+              >
+            </ion-buttons>
+          </ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+  </ion-item>
+  <ion-item id="end" detail="true" button>
+    <ion-label>Fim</ion-label>
+    <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
+      form?.value[day]?.end | date: "HH:mm"
+    }}</ion-badge>
+    <ion-icon slot="start" name="timer"></ion-icon>
+
+    <ion-popover
+      #popoverEnd
+      (ionChange)="setTime('end', dayOfTheWeek)"
+      trigger="end"
+      side="right"
+    >
+      <ng-template>
+        <ion-content class="ion-padding">
+          <ion-text color="medium ion-text-center">
+            <p class="ion-no-margin">horas | minutos</p>
+          </ion-text>
+          <ion-datetime
+            [showDefaultButtons]="false"
+            minuteValues="0,15,30,45"
+            presentation="time"
+            [value]="form?.value[day]?.end"
+          >
+            <ion-buttons slot="buttons">
+              <ion-button color="primary" (click)="cancel(popoverEnd)"
+                >Cancelar</ion-button
+              >
+              <ion-button color="primary" (click)="confirm(popoverEnd)"
+                >Confirmar</ion-button
+              >
+            </ion-buttons>
+          </ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+  </ion-item>
+</ion-item-group>
+<ion-button
+  (click)="onSubmit()"
+  expand="block"
+  class="ion-margin-top"
+  [disabled]="!(form?.value[day]?.start && form?.value[day]?.end)"
+>
+  <ion-icon name="cloud-upload" class="ion-margin-end"></ion-icon>
+  Salvar
+</ion-button>
+<ion-button
+  (click)="reset()"
+  expand="block"
+  class="ion-margin-top"
+  [disabled]="!(form?.value[day]?.start && form?.value[day]?.end)"
+>
+  <ion-icon name="trash" class="ion-margin-end"></ion-icon>
+  Redefinir
+</ion-button>

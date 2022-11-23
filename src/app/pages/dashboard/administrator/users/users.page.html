@@ -2,7 +2,34 @@
 
 <ion-content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
   <ion-grid fixed>
-    <ion-row *ngIf="(users$ | async);else Loading">
+    <!-- Navegação -->
+    <ion-row>
+      <ion-col size="12">
+        <ion-chip
+          [routerLink]="['/painel-de-controle', 'admin', 'usuarios']"
+          [outline]="!toggleListUser"
+          color="dark"
+          title="Usuários abilitados"
+          routerDirection="back"
+        >
+          <ion-icon name="list-circle"></ion-icon>
+          <ion-label>Abilitados</ion-label>
+        </ion-chip>
+
+        <ion-chip
+          [routerLink]="['/painel-de-controle', 'admin', 'usuarios', 'excluidos']"
+          [outline]="toggleListUser"
+          color="dark"
+          title="Usuários excluidos"
+          routerDirection="back"
+        >
+          <ion-icon name="trash"></ion-icon>
+          <ion-label>Excluidos</ion-label>
+        </ion-chip>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="(users$ | async);else ItemDeleted">
+      <!-- Campo de pesquiza -->
       <ion-col size="12" class="ion-no-padding">
         <app-search
           *ngIf="users?.length > 10"
@@ -10,102 +37,9 @@
         ></app-search>
       </ion-col>
 
+      <!-- Abilitars -->
       <ion-col size="12">
-        <ion-chip
-          [routerLink]="['/painel-de-controle', 'admin', 'usuarios']"
-          [color]="!toggleListUser ? 'success' : 'secondary'"
-          title="Usuários abilitados"
-          routerDirection="back"
-        >
-          <ion-icon
-            name="list-circle"
-            [color]="!toggleListUser ? 'success' : 'dark'"
-          ></ion-icon>
-          <ion-label>Abilitados</ion-label>
-        </ion-chip>
-
-        <ion-chip
-          [routerLink]="['/painel-de-controle', 'admin', 'usuarios', 'excluidos']"
-          [color]="toggleListUser ? 'success' : 'secondary'"
-          title="Usuários excluidos"
-          routerDirection="back"
-        >
-          <ion-icon
-            name="trash"
-            [color]="toggleListUser ? 'success' : 'dark'"
-          ></ion-icon>
-          <ion-label>Excluidos</ion-label>
-        </ion-chip>
-      </ion-col>
-
-      <!-- excluidos -->
-      <ion-col size="12">
-        <ion-list *ngIf="toggleListUser;else Able">
-          <ion-item *ngFor="let user of usersDrop;" color="none">
-            <ion-avatar slot="start">
-              <img
-                [src]="user.image?.url || './../../../../assets/avatar.svg'"
-                title="Imagem do usuário."
-                alt="Imagem do usuário."
-              />
-            </ion-avatar>
-            <div class="item">
-              <div>
-                <ion-label
-                  [title]="'Nome: ' + user?.name"
-                  [attr.data-message]="'Nome: ' + user?.name"
-                >
-                  {{ user?.name }}</ion-label
-                >
-                <div class="time">
-                  <small>{{ user?.createdAt | time:'create' }}</small>
-                  <small>{{ user?.updatedAt | time:'update' }}</small>
-                </div>
-              </div>
-            </div>
-
-            <ion-button
-              (click)="destroy(user)"
-              class="cursor-pointer"
-              title="Exclui permanentemente"
-              data-message="Exclui permanentemente"
-              color="none"
-            >
-              <ion-icon slot="icon-only" color="danger" name="trash"></ion-icon>
-            </ion-button>
-            <ion-button
-              (click)="restore(user)"
-              class="cursor-pointer"
-              title="Restaurar usuário"
-              data-message="Restaurar usuário"
-              color="none"
-            >
-              <ion-icon
-                slot="icon-only"
-                color="success"
-                name="play-back"
-              ></ion-icon>
-            </ion-button>
-          </ion-item>
-        </ion-list>
-
-        <ion-card *ngIf="usersDrop?.length === 0">
-          <ion-card-content>
-            <ion-text color="primary" class="ion-text-center">
-              <p style="font-size: 1.5em">Não a usuários exluidos</p>
-              <ion-button
-                expand="block"
-                [routerLink]="['/painel-de-controle', 'admin', 'usuarios']"
-              >
-                <ion-icon slot="icon-only" name="list-circle"></ion-icon>
-                &nbsp; listar usuários
-              </ion-button>
-            </ion-text>
-          </ion-card-content>
-        </ion-card>
-
-        <!--  -->
-        <ng-template #Able>
+        <ion-list *ngIf="!toggleListUser;">
           <ion-list>
             <ion-item
               color="none"
@@ -155,14 +89,14 @@
                     <ion-icon
                       color="medium"
                       slot="start"
-                      [name]="user?.state  ? 'eye': 'eye-off'"
+                      [name]="user?.state  ? 'power': 'radio-button-off'"
                     ></ion-icon>
                   </span>
                 </div>
               </div>
             </ion-item>
           </ion-list>
-        </ng-template>
+        </ion-list>
 
         <ion-card *ngIf="!endListUser">
           <ion-text color="primary" class="ion-text-center">
@@ -185,26 +119,124 @@
       </ion-col>
     </ion-row>
 
-    <ng-template #Loading>
-      <ion-row class="ion-margin-top">
-        <ion-col size="12">
-          <div *ngIf="error | async; else loadingNoError">error</div>
-          <ng-template #loadingNoError>
-            <span size="12" class="ion-padding-bottom ion-padding-horizontal">
-              <ion-skeleton-text animated class="search"></ion-skeleton-text>
-            </span>
-            <span *ngFor="let item of sizeSkeleton">
-              <div class="skeleton">
-                <ion-skeleton-text animated class="avatar"></ion-skeleton-text>
-                <div>
-                  <ion-skeleton-text animated class="title"></ion-skeleton-text>
-                  <ion-skeleton-text animated class="line"></ion-skeleton-text>
-                </div>
+    <ng-template #ItemDeleted>
+      <!-- Item excluidos  -->
+      <ion-row *ngIf="usersDrop$ | async; else Error" class="ion-margin-top">
+        <ion-item *ngFor="let user of usersDrop;" color="none">
+          <ion-avatar slot="start">
+            <img
+              [src]="user.image?.url || './../../../../assets/avatar.svg'"
+              title="Imagem do usuário."
+              alt="Imagem do usuário."
+            />
+          </ion-avatar>
+          <div class="item">
+            <div>
+              <ion-label
+                [title]="'Nome: ' + user?.name"
+                [attr.data-message]="'Nome: ' + user?.name"
+              >
+                {{ user?.name }}</ion-label
+              >
+              <div class="time">
+                <small>{{ user?.createdAt | time:'create' }}</small>
+                <small>{{ user?.updatedAt | time:'update' }}</small>
               </div>
-            </span>
-          </ng-template>
+            </div>
+          </div>
+
+          <ion-button
+            (click)="destroy(user)"
+            class="cursor-pointer"
+            title="Exclui permanentemente"
+            data-message="Exclui permanentemente"
+            color="none"
+          >
+            <ion-icon slot="icon-only" color="danger" name="trash"></ion-icon>
+          </ion-button>
+          <ion-button
+            (click)="restore(user)"
+            class="cursor-pointer"
+            title="Restaurar usuário"
+            data-message="Restaurar usuário"
+            color="none"
+          >
+            <ion-icon
+              slot="icon-only"
+              color="success"
+              name="play-back"
+            ></ion-icon>
+          </ion-button>
+        </ion-item>
+
+        <!-- Botão usuários vazios -->
+        <ion-col
+          *ngIf="usersDrop?.length === 0"
+          size="12"
+          class="content-center"
+        >
+          <ion-card>
+            <ion-card-content>
+              <ion-text color="primary" class="ion-text-center">
+                <p style="font-size: 1.5em">Não a usuários exluidos</p>
+                <ion-button
+                  expand="block"
+                  [routerLink]="['/painel-de-controle', 'admin', 'usuarios']"
+                >
+                  <ion-icon slot="icon-only" name="list-circle"></ion-icon>
+                  &nbsp; listar usuários
+                </ion-button>
+              </ion-text>
+            </ion-card-content>
+          </ion-card>
         </ion-col>
       </ion-row>
+    </ng-template>
+
+    <ng-template #Error>
+      <ion-row *ngIf="error | async; else loadingNoError">
+        <ion-col size="12">
+          <div class="content-center">
+            <div>
+              <ion-text class="ion-text-center">
+                <p [ngClass]="{'hide': menssage}">Erro ao carregar anúncios.</p>
+              </ion-text>
+              <ion-refresher slot="fixed" (ionRefresh)="refresher($event)">
+                <ion-refresher-content
+                  pullingIcon="arrow-dropdown"
+                  pullingText="Puxe para baixo"
+                  refreshingSpinner="circles"
+                  refreshingText="Atualizar..."
+                >
+                </ion-refresher-content>
+              </ion-refresher>
+              <ion-text class="ion-text-center">
+                <ion-button (mousedown)="hideMenssage()"
+                  >Puxe para atualizar
+                  <ion-icon
+                    class="ion-margin-start"
+                    name="arrow-down-circle"
+                  ></ion-icon>
+                </ion-button>
+              </ion-text>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ng-template #loadingNoError>
+        <span size="12" class="ion-padding-bottom ion-padding-horizontal">
+          <ion-skeleton-text animated class="search"></ion-skeleton-text>
+        </span>
+        <span *ngFor="let item of sizeSkeleton">
+          <div class="skeleton">
+            <ion-skeleton-text animated class="avatar"></ion-skeleton-text>
+            <div>
+              <ion-skeleton-text animated class="title"></ion-skeleton-text>
+              <ion-skeleton-text animated class="line"></ion-skeleton-text>
+            </div>
+          </div>
+        </span>
+      </ng-template>
     </ng-template>
   </ion-grid>
 

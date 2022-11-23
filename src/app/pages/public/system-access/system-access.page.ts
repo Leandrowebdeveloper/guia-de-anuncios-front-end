@@ -1,4 +1,5 @@
-import { AuthAdvertService } from './../../dashboard/auth/pages/advert/service/advert.service';
+import { LoadingService } from './../../../utilities/loading/loading.service';
+import { AuthAnnouncementService } from '../../dashboard/auth/announcement/service/auth-announcement.service';
 import { SystemAccessService } from './services/system-access.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -6,11 +7,12 @@ import { ActivatedRoute, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 import { OnComponentDeactivate } from 'src/app/components/form/guard/deactivate.guard';
-import { Advert, RequisitionLimit, User } from 'src/app/interface';
+import { Announcement, RequisitionLimit, User } from 'src/app/interface';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import attrButton from 'src/app/utilities/functions';
+import { MessageService } from 'src/app/utilities/message/message.service';
 
 @Component({
   selector: 'app-system-access',
@@ -34,8 +36,10 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
   constructor(
     private activatedRoute: ActivatedRoute,
     private systemAccessService: SystemAccessService,
-    private authAdvertService: AuthAdvertService,
-    private helpsService: HelpsService
+    private authAnnouncementService: AuthAnnouncementService,
+    private helpsService: HelpsService,
+    private messageService: MessageService,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
@@ -119,13 +123,13 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
 
   private login(event: FormGroup): Subscription {
     this.setRouter('login');
-    const loading = this.showLoading('Acessar o sistema...');
+    const loading = this.loadingService.show('Acessar o sistema...');
     return (this.systemAccess = this.systemAccessService
       .sendLoginData(event.value)
       .subscribe(
-        (login: User & Advert) => {
+        (login: User & Announcement) => {
           this.success(login[0], loading);
-          this.authAdvertService.setAdvert = login[1];
+          this.authAnnouncementService.setAnnouncement = login[1];
         },
         (error: HttpErrorResponse) => this.error(error, loading)
       ));
@@ -133,7 +137,7 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
 
   private register(event: FormGroup): Subscription {
     this.setRouter('register');
-    const loading = this.showLoading('Cadastrando usuário...');
+    const loading = this.loadingService.show('Cadastrando usuário...');
     return (this.systemAccess = this.systemAccessService
       .register(event.value)
       .subscribe(
@@ -144,7 +148,7 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
 
   private recover(event: FormGroup): Subscription {
     this.setRouter('recover');
-    const loading = this.showLoading('Recuperando senha...');
+    const loading = this.loadingService.show('Recuperando senha...');
     return (this.systemAccess = this.systemAccessService
       .passwordRecover(event.value)
       .subscribe(
@@ -153,24 +157,20 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
       ));
   }
 
-  private showLoading(message: string): Promise<HTMLIonLoadingElement> {
-    return this.systemAccessService.loading(message);
-  }
+  // private showLoading(message: string): Promise<HTMLIonLoadingElement> {
+  //   return this.systemAccessService.loading(message);
+  // }
 
   private success(user: User, loading: Promise<HTMLIonLoadingElement>) {
     this.disableCanDeactivate(user);
     this.formUpdate();
-    return this.disableLoadingUnsubscribeRegisterVariableTriggerSuccessMessage(
-      user,
-      loading
+    this.systemAccessService.isLogin(user);
+    this.systemAccessService.goToUserPage();
+    return this.messageService.success(
+      user.message,
+      loading,
+      this.systemAccess
     );
-  }
-
-  private disableLoadingUnsubscribeRegisterVariableTriggerSuccessMessage(
-    user: User,
-    loading: Promise<HTMLIonLoadingElement>
-  ) {
-    return this.systemAccessService.success(user, loading, this.systemAccess);
   }
 
   private error(

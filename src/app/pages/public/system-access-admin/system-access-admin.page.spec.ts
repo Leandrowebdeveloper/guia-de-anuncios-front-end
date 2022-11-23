@@ -1,4 +1,4 @@
-import { AuthAdvertService } from './../../dashboard/auth/pages/advert/service/advert.service';
+import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
 import { Storage } from '@ionic/storage';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -6,7 +6,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { SystemAccessAdminPage } from './system-access-admin.page';
-import { LoginService } from './services/login-admin/login-admin.service';
+import { LoginAdminService } from './services/login-admin/login-admin.service';
 import { SystemAccessAdminService } from './services/system-access-admin.service';
 
 import { FormComponentModule } from 'src/app/components/form/form.module';
@@ -17,8 +17,8 @@ describe('SystemAccessAdminPage', () => {
   let fixture: ComponentFixture<SystemAccessAdminPage>;
 
   let systemAccessService: SystemAccessAdminService;
-  let loginService: LoginService;
-  let authAdvertService: AuthAdvertService;
+  let loginService: LoginAdminService;
+  let authAnnouncementService: AuthAnnouncementService;
   let guard: SystemAccessAdminResolver;
 
   beforeEach(waitForAsync(() => {
@@ -33,9 +33,9 @@ describe('SystemAccessAdminPage', () => {
       providers: [
         Storage,
         SystemAccessAdminResolver,
-        LoginService,
+        LoginAdminService,
         SystemAccessAdminService,
-        AuthAdvertService,
+        AuthAnnouncementService,
       ],
     }).compileComponents();
 
@@ -45,9 +45,9 @@ describe('SystemAccessAdminPage', () => {
   }));
 
   beforeEach(() => {
-    loginService = TestBed.inject(LoginService);
+    loginService = TestBed.inject(LoginAdminService);
     systemAccessService = TestBed.inject(SystemAccessAdminService);
-    authAdvertService = TestBed.inject(AuthAdvertService);
+    authAnnouncementService = TestBed.inject(AuthAnnouncementService);
     guard = TestBed.inject(SystemAccessAdminResolver);
   });
 
@@ -55,8 +55,8 @@ describe('SystemAccessAdminPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('AuthAdvertService', () => {
-    expect(authAdvertService).toBeTruthy();
+  it('AuthAnnouncementService', () => {
+    expect(authAnnouncementService).toBeTruthy();
   });
 
   it('loginService', () => {

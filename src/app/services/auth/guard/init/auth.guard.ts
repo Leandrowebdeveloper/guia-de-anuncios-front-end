@@ -10,40 +10,34 @@ import {
 } from '@angular/router';
 import { Observable, EMPTY } from 'rxjs';
 
-import { Advert, Category, User } from 'src/app/interface';
+import { Announcement, Category, User } from 'src/app/interface';
 import { InitService } from 'src/app/services/init/init.service';
 import { AuthService } from '../../auth.service';
 import { HomeService } from 'src/app/pages/public/home/services/home.service';
-import { AdvertService } from 'src/app/pages/dashboard/administrator/Advert/services/advert.service';
-import { AuthAdvertService } from 'src/app/pages/dashboard/auth/pages/advert/service/advert.service';
+import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
 
 @Injectable({
   providedIn: 'root',
 })
-/**
- * @class AuthGuardi
- */
 export class AuthGuard
-  implements CanLoad, CanActivate, Resolve<User[] & Category[] & Advert[]>
+  implements CanLoad, CanActivate, Resolve<User[] & Category[]>
 {
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
     private init: InitService,
     private router: Router,
-    private homeService: HomeService,
-    private authAdvertService: AuthAdvertService
+    private homeService: HomeService
   ) {}
 
   canActivate(): UrlTree {
     return;
   }
 
-  resolve(): Observable<User[] & Category[] & Advert[]> {
+  resolve(): Observable<User[] & Category[]> {
     return this.init.boot().pipe(
-      tap((init: User[] & Category[][] & Advert[]) => {
+      tap((init: User[] & Category[][]) => {
         this.homeService.setIcons = init[1];
-        this.authAdvertService.setAdvert = init[2];
         this.confirmAuthenticationAndSetUser(init[0]);
       }),
       catchError(() => {

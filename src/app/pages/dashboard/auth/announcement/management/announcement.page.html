@@ -1,0 +1,126 @@
+<ion-header [hidden]="hasHeader || isRoute === 'galery'">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="back()" defaultHref></ion-back-button>
+    </ion-buttons>
+    <ion-title>Anúncio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid *ngIf="user$ | async;let user;" fixed>
+    <ion-row>
+      <ng-container *ngIf="announcement$ | async;let announcement; else Error">
+        <ion-col size="12">
+          <ion-text color="primary">
+            <p [title]="announcement?.title">{{ announcement?.title }}</p>
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="12">
+          <ng-container *ngIf="isAnnouncement; else Association">
+            <!-- Galery -->
+            <app-galery-component
+              [announcement]="announcement"
+              (isHeader)="isHeader($event)"
+            ></app-galery-component>
+
+            <!-- Categorias  -->
+            <ion-item-group>
+              <ion-item-divider>
+                <ion-icon color="mediun" name="list" slot="start"></ion-icon>
+                <ion-label>Categorias</ion-label>
+              </ion-item-divider>
+              <app-category-component
+                [announcement]="announcement"
+              ></app-category-component>
+            </ion-item-group>
+            <!-- List Item -->
+            <ion-item-group>
+              <ion-item-divider>
+                <ion-icon color="mediun" name="person" slot="start"></ion-icon>
+                <ion-label>Gerenciamento do anúncio</ion-label>
+              </ion-item-divider>
+
+              <!-- State -->
+              <app-state-announcement
+                [announcement]="announcement"
+              ></app-state-announcement>
+
+              <!-- Name -->
+              <app-announcement-component
+                [announcement]="announcement"
+                [user]="user"
+              ></app-announcement-component>
+
+              <!-- Cidade estado -->
+              <app-city-component
+                [announcement]="announcement"
+              ></app-city-component>
+
+              <!-- Endereço -->
+              <app-address-component
+                [announcement]="announcement"
+              ></app-address-component>
+
+              <!-- Contato -->
+              <app-contant-component
+                [announcement]="announcement"
+              ></app-contant-component>
+
+              <!-- Coordenadas -->
+              <app-map-component
+                [user]="user"
+                [announcement]="announcement"
+              ></app-map-component>
+
+              <!-- Redes Sociais -->
+              <app-social-network-component
+                [user]="user"
+                [announcement]="announcement"
+              ></app-social-network-component>
+
+              <!-- Horario de funcionamento -->
+              <app-button-opening-hour
+                [announcement]="announcement"
+                (route)="toggleRoute($event)"
+              ></app-button-opening-hour>
+            </ion-item-group>
+          </ng-container>
+
+          <ng-template #Association>
+            <app-opening-hour
+              [announcement]="announcement"
+              (route)="toggleRoute($event)"
+            ></app-opening-hour>
+          </ng-template>
+        </ion-col>
+      </ng-container>
+
+      <ng-template #Error>
+        <ion-col size="12">
+          <div class="content-center">
+            <ion-icon
+              name="warning"
+              color="medium"
+              style="font-size: 100px"
+            ></ion-icon>
+            <ion-text color="primary"> Anúncio não existe </ion-text>
+            <ion-button
+              (click)="back()"
+              fill="outline"
+              expand="block"
+              class="ion-margin-top"
+            >
+              <ion-icon
+                name="arrow-back-circle"
+                class="ion-margin-end"
+              ></ion-icon>
+              voutar
+            </ion-button>
+          </div>
+        </ion-col>
+      </ng-template>
+    </ion-row>
+  </ion-grid>
+</ion-content>

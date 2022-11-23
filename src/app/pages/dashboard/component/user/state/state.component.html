@@ -1,0 +1,18 @@
+<ion-item *ngIf="pageEnbled" [disabled]="user?.blockade">
+  <ion-label>{{ user?.state ? "Online" : "Offline" }}</ion-label>
+  <ion-toggle
+    slot="end"
+    (ionChange)="state()"
+    [checked]="user?.state"
+    title="Alternar entre usuário conectado ou desligado."
+    aria-label="Clique para alternar entre usuário conectado ou desligado."
+    [attr.aria-disabled]="
+      'Botão alterar status ' + user?.blockade ? 'abilitado.' : 'desabilitado'
+    "
+  >
+  </ion-toggle>
+  <ion-icon
+    slot="start"
+    [name]="user?.state ? 'power' : 'radio-button-off'"
+  ></ion-icon>
+</ion-item>

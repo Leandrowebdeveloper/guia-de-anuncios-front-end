@@ -1,3 +1,4 @@
+import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { Subscription } from 'rxjs';
 import { SystemAccessService } from './../../services/system-access.service';
 import {
@@ -13,6 +14,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FacebookLogin } from '@capacitor-community/facebook-login';
 import { SocialLoginService } from '../../services/social-login/service';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { MessageService } from 'src/app/utilities/message/message.service';
 
 @Component({
   selector: 'app-social-login',
@@ -29,7 +31,9 @@ export class SocialLoginComponent implements OnInit {
     private systemAccessService: SystemAccessService,
     private plt: Platform,
     private http: HttpClient,
-    private socialLoginService: SocialLoginService
+    private socialLoginService: SocialLoginService,
+    private messageService: MessageService,
+    private loadingService: LoadingService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -86,12 +90,17 @@ export class SocialLoginComponent implements OnInit {
     if (social) {
       this.setRouter();
       this.systemAccessService.setStayConnected(true);
-      const loading = this.showLoading('Acessar o sistema...');
+      const loading = this.loadingService.show('Acessar o sistema...');
       const data = { ...this.build(social) };
       return (this.systemAccess = this.socialLoginService
         .create(data)
         .subscribe(
-          (user_: User) => this.success(user_, loading),
+          (user_: User) =>
+            this.messageService.success(
+              user_?.message,
+              loading,
+              this.systemAccess
+            ),
           (error: HttpErrorResponse) => this.error(error, loading)
         ));
     }
@@ -116,27 +125,6 @@ export class SocialLoginComponent implements OnInit {
       _csrf: this.csrf,
     };
     return result;
-  }
-
-  private success(
-    user: User,
-    loading: Promise<HTMLIonLoadingElement>
-  ): Promise<void> {
-    return this.disableLoadingUnsubscribeRegisterVariableTriggerSuccessMessage(
-      user,
-      loading
-    );
-  }
-
-  private disableLoadingUnsubscribeRegisterVariableTriggerSuccessMessage(
-    user: User,
-    loading: Promise<HTMLIonLoadingElement>
-  ): Promise<void> {
-    return this.systemAccessService.success(user, loading, this.systemAccess);
-  }
-
-  private showLoading(message: string): Promise<HTMLIonLoadingElement> {
-    return this.systemAccessService.loading(message);
   }
 
   private error(

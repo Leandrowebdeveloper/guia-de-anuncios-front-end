@@ -115,32 +115,6 @@ export class AuthService extends HttpService<User> {
     return (this.setApi = `auth`);
   }
 
-  public async message(
-    user: User,
-    loading: Promise<HTMLIonLoadingElement>,
-    subscribe?: Subscription,
-    time?: number
-  ): Promise<number> {
-    return await this.messageService.success(
-      user.message,
-      loading,
-      subscribe,
-      time
-    );
-  }
-
-  public async error(
-    error: HttpErrorResponse,
-    loading: Promise<HTMLIonLoadingElement>,
-    subscribe: Subscription
-  ) {
-    if (error.status === 403) {
-      this.setBlockade = error.error.blockade;
-      return this.alertService.alert('Atenção', error.error.message);
-    }
-    return this.messageService.error(error, loading, subscribe);
-  }
-
   public name(user: User): Observable<User> {
     return this.patch(user, 'name').pipe(
       tap((user_: User) => {
@@ -158,7 +132,7 @@ export class AuthService extends HttpService<User> {
   }
 
   public emailIsValidToChange(params: { token: string; slug: string }) {
-    return this.toggleEmail(`change-email/`, params).pipe(
+    return this.findOne(`change-email/`, params).pipe(
       tap((user_: User) => {
         this.setEmail = user_;
       })
@@ -193,10 +167,6 @@ export class AuthService extends HttpService<User> {
   //     })
   //   );
   // }
-
-  public async showLoading(message: string): Promise<HTMLIonLoadingElement> {
-    return await this.loadingService.show(message);
-  }
 
   private clearsSessionAndDatabaseStorage(): void {
     this.removeTokenStorageSession();

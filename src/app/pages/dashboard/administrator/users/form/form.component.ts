@@ -1,3 +1,4 @@
+import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
@@ -8,6 +9,7 @@ import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
 import { UserUtilities } from 'src/app/utilities/user/user-utilities.service';
 import { UsersService } from '../services/users.service';
+import { MessageService } from 'src/app/utilities/message/message.service';
 
 @Component({
   templateUrl: './form.component.html',
@@ -28,7 +30,9 @@ export class FormComponent implements OnInit {
     private helpService: HelpsService,
     private modalController: ModalController,
     private usersService: UsersService,
-    private userUtilities: UserUtilities
+    private userUtilities: UserUtilities,
+    private loadingService: LoadingService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -56,28 +60,30 @@ export class FormComponent implements OnInit {
         return this.email(event);
       case 'level':
         return this.level(event);
+      case 'plan':
+        return this.plan(event);
     }
   }
 
   // Destroy
   private destroy(event: FormGroup): Subscription {
-    const loading = this.usersService.showLoading('Excluindo usuário...');
+    const loading = this.loadingService.show('Excluindo usuário...');
     this.getSlug(event);
     return (this.write = this.usersService.delete(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
-        this.usersService.error(error, loading, this.write)
+        this.messageService.error(error, loading, this.write)
     ));
   }
 
   // Destroy
   private drop(event: FormGroup): Subscription {
-    const loading = this.usersService.showLoading('Excluindo usuário...');
+    const loading = this.loadingService.show('Excluindo usuário...');
     this.getSlug(event);
     return (this.write = this.usersService.dropd(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
-        this.usersService.error(error, loading, this.write)
+        this.messageService.error(error, loading, this.write)
     ));
   }
 
@@ -89,54 +95,65 @@ export class FormComponent implements OnInit {
 
   // Name
   private name(event: FormGroup): Subscription {
-    const loading = this.usersService.showLoading('Alterando nome...');
+    const loading = this.loadingService.show('Alterando nome...');
     return (this.write = this.usersService.name(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
-        this.usersService.error(error, loading, this.write)
+        this.messageService.error(error, loading, this.write)
     ));
   }
 
-  // Name
+  // Restore
   private restore(event: FormGroup): Subscription {
-    const loading = this.usersService.showLoading('Restaurar usuário...');
+    const loading = this.loadingService.show('Restaurar usuário...');
     return (this.write = this.usersService.restore(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
-        this.usersService.error(error, loading, this.write)
+        this.messageService.error(error, loading, this.write)
     ));
   }
 
   // Email
   private email(event: FormGroup): Subscription {
-    const loading = this.usersService.showLoading('Alterando email...');
+    const loading = this.loadingService.show('Alterando email...');
     event.value.slug = this.usersService.getSlug;
     return (this.write = this.usersService.email(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
-        this.usersService.error(error, loading, this.write)
+        this.messageService.error(error, loading, this.write)
     ));
   }
 
   // Password
   private password(event: FormGroup): Subscription {
-    const loading = this.usersService.showLoading('Alterando senha...');
+    const loading = this.loadingService.show('Alterando senha...');
     event.value.slug = this.usersService.getSlug;
     return (this.write = this.usersService.password(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
-        this.usersService.error(error, loading, this.write)
+        this.messageService.error(error, loading, this.write)
     ));
   }
 
   // Level
   private level(event: FormGroup): Subscription {
-    const loading = this.usersService.showLoading('Alterando nivel...');
+    const loading = this.loadingService.show('Alterando nivel...');
     event.value.slug = this.usersService.getSlug;
     return (this.write = this.usersService.level(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
-        this.usersService.error(error, loading, this.write)
+        this.messageService.error(error, loading, this.write)
+    ));
+  }
+
+  // Level
+  private plan(event: FormGroup): Subscription {
+    const loading = this.loadingService.show('Alterando plano...');
+    event.value.slug = this.usersService.getSlug;
+    return (this.write = this.usersService.plan(event.value).subscribe(
+      (user: User) => this.messsage(user, loading),
+      (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.write)
     ));
   }
 
@@ -145,7 +162,7 @@ export class FormComponent implements OnInit {
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.usersService.message(user, loading, this.write);
+    return this.messageService.success(user?.message, loading, this.write);
   }
 
   private setButton(): void {

@@ -1,5 +1,5 @@
-import { AuthAdvertService } from './../../dashboard/auth/pages/advert/service/advert.service';
-import { Advert } from './../../../interface/index';
+import { LoadingService } from './../../../utilities/loading/loading.service';
+import { AuthAnnouncementService } from '../../dashboard/auth/announcement/service/auth-announcement.service';
 import { SystemAccessAdminService } from './services/system-access-admin.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -7,10 +7,11 @@ import { ActivatedRoute, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 import { OnComponentDeactivate } from 'src/app/components/form/guard/deactivate.guard';
-import { RequisitionLimit, User } from 'src/app/interface';
+import { RequisitionLimit, User, Announcement } from 'src/app/interface';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
+import { MessageService } from 'src/app/utilities/message/message.service';
 
 @Component({
   selector: 'app-system-access',
@@ -35,7 +36,9 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
     private activatedRoute: ActivatedRoute,
     private systemAccessService: SystemAccessAdminService,
     private helpsService: HelpsService,
-    private authAdvertService: AuthAdvertService
+    private authAnnouncementService: AuthAnnouncementService,
+    private messageService: MessageService,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
@@ -99,36 +102,28 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
   }
 
   private login(event: FormGroup): Subscription {
-    const loading = this.showLoading('Acessar o sistema...');
+    const loading = this.loadingService.show('Acessar o sistema...');
     return (this.systemAccess = this.systemAccessService
       .sendLoginData(event.value)
       .subscribe(
-        (login: User & Advert) => {
+        (login: User & Announcement) => {
           this.success(login[0], loading);
-          this.authAdvertService.setAdvert = login[1];
+          this.authAnnouncementService.setAnnouncement = login[1];
         },
         (error: HttpErrorResponse) => this.error(error, loading)
       ));
   }
 
-  private showLoading(message: string): Promise<HTMLIonLoadingElement> {
-    return this.systemAccessService.loading(message);
-  }
-
   private success(user: User, loading: Promise<HTMLIonLoadingElement>) {
     this.disableCanDeactivate(user);
     this.formUpdate();
-    return this.disableLoadingUnsubscribeRegisterVariableTriggerSuccessMessage(
-      user,
-      loading
+    this.systemAccessService.isLogin(user);
+    this.systemAccessService.goToUserPage();
+    return this.messageService.success(
+      user?.message,
+      loading,
+      this.systemAccess
     );
-  }
-
-  private disableLoadingUnsubscribeRegisterVariableTriggerSuccessMessage(
-    user: User,
-    loading: Promise<HTMLIonLoadingElement>
-  ) {
-    return this.systemAccessService.success(user, loading, this.systemAccess);
   }
 
   private error(

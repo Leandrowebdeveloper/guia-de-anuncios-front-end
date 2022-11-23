@@ -1,0 +1,16 @@
+<ion-item-group class="ion-margin-bottom">
+  <ion-list>
+    <ion-item>
+      <ion-select
+        *ngIf="category$ | async; let category"
+        placeholder="Selecione uma categoria"
+        (ionChange)="select($event)"
+        [value]="announcement?.categoryAnnouncement?.catAdId || null"
+      >
+        <ion-select-option *ngFor="let item of category" [value]="item?.id">{{
+          item?.name
+        }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-item-group>

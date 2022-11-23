@@ -1,0 +1,40 @@
+<app-header-component></app-header-component>
+
+<ion-content *ngIf="user$ | async; let user;" [fullscreen]="true">
+  <ion-grid fixed>
+    <!-- Navegação -->
+    <app-segment (togglePage)="togglePage($event)"></app-segment>
+
+    <!--  Abilitados -->
+    <ng-container *ngIf="toggleListAnnouncement;else ItemDeleted">
+      <app-enabled-item
+        (isAnnouncement)="getIsAnnouncement($event)"
+      ></app-enabled-item>
+
+      <app-button-create
+        [isButton]="isAnnouncement"
+        (create)="create()"
+      ></app-button-create>
+    </ng-container>
+
+    <!-- Deletados -->
+    <ng-template #ItemDeleted>
+      <app-deleted-item></app-deleted-item>
+    </ng-template>
+  </ion-grid>
+
+  <!-- Buttom create -->
+  <ion-fab
+    *ngIf="toggleListAnnouncement && user?.plan === 'special'"
+    vertical="bottom"
+    horizontal="end"
+    title="Cadastrar novo anúncio."
+    slot="fixed"
+  >
+    <ion-fab-button (click)="create()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<app-footer></app-footer>

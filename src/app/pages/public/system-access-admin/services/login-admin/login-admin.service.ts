@@ -6,55 +6,54 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Injectable()
-export class LoginService extends HttpService<User> {
-    private $stayConnected: boolean;
-    constructor(
-        public http: HttpClient,
-        public storageService: StorageService,
-        private AuthService: AuthService,
-        private authService: AuthService
-    ) {
-        super(http, storageService);
-        this.setApi = `login-admin`;
-    }
+export class LoginAdminService extends HttpService<User> {
+  private $stayConnected: boolean;
+  constructor(
+    public http: HttpClient,
+    public storageService: StorageService,
+    private authService: AuthService
+  ) {
+    super(http, storageService);
+    this.setApi = `login-admin`;
+  }
 
-    public get stayConnected() {
-        return this.$stayConnected;
-    }
+  public get stayConnected() {
+    return this.$stayConnected;
+  }
 
-    public set stayConnected(value: boolean) {
-        this.$stayConnected = value;
-    }
+  public set stayConnected(value: boolean) {
+    this.$stayConnected = value;
+  }
 
-    public storesTokenDatabaseOrSession(user: User): void {
-        if (this.stayConnected) {
-            return this.setUserAndTokenInDatabase(user);
-        }
-        return this.setUserAndTokenInSession(user);
+  public storesTokenDatabaseOrSession(user: User): void {
+    if (this.stayConnected) {
+      return this.setUserAndTokenInDatabase(user);
     }
+    return this.setUserAndTokenInSession(user);
+  }
 
-    private setTokenSession(user: User): void {
-        return sessionStorage.setItem('token', user?.token);
-    }
+  private setTokenSession(user: User): void {
+    return sessionStorage.setItem('token', user?.token);
+  }
 
-    private async setTokenDatabase(user: User): Promise<void> {
-        return await this.storageService.setAuthUserToken(user);
-    }
+  private async setTokenDatabase(user: User): Promise<void> {
+    return await this.storageService.setAuthUserToken(user);
+  }
 
-    private setAuthUser(user: User): User {
-        this.AuthService.setUser = user;
-        return (this.authService.setIsLoggedIn = user);
-    }
+  private setAuthUser(user: User): User {
+    this.authService.setUser = user;
+    return (this.authService.setIsLoggedIn = user);
+  }
 
-    private setUserAndTokenInSession(user: User): void {
-        this.setAuthUser(user);
-        this.setTokenSession(user);
-        this.storageService.setAuthToken = user?.token;
-    }
+  private setUserAndTokenInSession(user: User): void {
+    this.setAuthUser(user);
+    this.setTokenSession(user);
+    this.storageService.setAuthToken = user?.token;
+  }
 
-    private setUserAndTokenInDatabase(user: User): void {
-        this.setAuthUser(user);
-        this.setTokenDatabase(user);
-        this.storageService.setAuthToken = user?.token;
-    }
+  private setUserAndTokenInDatabase(user: User): void {
+    this.setAuthUser(user);
+    this.setTokenDatabase(user);
+    this.storageService.setAuthToken = user?.token;
+  }
 }

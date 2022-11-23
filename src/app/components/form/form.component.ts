@@ -1,5 +1,13 @@
+import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { Output, Input, EventEmitter, Component, OnInit } from '@angular/core';
+import {
+  Output,
+  Input,
+  EventEmitter,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormServices } from './services/form.service';
 import { ConfigForm } from './config';
@@ -21,11 +29,13 @@ export class FormComponent implements OnInit {
   public submitted = false;
   public visiblePassword: boolean;
   public isPageTheLogin: boolean;
+  public config: any;
   constructor(
     private configForm: ConfigForm,
     private fb: FormBuilder,
     private formServices: FormServices,
-    private router: Router
+    private router: Router,
+    private plt: Platform
   ) {}
 
   public get f() {
@@ -41,6 +51,7 @@ export class FormComponent implements OnInit {
     this.importForm();
     this.isPageLogin();
     this.disableValidate();
+    this.tinymce();
   }
 
   public onSubmit(): void {
@@ -113,5 +124,21 @@ export class FormComponent implements OnInit {
       this.inputConfig
     );
     return (this.form = this.fb.group(data, validator));
+  }
+
+  private tinymce(): void {
+    this.config = {
+      height: this.plt.is('mobile') ? 480 : 320,
+      plugins:
+        // eslint-disable-next-line max-len
+        'preview searchreplace directionality visualblocks visualchars fullscreen template charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount table',
+      toolbar:
+        // eslint-disable-next-line max-len
+        'undo redo preview | bold italic strikethrough | forecolor backcolor | \
+        table | alignleft aligncenter alignright alignjustify  | numlist bullist | outdent indent | \
+        casechange | blocks | checklist | fontfamily fontsize | removeformat',
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      language: 'pt_BR',
+    };
   }
 }

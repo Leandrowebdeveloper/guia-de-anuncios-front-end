@@ -1,0 +1,27 @@
+<ion-row *ngIf="announcement$ | async;">
+  <ion-col
+    *ngFor="let item of announcement;let i = index;trackBy: trackByFn;"
+    size-xl="4"
+    size-lg="4"
+    size-md="6"
+    size-sm="6"
+    size="12"
+  >
+    <ng-container *ngIf="isDesktop;else Mobile">
+      <app-card
+        [announcement]="item"
+        [index]="i"
+        [action]="isDeleted"
+        (actionButtons)="actionButton($event)"
+      ></app-card>
+    </ng-container>
+    <ng-template #Mobile>
+      <app-list-item
+        [announcement]="item"
+        [index]="i"
+        [action]="isDeleted"
+        (actionButtons)="actionButton($event)"
+      ></app-list-item>
+    </ng-template>
+  </ion-col>
+</ion-row>

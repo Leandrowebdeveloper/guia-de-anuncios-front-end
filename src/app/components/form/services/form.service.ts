@@ -26,17 +26,11 @@ export class FormServices {
         Validators.pattern(this.regexName),
       ],
     ],
-    title: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.pattern(this.regexName),
-      ],
-    ],
+    title: ['', [Validators.required, Validators.minLength(3)]],
     allotment: ['', [Validators.required]],
     block: ['', [Validators.required]],
     street: ['', [Validators.required]],
+    plan: ['', [Validators.required]],
     // eslint-disable-next-line @typescript-eslint/naming-convention
     zip_code: ['', [Validators.required]],
     district: [''],
@@ -58,9 +52,7 @@ export class FormServices {
       '',
       [
         Validators.required,
-        Validators.pattern(
-          /(?:https?:\/\/www\.)?instagram\.com\S*?\/p\/(\w{11})\/?/
-        ),
+        Validators.pattern(/(?:https?:\/\/www\.?instagram\.com\/([\W\w])+)/g),
       ],
     ],
     city: ['', [Validators.required]],

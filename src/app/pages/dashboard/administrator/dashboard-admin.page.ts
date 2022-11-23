@@ -25,7 +25,7 @@ export class DashboardPage implements OnInit {
       name: 'Anúncios',
       title: 'Manutenção do anúncios.',
       router: ['/painel-de-controle/admin', 'anuncios'],
-      icon: 'newspaper',
+      icon: 'megaphone',
     },
   ];
 

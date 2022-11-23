@@ -7,7 +7,7 @@ import { LoginPageRoutingModule } from './system-access-admin-routing.module';
 
 import { SystemAccessAdminPage } from './system-access-admin.page';
 import { FormComponentModule } from 'src/app/components/form/form.module';
-import { LoginService } from './services/login-admin/login-admin.service';
+import { LoginAdminService } from './services/login-admin/login-admin.service';
 import { SystemAccessAdminService } from './services/system-access-admin.service';
 import { RequisitionLimitComponentModule } from 'src/app/components/requisitionLimit/requisition-limit.module';
 import { HeaderModule } from 'src/app/header/header.module';
@@ -24,6 +24,6 @@ import { FooterModule } from 'src/app/footer/footer.module';
     FooterModule,
   ],
   declarations: [SystemAccessAdminPage],
-  providers: [SystemAccessAdminService, LoginService],
+  providers: [SystemAccessAdminService, LoginAdminService],
 })
 export class SystemAccessAdminPageModule {}

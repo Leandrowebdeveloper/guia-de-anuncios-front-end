@@ -11,10 +11,10 @@ export class ToastService {
     message: string,
     position: 'bottom' | 'middle' | 'top',
     icon: 'thumbs-up' | 'thumbs-down' | 'warning',
-    duration: 1000 |  1500 | 2000 | 2500 | 3000,
-    color = 'light',
+    duration: 1000 | 1500 | 2000 | 2500 | 3000,
+    color = 'light'
   ): Promise<HTMLIonToastElement> {
-    const toast =  await this.toastController.create({
+    const toast = await this.toastController.create({
       message,
       icon,
       duration,
@@ -27,6 +27,19 @@ export class ToastService {
           handler: () => this.toastController.dismiss(),
         },
       ],
+    });
+    toast.present();
+    return toast;
+  }
+
+  public async loading(
+    message: string,
+    position: 'bottom' | 'middle' | 'top'
+  ): Promise<HTMLIonToastElement> {
+    const toast = await this.toastController.create({
+      message,
+      position,
+      color: 'light',
     });
     toast.present();
     return toast;

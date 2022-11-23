@@ -25,6 +25,15 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+.tox-notifications-container,
+.tox-statusbar__branding {
+  display: none;
+}
+
+[apikey="eltulb4tbmvkr9gu7025qd3j9otlnxlej0ybckmvguswoje5"] {
+  width: 100%;
+}
+
 @font-face {
   font-family: Poppins-Light;
   src: url("./theme/fonts/Poppins/Poppins-Light.ttf");
@@ -76,6 +85,9 @@ ion-label {
 
 ion-icon {
   pointer-events: none !important;
+  &.ios {
+    color: #707070;
+  }
 }
 
 .content-center {
@@ -83,4 +95,12 @@ ion-icon {
   justify-content: center;
   align-items: center;
   min-height: 60vh;
+  flex-direction: column;
+}
+
+.inputFiles {
+  height: 0px;
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
 }

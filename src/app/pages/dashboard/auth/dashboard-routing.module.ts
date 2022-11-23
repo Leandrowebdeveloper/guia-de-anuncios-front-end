@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PrivateAutorizationGuard } from 'src/app/services/auth/guard/private-autorization/private-autorization.guard';
 
 import { DashboardPage } from './dashboard.page';
-import { ChangeEmailResolver } from './pages/change-email/guard/change-email.guard';
+import { ChangeEmailResolver } from './user/change-email/guard/change-email.guard';
 
 const routes: Routes = [
   {
@@ -15,7 +15,7 @@ const routes: Routes = [
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('./pages/change-email/change-email.module').then(
+      import('./user/change-email/change-email.module').then(
         (m) => m.ChangeEmailPageModule
       ),
     resolve: {
@@ -27,14 +27,16 @@ const routes: Routes = [
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('./pages/user/user.module').then((m) => m.UserPageModule),
+      import('./user/user.module').then((m) => m.UserPageModule),
   },
   {
     path: 'anuncio',
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('./pages/advert/advert.module').then((m) => m.AdvertPageModule),
+      import('./announcement/dashboard.module').then(
+        (m) => m.DashboardPageModule
+      ),
   },
 ];
 

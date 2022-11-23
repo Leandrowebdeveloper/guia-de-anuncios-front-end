@@ -1,0 +1,67 @@
+<ion-item-group>
+  <ion-item-divider>
+    <ion-label>Horario de funcionamento</ion-label>
+    <ion-icon slot="start" name="timer"></ion-icon>
+    <ion-button slot="end" size="small" (click)="back()" color="light">
+      <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+      voltar
+    </ion-button>
+  </ion-item-divider>
+
+  <ion-item detail="true" (click)="setDay('domingo')" button>
+    <ion-label>Domingo</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="openingHour?.sunday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="openingHour?.sunday?.start ? 'success' : 'medium'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('segunda')" button>
+    <ion-label>Segunda</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="openingHour?.monday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="openingHour?.monday?.start ? 'success' : 'medium'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('terca')" button>
+    <ion-label>Terça</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="openingHour?.third?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="openingHour?.third?.start ? 'success' : 'medium'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('quarta')" button>
+    <ion-label>Quarta</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="openingHour?.fourth?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="openingHour?.fourth?.start ? 'success' : 'medium'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('quinta')" button>
+    <ion-label>Quinta</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="openingHour?.thursday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="openingHour?.thursday?.start ? 'success' : 'medium'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('sexta')" button>
+    <ion-label>Sexta</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="openingHour?.friday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="openingHour?.friday?.start ? 'success' : 'light'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('sabado')" button>
+    <ion-label>Sábado</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="openingHour?.saturday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="openingHour?.saturday?.start ? 'success' : 'light'"
+    ></ion-icon>
+  </ion-item>
+</ion-item-group>

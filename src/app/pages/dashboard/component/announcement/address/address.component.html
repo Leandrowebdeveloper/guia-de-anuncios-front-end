@@ -1,0 +1,19 @@
+<ion-item
+  *ngIf="announcement"
+  [disabled]="
+    announcement?.categoryAnnouncement === null || announcement?.blockade
+  "
+  detail="true"
+  (click)="address()"
+  title="Alterar endereço"
+  aria-label="Clique para alterar endereço"
+  [attr.aria-disabled]="
+    'Clique para alterar endereço ' + announcement?.blockade
+      ? 'abilitado.'
+      : 'desabilitado'
+  "
+  button
+>
+  <ion-icon name="location" slot="start"></ion-icon>
+  <ion-label>Endereço</ion-label>
+</ion-item>

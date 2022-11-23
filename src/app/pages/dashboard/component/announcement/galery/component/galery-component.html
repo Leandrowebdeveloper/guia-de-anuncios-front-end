@@ -1,0 +1,46 @@
+<ion-item-group>
+  <ion-item-divider>
+    <ion-icon color="mediun" name="images" slot="start"></ion-icon>
+    <ion-label>Galeria</ion-label>
+  </ion-item-divider>
+  <div class="row">
+    <app-galery-button-upload
+      [data]="{ id: announcement?.id, _csrf: announcement?._csrf}"
+    ></app-galery-button-upload>
+
+    <div>
+      <section *ngFor="let item of announcement?.galery">
+        <ion-img
+          class="cursor-pointer"
+          [src]="item?.url"
+          alt="Image da galeria"
+          title="Clique para ampliar"
+          aria-message="Clique para ampliar"
+          (click)="show(item)"
+        ></ion-img>
+      </section>
+    </div>
+  </div>
+</ion-item-group>
+
+<!-- The Modal -->
+<div id="myModal" class="modal" [ngClass]="{'show': image}">
+  <!-- The Close Button -->
+  <span class="close" (click)="hidden()">&times;</span>
+
+  <div class="modal-content">
+    <ion-img [src]="image?.url"></ion-img>
+  </div>
+
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption">
+    <ion-button
+      (click)="delete(image)"
+      color="light"
+      aria-label="Excluir imagem da galeria de anúncios."
+      title="Excluir imagem da galeria de anúncios."
+    >
+      <ion-icon slot="icon-only" name="trash"></ion-icon>
+    </ion-button>
+  </div>
+</div>

@@ -7,6 +7,7 @@ export interface InputName {
   lastName: Attributes;
   email: Attributes;
   level: Attributes;
+  plan: Attributes;
   password: Attributes;
   passwordCurrent: Attributes;
   passwordConfirmation: Attributes;

@@ -59,9 +59,10 @@ export interface Image {
 
 export interface Galery {
   readonly id?: number;
-  readonly advertId?: number;
+  readonly announcementId?: number;
   filename?: string;
   url?: string;
+  position?: number;
   message?: string;
   order: number[];
   _csrf?: string;
@@ -186,7 +187,8 @@ export interface Category {
 /************************************** */
 
 export interface Address {
-  advertId?: number;
+  id?: number;
+  announcementId?: number;
   allotment?: string;
   block?: string;
   complement?: string;
@@ -199,7 +201,8 @@ export interface Address {
   _csrf?: string;
 }
 export interface Citie {
-  advertId?: number;
+  id?: number;
+  announcementId?: number;
   city: string;
   readonly uf: 'GO';
   message?: string;
@@ -207,7 +210,8 @@ export interface Citie {
 }
 
 export interface Contact {
-  advertId?: number;
+  id?: number;
+  announcementId?: number;
   mobilePhone?: string;
   phone?: string;
   whatsapp?: string;
@@ -215,28 +219,31 @@ export interface Contact {
   _csrf?: string;
 }
 export interface Coordinate {
-  advertId?: number;
+  id?: number;
+  announcementId?: number;
   latitude?: number;
   longitude?: number;
   message?: string;
   _csrf?: string;
 }
 export interface Like {
-  advertId?: number;
+  id?: number;
+  announcementId?: number;
   not?: number;
   yes?: number;
   message?: string;
 }
 
 export interface OpeningHour {
-  advertId?: number;
-  sunday?: FieldsOpeningHour | null;
-  monday?: FieldsOpeningHour | null;
-  third?: FieldsOpeningHour | null;
-  fourth?: FieldsOpeningHour | null;
-  thursday?: FieldsOpeningHour | null;
-  friday?: FieldsOpeningHour | null;
-  saturday?: FieldsOpeningHour | null;
+  id?: number;
+  announcementId?: number;
+  sunday: FieldsOpeningHour;
+  monday: FieldsOpeningHour;
+  third: FieldsOpeningHour;
+  fourth: FieldsOpeningHour;
+  thursday: FieldsOpeningHour;
+  friday: FieldsOpeningHour;
+  saturday: FieldsOpeningHour;
   message?: string;
   _csrf?: string;
 }
@@ -248,7 +255,7 @@ export interface FieldsOpeningHour {
   end: string;
 }
 
-export interface Advert {
+export interface Announcement {
   id?: number;
   userId?: number;
   title?: string;
@@ -272,19 +279,21 @@ export interface Advert {
   address?: Address;
   citie?: Citie;
   galery?: Galery[];
-  categoryAdvert?: CategoryAdvert;
+  categoryAnnouncement?: CategoryAnnouncement;
 }
 
-export interface CategoryAdvert {
+export interface CategoryAnnouncement {
   id: number;
-  advertId: number;
+  announcementId: number;
   catAdId: number;
   _csrf?: string;
   message?: string;
+  category?: Category;
 }
 
 export interface SocialNetwork {
-  advertId?: number;
+  id?: number;
+  announcementId?: number;
   facebook?: string;
   instagran?: string;
   message?: string;
@@ -306,3 +315,19 @@ export type DaysOfTheWeek =
   | 'thursday'
   | 'friday'
   | 'saturday';
+
+export type DayOfTheWeekPT =
+  | 'segunda'
+  | 'terca'
+  | 'quarta'
+  | 'quinta'
+  | 'sexta'
+  | 'sabado'
+  | 'domingo';
+
+export interface DataUpload {
+  _csrf: string;
+  id: number;
+}
+
+export type AnnouncementRoute = 'OpeningHours' | 'announcement' | 'galery';

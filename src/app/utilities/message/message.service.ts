@@ -28,7 +28,7 @@ export class MessageService {
     this.disableLoadingUnsubscribeVariable(loading, subscribe);
     return this.helpsService.delay(
       async () =>
-        await this.toastService.show(message, 'bottom', 'thumbs-up', 3000),
+        await this.toastService.show(message, 'bottom', 'thumbs-up', 2500),
       time
     );
   }

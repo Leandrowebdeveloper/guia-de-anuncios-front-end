@@ -1,0 +1,96 @@
+<ion-card [ngClass]="{ isDeleted: index === action }">
+  <ion-card-header>
+    <ion-card-title [title]="announcement?.title">{{
+      announcement?.title | lnWords
+    }}</ion-card-title>
+
+    <ion-card-subtitle
+      [hidden]="!announcement?.categoryAnnouncement?.category?.name"
+      class="d-flex"
+    >
+      <b>Categoria: &nbsp; </b>
+      {{ announcement?.categoryAnnouncement?.category?.name }}
+    </ion-card-subtitle>
+
+    <ion-card-subtitle>
+      <!-- Chips -->
+      <ion-chip
+        disabled="true"
+        [outline]="!announcement?.state"
+        [color]="announcement?.state ? 'dark' : ''"
+      >
+        <ion-icon
+          [name]="announcement?.state ? 'eye' : 'eye-off'"
+          class="ion-margin-end"
+        ></ion-icon>
+        {{ announcement?.state ? "Online" : "Offline" }}
+      </ion-chip>
+      <ion-chip outline="true" disabled="true">
+        <ion-icon name="thumbs-up"></ion-icon>
+        {{ announcement?.like ? announcement?.like?.yes : 0 }}
+        <span class="separaitor"></span>
+        {{ announcement?.like ? announcement?.like?.not : 0 }}
+        <ion-icon name="thumbs-down"></ion-icon>
+      </ion-chip>
+    </ion-card-subtitle>
+  </ion-card-header>
+
+  <!-- Buttons -->
+  <ion-card-content class="d-flex">
+    <!-- Destroy -->
+    <ion-button
+      *ngIf="!announcement?.deletedAt"
+      expand="block"
+      color="danger"
+      (click)="destroy(index, announcement)"
+    >
+      <ion-icon slot="icon-only" name="trash" class="ion-margin-end"></ion-icon>
+      Excluir
+    </ion-button>
+
+    <!-- Drop -->
+    <ion-button
+      *ngIf="announcement?.deletedAt"
+      expand="block"
+      color="danger"
+      (click)="drop(index, announcement)"
+    >
+      <ion-icon slot="icon-only" name="trash" class="ion-margin-end"></ion-icon>
+      Excluir
+    </ion-button>
+
+    <!-- Editar -->
+    <ion-button
+      *ngIf="!announcement?.deletedAt"
+      expand="block"
+      [routerLink]="[
+        '/painel-de-controle',
+        'anuncio',
+        'editar',
+        announcement?.slug
+      ]"
+    >
+      <ion-icon
+        slot="icon-only"
+        name="create"
+        class="ion-margin-end"
+      ></ion-icon>
+      editar
+    </ion-button>
+
+    <!-- Restore -->
+    <ion-button
+      *ngIf="announcement?.deletedAt"
+      expand="block"
+      color="success"
+      (click)="toRestore(index, announcement)"
+    >
+      <ion-icon
+        slot="icon-only"
+        name="arrow-back-circle"
+        class="ion-margin-end"
+      ></ion-icon>
+      restaurar
+    </ion-button>
+  </ion-card-content>
+</ion-card>

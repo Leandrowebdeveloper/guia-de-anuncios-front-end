@@ -17,7 +17,6 @@ export class SystemAccessService {
   private $activeRoute: string = 'login' || 'recover' || 'register';
   constructor(
     public http: HttpClient,
-    private loadingService: LoadingService,
     private messageService: MessageService,
     private authService: AuthService,
     private helpsService: HelpsService,
@@ -46,10 +45,6 @@ export class SystemAccessService {
     return this.registerService.register(user);
   }
 
-  public async loading(message: string): Promise<HTMLIonLoadingElement> {
-    return await this.loadingService.show(message);
-  }
-
   public setStayConnected(value: boolean) {
     this.loginService.stayConnected = value;
   }
@@ -57,16 +52,6 @@ export class SystemAccessService {
   /********************************************************
    ******* MESSAGENS DE RETORNO DA CHAMADA HTTP ***********
    ********************************************************/
-  public async success(
-    user: User,
-    loading: Promise<HTMLIonLoadingElement>,
-    subscribe: Subscription
-  ) {
-    this.isLogin(user);
-    await this.goToUserPage();
-    await this.messageService.disable(loading, subscribe);
-    this.messageService.success(user.message);
-  }
 
   public error(
     error: HttpErrorResponse,
@@ -76,16 +61,7 @@ export class SystemAccessService {
     return this.messageService.error(error, loading, subscribe);
   }
 
-  private isLogin(user: User): void {
-    if (this.activeRoute === 'login') {
-      this.helpsService.delay(
-        () => this.loginService.storesTokenDatabaseOrSession(user),
-        2500
-      );
-    }
-  }
-
-  private async goToUserPage(): Promise<number> {
+  public async goToUserPage(): Promise<number> {
     switch (this.activeRoute) {
       case 'login':
         return this.authRoute();
@@ -93,6 +69,15 @@ export class SystemAccessService {
         return this.recoverService.goToLoginPage();
       case 'register':
         return this.registerService.goToLoginPage();
+    }
+  }
+
+  public isLogin(user: User): void {
+    if (this.activeRoute === 'login') {
+      this.helpsService.delay(
+        () => this.loginService.storesTokenDatabaseOrSession(user),
+        2500
+      );
     }
   }
 

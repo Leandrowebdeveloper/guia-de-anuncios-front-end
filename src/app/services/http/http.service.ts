@@ -61,14 +61,14 @@ export class HttpService<T> implements Http<T> {
       .pipe(tap((e: T[]) => console.log('search', e)));
   }
 
-  public toggleEmail(url: string, searchBy: object): Observable<T> {
+  public findOne(url: string, searchBy: object): Observable<T> {
     this.getToken();
     return this.http
       .get<T>(`${this.api}/${url}`, {
         headers: this.httpOptions.headers,
         params: { ...searchBy },
       })
-      .pipe(tap((e: T) => console.log('toggleEmail', e)));
+      .pipe(tap((e: T) => console.log('findOne', e)));
   }
 
   public index(url?: string, search?: object): Observable<T[]> {

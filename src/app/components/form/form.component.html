@@ -4,10 +4,11 @@
       *ngIf="
         input?.type !== 'checkbox' &&
         input?.name !== 'level' &&
+        input?.name !== 'plan' &&
         input?.name !== 'city'
       "
     >
-      <ion-item>
+      <ion-item [lines]="input?.name === 'description' && 'none'">
         <!-- Label -->
         <ion-label
           position="floating"
@@ -63,7 +64,8 @@
             input?.name !== 'description' &&
             input?.name !== 'complement' &&
             input?.name !== 'zip_code' &&
-            input?.name !== 'city'
+            input?.name !== 'city' &&
+            input?.name !== 'plan'
           "
           [type]="visiblePassword ? 'text' : input?.type"
           [formControlName]="input?.name"
@@ -127,6 +129,15 @@
           rows="8"
         ></ion-textarea>
 
+        <p *ngIf="input?.name === 'description'" class="ion-margin-top"></p>
+
+        <editor
+          *ngIf="input?.name === 'description'"
+          apiKey="eltulb4tbmvkr9gu7025qd3j9otlnxlej0ybckmvguswoje5"
+          [formControlName]="input?.name"
+          [init]="config"
+        ></editor>
+
         <!-- Button display password -->
         <ion-button
           *ngIf="
@@ -154,15 +165,21 @@
           input?.name === 'passwordConfirmation' ||
           (input?.name === 'password' && attrButton?.route === 'login')
         "
-        [passwordToCheck]="form.value.password"
+        [passwordToCheck]="form?.value?.password"
         [hidden]="isPageTheLogin"
       ></app-password-strength>
     </div>
 
     <!-- Level OR Cities -->
-    <ion-list *ngIf="input?.name === 'level' || input?.name === 'city'">
+    <ion-list
+      *ngIf="
+        input?.name === 'level' ||
+        input?.name === 'city' ||
+        input?.name === 'plan'
+      "
+    >
       <ion-radio-group [formControlName]="input?.name">
-        <span *ngIf="input?.name === 'level'; else City">
+        <span *ngIf="input?.name === 'level'">
           <ion-item>
             <ion-label>Colaborador</ion-label>
             <ion-radio value="2"></ion-radio>
@@ -173,7 +190,7 @@
             <ion-radio value="1"></ion-radio>
           </ion-item>
         </span>
-        <ng-template #City>
+        <span *ngIf="input?.name === 'city'">
           <ion-item>
             <ion-label>São Luiz dos Montes Belos</ion-label>
             <ion-radio value="São Luiz dos Montes Belos"></ion-radio>
@@ -199,7 +216,23 @@
             <ion-label>Córrego do Ouro</ion-label>
             <ion-radio value="Córrego do Ouro"></ion-radio>
           </ion-item>
-        </ng-template>
+        </span>
+        <span *ngIf="input?.name === 'plan'">
+          <ion-item>
+            <ion-label>Grátis</ion-label>
+            <ion-radio value="free"></ion-radio>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Básico</ion-label>
+            <ion-radio value="basic"></ion-radio>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Special</ion-label>
+            <ion-radio value="special"></ion-radio>
+          </ion-item>
+        </span>
       </ion-radio-group>
     </ion-list>
 

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PrivateAutorizationGuard } from 'src/app/services/auth/guard/private-autorization/private-autorization.guard';
-import { CategoryManagementResolver } from './categoryAdvert/management/guard/resolve.guard';
-import { ChangeEmailResolver } from '../auth/pages/change-email/guard/change-email.guard';
+import { CategoryManagementResolver } from './categoryAnnouncement/management/guard/resolve.guard';
+import { ChangeEmailResolver } from '../auth/user/change-email/guard/change-email.guard';
 
 import { DashboardPage } from './dashboard-admin.page';
 import { UserManagementResolver } from './users/management/guard/resolve.guard';
@@ -18,7 +18,7 @@ const routes: Routes = [
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
       import(
-        'src/app/pages/dashboard/auth/pages/change-email/change-email.module'
+        'src/app/pages/dashboard/auth/user/change-email/change-email.module'
       ).then((m) => m.ChangeEmailPageModule),
     resolve: {
       changeEmail: ChangeEmailResolver,
@@ -29,7 +29,7 @@ const routes: Routes = [
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('src/app/pages/dashboard/auth/pages/user/user.module').then(
+      import('src/app/pages/dashboard/auth/user/user.module').then(
         (m) => m.UserPageModule
       ),
   },
@@ -64,22 +64,26 @@ const routes: Routes = [
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('./Advert/advert.module').then((m) => m.AdvertPageModule),
+      import('./announcement/announcement.module').then(
+        (m) => m.AnnouncementPageModule
+      ),
   },
   {
     path: 'anuncio/:id',
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('./Advert/advert.module').then((m) => m.AdvertPageModule),
+      import('./announcement/announcement.module').then(
+        (m) => m.AnnouncementPageModule
+      ),
   },
   {
     path: 'categorias',
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('./categoryAdvert/category-advert.module').then(
-        (m) => m.CategoryAdvertisementPageModule
+      import('./categoryAnnouncement/category-announcement.module').then(
+        (m) => m.CategoryAnnouncementPageModule
       ),
   },
   {
@@ -87,8 +91,8 @@ const routes: Routes = [
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('./categoryAdvert/category-advert.module').then(
-        (m) => m.CategoryAdvertisementPageModule
+      import('./categoryAnnouncement/category-announcement.module').then(
+        (m) => m.CategoryAnnouncementPageModule
       ),
   },
   {
@@ -96,7 +100,7 @@ const routes: Routes = [
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('./categoryAdvert/management/management.module').then(
+      import('./categoryAnnouncement/management/management.module').then(
         (m) => m.ManagementPageModule
       ),
     resolve: {

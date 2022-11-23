@@ -2,48 +2,36 @@
 
 <ion-content [fullscreen]="true">
   <ion-grid *ngIf="user$ | async;let user;" fixed>
-    <ion-card>
-      <!-- Avatar -->
-      <div class="container ion-margin-vertical">
-        <div
-          button
-          (click)="avatar(user)"
-          title="Adicionar á imagem do usuário."
-          aria-label="Clique para adicionar á imagem do usuário."
-          button
-        >
-          <ion-avatar>
-            <ion-img
-              [src]="user?.image?.url || './../../../../../../assets/avatar.svg'"
-              alt="Avatar"
-              title="Imagem do usuário"
-            ></ion-img>
-          </ion-avatar>
-          <ion-icon color="medium" size="large" name="camera"> </ion-icon>
-        </div>
-      </div>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <!-- Avatar -->
+          <!-- <div class="container ion-margin-vertical"> -->
+          <app-avatar-component [user]="user"></app-avatar-component>
 
-      <!-- Label -->
-      <ion-card-content>
-        <ion-card-header>
-          <ion-card-title>{{ user?.name }}</ion-card-title>
-          <ion-card-subtitle>
-            Plano:
-            <span [ngSwitch]="user?.plan">
-              <span *ngSwitchCase="'free'">Grátis</span>
-              <span *ngSwitchCase="'basic'">Basico</span>
-              <span *ngSwitchCase="'special'">Especial</span>
-            </span>
-            <br />
-            Tipo: {{ user?.level === '1' ? 'Administrador' : 'Colaborador' }}
-            <br />
-            Email: {{ user?.email }} <br />{{ user?.createdAt | time:'create' }}
-            <br />
-            {{ user?.updatedAt | time:'update' }}
-          </ion-card-subtitle>
-        </ion-card-header>
-      </ion-card-content>
-    </ion-card>
+          <!-- Label -->
+          <ion-card-content>
+            <ion-card-header>
+              <ion-card-title>{{ user?.name }}</ion-card-title>
+              <ion-card-subtitle>
+                Plano:
+                <span *ngIf="user?.plan === 'free'">Grátis</span>
+                <span *ngIf="user?.plan === 'basic'">Básico</span>
+                <span *ngIf="user?.plan === 'special'">Especial</span>
+                <br />
+                Tipo: {{ user?.level === '1' ? 'Administrador' : 'Colaborador'
+                }}
+                <br />
+                Email: {{ user?.email }} <br />{{ user?.createdAt |
+                time:'create' }}
+                <br />
+                {{ user?.updatedAt | time:'update' }}
+              </ion-card-subtitle>
+            </ion-card-header>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
 
     <ion-item-group>
       <ion-row>
@@ -73,7 +61,7 @@
 
           <!-- State -->
           <ion-item [disabled]="user?.blockade">
-            <ion-label>{{ user?.state ? 'Conectado' : 'Desligado'}}</ion-label>
+            <ion-label>{{ user?.state ? 'Online' : 'Offline'}}</ion-label>
             <ion-toggle
               slot="end"
               (ionChange)="state(user)"
@@ -85,7 +73,7 @@
             </ion-toggle>
             <ion-icon
               slot="start"
-              [name]="user?.state  ? 'eye': 'eye-off'"
+              [name]="user?.state  ? 'power': 'radio-button-off'"
             ></ion-icon>
           </ion-item>
 
@@ -106,6 +94,38 @@
             <ion-icon
               slot="start"
               [name]="user?.level === '1' ? 'trophy': 'medal'"
+            ></ion-icon>
+          </ion-item>
+
+          <!-- Plano -->
+          <ion-item
+            [disabled]="user?.blockade"
+            detail="true"
+            (click)="plan(user)"
+            title="Alterar plano."
+            aria-label="Clique para alterar plano"
+            [attr.aria-disabled]="'Botão alterar plano do usuário ' + user?.blockade ? 'abilitado.' : 'desabilitado.'"
+            button
+          >
+            <ion-label *ngIf="user?.plan === 'free'">Grátis</ion-label>
+            <ion-icon
+              *ngIf="user?.plan === 'free'"
+              slot="start"
+              name="trophy"
+            ></ion-icon>
+
+            <ion-label *ngIf="user?.plan === 'basic'">Básico</ion-label>
+            <ion-icon
+              *ngIf="user?.plan === 'basic'"
+              slot="start"
+              name="trophy"
+            ></ion-icon>
+
+            <ion-label *ngIf="user?.plan === 'special'">Especial</ion-label>
+            <ion-icon
+              *ngIf="user?.plan === 'special'"
+              slot="start"
+              name="trophy"
             ></ion-icon>
           </ion-item>
 

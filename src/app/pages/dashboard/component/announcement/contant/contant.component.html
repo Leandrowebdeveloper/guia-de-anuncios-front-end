@@ -1,0 +1,22 @@
+<ion-item
+  *ngIf="announcement"
+  [disabled]="
+    announcement?.categoryAnnouncement === null || announcement?.blockade
+  "
+  detail="true"
+  (click)="contacts()"
+  title="Alterar Titulo e descrição"
+  aria-label="Clique para alterar Titulo e descrição"
+  [attr.aria-disabled]="
+    'Botão alterar Titulo e descrição ' + announcement?.blockade
+      ? 'abilitado.'
+      : 'desabilitado'
+  "
+  button
+>
+  <ion-icon
+    src="../../../../../../assets/ion-icon/contact.svg"
+    slot="start"
+  ></ion-icon>
+  <ion-label>Contato</ion-label>
+</ion-item>

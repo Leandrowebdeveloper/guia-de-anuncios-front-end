@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, delay, tap } from 'rxjs/operators';
 import { UsersService } from './services/users.service';
 import { User, UserSearch } from 'src/app/interface';
-import { Observable, EMPTY, Subject, Subscription } from 'rxjs';
+import { Observable, EMPTY, Subject, Subscription, of } from 'rxjs';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   InfiniteScrollCustomEvent,
@@ -27,6 +27,7 @@ export class UsersPage implements OnInit, OnDestroy {
   @ViewChild(IonContent, { static: true }) content: IonContent;
   public users$: Observable<User[]>;
   public users: User[];
+  public usersDrop$: Observable<User[]>;
   public usersDrop: User[];
   public error = new Subject<boolean>();
   public endListUser = true;
@@ -36,6 +37,8 @@ export class UsersPage implements OnInit, OnDestroy {
   public sizeSkeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   public toggleListUser: boolean;
+
+  public menssage: boolean;
 
   private $users: Subscription;
   private $search: Subscription;
@@ -80,6 +83,15 @@ export class UsersPage implements OnInit, OnDestroy {
     this.$users.unsubscribe();
     this.$drop.unsubscribe();
     this.$dropd.unsubscribe();
+  }
+
+  public refresher(event: any): void {
+    this.findUsers();
+    event.target.complete();
+  }
+
+  public hideMenssage() {
+    this.menssage = true;
   }
 
   public logScrolling(event: any): void {
@@ -215,18 +227,33 @@ export class UsersPage implements OnInit, OnDestroy {
   }
 
   private findUsers(): Observable<User[]> {
-    const url = this.toggleListUser ? 'deleted' : '';
+    const url = this.toggleListUser && 'deleted';
+    if (url) {
+      return (this.usersDrop$ = this.usersService
+        .index(`management/${url}`, { limit: this.limit, offset: this.offset })
+        .pipe(
+          tap((user: User[]) => {
+            setTimeout(() => (this.menssage = false), 300);
+            return (this.usersDrop = user);
+          }),
+          delay(300),
+          catchError((error: HttpErrorResponse) => {
+            setTimeout(() => (this.menssage = false), 300);
+            this.error.next(true);
+            return EMPTY;
+          })
+        ));
+    }
     return (this.users$ = this.usersService
-      .index(`management/${url}`, { limit: this.limit, offset: this.offset })
+      .index(`management/`, { limit: this.limit, offset: this.offset })
       .pipe(
         tap((user: User[]) => {
-          if (this.toggleListUser) {
-            return (this.usersDrop = user);
-          }
+          setTimeout(() => (this.menssage = false), 300);
           return (this.users = user);
         }),
         delay(500),
         catchError((error: HttpErrorResponse) => {
+          setTimeout(() => (this.menssage = false), 300);
           this.error.next(true);
           return EMPTY;
         })
@@ -240,7 +267,7 @@ export class UsersPage implements OnInit, OnDestroy {
   }
 
   private success(event: InfiniteScrollCustomEvent, user: User[]): void {
-    this.setMoreData(user);
+    // this.setMoreData(user);
     this.updateScrollEvent(event, user);
     return;
   }

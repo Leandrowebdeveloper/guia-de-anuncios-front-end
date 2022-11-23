@@ -73,6 +73,11 @@ export class UsersService extends HttpService<User> {
     }
   }
 
+  public set setPlan(value: 'free' | 'basic' | 'special') {
+    this.users.value.plan = value;
+    this.users.next(this.users.value);
+  }
+
   public set setCsrf(csrf: string) {
     this.csrf = csrf;
   }
@@ -90,10 +95,6 @@ export class UsersService extends HttpService<User> {
   public set setDelete(user: User) {
     this.users.value.deletedAt = user?.deletedAt;
     this.setUsers = this.users?.value;
-  }
-
-  public async showLoading(message: string): Promise<HTMLIonLoadingElement> {
-    return await this.loadingService.show(message);
   }
 
   public name(user: User): Observable<User | number[]> {
@@ -144,6 +145,12 @@ export class UsersService extends HttpService<User> {
     );
   }
 
+  public plan(user: User): Observable<User | number[]> {
+    return this.patch(user, 'management/plan').pipe(
+      tap((user_: User) => (this.setPlan = user_?.plan))
+    );
+  }
+
   public delete(user: User): Observable<User> {
     return this.destroy(user, `management/`).pipe(
       tap((user_: User) => setTimeout(() => this.deleted.emit(user_), 3600))
@@ -158,28 +165,6 @@ export class UsersService extends HttpService<User> {
 
   public email(user: User): Observable<User | number[]> {
     return this.patch(user, 'management/email');
-  }
-
-  public async message(
-    user: User,
-    loading: Promise<HTMLIonLoadingElement>,
-    subscribe?: Subscription,
-    time?: number
-  ): Promise<number> {
-    return await this.messageService.success(
-      user?.message,
-      loading,
-      subscribe,
-      time
-    );
-  }
-
-  public async error(
-    error: HttpErrorResponse,
-    loading: Promise<HTMLIonLoadingElement>,
-    subscribe: Subscription
-  ) {
-    return this.messageService.error(error, loading, subscribe);
   }
 
   public updateUsersUrl(user: User): void {
