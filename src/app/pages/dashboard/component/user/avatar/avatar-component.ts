@@ -5,7 +5,7 @@ import {
   ActionSheetController,
   Platform,
 } from '@ionic/angular';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { User, HttpResponse, Image } from 'src/app/interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
@@ -22,10 +22,9 @@ export class AvatarComponent implements OnInit {
   public btnPlatform: boolean;
   public isMobile: boolean;
   private upload: Subscription;
-  private delete: Subscription;
+  private $delete: Subscription;
 
   constructor(
-    private authService: AuthService,
     private avatarService: AvatarService,
     private alertController: AlertController,
     private plt: Platform,
@@ -50,9 +49,11 @@ export class AvatarComponent implements OnInit {
           {
             text: 'excluir',
             handler: () =>
-              (this.delete = this.avatarService
+              (this.$delete = this.avatarService
                 .delete(image)
-                .subscribe((avatar: Image) => console.log(avatar))),
+                .subscribe(() =>
+                  setTimeout(() => this.$delete.unsubscribe(), 2000)
+                )),
           },
           {
             text: 'substituir',
@@ -101,9 +102,9 @@ export class AvatarComponent implements OnInit {
     }
     const loading = this.toastService.loading('Transferindo imagen', 'top');
     // eslint-disable-next-line no-underscore-dangle
-    this.authService.setCsrf = user?._csrf;
-    this.upload = this.authService
-      .upload('upload', this.build(input.files[0], user))
+    this.avatarService.setCsrf = user?._csrf;
+    this.upload = this.avatarService
+      .upload(this.build(input.files[0], user))
       .subscribe(
         (response: any) => this.success(response, response, loading),
         (error: HttpErrorResponse) =>
@@ -133,7 +134,7 @@ export class AvatarComponent implements OnInit {
   }
 
   private async update(image: Image, loading: Promise<HTMLIonToastElement>) {
-    this.authService.avatar = image;
+    this.avatarService.setAuthAvatar(image);
     (await loading).dismiss();
     if (image) {
       this.upload.unsubscribe();
@@ -146,7 +147,7 @@ export class AvatarComponent implements OnInit {
 
   private build(file: File, user: User): FormData {
     const formData = new FormData();
-    formData.append('slug', user?.slug);
+    formData.append('userId', String(user?.id));
     // eslint-disable-next-line no-underscore-dangle
     formData.append('_csrf', user?._csrf);
     formData.append('filename', file, file?.name);

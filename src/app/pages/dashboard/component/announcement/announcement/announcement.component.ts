@@ -1,4 +1,4 @@
-import { FormComponent } from './form/form.component';
+import { FormAnnouncementComponent } from './form/form.component';
 import { Announcement, User } from 'src/app/interface';
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
@@ -26,6 +26,7 @@ export class AnnouncementComponent implements OnInit {
         _csrf: announcement?._csrf,
         title: announcement?.title,
         description: announcement?.description,
+        slug: announcement?.slug,
         id: announcement?.id,
       };
       label = 'Editar anúcio';
@@ -35,13 +36,14 @@ export class AnnouncementComponent implements OnInit {
         _csrf: this.user?._csrf,
         title: null,
         description: null,
+        slug: null,
         userId: this.user?.id,
       };
       label = 'Cadastrar anúncio';
     }
 
     const modal = await this.modalController.create({
-      component: FormComponent,
+      component: FormAnnouncementComponent,
       componentProps: {
         action: 'announcement',
         label,

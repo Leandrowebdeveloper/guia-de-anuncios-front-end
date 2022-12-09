@@ -55,17 +55,9 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
     this.csrf = csrf;
   }
 
-  public sendAnnouncement(
+  public createAnnouncement(
     announcement: Announcement
   ): Observable<Announcement> {
-    if (announcement?.id) {
-      return this.patch(announcement, 'announcement').pipe(
-        tap(
-          (announcement_: Announcement) =>
-            (this.setDataAnnouncement = announcement_)
-        )
-      );
-    }
     return this.create(announcement, 'announcement').pipe(
       tap((announcement_: Announcement) => {
         if (this.getAnnouncement?.length > 0) {
@@ -77,7 +69,6 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
         return this.navCtrl.navigateBack([
           '/painel-de-controle',
           'anuncio',
-          'editar',
           announcement_.slug,
         ]);
       })
@@ -103,9 +94,8 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
 
   public getAnnouncementAll(
     url: string,
-    limit: number,
-    offset: number
+    query: { userId: number; limit: number; offset: number }
   ): Observable<Announcement[]> {
-    return this.index(`management/${url}`, { limit, offset });
+    return this.index(`management/${url}`, { ...query });
   }
 }

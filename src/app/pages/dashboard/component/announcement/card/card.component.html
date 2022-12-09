@@ -39,7 +39,7 @@
   <ion-card-content class="d-flex">
     <!-- Destroy -->
     <ion-button
-      *ngIf="!announcement?.deletedAt"
+      *ngIf="!announcement?.deletedAt && index !== 0"
       expand="block"
       color="danger"
       (click)="destroy(index, announcement)"
@@ -63,12 +63,7 @@
     <ion-button
       *ngIf="!announcement?.deletedAt"
       expand="block"
-      [routerLink]="[
-        '/painel-de-controle',
-        'anuncio',
-        'editar',
-        announcement?.slug
-      ]"
+      [routerLink]="['/painel-de-controle', 'anuncio', announcement?.slug]"
     >
       <ion-icon
         slot="icon-only"

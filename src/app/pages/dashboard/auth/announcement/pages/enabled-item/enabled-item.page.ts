@@ -7,14 +7,15 @@ import { AlertService } from 'src/app//utilities/alert/alert.service';
 import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
 import { Announcement } from 'src/app/interface/index';
 import { Observable, Subject, Subscription, EMPTY } from 'rxjs';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-enabled-item',
+  selector: 'app-enabled-item-announcement-page',
   templateUrl: './enabled-item.page.html',
   styleUrls: ['./enabled-item.page.scss', '../../dashboard.page.scss'],
 })
-export class EnabledItemPage implements OnInit {
+export class EnabledItemAnnouncementPage implements OnInit {
+  @Input() userId!: number;
   @Output() isAnnouncement = new EventEmitter<boolean>(undefined);
   public announcement$: Observable<Announcement[]>;
   public announcement: Announcement[];
@@ -99,19 +100,25 @@ export class EnabledItemPage implements OnInit {
   }
 
   private getAnnouncement(): Observable<Announcement[]> {
-    return (this.announcement$ = this.authAnnouncementService
-      .getAnnouncementAll('', this.limit, this.offset)
-      .pipe(
-        tap((announcement: Announcement[]) => {
-          this.isAnnouncement.emit(announcement.length > 0);
-          this.announcement = announcement;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          setTimeout(() => (this.menssage = false), 300);
-          this.error.next(true);
-          return EMPTY;
+    if (this.userId) {
+      return (this.announcement$ = this.authAnnouncementService
+        .getAnnouncementAll('', {
+          limit: this.limit,
+          offset: this.offset,
+          userId: this.userId,
         })
-      ));
+        .pipe(
+          tap((announcement: Announcement[]) => {
+            this.isAnnouncement.emit(announcement.length > 0);
+            this.announcement = announcement;
+          }),
+          catchError((error: HttpErrorResponse) => {
+            setTimeout(() => (this.menssage = false), 300);
+            this.error.next(true);
+            return EMPTY;
+          })
+        ));
+    }
   }
 
   private deleted(announcement: Announcement, index: number) {

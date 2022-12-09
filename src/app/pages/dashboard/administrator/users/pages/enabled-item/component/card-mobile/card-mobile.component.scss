@@ -1,0 +1,14 @@
+ion-card-header {
+  > div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+}
+
+ion-card-content {
+  > div {
+    display: flex;
+    justify-content: end;
+  }
+}

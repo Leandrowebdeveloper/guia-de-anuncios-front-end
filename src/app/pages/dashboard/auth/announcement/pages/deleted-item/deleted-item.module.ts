@@ -3,22 +3,22 @@ import { CommonModule } from '@angular/common';
 
 import { IonicModule } from '@ionic/angular';
 
-import { DeletedItemPageRoutingModule } from './deleted-item-routing.module';
+import { DeletedItemAnnouncementPageRoutingModule } from './deleted-item-routing.module';
 
-import { DeletedItemPage } from './deleted-item.page';
-import { CardUserComponentModule } from 'src/app/pages/dashboard/component/user/card/card.module';
-import { ListItemComponentModule } from 'src/app/pages/dashboard/component/announcement/list-item/list-item.component.module';
-import { SkeletonComponent } from 'src/app/pages/dashboard/component/announcement/skeleton/skeleton.component';
+import { DeletedItemAnnouncementPage } from './deleted-item.page';
+
+import { UserComponentsModule } from 'src/app/pages/dashboard/component/user/user-component.module';
+import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
 
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
-    DeletedItemPageRoutingModule,
-    CardUserComponentModule,
-    ListItemComponentModule,
+    DeletedItemAnnouncementPageRoutingModule,
+    UserComponentsModule,
+    AnnouncementComponentsModule,
   ],
-  declarations: [DeletedItemPage, SkeletonComponent],
-  exports: [DeletedItemPage],
+  declarations: [DeletedItemAnnouncementPage],
+  exports: [DeletedItemAnnouncementPage],
 })
-export class DeletedItemPageModule {}
+export class DeletedItemAnnouncememtPageModule {}

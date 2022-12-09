@@ -1,4 +1,3 @@
-import { LoadingService } from './../../../../utilities/loading/loading.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, delay, tap } from 'rxjs/operators';
 import { Category, CategorySearch } from 'src/app/interface';
@@ -8,7 +7,6 @@ import {
   InfiniteScrollCustomEvent,
   IonContent,
   IonReorderGroup,
-  ItemReorderEventDetail,
   ModalController,
   NavController,
   SearchbarCustomEvent,
@@ -20,6 +18,7 @@ import { FormComponent } from './form/form.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SearchService } from 'src/app/components/categotyAnnouncementSearch/service/service.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { LoadingService } from 'src/app/utilities/loading/loading.service';
 
 @Component({
   selector: 'app-category',

@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { DeletedItemPage } from './deleted-item.page';
+import { DeletedItemAnnouncementPage } from './deleted-item.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: DeletedItemPage
-  }
+    component: DeletedItemAnnouncementPage,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DeletedItemPageRoutingModule {}
+export class DeletedItemAnnouncementPageRoutingModule {}

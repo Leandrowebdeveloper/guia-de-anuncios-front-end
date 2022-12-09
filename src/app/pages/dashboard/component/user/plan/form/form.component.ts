@@ -1,20 +1,21 @@
-import { UsersService } from 'src/app/pages/dashboard/administrator/users/services/users.service';
-import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
-import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
-import { User } from 'src/app/interface';
 import { HttpErrorResponse } from '@angular/common/http';
-import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
+
+import { Plan, User } from 'src/app/interface';
+import { HelpsService } from 'src/app/services/helps/helps.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { UserPlanService } from '../service/user-plan.service';
+import { LoadingService } from 'src/app/utilities/loading/loading.service';
+import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormUserPlanComponent implements OnInit {
   @Input() user!: User;
   @Input() action!: string;
   @Input() label!: string;
@@ -35,7 +36,7 @@ export class FormComponent implements OnInit {
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
-    private usersService: UsersService,
+    private userPlanService: UserPlanService,
     private loadingService: LoadingService,
     private messageService: MessageService
   ) {}
@@ -54,23 +55,25 @@ export class FormComponent implements OnInit {
 
   private plan(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Alterando plano...');
-    event.value.slug = this.usersService.getSlug;
-    return (this.write = this.usersService.plan(event.value).subscribe(
-      (user: User) => this.messsage(user, loading),
+    event.value.userId = this.user?.id;
+    return (this.write = this.userPlanService.plan(event.value).subscribe(
+      (plan: Plan) => this.messsage(plan, loading),
       (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.write)
     ));
   }
 
   private messsage(
-    user: User,
+    plan: Plan,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(user?.message, loading, this.write);
+    return this.messageService.success(plan?.message, loading, this.write);
   }
 
   private getData(): void {
-    this.config = { ...this.user };
+    const { _csrf, plan, password } = this.user;
+    this.config = { _csrf, password, ...plan };
+    console.log(this.config);
   }
 }

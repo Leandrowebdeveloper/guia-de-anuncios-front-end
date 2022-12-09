@@ -2,19 +2,19 @@ import { SocialNetwork } from 'src/app/interface/index';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
-import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
 import { SocialNetworkService } from '../service/social-network.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
+import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormSocialNetworkAnnouncementComponent implements OnInit {
   @Input() socialNetwork!: SocialNetwork;
   @Input() label!: string;
 

@@ -16,6 +16,12 @@ export class FormServices {
   private regexName =
     /^(?![ ])(?!.*(?:\d|[ ]{2}|[!$%^&*()_+|~=\{\}\[\]:";<>?,\/]))(?:(?:e|da|do|das|dos|de|d'|D'|la|las|el|los|l')\s*?|(?:[A-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð'][^\s]*\s*?)(?!.*[ ]$))+$/;
 
+  private regexFacebook =
+    /(?:https?\:\/\/|www\.)(?:facebook)(?:.com\/)(?:[-a-z0-9]+\.)*[-a-z0-9]+.*?$/i;
+
+  private regexInstagran =
+    /(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/im;
+
   private controls = {
     id: ['', [Validators.required]],
     name: [
@@ -30,30 +36,25 @@ export class FormServices {
     allotment: ['', [Validators.required]],
     block: ['', [Validators.required]],
     street: ['', [Validators.required]],
-    plan: ['', [Validators.required]],
+    type: ['', [Validators.required]],
+    blockade: ['', [Validators.required]],
+    response: ['', [Validators.required]],
+    period: [''],
     // eslint-disable-next-line @typescript-eslint/naming-convention
     zip_code: ['', [Validators.required]],
-    district: [''],
-    number_: [''],
+    district: ['', [Validators.required]],
+    numberr: [''],
     complement: [''],
     mobilePhone: ['', [Validators.required]],
     phone: [''],
     whatsapp: ['', [Validators.required]],
     facebook: [
       '',
-      [
-        Validators.required,
-        Validators.pattern(
-          /(?:https?:\/\/www\.?facebook\.com\/)([a-z]+(.)[a-z]+(.)[\d]{0,7})/g
-        ),
-      ],
+      [Validators.required, Validators.pattern(this.regexFacebook)],
     ],
     instagran: [
       '',
-      [
-        Validators.required,
-        Validators.pattern(/(?:https?:\/\/www\.?instagram\.com\/([\W\w])+)/g),
-      ],
+      [Validators.required, Validators.pattern(this.regexInstagran)],
     ],
     city: ['', [Validators.required]],
     uf: ['GO', [Validators.required]],

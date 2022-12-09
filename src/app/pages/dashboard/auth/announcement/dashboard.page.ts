@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { User } from 'src/app/interface/index';
-import { FormComponent } from 'src/app/pages/dashboard/component/announcement/announcement/form/form.component';
+import { FormAnnouncementComponent } from 'src/app/pages/dashboard/component/announcement/announcement/form/form.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +13,7 @@ import { FormComponent } from 'src/app/pages/dashboard/component/announcement/an
 export class DashboardPage implements OnInit {
   public user$: Observable<User>;
   public isAnnouncement: boolean;
-  public toggleListAnnouncement: boolean;
+  public toggleList: boolean;
 
   constructor(
     private authService: AuthService,
@@ -29,12 +29,12 @@ export class DashboardPage implements OnInit {
   }
 
   public togglePage(e: boolean) {
-    this.toggleListAnnouncement = e;
+    this.toggleList = e;
   }
 
   public async create(): Promise<void> {
     const modal = await this.modalController.create({
-      component: FormComponent,
+      component: FormAnnouncementComponent,
       componentProps: {
         action: 'announcement',
         label: 'Cadastrar anúncio',

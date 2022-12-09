@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Announcement, Citie } from 'src/app/interface';
-import { FormComponent } from './form/form.component';
+import { FormCityAnnouncementComponent } from './form/form.component';
 
 @Component({
   selector: 'app-city-component',
@@ -36,7 +36,7 @@ export class CityComponent implements OnInit {
     }
 
     const modal = await this.modalController.create({
-      component: FormComponent,
+      component: FormCityAnnouncementComponent,
       componentProps: {
         label,
         citie,

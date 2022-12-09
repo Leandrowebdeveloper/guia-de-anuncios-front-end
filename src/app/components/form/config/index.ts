@@ -94,9 +94,8 @@ export class ConfigForm {
         max: null,
       },
     },
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    number_: {
-      name: 'number',
+    numberr: {
+      name: 'numberr',
       label: 'Número',
       placeholder: 'Digite o numero',
       type: 'text',
@@ -140,7 +139,7 @@ export class ConfigForm {
     complement: {
       name: 'complement',
       label: 'Complemento',
-      placeholder: 'Complemento',
+      placeholder: 'Ex: Casa 4 / Bloco A3, Apartamento 204',
       type: 'text',
       actionLabel: 'Complemento',
       readonly: false,
@@ -185,6 +184,20 @@ export class ConfigForm {
       placeholder: 'Entre com uma descrição',
       type: 'text',
       actionLabel: 'Entre com uma descrição',
+      readonly: false,
+      msg: {
+        invalid: null,
+        empty: 'obrigatório!',
+        min: null,
+        max: null,
+      },
+    },
+    blockade: {
+      name: 'blockade',
+      label: 'Bloquear',
+      placeholder: 'Bloquear usuário',
+      type: 'radio',
+      actionLabel: 'Bloquear usuário',
       readonly: false,
       msg: {
         invalid: null,
@@ -298,11 +311,40 @@ export class ConfigForm {
         max: null,
       },
     },
-    plan: {
-      name: 'plan',
+    type: {
+      name: 'type',
       label: 'Plano',
       placeholder: 'Selecione um plano',
       type: 'radio',
+      actionLabel: '',
+      readonly: false,
+      msg: {
+        invalid: 'inválido!',
+        empty: 'obrigatório!',
+        min: null,
+        max: null,
+      },
+    },
+    response: {
+      name: 'response',
+      label: 'Deseja uma resposta?',
+      placeholder: 'Deseja uma resposta?',
+      type: 'checkbox',
+      actionLabel: '',
+      readonly: false,
+      msg: {
+        invalid: 'inválido!',
+        empty: 'obrigatório!',
+        min: null,
+        max: null,
+      },
+    },
+
+    period: {
+      name: 'period',
+      label: 'Período',
+      placeholder: 'Selecione um período',
+      type: undefined,
       actionLabel: '',
       readonly: false,
       msg: {

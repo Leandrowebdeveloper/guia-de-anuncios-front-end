@@ -1,3 +1,4 @@
+import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Announcement, Coordinate, User } from 'src/app/interface';
 import { Component, Input, OnInit } from '@angular/core';
@@ -8,6 +9,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MapService } from './service/map.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
+import { PresentPlanComponent } from 'src/app/components/present-plan/present-plan.component';
+import { ModalService } from 'src/app/components/present-plan/animations/modal.service';
 
 @Component({
   selector: 'app-map-component',
@@ -25,13 +28,25 @@ export class MapComponent implements OnInit {
     public messageService: MessageService,
     private authService: AuthService,
     private alertService: AlertService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private modalController: ModalController,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {}
 
   // Coordenadas
-  public async coordinates(announcement: Announcement): Promise<Subscription> {
+  public async coordinates(
+    announcement: Announcement
+  ): Promise<void | Subscription> {
+    if (this.user?.plan?.type === 'free') {
+      const modal = await this.modalController.create({
+        component: PresentPlanComponent,
+        enterAnimation: this.modalService.enterAnimation,
+        leaveAnimation: this.modalService.leaveAnimation,
+      });
+      return await modal.present();
+    }
     const position = await this.getCoordinate();
     if (position instanceof GeolocationPosition) {
       return this.addCoordinate(position, announcement);

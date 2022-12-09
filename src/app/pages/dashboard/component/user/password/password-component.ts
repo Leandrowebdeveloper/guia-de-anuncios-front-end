@@ -1,15 +1,16 @@
-import { FormComponent } from './form/form.component';
+import { FormUserPasswordComponent } from './form/form.component';
 import { ModalController } from '@ionic/angular';
 import { Component, Input } from '@angular/core';
 import { User } from 'src/app/interface';
 
 @Component({
-  selector: 'app-password-component',
+  selector: 'app-password-user-component',
   templateUrl: './password-component.html',
   styleUrls: ['./password-component.scss'],
 })
-export class PasswordComponent {
+export class UserPasswordComponent {
   @Input() user!: User;
+  @Input() isAuth: boolean;
   constructor(private modalController: ModalController) {}
 
   public async password(): Promise<void> {
@@ -18,8 +19,9 @@ export class PasswordComponent {
     }
     const { _csrf, password, slug } = this.user;
     const modal = await this.modalController.create({
-      component: FormComponent,
+      component: FormUserPasswordComponent,
       componentProps: {
+        isAuth: this.isAuth,
         action: 'password',
         label: 'Editar senha',
         user: {
@@ -40,7 +42,7 @@ export class PasswordComponent {
     }
     const { _csrf, password, slug } = user;
     const modal = await this.modalController.create({
-      component: FormComponent,
+      component: FormUserPasswordComponent,
       componentProps: {
         action: 'passwordCreate',
         label: 'Cadastrar senha',

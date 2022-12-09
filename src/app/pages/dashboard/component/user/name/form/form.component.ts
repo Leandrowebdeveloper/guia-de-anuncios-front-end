@@ -1,23 +1,25 @@
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
-import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
-import { User } from 'src/app/interface';
 import { HttpErrorResponse } from '@angular/common/http';
-import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
-import { UserUtilities } from 'src/app/utilities/user/user-utilities.service';
+
+import { User } from 'src/app/interface';
+import { HelpsService } from 'src/app/services/helps/helps.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { NameService } from '../service/name.service';
+import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormUserNameComponent implements OnInit {
   @Input() user!: User;
   @Input() label!: string;
+  @Input() isAuth!: boolean;
 
   public attrButton: AttrButton = {
     route: '/name',
@@ -30,8 +32,9 @@ export class FormComponent implements OnInit {
 
   public config: object;
   private form: FormGroup;
-  private write: Subscription;
+  private $name: Subscription;
   constructor(
+    private nameService: NameService,
     private helpService: HelpsService,
     private modalController: ModalController,
     private authService: AuthService,
@@ -52,11 +55,18 @@ export class FormComponent implements OnInit {
   }
 
   private name(event: FormGroup): Subscription {
-    const loading = this.loadingService.show('Alterando nome...');
-    return (this.write = this.authService.name(event.value).subscribe(
+    const loading = this.loadingService.show('Salvando nome...');
+    if (this.isAuth) {
+      return (this.$name = this.authService.name(event.value).subscribe(
+        (user: User) => this.messsage(user, loading),
+        (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$name)
+      ));
+    }
+    return (this.$name = this.nameService.name(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
+        this.messageService.error(error, loading, this.$name)
     ));
   }
 
@@ -65,7 +75,7 @@ export class FormComponent implements OnInit {
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(user?.message, loading, this.write);
+    return this.messageService.success(user?.message, loading, this.$name);
   }
 
   private getData(): void {

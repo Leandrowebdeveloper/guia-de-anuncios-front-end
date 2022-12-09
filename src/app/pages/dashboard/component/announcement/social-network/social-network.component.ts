@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { ModalService } from 'src/app/components/present-plan/animations/modal.service';
+import { PresentPlanComponent } from 'src/app/components/present-plan/present-plan.component';
 import { Announcement, SocialNetwork, User } from 'src/app/interface';
-import { FormComponent } from './form/form.component';
+import { FormSocialNetworkAnnouncementComponent } from './form/form.component';
 
 @Component({
   selector: 'app-social-network-component',
@@ -11,10 +13,22 @@ import { FormComponent } from './form/form.component';
 export class SocialNetworkComponent {
   @Input() announcement!: Announcement;
   @Input() user!: User;
-  constructor(private modalController: ModalController) {}
+  constructor(
+    private modalController: ModalController,
+    private modalService: ModalService
+  ) {}
 
   // Rede social
   public async socialNetwork(): Promise<void> {
+    let modal: HTMLIonModalElement;
+    if (this.user?.plan?.type === 'free') {
+      modal = await this.modalController.create({
+        component: PresentPlanComponent,
+        enterAnimation: this.modalService.enterAnimation,
+        leaveAnimation: this.modalService.leaveAnimation,
+      });
+      return await modal.present();
+    }
     const announcement: Announcement = this.announcement;
     let socialNetwork: SocialNetwork;
     let label: string;
@@ -34,8 +48,8 @@ export class SocialNetworkComponent {
       label = 'Cadastrar rede social';
     }
 
-    const modal = await this.modalController.create({
-      component: FormComponent,
+    modal = await this.modalController.create({
+      component: FormSocialNetworkAnnouncementComponent,
       componentProps: {
         label,
         socialNetwork,

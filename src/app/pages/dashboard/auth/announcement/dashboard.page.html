@@ -1,40 +1,63 @@
 <app-header-component></app-header-component>
 
-<ion-content *ngIf="user$ | async; let user;" [fullscreen]="true">
-  <ion-grid fixed>
-    <!-- Navegação -->
-    <app-segment (togglePage)="togglePage($event)"></app-segment>
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="user$ | async; let user;">
+    <ion-grid fixed>
+      <ng-container
+        *ngIf="user?.plan?.type === 'free' || user?.plan?.type === 'basic'; else Plan"
+      >
+        <ion-row>
+          <ion-col size="12">
+            <app-enabled-item-announcement-page
+              [userId]="user?.id"
+              (isAnnouncement)="getIsAnnouncement($event)"
+            ></app-enabled-item-announcement-page>
 
-    <!--  Abilitados -->
-    <ng-container *ngIf="toggleListAnnouncement;else ItemDeleted">
-      <app-enabled-item
-        (isAnnouncement)="getIsAnnouncement($event)"
-      ></app-enabled-item>
+            <app-button-create-announcement
+              [isButton]="isAnnouncement"
+              (create)="create()"
+            ></app-button-create-announcement>
+          </ion-col>
+        </ion-row>
+      </ng-container>
 
-      <app-button-create
-        [isButton]="isAnnouncement"
-        (create)="create()"
-      ></app-button-create>
-    </ng-container>
+      <ng-template #Plan>
+        <!-- Navegação -->
+        <app-segment-announcement-component
+          [isAdmin]="false"
+          (togglePage)="togglePage($event)"
+        ></app-segment-announcement-component>
 
-    <!-- Deletados -->
-    <ng-template #ItemDeleted>
-      <app-deleted-item></app-deleted-item>
-    </ng-template>
-  </ion-grid>
+        <!--  Abilitados -->
+        <ng-container *ngIf="toggleList;else ItemDeleted">
+          <app-enabled-item-announcement-page
+            [userId]="user?.id"
+            (isAnnouncement)="getIsAnnouncement($event)"
+          ></app-enabled-item-announcement-page>
+        </ng-container>
 
-  <!-- Buttom create -->
-  <ion-fab
-    *ngIf="toggleListAnnouncement && user?.plan === 'special'"
-    vertical="bottom"
-    horizontal="end"
-    title="Cadastrar novo anúncio."
-    slot="fixed"
-  >
-    <ion-fab-button (click)="create()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+        <!-- Deletados -->
+        <ng-template #ItemDeleted>
+          <app-deleted-item-announcement-page
+            [userId]="user?.id"
+          ></app-deleted-item-announcement-page>
+        </ng-template>
+      </ng-template>
+    </ion-grid>
+
+    <!-- Buttom create -->
+    <ion-fab
+      *ngIf="toggleList && user?.plan === 'special'"
+      vertical="bottom"
+      horizontal="end"
+      title="Cadastrar novo anúncio."
+      slot="fixed"
+    >
+      <ion-fab-button (click)="create()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ng-container>
 </ion-content>
 
 <app-footer></app-footer>

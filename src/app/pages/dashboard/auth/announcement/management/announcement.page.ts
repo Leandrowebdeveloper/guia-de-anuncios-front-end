@@ -9,7 +9,7 @@ import { NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { ManagementService } from './service/management.service';
+import { ManagementAnnouncementService } from './service/management.service';
 
 @Component({
   selector: 'app-announcement',
@@ -26,7 +26,7 @@ export class AnnouncementPage implements OnInit {
   public csrf: string;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private managementService: ManagementService,
+    private managementAnnouncementService: ManagementAnnouncementService,
     private authService: AuthService,
     private navCtrl: NavController
   ) {}
@@ -37,11 +37,11 @@ export class AnnouncementPage implements OnInit {
     this.startAnnouncement();
   }
 
-  public isHeader(e: boolean) {
+  public isHeader(e: boolean): void {
     this.hasHeader = e;
   }
 
-  public toggleRoute(route: AnnouncementRoute) {
+  public toggleRoute(route: AnnouncementRoute): void {
     this.isAnnouncement = false;
     switch (route) {
       case 'OpeningHours':
@@ -63,11 +63,12 @@ export class AnnouncementPage implements OnInit {
 
   private getAnnouncement(): void {
     const { announcement } = this.activatedRoute.snapshot.data;
-    this.managementService.setAnnouncement = announcement;
+    this.managementAnnouncementService.setAnnouncement = announcement;
   }
 
-  private startAnnouncement() {
-    this.announcement$ = this.managementService.announcementObservable;
+  private startAnnouncement(): void {
+    this.announcement$ =
+      this.managementAnnouncementService.announcementObservable;
   }
 
   private getUser(): void {

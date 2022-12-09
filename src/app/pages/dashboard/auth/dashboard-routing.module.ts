@@ -27,7 +27,7 @@ const routes: Routes = [
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('./user/user.module').then((m) => m.UserPageModule),
+      import('./user/management.module').then((m) => m.UserPageModule),
   },
   {
     path: 'anuncio',

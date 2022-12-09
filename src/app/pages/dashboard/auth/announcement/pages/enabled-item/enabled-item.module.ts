@@ -4,21 +4,19 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EnabledItemPage } from './enabled-item.page';
-import { EnabledItemPageRoutingModule } from './enabled-item-routing.module';
-import { CardComponentModule } from 'src/app/pages/dashboard/component/announcement/card/card.component.module';
-import { ListItemComponentModule } from 'src/app/pages/dashboard/component/announcement/list-item/list-item.component.module';
+import { EnabledItemAnnouncementPage } from './enabled-item.page';
+import { EnabledItemAnnouncementPageRoutingModule } from './enabled-item-routing.module';
+import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EnabledItemPageRoutingModule,
-    CardComponentModule,
-    ListItemComponentModule,
+    EnabledItemAnnouncementPageRoutingModule,
+    AnnouncementComponentsModule,
   ],
-  declarations: [EnabledItemPage],
-  exports: [EnabledItemPage],
+  declarations: [EnabledItemAnnouncementPage],
+  exports: [EnabledItemAnnouncementPage],
 })
-export class EnabledItemPageModule {}
+export class EnabledItemAnnouncementPageModule {}

@@ -8,20 +8,20 @@
     size="12"
   >
     <ng-container *ngIf="isDesktop;else Mobile">
-      <app-card
+      <app-card-announcement-component
         [announcement]="item"
         [index]="i"
         [action]="isDeleted"
         (actionButtons)="actionButton($event)"
-      ></app-card>
+      ></app-card-announcement-component>
     </ng-container>
     <ng-template #Mobile>
-      <app-list-item
+      <app-list-item-announcement-component
         [announcement]="item"
         [index]="i"
         [action]="isDeleted"
         (actionButtons)="actionButton($event)"
-      ></app-list-item>
+      ></app-list-item-announcement-component>
     </ng-template>
   </ion-col>
 </ion-row>

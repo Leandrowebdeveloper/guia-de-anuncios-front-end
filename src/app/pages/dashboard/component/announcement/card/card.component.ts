@@ -2,11 +2,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Announcement } from 'src/app/interface';
 
 @Component({
-  selector: 'app-card',
+  selector: 'app-card-announcement-component',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
 })
-export class CardComponent {
+export class CardAnnouncementComponent {
   @Input() announcement!: Announcement;
   @Input() index!: number;
   @Input() action!: number;

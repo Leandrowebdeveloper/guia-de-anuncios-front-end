@@ -6,29 +6,46 @@ import { Image } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { AdminUsersService } from 'src/app/pages/dashboard/administrator/users/services/admin-users.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AvatarService extends HttpService<Image> {
   constructor(
     public http: HttpClient,
     public storageService: StorageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private usersService: AdminUsersService
   ) {
     super(http, storageService);
-    this.setApi = `images`;
+    this.setApi = 'avatar';
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  public get avatar(): Image {
+    return this.usersService.getUsers?.image;
+  }
+
+  public set avatar(value: Image) {
+    this.usersService.getUsers.image = value;
+    this.usersService.setUsers = this.usersService.getUsers;
+  }
+
+  public set setCsrf(csrf: string) {
+    this.csrf = csrf;
   }
 
   public delete(avatar: Image): Observable<number | Image> {
-    return this.destroy(avatar, 'avatar').pipe(
+    return this.destroy(avatar).pipe(
       tap((image: Image) => this.setAuthAvatar(image))
     );
   }
 
-  public setAuthAvatar(result: Image): Image {
-    const avatar: Image = result;
-    this.authService.avatar = avatar;
-    return avatar;
+  public setAuthAvatar(avatar: Image): void {
+    if (this.avatar?.userId === avatar?.userId) {
+      this.avatar = avatar;
+    }
+    if (this.authService?.avatar?.userId === avatar?.userId) {
+      this.authService.avatar = avatar;
+    }
   }
 }

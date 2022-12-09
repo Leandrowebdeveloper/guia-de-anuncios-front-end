@@ -6,15 +6,16 @@ import { AlertService } from 'src/app//utilities/alert/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
 import { Observable, Subject, Subscription, EMPTY } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Announcement } from 'src/app/interface';
 
 @Component({
-  selector: 'app-deleted-item',
+  selector: 'app-deleted-item-announcement-page',
   templateUrl: './deleted-item.page.html',
   styleUrls: ['./deleted-item.page.scss', '../../dashboard.page.scss'],
 })
-export class DeletedItemPage implements OnInit {
+export class DeletedItemAnnouncementPage implements OnInit {
+  @Input() userId: number;
   public announcement$: Observable<Announcement[]>;
   public announcement: Announcement[];
   public isToRestore: number;
@@ -148,19 +149,25 @@ export class DeletedItemPage implements OnInit {
   }
 
   private getAnnouncement(): Observable<Announcement[]> {
-    return (this.announcement$ = this.authAnnouncementService
-      .getAnnouncementAll('deleted', this.limit, this.offset)
-      .pipe(
-        tap((announcement: Announcement[]) => {
-          this.isAnnouncement = announcement.length > 0;
-          this.announcement = announcement;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          setTimeout(() => (this.menssage = false), 300);
-          this.error.next(true);
-          return EMPTY;
+    if (this.userId) {
+      return (this.announcement$ = this.authAnnouncementService
+        .getAnnouncementAll('deleted', {
+          limit: this.limit,
+          offset: this.offset,
+          userId: this.userId,
         })
-      ));
+        .pipe(
+          tap((announcement: Announcement[]) => {
+            this.isAnnouncement = announcement.length > 0;
+            this.announcement = announcement;
+          }),
+          catchError((error: HttpErrorResponse) => {
+            setTimeout(() => (this.menssage = false), 300);
+            this.error.next(true);
+            return EMPTY;
+          })
+        ));
+    }
   }
 
   private drop(announcement: Announcement, index: number) {

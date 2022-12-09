@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { DeletedItemPage } from './deleted-item.page';
+import { DeletedItemAnnouncementPage } from './deleted-item.page';
 
-describe('DeletedItemPage', () => {
-  let component: DeletedItemPage;
-  let fixture: ComponentFixture<DeletedItemPage>;
+describe('DeletedItemAnnouncementPage', () => {
+  let component: DeletedItemAnnouncementPage;
+  let fixture: ComponentFixture<DeletedItemAnnouncementPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeletedItemPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [DeletedItemAnnouncementPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DeletedItemPage);
+    fixture = TestBed.createComponent(DeletedItemAnnouncementPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

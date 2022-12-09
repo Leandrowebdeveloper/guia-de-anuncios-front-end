@@ -12,16 +12,11 @@ import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
 import { AnnouncementUtilities } from 'src/app/utilities/announcement/announcement-utilities.service';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
-import { SocialNetworkComponentModule } from '../../../component/announcement/social-network/social-network.module';
-import { MapComonentModule } from '../../../component/announcement/map/map.module';
-import { AddressComponentModule } from '../../../component/announcement/address/address.module';
-import { ContantComponentModule } from '../../../component/announcement/contant/contant.module';
-import { CityComponentModule } from '../../../component/announcement/city/city.module';
 import { GaleryComponentModule } from '../../../component/announcement/galery/component/galery-component.module';
-import { StateComponentModule } from '../../../component/announcement/state/state.module';
 import { OpeningHourComponentModule } from '../../../component/announcement/opening-hour/opening-hour.component.module';
 import { CategoryComponentModule } from '../../../component/announcement/category/category.component.module';
 import { AnnouncementComponentModule } from '../../../component/announcement/announcement/announcement.module';
+import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
 
 @NgModule({
   imports: [
@@ -30,13 +25,8 @@ import { AnnouncementComponentModule } from '../../../component/announcement/ann
     FormsModule,
     AnnouncementPageRoutingModule,
     HeaderModalModule,
-    SocialNetworkComponentModule,
-    MapComonentModule,
-    AddressComponentModule,
-    ContantComponentModule,
-    CityComponentModule,
     GaleryComponentModule,
-    StateComponentModule,
+    AnnouncementComponentsModule,
     OpeningHourComponentModule,
     CategoryComponentModule,
     AnnouncementComponentModule,

@@ -7,7 +7,8 @@ export interface InputName {
   lastName: Attributes;
   email: Attributes;
   level: Attributes;
-  plan: Attributes;
+  type: Attributes;
+  period: Attributes;
   password: Attributes;
   passwordCurrent: Attributes;
   passwordConfirmation: Attributes;
@@ -15,9 +16,10 @@ export interface InputName {
   terms: Attributes;
   allotment: Attributes;
   block: Attributes;
+  blockade: Attributes;
   complement: Attributes;
   district: Attributes;
-  number_: Attributes;
+  numberr: Attributes;
   street: Attributes;
   mobilePhone: Attributes;
   phone: Attributes;
@@ -25,6 +27,7 @@ export interface InputName {
   facebook: Attributes;
   instagran: Attributes;
   city: Attributes;
+  response: Attributes;
   uf: Attributes;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   zip_code: Attributes;

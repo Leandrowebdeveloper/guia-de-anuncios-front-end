@@ -20,7 +20,6 @@ export class ChangeEmailPage implements OnInit {
   private user: User;
 
   constructor(
-    private storageService: StorageService,
     private authService: AuthService,
     private activatedRoute: ActivatedRoute
   ) {}

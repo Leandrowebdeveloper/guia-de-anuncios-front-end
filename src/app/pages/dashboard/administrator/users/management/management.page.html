@@ -1,206 +1,133 @@
-<app-header-component></app-header-component>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="back()" defaultHref></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gerenciamento do usuário</ion-title>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-grid *ngIf="user$ | async;let user;" fixed>
-    <ion-row>
-      <ion-col size="12">
-        <ion-card>
-          <!-- Avatar -->
-          <!-- <div class="container ion-margin-vertical"> -->
-          <app-avatar-component [user]="user"></app-avatar-component>
+    <ion-segment value="user" (ionChange)="toggleSegment($event)">
+      <ion-segment-button value="user">
+        <ion-icon color="mediun" name="person"></ion-icon>
+        <ion-label>Usuário</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="announcement">
+        <ion-icon color="mediun" name="megaphone"></ion-icon>
+        <ion-label>Anúncio</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="statistic">
+        <ion-icon color="mediun" name="analytics"></ion-icon>
+        <ion-label>Estatística</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
-          <!-- Label -->
-          <ion-card-content>
-            <ion-card-header>
-              <ion-card-title>{{ user?.name }}</ion-card-title>
-              <ion-card-subtitle>
-                Plano:
-                <span *ngIf="user?.plan === 'free'">Grátis</span>
-                <span *ngIf="user?.plan === 'basic'">Básico</span>
-                <span *ngIf="user?.plan === 'special'">Especial</span>
-                <br />
-                Tipo: {{ user?.level === '1' ? 'Administrador' : 'Colaborador'
-                }}
-                <br />
-                Email: {{ user?.email }} <br />{{ user?.createdAt |
-                time:'create' }}
-                <br />
-                {{ user?.updatedAt | time:'update' }}
-              </ion-card-subtitle>
-            </ion-card-header>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+    <div [ngSwitch]="toggleRoute">
+      <div *ngSwitchCase="'user'">
+        <!-- Messagem -->
+        <ion-row>
+          <ion-col size="12">
+            <app-message-user-component
+              [user]="user"
+              [isAdmin]="true"
+            ></app-message-user-component>
+          </ion-col>
+        </ion-row>
 
-    <ion-item-group>
-      <ion-row>
-        <ion-col size-xl="6" size-lg="6" size-md="6" size-sm="6" size="12">
-          <ion-item-divider>
-            <ion-icon color="mediun" name="person" slot="start"></ion-icon>
-            <ion-label>Gerenciamento do usuário</ion-label>
-          </ion-item-divider>
+        <ion-row class="ion-margin-top">
+          <ion-col size-xl="5" size-lg="5" size-md="6" size-sm="12" size="12">
+            <ion-card>
+              <app-avatar-component [user]="user"></app-avatar-component>
 
-          <!-- Blockade -->
-          <ion-item>
-            <ion-label
-              >{{ user?.blockade ? 'Bloqueado' : 'Desbloqueado' }}</ion-label
-            >
-            <ion-toggle
-              slot="end"
-              (ionChange)="blockade(user)"
-              [checked]="user?.blockade"
-              title="Alternar entre usuário bloquear e desbloquear."
-              aria-label="Clique para alternar entre usuário bloquear e desbloquear."
-            ></ion-toggle>
-            <ion-icon
-              slot="start"
-              [name]="user?.blockade  ? 'stop': 'play'"
-            ></ion-icon>
-          </ion-item>
-
-          <!-- State -->
-          <ion-item [disabled]="user?.blockade">
-            <ion-label>{{ user?.state ? 'Online' : 'Offline'}}</ion-label>
-            <ion-toggle
-              slot="end"
-              (ionChange)="state(user)"
-              [checked]="user?.state"
-              title="Alternar entre usuário conectado ou desligado."
-              aria-label="Clique para alternar entre usuário conectado ou desligado."
-              [attr.aria-disabled]="'Botão alterar status ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
-            >
-            </ion-toggle>
-            <ion-icon
-              slot="start"
-              [name]="user?.state  ? 'power': 'radio-button-off'"
-            ></ion-icon>
-          </ion-item>
-
-          <!-- Level -->
-          <ion-item
-            [disabled]="user?.blockade"
-            detail="true"
-            (click)="level(user)"
-            title="Alterar senha"
-            aria-label="Clique para alterar senha"
-            [attr.aria-disabled]="'Botão alterar nivel do usuário ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
-            button
+              <app-card-user-component [user]="user"></app-card-user-component>
+            </ion-card>
+          </ion-col>
+          <ion-col
+            size-xl="6"
+            size-lg="6"
+            size-md="6"
+            size-sm="12"
+            size="12"
+            offset-xl="1"
+            offset-lg="1"
           >
-            <ion-label
-              >{{ user?.level === '1' ? 'administrador' :
-              'Colaborador'}}</ion-label
-            >
-            <ion-icon
-              slot="start"
-              [name]="user?.level === '1' ? 'trophy': 'medal'"
-            ></ion-icon>
-          </ion-item>
+            <!-- message -->
+            <app-user-message-component
+              [user]="user"
+            ></app-user-message-component>
+            <!-- Blockade -->
+            <app-blockade-user-component
+              [user]="user"
+            ></app-blockade-user-component>
 
-          <!-- Plano -->
-          <ion-item
-            [disabled]="user?.blockade"
-            detail="true"
-            (click)="plan(user)"
-            title="Alterar plano."
-            aria-label="Clique para alterar plano"
-            [attr.aria-disabled]="'Botão alterar plano do usuário ' + user?.blockade ? 'abilitado.' : 'desabilitado.'"
-            button
-          >
-            <ion-label *ngIf="user?.plan === 'free'">Grátis</ion-label>
-            <ion-icon
-              *ngIf="user?.plan === 'free'"
-              slot="start"
-              name="trophy"
-            ></ion-icon>
+            <!-- State -->
+            <app-state-user-component [user]="user"></app-state-user-component>
 
-            <ion-label *ngIf="user?.plan === 'basic'">Básico</ion-label>
-            <ion-icon
-              *ngIf="user?.plan === 'basic'"
-              slot="start"
-              name="trophy"
-            ></ion-icon>
+            <!-- Level -->
+            <app-level-user-component [user]="user"></app-level-user-component>
 
-            <ion-label *ngIf="user?.plan === 'special'">Especial</ion-label>
-            <ion-icon
-              *ngIf="user?.plan === 'special'"
-              slot="start"
-              name="trophy"
-            ></ion-icon>
-          </ion-item>
+            <!-- Plan -->
+            <app-plan-user-component [user]="user"></app-plan-user-component>
 
-          <!-- Name -->
-          <ion-item
-            [disabled]="user?.blockade"
-            detail="true"
-            (click)="name(user)"
-            title="Alterar nome e sobrenome"
-            aria-label="Clique para alterar nome e sobrenome"
-            [attr.aria-disabled]="'Botão alterar nome e sobrenome ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
-            button
-          >
-            <ion-icon name="create" slot="start"></ion-icon>
-            <ion-label>Nome</ion-label>
-          </ion-item>
+            <!-- Name -->
+            <app-name-user-component
+              [user]="user"
+              [isAuth]="false"
+            ></app-name-user-component>
 
-          <!-- Email -->
-          <ion-item
-            [disabled]="user?.blockade"
-            detail="true"
-            (click)="email(user)"
-            title="Alterar email"
-            aria-label="Clique para alterar email"
-            [attr.aria-disabled]="'Botão alterar email ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
-            button
-          >
-            <ion-icon name="mail" slot="start"></ion-icon>
-            <ion-label>Email</ion-label>
-          </ion-item>
+            <!-- Email -->
+            <app-email-user-component [user]="user"></app-email-user-component>
 
-          <!-- Passwprd -->
-          <ion-item
-            [disabled]="user?.blockade"
-            detail="true"
-            (click)="password(user)"
-            title="Alterar senha"
-            aria-label="Clique para alterar senha"
-            [attr.aria-disabled]="'Botão alterar senha ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
-            button
-          >
-            <ion-icon name="key" slot="start"></ion-icon>
-            <ion-label>Senha</ion-label>
-          </ion-item>
+            <!-- Passwprd -->
+            <app-password-user-component
+              [user]="user"
+              [isAuth]="false"
+            ></app-password-user-component>
 
-          <!-- Delete -->
-          <ion-item
-            [disabled]="user?.blockade"
-            detail="true"
-            (click)="destroy(user)"
-            title="Excluir usuário"
-            aria-label="Clique para excluir usuário"
-            [attr.aria-disabled]="'Botão excluir usuário ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
-            button
-          >
-            <ion-icon name="trash" slot="start"></ion-icon>
-            <ion-label>Excluir</ion-label>
-          </ion-item>
-        </ion-col>
-        <ion-col size-xl="6" size-lg="6" size-md="6" size-sm="6" size="12">
-          <ion-item-divider>
-            <ion-icon color="mediun" name="megaphone" slot="start"></ion-icon>
-            <ion-label>Gerenciamento do anúncio</ion-label>
-          </ion-item-divider>
-        </ion-col>
+            <!-- Destroy -->
+            <app-destroy-user-component
+              [user]="user"
+              [isAuth]="false"
+            ></app-destroy-user-component>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngSwitchCase="'announcement'">
+        <ion-row>
+          <ion-col size="12">
+            <!-- Navegação -->
+            <app-segment-announcement-component
+              [isAdmin]="true"
+              (togglePage)="togglePage($event)"
+            ></app-segment-announcement-component>
+            <!--  Abilitados -->
+            <ng-container *ngIf="toggleList;else ItemDeleted">
+              <app-enabled-item-announcement-page
+                [userId]="user?.id"
+                (isAnnouncement)="getIsAnnouncement($event)"
+              ></app-enabled-item-announcement-page>
+            </ng-container>
 
-        <ion-col size="12">
-          <ion-item-divider>
-            <ion-icon color="mediun" name="analytics" slot="start"></ion-icon>
-            <ion-label>Extatísticas</ion-label>
-          </ion-item-divider>
-        </ion-col>
-      </ion-row>
-    </ion-item-group>
+            <!-- Deletados -->
+            <ng-template #ItemDeleted>
+              <app-deleted-item-announcement-page
+                [userId]="user?.id"
+              ></app-deleted-item-announcement-page>
+            </ng-template>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngSwitchCase="'statistic'">
+        <ion-row>
+          <ion-col size="12">
+            <ion-item-divider>
+              <ion-label>Extatísticas</ion-label>
+            </ion-item-divider>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
   </ion-grid>
 </ion-content>
-
-<app-footer></app-footer>

@@ -7,7 +7,7 @@ export class CategoryUtilities {
     switch (action) {
       case 'register':
         return {
-          route: '/create',
+          route: '/category',
           icon: 'create',
           label: 'Cadastrar',
           fill: false,

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { DestroyComponent } from './destroy.component';
+import { UserDestroyComponent } from './destroy.component';
 
-describe('DestroyComponent', () => {
-  let component: DestroyComponent;
-  let fixture: ComponentFixture<DestroyComponent>;
+describe('UserDestroyComponent', () => {
+  let component: UserDestroyComponent;
+  let fixture: ComponentFixture<UserDestroyComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [DestroyComponent],
+      declarations: [UserDestroyComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DestroyComponent);
+    fixture = TestBed.createComponent(UserDestroyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

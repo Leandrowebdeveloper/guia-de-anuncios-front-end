@@ -1,20 +1,27 @@
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { Subscription } from 'rxjs';
-import { DataUpload, Galery, HttpResponse } from 'src/app/interface';
+import { DataUpload, Galery, HttpResponse, Plan } from 'src/app/interface';
 import { HttpHeaderResponse, HttpErrorResponse } from '@angular/common/http';
-import { ActionSheetController, Platform } from '@ionic/angular';
+import {
+  ActionSheetController,
+  ModalController,
+  Platform,
+} from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastService } from 'src/app/utilities/toast/toast.service';
-import { ManagementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
+import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 import { GaleryAnnouncementService } from '../../service/galery.service';
+import { PresentPlanComponent } from 'src/app/components/present-plan/present-plan.component';
+import { ModalService } from 'src/app/components/present-plan/animations/modal.service';
 
 @Component({
   selector: 'app-galery-button-upload',
   templateUrl: './button-upload.component.html',
   styleUrls: ['./button-upload.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class GaleryButtonUploadComponent implements OnInit {
   @Input() data!: DataUpload;
+  @Input() plan!: Plan;
   public isMobile: boolean;
 
   private upload: Subscription;
@@ -24,15 +31,25 @@ export class HeaderComponent implements OnInit {
     private actionSheetController: ActionSheetController,
     private galeryAnnouncementService: GaleryAnnouncementService,
     private messageService: MessageService,
-    private managementService: ManagementService,
-    private toastService: ToastService
+    private managementService: ManagementAnnouncementService,
+    private toastService: ToastService,
+    private modalController: ModalController,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
     this.plt.ready().then(() => this.togglePLatform());
   }
 
-  public loadFile(file: HTMLElement) {
+  public async loadFile(file: HTMLElement) {
+    if (this.plan?.type === 'free') {
+      const modal = await this.modalController.create({
+        component: PresentPlanComponent,
+        enterAnimation: this.modalService.enterAnimation,
+        leaveAnimation: this.modalService.leaveAnimation,
+      });
+      return await modal.present();
+    }
     file.click();
   }
 
@@ -45,7 +62,7 @@ export class HeaderComponent implements OnInit {
     const count = input.files.length;
     for (let i = 0; i < count; i++) {
       this.upload = this.galeryAnnouncementService
-        .upload('upload', this.build(input.files[i]))
+        .upload(this.build(input.files[i]), 'upload')
         .subscribe(
           (response: any) => this.success(response, response, loading),
           (error: HttpErrorResponse) =>

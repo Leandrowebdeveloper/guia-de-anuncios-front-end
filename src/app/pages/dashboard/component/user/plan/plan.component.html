@@ -1,6 +1,6 @@
 <!-- Plano -->
 <ion-item
-  *ngIf="pageEnbled"
+  *ngIf="user"
   [disabled]="user?.blockade"
   detail="true"
   (click)="plan()"
@@ -13,20 +13,10 @@
   "
   button
 >
-  <ion-label *ngIf="user?.plan === 'free'">Grátis</ion-label>
-  <ion-icon *ngIf="user?.plan === 'free'" slot="start" name="trophy"></ion-icon>
-
-  <ion-label *ngIf="user?.plan === 'basic'">Básico</ion-label>
+  <ion-label >Plano</ion-label>
   <ion-icon
-    *ngIf="user?.plan === 'basic'"
     slot="start"
     name="trophy"
   ></ion-icon>
 
-  <ion-label *ngIf="user?.plan === 'special'">Especial</ion-label>
-  <ion-icon
-    *ngIf="user?.plan === 'special'"
-    slot="start"
-    name="trophy"
-  ></ion-icon>
 </ion-item>

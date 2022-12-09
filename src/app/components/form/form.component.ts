@@ -6,7 +6,8 @@ import {
   EventEmitter,
   Component,
   OnInit,
-  ViewChild,
+  AfterContentChecked,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormServices } from './services/form.service';
@@ -19,7 +20,7 @@ import { AttrButton } from '../../pages/public/system-access/components/buttons/
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, AfterContentChecked {
   @Input() inputConfig!: any;
   @Input() attrButton!: AttrButton;
   @Output() submitDataForm = new EventEmitter<FormGroup>(undefined);
@@ -30,16 +31,22 @@ export class FormComponent implements OnInit {
   public visiblePassword: boolean;
   public isPageTheLogin: boolean;
   public config: any;
+  public message: string;
   constructor(
     private configForm: ConfigForm,
     private fb: FormBuilder,
     private formServices: FormServices,
     private router: Router,
-    private plt: Platform
+    private plt: Platform,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   public get f() {
     return this.form.controls;
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 
   ngOnInit() {
@@ -52,13 +59,30 @@ export class FormComponent implements OnInit {
     this.isPageLogin();
     this.disableValidate();
     this.tinymce();
+    // ordenar inputs
+    this.orderImputsBlockade();
+    this.orderImputsMessages();
+  }
+
+  public setPediod(period: '03' | '06' | '12') {
+    this.form.patchValue({ period });
   }
 
   public onSubmit(): void {
+    if (this.form.value?.type === 'free') {
+      this.form.patchValue({ period: null });
+    } else {
+      if (this.form.value?.period === null) {
+        this.message = '* obrigatório';
+        return;
+      }
+    }
+
     this.submitted = true;
     if (this.form.pristine || this.form.invalid) {
       return;
     }
+
     return this.sendDataForm();
   }
 
@@ -114,6 +138,29 @@ export class FormComponent implements OnInit {
   private isDestroy(): void {
     if (this.attrButton?.route === '/destroy' && this.buildInputs[0]?.label) {
       this.buildInputs[0].label = 'Senha';
+    }
+  }
+
+  private orderImputsBlockade(): void {
+    if (this.attrButton?.route === '/blockade') {
+      this.buildInputs = [
+        this.buildInputs[1],
+        this.buildInputs[2],
+        this.buildInputs[0],
+        this.buildInputs[3],
+        this.buildInputs[4],
+      ];
+    }
+  }
+
+  private orderImputsMessages(): void {
+    if (this.attrButton?.route === '/message') {
+      this.buildInputs = [
+        this.buildInputs[1],
+        this.buildInputs[2],
+        this.buildInputs[0],
+        this.buildInputs[3],
+      ];
     }
   }
 

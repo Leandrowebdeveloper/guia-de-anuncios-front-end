@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-skeleton',
+  selector: 'app-skeleton-announcement',
   templateUrl: './skeleton.component.html',
   styleUrls: ['./skeleton.component.scss'],
 })

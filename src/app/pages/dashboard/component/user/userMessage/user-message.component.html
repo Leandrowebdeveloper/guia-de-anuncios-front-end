@@ -1,0 +1,14 @@
+<ion-item
+  *ngIf="user"
+  detail="true"
+  (click)="open()"
+  title="Enviar menssagem"
+  aria-label="Clique para alterar messagem"
+  [attr.aria-disabled]="
+    'Botão alterar messagem ' + user?.blockade ? 'abilitado.' : 'desabilitado'
+  "
+  button
+>
+  <ion-icon name="megaphone" slot="start"></ion-icon>
+  <ion-label>Criar messages</ion-label>
+</ion-item>

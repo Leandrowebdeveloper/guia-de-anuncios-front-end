@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Address, Announcement } from 'src/app/interface';
-import { FormComponent } from './form/form.component';
+import { FormAddressAnnouncementComponent } from './form/form.component';
 
 @Component({
-  selector: 'app-address-component',
+  selector: 'app-address-announcement-component',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss'],
 })
-export class AddressComponent implements OnInit {
+export class AddressAnnouncementComponent implements OnInit {
   @Input() announcement!: Announcement;
   constructor(private modalController: ModalController) {}
 
@@ -32,6 +32,7 @@ export class AddressComponent implements OnInit {
         complement: null,
         district: null,
         street: null,
+        numberr: null,
         // eslint-disable-next-line @typescript-eslint/naming-convention
         zip_code: null,
         announcementId: announcement?.id,
@@ -40,7 +41,7 @@ export class AddressComponent implements OnInit {
     }
 
     const modal = await this.modalController.create({
-      component: FormComponent,
+      component: FormAddressAnnouncementComponent,
       componentProps: {
         label,
         address,

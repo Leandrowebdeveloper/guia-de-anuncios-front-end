@@ -51,7 +51,6 @@ export class SearchComponent implements OnInit {
       return this.navCtrl.navigateForward([
         URL[1],
         'admin',
-        'manutencao',
         'usuario',
         url?.slug,
       ]);

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { EnabledItemPage } from './enabled-item.page';
+import { EnabledItemAnnouncementPage } from './enabled-item.page';
 
-describe('EnabledItemPage', () => {
-  let component: EnabledItemPage;
-  let fixture: ComponentFixture<EnabledItemPage>;
+describe('EnabledItemAnnouncementPage', () => {
+  let component: EnabledItemAnnouncementPage;
+  let fixture: ComponentFixture<EnabledItemAnnouncementPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnabledItemPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [EnabledItemAnnouncementPage],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EnabledItemPage);
+    fixture = TestBed.createComponent(EnabledItemAnnouncementPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

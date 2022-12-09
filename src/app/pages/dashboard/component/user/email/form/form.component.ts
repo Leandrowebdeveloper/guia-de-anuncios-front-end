@@ -14,7 +14,7 @@ import { MessageService } from 'src/app/utilities/message/message.service';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormUserEmailComponent implements OnInit {
   @Input() user!: User;
   @Input() label!: string;
 
@@ -52,7 +52,7 @@ export class FormComponent implements OnInit {
 
   private email(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Alterando email...');
-    event.value.slug = this.authService.getSlug;
+    event.value.slug = this.user?.slug;
     return (this.write = this.authService.email(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>

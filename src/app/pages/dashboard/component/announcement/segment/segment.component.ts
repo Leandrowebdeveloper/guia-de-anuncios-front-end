@@ -7,14 +7,16 @@ import {
   EventEmitter,
   ViewChild,
   OnDestroy,
+  Input,
 } from '@angular/core';
 
 @Component({
-  selector: 'app-segment',
+  selector: 'app-segment-announcement-component',
   templateUrl: './segment.component.html',
   styleUrls: ['./segment.component.scss'],
 })
-export class SegmentComponent implements OnInit, OnDestroy {
+export class SegmentAnnouncementComponent implements OnInit, OnDestroy {
+  @Input() isAdmin: boolean;
   @ViewChild(IonSegment, { static: true }) segment: IonSegment;
   @Output() togglePage = new EventEmitter<boolean>(true);
   private segmentIonChange: Subscription;

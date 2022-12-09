@@ -9,15 +9,16 @@ import { ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { UserDestroyService } from '../service/user-destroy.service';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormUserDestroyComponent implements OnInit {
   @Input() user!: User;
   @Input() label!: string;
-
+  @Input() isAuth!: boolean;
   public attrButton: AttrButton = {
     route: '/destroy',
     icon: 'trash',
@@ -31,6 +32,7 @@ export class FormComponent implements OnInit {
   private form: FormGroup;
   private write: Subscription;
   constructor(
+    private userDestroyService: UserDestroyService,
     private helpService: HelpsService,
     private modalController: ModalController,
     private authService: AuthService,
@@ -52,8 +54,15 @@ export class FormComponent implements OnInit {
 
   private destroy(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Alterando senha...');
-    event.value.slug = this.authService.getSlug;
-    return (this.write = this.authService.delete(event.value).subscribe(
+    event.value.slug = this.user?.slug;
+    if (this.isAuth) {
+      return (this.write = this.authService.delete(event.value).subscribe(
+        (user: User) => this.messsage(user, loading),
+        (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.write)
+      ));
+    }
+    return (this.write = this.userDestroyService.delete(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.write)

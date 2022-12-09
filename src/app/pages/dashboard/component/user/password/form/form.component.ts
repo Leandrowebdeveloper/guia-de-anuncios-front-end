@@ -1,23 +1,26 @@
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
-import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
-import { User } from 'src/app/interface';
 import { HttpErrorResponse } from '@angular/common/http';
-import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
+
+import { User } from 'src/app/interface';
+import { HelpsService } from 'src/app/services/helps/helps.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { AdminPasswordService } from '../service/password.service';
+import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormUserPasswordComponent implements OnInit {
   @Input() user!: User;
   @Input() action!: string;
   @Input() label!: string;
+  @Input() isAuth: boolean;
 
   public attrButton: AttrButton = {
     route: '/new-password',
@@ -30,8 +33,9 @@ export class FormComponent implements OnInit {
 
   public config: object;
   private form: FormGroup;
-  private write: Subscription;
+  private $password: Subscription;
   constructor(
+    private adminPasswordService: AdminPasswordService,
     private helpService: HelpsService,
     private modalController: ModalController,
     private authService: AuthService,
@@ -48,32 +52,26 @@ export class FormComponent implements OnInit {
   }
 
   public onSubmit(event: FormGroup): Subscription {
-    switch (this.action) {
-      case 'password':
-        return this.password(event);
-      case 'passwordCreate':
-        return this.passwordCreate(event);
-    }
+    return this.password(event);
   }
 
   private password(event: FormGroup): Subscription {
-    const loading = this.loadingService.show('Alterando senha...');
-    event.value.slug = this.authService.getSlug;
-    return (this.write = this.authService.password(event.value).subscribe(
-      (user: User) => this.messsage(user, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
-  }
-
-  private passwordCreate(event: FormGroup): Subscription {
-    const loading = this.loadingService.show('Alterando senha...');
-    event.value.slug = this.authService.getSlug;
-    return (this.write = this.authService.passwordCreate(event.value).subscribe(
-      (user: User) => this.messsage(user, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
+    const loading = this.loadingService.show('Armazenar senha...');
+    event.value.slug = this.user?.slug;
+    if (this.isAuth) {
+      return (this.$password = this.authService.password(event.value).subscribe(
+        (user: User) => this.messsage(user, loading),
+        (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$password)
+      ));
+    }
+    return (this.$password = this.adminPasswordService
+      .password(event.value)
+      .subscribe(
+        (user: User) => this.messsage(user, loading),
+        (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$password)
+      ));
   }
 
   private messsage(
@@ -81,7 +79,7 @@ export class FormComponent implements OnInit {
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(user?.message, loading, this.write);
+    return this.messageService.success(user?.message, loading, this.$password);
   }
 
   private getData(): void {

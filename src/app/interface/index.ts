@@ -7,7 +7,7 @@ export interface User {
   lastName: string;
   name: string;
   email: string;
-  plan: 'free' | 'basic' | 'special';
+  plan: Plan;
   password: string;
   isPassword?: boolean;
   level: '1' | '2';
@@ -31,6 +31,7 @@ export interface User {
   };
   _csrf: string;
   message: string;
+  userMessage: UserMessage[];
   socialLogin: SocialLogin;
   requisitionLimit: RequisitionLimit;
 }
@@ -82,7 +83,7 @@ export interface Http<T> {
   find: (id: string | number) => Observable<T>;
   patch: (data: T, url?: string) => Observable<T | number[]>;
   destroy: (data: T, url: string) => Observable<T | number>;
-  upload: (url: string, formData: FormData) => Observable<any>;
+  upload: (formData: FormData, url?: string) => Observable<any>;
 }
 
 export interface LocalStorage {
@@ -193,7 +194,7 @@ export interface Address {
   block?: string;
   complement?: string;
   district?: string;
-  number_?: number;
+  numberr?: number;
   street?: string;
   message?: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -325,9 +326,59 @@ export type DayOfTheWeekPT =
   | 'sabado'
   | 'domingo';
 
+export interface Plan {
+  end: string;
+  start: string;
+  period: '03' | '06' | '12';
+  type: 'free' | 'basic' | 'special';
+  userId: number;
+  message?: string;
+  _csrf?: string;
+}
+
+export interface UserMessage {
+  id: number;
+  description: string;
+  type: 'info' | 'warning' | 'success' | 'danger';
+  userId: number;
+  message?: string;
+  response: boolean;
+  sender: number;
+  userSender: Omit<User, UserSender>;
+  _csrf?: string;
+}
+
 export interface DataUpload {
-  _csrf: string;
+  _csrf?: string;
   id: number;
 }
 
 export type AnnouncementRoute = 'OpeningHours' | 'announcement' | 'galery';
+export type UserSender =
+  | 'updatedAt'
+  | 'deletedAt'
+  | 'firstName'
+  | 'lastName'
+  | 'isPassword'
+  | 'password'
+  | 'state'
+  | 'message'
+  | 'id'
+  | 'blockade'
+  | 'userMessage'
+  | '_csrf'
+  | 'plan'
+  | 'level'
+  | 'active'
+  | 'activateAccount'
+  | 'association'
+  | 'auth'
+  | 'token'
+  | 'key'
+  | 'authState'
+  | 'passwordConfirmation'
+  | 'desabled'
+  | 'requisitionLimit'
+  | 'stayConnected'
+  | 'createdAt'
+  | 'socialLogin';

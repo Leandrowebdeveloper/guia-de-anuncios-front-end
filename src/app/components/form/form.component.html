@@ -1,297 +1,481 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div *ngFor="let input of buildInputs">
-    <div
-      *ngIf="
-        input?.type !== 'checkbox' &&
-        input?.name !== 'level' &&
-        input?.name !== 'plan' &&
-        input?.name !== 'city'
-      "
-    >
-      <ion-item [lines]="input?.name === 'description' && 'none'">
-        <!-- Label -->
-        <ion-label
-          position="floating"
-          [color]="f[input?.name].valid && 'success'"
-        >
-          {{ input?.label }}
-
-          <!-- Message error -->
-          <ion-text color="danger" *ngIf="submitted && f[input?.name].errors">
-            <span
-              *ngIf="f[input?.name].errors.pattern"
-              [attr.aria-errormessage]="input.msg?.invalid"
-              >{{ input.msg?.invalid }}&nbsp;</span
-            >
-            <span
-              *ngIf="f[input?.name].errors.email"
-              [attr.aria-errormessage]="input.msg?.invalid"
-            >
-              *{{ input.msg?.invalid }}&nbsp;</span
-            >
-            <span
-              *ngIf="f[input?.name].errors.required"
-              [attr.aria-errormessage]="input.msg?.empty"
-            >
-              *{{ input.msg?.empty }}&nbsp;</span
-            >
-            <span
-              *ngIf="f[input?.name].errors.maxlength"
-              [attr.aria-errormessage]="input?.msg?.max"
-            >
-              *{{ input?.msg?.max }}&nbsp;</span
-            >
-            <span
-              *ngIf="f[input?.name].errors.minlength"
-              [attr.aria-errormessage]="input?.msg?.min"
-            >
-              *{{ input?.msg?.min }}&nbsp;</span
-            >
-            <span
-              *ngIf="f[input?.name].errors?.mustMatch"
-              [attr.aria-errormessage]="input?.msg?.mustMatch"
-            >
-              *{{ input?.msg?.mustMatch }}&nbsp;</span
-            >
-          </ion-text>
-        </ion-label>
-
-        <!-- Level -->
-
-        <ion-input
-          *ngIf="
-            input?.type !== 'tel' &&
-            input?.name !== 'description' &&
-            input?.name !== 'complement' &&
-            input?.name !== 'zip_code' &&
-            input?.name !== 'city' &&
-            input?.name !== 'plan'
-          "
-          [type]="visiblePassword ? 'text' : input?.type"
-          [formControlName]="input?.name"
-          [inputmode]="input?.type"
-          [placeholder]="input?.placeholder"
-          [attr.aria-invalid]="submitted"
-          [attr.aria-placeholder]="input?.actionLabel"
-          [readonly]="input?.readonly"
-          [attr.aria-readonly]="input?.readonly"
-        >
-        </ion-input>
-
-        <ion-input
-          *ngIf="input?.type === 'tel' && input?.name === 'phone'"
-          [type]="input?.type"
-          [formControlName]="input?.name"
-          [inputmode]="input?.type"
-          [placeholder]="input?.placeholder"
-          [attr.aria-invalid]="submitted"
-          [attr.aria-placeholder]="input?.actionLabel"
-          maxlength="13"
-          minlength="13"
-          mask="(**)****-****"
-        >
-        </ion-input>
-
-        <ion-input
-          *ngIf="input?.type === 'tel' && input?.name !== 'phone'"
-          [type]="input?.type"
-          [formControlName]="input?.name"
-          [inputmode]="input?.type"
-          [placeholder]="input?.placeholder"
-          [attr.aria-invalid]="submitted"
-          [attr.aria-placeholder]="input?.actionLabel"
-          maxlength="15"
-          minlength="15"
-          mask="(**)***-***-***"
-        >
-        </ion-input>
-
-        <ion-input
-          *ngIf="input?.name === 'zip_code'"
-          [type]="visiblePassword ? 'text' : input?.type"
-          [formControlName]="input?.name"
-          [inputmode]="input?.type"
-          [placeholder]="input?.placeholder"
-          [attr.aria-invalid]="submitted"
-          [attr.aria-placeholder]="input?.actionLabel"
-          maxlength="10"
-          minlength="10"
-          mask="**.***-***"
-        >
-        </ion-input>
-
-        <ion-textarea
-          *ngIf="input?.name === 'complement'"
-          [formControlName]="input?.name"
-          [inputmode]="input?.type"
-          [placeholder]="input?.placeholder"
-          [attr.aria-placeholder]="input?.actionLabel"
-          rows="8"
-        ></ion-textarea>
-
-        <p *ngIf="input?.name === 'description'" class="ion-margin-top"></p>
-
-        <editor
-          *ngIf="input?.name === 'description'"
-          apiKey="eltulb4tbmvkr9gu7025qd3j9otlnxlej0ybckmvguswoje5"
-          [formControlName]="input?.name"
-          [init]="config"
-        ></editor>
-
-        <!-- Button display password -->
-        <ion-button
-          *ngIf="
-            input?.name === 'passwordConfirmation' ||
-            (input?.name === 'password' && attrButton?.route === '/entrar')
-          "
-          slot="end"
-          fill="clear"
-          (click)="showPassword()"
-          class="ion-margin-top"
-          [title]="visiblePassword ? 'Ocultar senha' : 'Ver senha'"
-          [attr.aria-pressed]="visiblePassword"
-          [attr.aria-label]="attrButton?.aria"
-        >
-          <ion-icon
-            [name]="visiblePassword ? 'eye-off-outline' : 'eye-outline'"
-            color="medium"
-          ></ion-icon>
-        </ion-button>
-      </ion-item>
-
-      <!-- Password -->
-      <app-password-strength
-        *ngIf="
-          input?.name === 'passwordConfirmation' ||
-          (input?.name === 'password' && attrButton?.route === 'login')
-        "
-        [passwordToCheck]="form?.value?.password"
-        [hidden]="isPageTheLogin"
-      ></app-password-strength>
-    </div>
-
-    <!-- Level OR Cities -->
-    <ion-list
-      *ngIf="
-        input?.name === 'level' ||
-        input?.name === 'city' ||
-        input?.name === 'plan'
-      "
-    >
-      <ion-radio-group [formControlName]="input?.name">
-        <span *ngIf="input?.name === 'level'">
-          <ion-item>
-            <ion-label>Colaborador</ion-label>
-            <ion-radio value="2"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Administrador</ion-label>
-            <ion-radio value="1"></ion-radio>
-          </ion-item>
-        </span>
-        <span *ngIf="input?.name === 'city'">
-          <ion-item>
-            <ion-label>São Luiz dos Montes Belos</ion-label>
-            <ion-radio value="São Luiz dos Montes Belos"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Firminópolis</ion-label>
-            <ion-radio value="Firminópolis"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>Aurilândia</ion-label>
-            <ion-radio value="Aurilândia"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>Sanclerlândia</ion-label>
-            <ion-radio value="Sanclerlândia"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>Turvânia</ion-label>
-            <ion-radio value="Turvânia"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>Córrego do Ouro</ion-label>
-            <ion-radio value="Córrego do Ouro"></ion-radio>
-          </ion-item>
-        </span>
-        <span *ngIf="input?.name === 'plan'">
-          <ion-item>
-            <ion-label>Grátis</ion-label>
-            <ion-radio value="free"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Básico</ion-label>
-            <ion-radio value="basic"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Special</ion-label>
-            <ion-radio value="special"></ion-radio>
-          </ion-item>
-        </span>
-      </ion-radio-group>
-    </ion-list>
-
-    <ion-item
-      lines="none"
-      *ngIf="input?.name === 'stayConnected'"
-      [hidden]="!isPageTheLogin"
-    >
-      <ion-checkbox
-        [formControlName]="input?.name"
-        [attr.aria-label]="input?.label"
+  <ion-grid>
+    <ion-row>
+      <ion-col
+        size="12"
+        *ngFor="let input of buildInputs"
+        class="ion-no-padding"
       >
-      </ion-checkbox>
-      <ion-text class="ion-margin-start">{{ input?.label }}</ion-text>
-    </ion-item>
-
-    <!-- terms -->
-    <div *ngIf="input?.name === 'terms'">
-      <ion-item lines="none">
-        <ion-checkbox
-          [formControlName]="input?.name"
-          [attr.aria-label]="input?.label"
+        <div
+          *ngIf="
+            input?.type !== 'checkbox' &&
+            input?.name !== 'level' &&
+            input?.name !== 'type' &&
+            input?.name !== 'period' &&
+            input?.name !== 'blockade' &&
+            input?.name !== 'city'
+          "
         >
-        </ion-checkbox>
-        <ion-text class="ion-margin-start">{{ input?.label }}</ion-text>
-      </ion-item>
+          <ion-item
+            [lines]="
+              (input?.name === 'description' || input?.name === 'blockade') &&
+              'none'
+            "
+          >
+            <!-- Label -->
+            <ion-label
+              position="floating"
+              [color]="f[input?.name].valid && 'success'"
+            >
+              {{ input?.label }}
 
-      <div class="ion-text-start" *ngIf="submitted && f[input?.name].errors">
-        <ion-text color="danger" *ngIf="!form.controls['terms'].valid">
-          <small [attr.aria-errormessage]="input?.msg?.invalid">{{
-            input?.msg?.invalid
-          }}</small>
-        </ion-text>
-      </div>
+              <!-- Message error -->
+              <ion-text
+                color="danger"
+                *ngIf="submitted && f[input?.name].errors"
+              >
+                <span
+                  *ngIf="f[input?.name].errors.pattern"
+                  [attr.aria-errormessage]="input.msg?.invalid"
+                >
+                  * {{ input.msg?.invalid }}&nbsp;</span
+                >
+                <span
+                  *ngIf="f[input?.name].errors.email"
+                  [attr.aria-errormessage]="input.msg?.invalid"
+                >
+                  * {{ input.msg?.invalid }}&nbsp;</span
+                >
+                <span
+                  *ngIf="f[input?.name].errors.required"
+                  [attr.aria-errormessage]="input.msg?.empty"
+                >
+                  * {{ input.msg?.empty }}&nbsp;</span
+                >
+                <span
+                  *ngIf="f[input?.name].errors.maxlength"
+                  [attr.aria-errormessage]="input?.msg?.max"
+                >
+                  * {{ input?.msg?.max }}&nbsp;</span
+                >
+                <span
+                  *ngIf="f[input?.name].errors.minlength"
+                  [attr.aria-errormessage]="input?.msg?.min"
+                >
+                  * {{ input?.msg?.min }}&nbsp;</span
+                >
+                <span
+                  *ngIf="f[input?.name].errors?.mustMatch"
+                  [attr.aria-errormessage]="input?.msg?.mustMatch"
+                >
+                  * {{ input?.msg?.mustMatch }}&nbsp;</span
+                >
+              </ion-text>
+            </ion-label>
 
-      <ion-text class="cursor" color="secondary">
-        <small
-          class="cursor-pointer ion-margin-start"
-          title="Ver termos de uso do jussara.app."
-          routerLink="/termos-de-uso"
-          data-label="Ver termos de uso?"
+            <ion-input
+              *ngIf="
+                input?.type !== 'tel' &&
+                input?.name !== 'description' &&
+                input?.name !== 'complement' &&
+                input?.name !== 'zip_code' &&
+                input?.name !== 'city' &&
+                input?.name !== 'period' &&
+                input?.name !== 'blockade' &&
+                input?.name !== 'type'
+              "
+              [type]="visiblePassword ? 'text' : input?.type"
+              [formControlName]="input?.name"
+              [inputmode]="input?.type"
+              [placeholder]="input?.placeholder"
+              [attr.aria-invalid]="submitted"
+              [attr.aria-placeholder]="input?.actionLabel"
+              [readonly]="input?.readonly"
+              [attr.aria-readonly]="input?.readonly"
+            >
+            </ion-input>
+
+            <!-- PHONE -->
+            <ion-input
+              *ngIf="input?.type === 'tel' && input?.name === 'phone'"
+              [type]="input?.type"
+              [formControlName]="input?.name"
+              [inputmode]="input?.type"
+              [placeholder]="input?.placeholder"
+              [attr.aria-invalid]="submitted"
+              [attr.aria-placeholder]="input?.actionLabel"
+              maxlength="13"
+              minlength="13"
+              mask="(**)****-****"
+            >
+            </ion-input>
+
+            <ion-input
+              *ngIf="input?.type === 'tel' && input?.name !== 'phone'"
+              [type]="input?.type"
+              [formControlName]="input?.name"
+              [inputmode]="input?.type"
+              [placeholder]="input?.placeholder"
+              [attr.aria-invalid]="submitted"
+              [attr.aria-placeholder]="input?.actionLabel"
+              maxlength="15"
+              minlength="15"
+              mask="(**)***-***-***"
+            >
+            </ion-input>
+
+            <ion-input
+              *ngIf="input?.name === 'zip_code'"
+              [type]="visiblePassword ? 'text' : input?.type"
+              [formControlName]="input?.name"
+              [inputmode]="input?.type"
+              [placeholder]="input?.placeholder"
+              [attr.aria-invalid]="submitted"
+              [attr.aria-placeholder]="input?.actionLabel"
+              maxlength="10"
+              minlength="10"
+              mask="**.***-***"
+            >
+            </ion-input>
+
+            <ion-textarea
+              *ngIf="
+                input?.name === 'complement' ||
+                (input?.name === 'description' &&
+                  attrButton?.route === '/category')
+              "
+              [formControlName]="input?.name"
+              [inputmode]="input?.type"
+              [placeholder]="input?.placeholder"
+              [attr.aria-placeholder]="input?.actionLabel"
+              rows="8"
+            ></ion-textarea>
+
+            <p
+              *ngIf="
+                input?.name === 'description' &&
+                attrButton?.route !== '/category'
+              "
+              class="ion-margin-top"
+            ></p>
+
+            <editor
+              *ngIf="
+                input?.name === 'description' &&
+                attrButton?.route !== '/category'
+              "
+              apiKey="eltulb4tbmvkr9gu7025qd3j9otlnxlej0ybckmvguswoje5"
+              [formControlName]="input?.name"
+              [init]="config"
+            ></editor>
+
+            <!-- Button display password -->
+            <ion-button
+              *ngIf="
+                input?.name === 'passwordConfirmation' ||
+                (input?.name === 'password' && attrButton?.route === '/entrar')
+              "
+              slot="end"
+              fill="clear"
+              (click)="showPassword()"
+              class="ion-margin-top"
+              [title]="visiblePassword ? 'Ocultar senha' : 'Ver senha'"
+              [attr.aria-pressed]="visiblePassword"
+              [attr.aria-label]="attrButton?.aria"
+            >
+              <ion-icon
+                [name]="visiblePassword ? 'eye-off-outline' : 'eye-outline'"
+                color="medium"
+              ></ion-icon>
+            </ion-button>
+          </ion-item>
+
+          <!-- Password -->
+          <app-password-strength
+            *ngIf="
+              input?.name === 'passwordConfirmation' ||
+              (input?.name === 'password' && attrButton?.route === 'login')
+            "
+            [passwordToCheck]="form?.value?.password"
+            [hidden]="isPageTheLogin"
+          ></app-password-strength>
+        </div>
+
+        <!-- Resposta da menssagem -->
+        <ion-item
+          class="ion-margin-vertical"
+          *ngIf="input?.name === 'response'"
         >
-          Ver termos de uso?
-        </small>
-      </ion-text>
-    </div>
-  </div>
+          <ion-checkbox
+            slot="end"
+            [formControlName]="input?.name"
+          ></ion-checkbox>
+          <ion-label>{{ input?.label }}</ion-label>
+        </ion-item>
 
-  <ion-button
-    *ngIf="buildInputs.length > 0"
-    color="tertiary"
-    type="submit"
-    expand="block"
-    class="ion-margin-vertical"
-    [fill]="attrButton?.fill ? 'outline' : 'solid'"
-    [attr.aria-label]="attrButton?.aria"
-    [title]="attrButton?.title"
-  >
-    <ion-icon class="ion-margin-end" [name]="attrButton?.icon"></ion-icon>
-    {{ attrButton?.label }}
-  </ion-button>
+        <!-- Bloquear -->
+        <ion-item
+          class="ion-margin-vertical"
+          *ngIf="input?.name === 'blockade' && attrButton.route === '/blockade'"
+        >
+          <ion-checkbox
+            slot="end"
+            [formControlName]="input?.name"
+          ></ion-checkbox>
+          <ion-label>{{ input?.label }}</ion-label>
+        </ion-item>
+
+        <!-- Level or Cities -->
+        <ion-list
+          *ngIf="
+            input?.name === 'level' ||
+            input?.name === 'city' ||
+            input?.name === 'type'
+          "
+        >
+          <ion-radio-group [formControlName]="input?.name">
+            <!-- Nivel -->
+            <span *ngIf="input?.name === 'level'">
+              <ion-item>
+                <ion-label>Colaborador</ion-label>
+                <ion-radio value="2"></ion-radio>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Administrador</ion-label>
+                <ion-radio value="1"></ion-radio>
+              </ion-item>
+            </span>
+            <!-- Cidade -->
+            <span *ngIf="input?.name === 'city'">
+              <ion-item>
+                <ion-label>São Luiz dos Montes Belos</ion-label>
+                <ion-radio value="São Luiz dos Montes Belos"></ion-radio>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Firminópolis</ion-label>
+                <ion-radio value="Firminópolis"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>Aurilândia</ion-label>
+                <ion-radio value="Aurilândia"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>Sanclerlândia</ion-label>
+                <ion-radio value="Sanclerlândia"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>Turvânia</ion-label>
+                <ion-radio value="Turvânia"></ion-radio>
+              </ion-item>
+              <ion-item>
+                <ion-label>Córrego do Ouro</ion-label>
+                <ion-radio value="Córrego do Ouro"></ion-radio>
+              </ion-item>
+            </span>
+            <!-- Planos -->
+            <span
+              *ngIf="
+                input?.name === 'type' &&
+                attrButton.route !== '/message' &&
+                attrButton.route !== '/blockade'
+              "
+            >
+              <ion-item>
+                <ion-label>Grátis</ion-label>
+                <ion-radio value="free"></ion-radio>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Básico</ion-label>
+                <ion-radio value="basic"></ion-radio>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Special</ion-label>
+                <ion-radio value="special"></ion-radio>
+              </ion-item>
+
+              <ion-row
+                [hidden]="form?.value?.type === 'free'"
+                class="ion-margin-vertical ion-justify-content-center"
+              >
+                <ion-col size="12">
+                  <ion-text color="medium" class="ion-text-center">
+                    <p>
+                      Selecione um periodo
+                      <ion-text color="danger" [hidden]="!message">
+                        {{ message }}
+                      </ion-text>
+                    </p>
+                  </ion-text>
+                </ion-col>
+                <ion-button
+                  [color]="
+                    form?.value?.period === '03' ? 'success' : 'secondary'
+                  "
+                  (click)="setPediod('03')"
+                  size="small"
+                  shape="round"
+                >
+                  3 messes
+                </ion-button>
+
+                <ion-button
+                  [color]="
+                    form?.value?.period === '06' ? 'success' : 'secondary'
+                  "
+                  (click)="setPediod('06')"
+                  class="ion-margin-horizontal"
+                  size="small"
+                  shape="round"
+                >
+                  6 messes
+                </ion-button>
+
+                <ion-button
+                  [color]="
+                    form?.value?.period === '12' ? 'success' : 'secondary'
+                  "
+                  (click)="setPediod('12')"
+                  size="small"
+                  shape="round"
+                >
+                  1 ano
+                </ion-button>
+              </ion-row>
+            </span>
+            <!-- Tipo da menssagem -->
+            <span
+              *ngIf="
+                input?.name === 'type' &&
+                (attrButton.route === '/message' ||
+                  attrButton.route === '/blockade')
+              "
+            >
+              <ion-item-divider
+                [ngClass]="{
+                  'ion-margin-top': attrButton.route !== '/blockade'
+                }"
+              >
+                <ion-label>Tipo de menssagem</ion-label>
+                <ion-icon slot="start" name="mail"></ion-icon>
+              </ion-item-divider>
+
+              <ion-item>
+                <ion-label>Aviso</ion-label>
+                <ion-radio
+                  value="warning"
+                  [disabled]="form?.value?.blockade"
+                ></ion-radio>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Informação</ion-label>
+                <ion-radio
+                  value="info"
+                  [disabled]="form?.value?.blockade"
+                ></ion-radio>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Parabéns</ion-label>
+                <ion-radio
+                  value="success"
+                  [disabled]="form?.value?.blockade"
+                ></ion-radio>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Atenção</ion-label>
+                <ion-radio
+                  value="danger"
+                  [disabled]="!form?.value?.blockade"
+                ></ion-radio>
+              </ion-item>
+            </span>
+            <!-- Bloquear usuário -->
+            <!-- <span
+              *ngIf="
+                input?.name === 'blockade' && attrButton.route === '/blockade'
+              "
+            >
+              <ion-item>
+                <ion-label>Bloquear</ion-label>
+                <ion-radio [value]="true"></ion-radio>
+              </ion-item>
+
+              <ion-item class="ion-margin-bottom">
+                <ion-label>Desbloquear</ion-label>
+                <ion-radio [value]="false"></ion-radio>
+              </ion-item>
+            </span> -->
+          </ion-radio-group>
+        </ion-list>
+        <ion-item
+          lines="none"
+          *ngIf="input?.name === 'stayConnected'"
+          [hidden]="!isPageTheLogin"
+        >
+          <ion-checkbox
+            [formControlName]="input?.name"
+            [attr.aria-label]="input?.label"
+          >
+          </ion-checkbox>
+          <ion-text class="ion-margin-start">{{ input?.label }}</ion-text>
+        </ion-item>
+        <!-- terms -->
+        <div *ngIf="input?.name === 'terms'">
+          <ion-item lines="none">
+            <ion-checkbox
+              [formControlName]="input?.name"
+              [attr.aria-label]="input?.label"
+            >
+            </ion-checkbox>
+            <ion-text class="ion-margin-start">{{ input?.label }}</ion-text>
+          </ion-item>
+
+          <div
+            class="ion-text-start"
+            *ngIf="submitted && f[input?.name].errors"
+          >
+            <ion-text color="danger" *ngIf="!form.controls['terms'].valid">
+              <small [attr.aria-errormessage]="input?.msg?.invalid">{{
+                input?.msg?.invalid
+              }}</small>
+            </ion-text>
+          </div>
+
+          <ion-text class="cursor" color="secondary">
+            <small
+              class="cursor-pointer ion-margin-start"
+              title="Ver termos de uso do jussara.app."
+              routerLink="/termos-de-uso"
+              data-label="Ver termos de uso?"
+            >
+              Ver termos de uso?
+            </small>
+          </ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button
+          *ngIf="buildInputs.length > 0"
+          color="tertiary"
+          type="submit"
+          expand="block"
+          class="ion-margin-vertical"
+          [fill]="attrButton?.fill ? 'outline' : 'solid'"
+          [attr.aria-label]="attrButton?.aria"
+          [title]="attrButton?.title"
+        >
+          <ion-icon class="ion-margin-end" [name]="attrButton?.icon"></ion-icon>
+          {{ attrButton?.label }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </form>

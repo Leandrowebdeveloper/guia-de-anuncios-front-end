@@ -7,11 +7,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { StateService } from './service/state.service';
 
 @Component({
-  selector: 'app-state-announcement',
+  selector: 'app-state-announcement-component',
   templateUrl: './state.component.html',
   styleUrls: ['./state.component.scss'],
 })
-export class StateComponent {
+export class AnnouncementStateComponent {
   @Input() announcement!: Announcement;
   private form: FormGroup;
   private $state: Subscription;

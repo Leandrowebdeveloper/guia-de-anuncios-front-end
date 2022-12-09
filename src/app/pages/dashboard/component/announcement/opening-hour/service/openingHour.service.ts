@@ -11,7 +11,7 @@ import {
 } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
-import { ManagementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
+import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +47,7 @@ export class OpeningHourService extends HttpService<Announcement> {
     http: HttpClient,
     public storageService: StorageService,
     public messageService: MessageService,
-    private managementService: ManagementService
+    private managementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
     this.setApi = `auth-announcement`;

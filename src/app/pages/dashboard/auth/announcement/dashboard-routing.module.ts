@@ -11,7 +11,7 @@ const routes: Routes = [
     component: DashboardPage,
   },
   {
-    path: 'editar/:slug',
+    path: ':slug',
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     resolve: {

@@ -1,9 +1,9 @@
-import { MessageService } from 'src/app/utilities/message/message.service';
 import { Subscription } from 'rxjs';
-import { Announcement, Galery } from 'src/app/interface';
+import { Announcement, Galery, User } from 'src/app/interface';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { GaleryAnnouncementService } from '../service/galery.service';
-import { ManagementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
+import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
+import { MessageService } from 'src/app/utilities/message/message.service';
 
 @Component({
   selector: 'app-galery-component',
@@ -13,12 +13,13 @@ import { ManagementService } from 'src/app/pages/dashboard/auth/announcement/man
 export class GaleryComponent {
   @Output() isHeader = new EventEmitter<boolean>(false);
   @Input() announcement!: Announcement;
+  @Input() user!: User;
   public image: Galery;
   private destroy: Subscription;
 
   constructor(
     private galeryAnnouncementService: GaleryAnnouncementService,
-    private managementService: ManagementService,
+    private managementService: ManagementAnnouncementService,
     private messageService: MessageService
   ) {}
 

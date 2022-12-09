@@ -6,7 +6,6 @@ import { AttrButton } from 'src/app/pages/public/system-access/components/button
 import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
-import { AnnouncementUtilities } from 'src/app/utilities/announcement/announcement-utilities.service';
 import { ContactService } from '../service/contact.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
@@ -15,7 +14,7 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormContactAnnouncementComponent implements OnInit {
   @Input() contact!: Contact;
   @Input() label!: string;
 

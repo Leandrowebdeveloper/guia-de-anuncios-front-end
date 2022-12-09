@@ -135,7 +135,7 @@ export class CategoryService extends HttpService<Category> {
     const data = this.buildFileData(category, file);
     // eslint-disable-next-line no-underscore-dangle
     this.setCsrf = category._csrf;
-    return this.upload('upload', data);
+    return this.upload(data, 'upload');
   }
 
   public order(category: Category): Observable<Category | number[]> {

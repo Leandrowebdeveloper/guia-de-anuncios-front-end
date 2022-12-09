@@ -1,11 +1,17 @@
-<ion-item *ngIf="pageEnbled">
-  <ion-label>{{ user?.blockade ? "Bloqueado" : "Desbloqueado" }}</ion-label>
-  <ion-toggle
-    slot="end"
-    (ionChange)="blockade()"
-    [checked]="user?.blockade"
-    title="Alternar entre usuário bloquear e desbloquear."
-    aria-label="Clique para alternar entre usuário bloquear e desbloquear."
-  ></ion-toggle>
-  <ion-icon slot="start" [name]="user?.blockade ? 'stop' : 'play'"></ion-icon>
+<ion-item
+  *ngIf="user"
+  (click)="blockade()"
+  title="Alternar entre usuário bloquear e desbloquear."
+  aria-label="Clique para alternar entre usuário bloquear e desbloquear."
+  detail="true"
+  button
+>
+  <ion-label [color]="user?.blockade ? 'danger' : 'success'">{{
+    user?.blockade ? "Bloqueado" : "Desbloqueado"
+  }}</ion-label>
+  <ion-icon
+    slot="start"
+    [color]="user?.blockade ? 'danger' : 'success'"
+    [name]="user?.blockade ? 'stop' : 'play'"
+  ></ion-icon>
 </ion-item>

@@ -73,7 +73,7 @@
                 (click)="close()"
                 button
               >
-                <ion-label>Usuário</ion-label>
+                <ion-label>{{ user?.firstName }}</ion-label>
                 <ion-avatar class="cursor-pointer" title="Imágem do usuário.">
                   <ion-img
                     [src]="user?.image?.url || './../../assets/avatar.svg'"

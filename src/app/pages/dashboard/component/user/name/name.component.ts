@@ -1,15 +1,16 @@
-import { FormComponent } from './form/form.component';
+import { FormUserNameComponent } from './form/form.component';
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { User } from 'src/app/interface';
 
 @Component({
-  selector: 'app-name-component',
+  selector: 'app-name-user-component',
   templateUrl: './name.component.html',
   styleUrls: ['./name.component.scss'],
 })
-export class NameComponent {
+export class UserNameComponent {
   @Input() user!: User;
+  @Input() isAuth!: boolean;
   constructor(private modalController: ModalController) {}
 
   public async name(): Promise<void> {
@@ -18,8 +19,9 @@ export class NameComponent {
     }
     const { _csrf, firstName, lastName, slug } = this.user;
     const modal = await this.modalController.create({
-      component: FormComponent,
+      component: FormUserNameComponent,
       componentProps: {
+        isAuth: this.isAuth,
         action: 'name',
         label: 'Editar usuário',
         user: { _csrf, firstName, lastName, slug },

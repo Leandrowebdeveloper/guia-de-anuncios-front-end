@@ -10,7 +10,6 @@ import { ChangeEmailPage } from './change-email.page';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -18,9 +17,8 @@ import { FooterModule } from 'src/app/footer/footer.module';
     IonicModule,
     ChangeEmailPageRoutingModule,
     HeaderModule,
-    FooterModule
-
+    FooterModule,
   ],
-  declarations: [ChangeEmailPage]
+  declarations: [ChangeEmailPage],
 })
 export class ChangeEmailPageModule {}

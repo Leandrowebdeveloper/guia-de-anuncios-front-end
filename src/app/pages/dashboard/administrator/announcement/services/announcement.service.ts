@@ -133,7 +133,7 @@ export class AnnouncementService extends HttpService<Announcement> {
     const data = this.buildFileData(announcement, file);
     // eslint-disable-next-line no-underscore-dangle
     this.setCsrf = announcement._csrf;
-    return this.upload('upload', data);
+    return this.upload(data, 'upload');
   }
 
   public order(

@@ -9,12 +9,13 @@ import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormAnnouncementComponent implements OnInit {
   @Input() announcement!: Announcement;
   @Input() action!: string;
   @Input() label!: string;
@@ -35,6 +36,7 @@ export class FormComponent implements OnInit {
     private helpService: HelpsService,
     private modalController: ModalController,
     private authAnnouncementService: AuthAnnouncementService,
+    private managementAnnouncementService: ManagementAnnouncementService,
     private messageService: MessageService,
     private loadingService: LoadingService
   ) {}
@@ -64,8 +66,18 @@ export class FormComponent implements OnInit {
     event: FormGroup<any>,
     loading: Promise<HTMLIonLoadingElement>
   ): Subscription {
+    if (event.value.id) {
+      return (this.$announcement = this.managementAnnouncementService
+        .updateAnnouncement(event.value)
+        .subscribe(
+          (announcement: Announcement) =>
+            this.messsage(announcement?.message, loading),
+          (error: HttpErrorResponse) =>
+            this.messageService.error(error, loading, this.$announcement)
+        ));
+    }
     return (this.$announcement = this.authAnnouncementService
-      .sendAnnouncement(event.value)
+      .createAnnouncement(event.value)
       .subscribe(
         (announcement: Announcement) =>
           this.messsage(announcement?.message, loading),

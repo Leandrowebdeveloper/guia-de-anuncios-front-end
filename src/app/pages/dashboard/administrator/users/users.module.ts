@@ -11,7 +11,9 @@ import { SearchModule } from 'src/app/components/search/search.module';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
-import { FormPageModule } from './form/form.module';
+import { UserComponentsModule } from 'src/app/pages/dashboard/component/user/user-component.module';
+import { DeletedItemUserPageModule } from './pages/deleted-item/deleted-item-user.module';
+import { EnabledItemUserPageModule } from './pages/enabled-item/enabled-item-user.module';
 
 @NgModule({
   imports: [
@@ -20,10 +22,12 @@ import { FormPageModule } from './form/form.module';
     IonicModule,
     UsersPageRoutingModule,
     SearchModule,
-    FormPageModule,
     PipeModule,
     HeaderModule,
     FooterModule,
+    UserComponentsModule,
+    DeletedItemUserPageModule,
+    EnabledItemUserPageModule,
   ],
   declarations: [UsersPage],
 })

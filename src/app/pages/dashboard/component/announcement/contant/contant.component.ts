@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Announcement, Contact } from 'src/app/interface';
 import { ModalController } from '@ionic/angular';
-import { FormComponent } from './form/form.component';
+import { FormContactAnnouncementComponent } from './form/form.component';
 
 @Component({
-  selector: 'app-contant-component',
+  selector: 'app-contant-announcement-component',
   templateUrl: './contant.component.html',
   styleUrls: ['./contant.component.scss'],
 })
-export class ContantComponent implements OnInit {
+export class ContantAnnouncementComponent implements OnInit {
   @Input() announcement!: Announcement;
   constructor(private modalController: ModalController) {}
 
@@ -36,7 +36,7 @@ export class ContantComponent implements OnInit {
     }
 
     const modal = await this.modalController.create({
-      component: FormComponent,
+      component: FormContactAnnouncementComponent,
       componentProps: {
         action: 'contact',
         label,

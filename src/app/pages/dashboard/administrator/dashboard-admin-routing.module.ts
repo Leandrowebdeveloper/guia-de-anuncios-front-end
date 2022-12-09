@@ -29,7 +29,7 @@ const routes: Routes = [
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
-      import('src/app/pages/dashboard/auth/user/user.module').then(
+      import('src/app/pages/dashboard/auth/user/management.module').then(
         (m) => m.UserPageModule
       ),
   },
@@ -41,14 +41,7 @@ const routes: Routes = [
       import('./users/users.module').then((m) => m.UsersPageModule),
   },
   {
-    path: 'usuarios/excluidos',
-    canActivate: [PrivateAutorizationGuard],
-    canLoad: [PrivateAutorizationGuard],
-    loadChildren: () =>
-      import('./users/users.module').then((m) => m.UsersPageModule),
-  },
-  {
-    path: 'manutencao/usuario/:id',
+    path: 'usuario/:id',
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>

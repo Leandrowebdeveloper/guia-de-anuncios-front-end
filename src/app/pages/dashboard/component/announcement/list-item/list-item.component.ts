@@ -1,13 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ItemSlidingCustomEvent } from '@ionic/angular';
 import { Announcement } from 'src/app/interface';
 
 @Component({
-  selector: 'app-list-item',
+  selector: 'app-list-item-announcement-component',
   templateUrl: './list-item.component.html',
   styleUrls: ['./list-item.component.scss'],
 })
-export class ListItemComponent {
+export class ListItemAnnouncementComponent {
   @Input() announcement!: Announcement;
   @Input() index!: number;
   @Input() action!: number;

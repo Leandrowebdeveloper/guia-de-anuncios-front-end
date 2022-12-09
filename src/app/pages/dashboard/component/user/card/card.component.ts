@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { User } from 'src/app/interface';
 
 @Component({
@@ -6,6 +6,6 @@ import { User } from 'src/app/interface';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
 })
-export class CardUserComponent {
+export class UserCardComponent {
   @Input() user!: User;
 }

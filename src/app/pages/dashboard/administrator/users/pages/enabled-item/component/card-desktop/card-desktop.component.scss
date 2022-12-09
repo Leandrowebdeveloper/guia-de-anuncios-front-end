@@ -1,0 +1,24 @@
+$noMargin: -4px;
+
+.flex {
+  display: flex;
+  align-items: flex-start;
+  justify-content: start;
+  flex-direction: column;
+  width: 120px;
+  small {
+    display: flex;
+    align-items: center;
+    > ion-icon {
+      margin-right: 6px;
+    }
+    &.margin {
+      margin-bottom: 6px;
+    }
+  }
+}
+
+p.no-margin {
+  margin-top: $noMargin;
+  margin-bottom: $noMargin;
+}

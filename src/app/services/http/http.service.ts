@@ -51,6 +51,13 @@ export class HttpService<T> implements Http<T> {
       .pipe(tap((e: T) => console.log('requirement', e)));
   }
 
+  public get<J>(token?: string): Observable<J> {
+    this.getToken();
+    return this.http
+      .get<J>(`${this.api}/requirement/${token || ''}`, this.httpOptions)
+      .pipe(tap((e: J) => console.log('get', e)));
+  }
+
   public search(url: string, searchBy: object): Observable<T[]> {
     this.getToken();
     return this.http
@@ -125,11 +132,11 @@ export class HttpService<T> implements Http<T> {
     });
   }
 
-  public upload(url: string, formData: FormData): Observable<any> {
+  public upload(formData: FormData, url?: string): Observable<any> {
     this.getToken();
     const request = new HttpRequest<any>(
       'POST',
-      `${this.api}/${url}`,
+      `${this.api}/${url || ''}`,
       formData,
       {
         headers: new HttpHeaders({

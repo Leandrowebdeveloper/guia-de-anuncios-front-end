@@ -1,5 +1,7 @@
-<ion-item *ngIf="pageEnbled" [disabled]="user?.blockade">
-  <ion-label>{{ user?.state ? "Online" : "Offline" }}</ion-label>
+<ion-item *ngIf="user" [disabled]="user?.blockade">
+  <ion-label [color]="user?.state ? 'success' : 'danger'">{{
+    user?.state ? "Online" : "Offline"
+  }}</ion-label>
   <ion-toggle
     slot="end"
     (ionChange)="state()"
@@ -9,10 +11,12 @@
     [attr.aria-disabled]="
       'Botão alterar status ' + user?.blockade ? 'abilitado.' : 'desabilitado'
     "
+    [color]="user?.state && 'success'"
   >
   </ion-toggle>
   <ion-icon
     slot="start"
+    [color]="user?.state ? 'success' : 'danger'"
     [name]="user?.state ? 'power' : 'radio-button-off'"
   ></ion-icon>
 </ion-item>

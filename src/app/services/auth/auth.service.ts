@@ -2,16 +2,13 @@ import { Image, User } from 'src/app/interface';
 import { NavController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { BehaviorSubject } from 'rxjs';
 import { HttpService } from '../http/http.service';
-import { AlertService } from 'src/app/utilities/alert/alert.service';
 import { HelpsService } from '../helps/helps.service';
-import { LoadingService } from 'src/app/utilities/loading/loading.service';
-import { MessageService } from 'src/app/utilities/message/message.service';
 import { StorageService } from '../storage/storage.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -24,10 +21,7 @@ export class AuthService extends HttpService<User> {
   constructor(
     http: HttpClient,
     public storageService: StorageService,
-    private messageService: MessageService,
-    private loadingService: LoadingService,
     private helpsService: HelpsService,
-    private alertService: AlertService,
     private router: Router,
     private navCtrl: NavController
   ) {
@@ -143,12 +137,6 @@ export class AuthService extends HttpService<User> {
     return this.patch(user, 'password');
   }
 
-  public passwordCreate(user: User): Observable<User | number[]> {
-    return this.patch(user, 'passwordCreate').pipe(
-      tap((user_: User) => (this.setIsPassword = user_.isPassword))
-    );
-  }
-
   public delete(user: User): Observable<User> {
     return this.destroy(user).pipe(
       tap((user_: User) => {
@@ -159,14 +147,6 @@ export class AuthService extends HttpService<User> {
       })
     );
   }
-
-  // public state(user: User): Observable<User | number[]> {
-  //   return this.patch(user, 'state').pipe(
-  //     tap((user_: User) => {
-  //       this.setState = user_?.state;
-  //     })
-  //   );
-  // }
 
   private clearsSessionAndDatabaseStorage(): void {
     this.removeTokenStorageSession();

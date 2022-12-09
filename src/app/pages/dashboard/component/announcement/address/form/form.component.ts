@@ -14,7 +14,7 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormAddressAnnouncementComponent implements OnInit {
   @Input() address!: Address;
   @Input() label!: string;
 

@@ -8,13 +8,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
 import { MessageService } from 'src/app/utilities/message/message.service';
-import { UsersService } from 'src/app/pages/dashboard/administrator/users/services/users.service';
+import { UserLevelService } from '../service/user-level.service';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit {
+export class FormUserLevelComponent implements OnInit {
   @Input() user!: User;
   @Input() action!: string;
   @Input() label!: string;
@@ -34,7 +34,7 @@ export class FormComponent implements OnInit {
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
-    private usersService: UsersService,
+    private userLevelService: UserLevelService,
     private loadingService: LoadingService,
     private messageService: MessageService
   ) {}
@@ -53,9 +53,9 @@ export class FormComponent implements OnInit {
 
   // Level
   private level(event: FormGroup): Subscription {
-    const loading = this.loadingService.show('Alterando nivel...');
-    event.value.slug = this.usersService.getSlug;
-    return (this.$level = this.usersService.level(event.value).subscribe(
+    const loading = this.loadingService.show('Salvando nivel...');
+    event.value.slug = this.user?.slug;
+    return (this.$level = this.userLevelService.level(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$level)

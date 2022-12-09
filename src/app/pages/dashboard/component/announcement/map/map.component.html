@@ -1,10 +1,6 @@
 <ion-item
   *ngIf="announcement"
-  [disabled]="
-    announcement?.categoryAnnouncement === null ||
-    announcement?.blockade ||
-    user?.plan === 'free'
-  "
+  [disabled]="announcement?.blockade"
   detail="true"
   (click)="coordinates(announcement)"
   title="Alterar Titulo e descrição"
