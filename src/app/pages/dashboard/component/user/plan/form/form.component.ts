@@ -16,7 +16,7 @@ import { AttrButton } from 'src/app/pages/public/system-access/components/button
   styleUrls: ['./form.component.scss'],
 })
 export class FormUserPlanComponent implements OnInit {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, 'id' | '_csrf' | 'plan' | 'password'>>;
   @Input() action!: string;
   @Input() label!: string;
 
@@ -64,7 +64,7 @@ export class FormUserPlanComponent implements OnInit {
   }
 
   private messsage(
-    plan: Plan,
+    plan: Pick<Plan, 'message'>,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);
@@ -74,6 +74,5 @@ export class FormUserPlanComponent implements OnInit {
   private getData(): void {
     const { _csrf, plan, password } = this.user;
     this.config = { _csrf, password, ...plan };
-    console.log(this.config);
   }
 }

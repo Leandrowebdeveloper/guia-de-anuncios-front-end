@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { User } from 'src/app/interface/index';
+import { EnabledItemUser } from '../../enabled-item-user.page';
 
 @Component({
   selector: 'app-user-card-desktop',
@@ -7,6 +8,6 @@ import { User } from 'src/app/interface/index';
   styleUrls: ['./card-desktop.component.scss'],
 })
 export class CardDesktopComponent {
-  @Input() users!: User[];
+  @Input() users!: Pick<User, EnabledItemUser>[];
   constructor() {}
 }

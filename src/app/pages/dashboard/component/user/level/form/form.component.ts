@@ -15,7 +15,7 @@ import { UserLevelService } from '../service/user-level.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormUserLevelComponent implements OnInit {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, '_csrf' | 'slug' | 'password' | 'level'>>;
   @Input() action!: string;
   @Input() label!: string;
 
@@ -56,14 +56,15 @@ export class FormUserLevelComponent implements OnInit {
     const loading = this.loadingService.show('Salvando nivel...');
     event.value.slug = this.user?.slug;
     return (this.$level = this.userLevelService.level(event.value).subscribe(
-      (user: User) => this.messsage(user, loading),
+      (user: Required<Pick<User, 'message' | 'level'>>) =>
+        this.messsage(user, loading),
       (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$level)
     ));
   }
 
   private messsage(
-    user: User,
+    user: Required<Pick<User, 'message'>>,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);

@@ -8,11 +8,11 @@ import { User } from 'src/app/interface';
   templateUrl: './level.component.html',
   styleUrls: ['./level.component.scss'],
 })
-export class UserLevelComponent implements OnInit {
-  @Input() user!: User;
+export class UserLevelComponent {
+  @Input() user!: Required<
+    Pick<User, '_csrf' | 'slug' | 'password' | 'level' | 'blockade'>
+  >;
   constructor(private modalController: ModalController) {}
-
-  ngOnInit() {}
 
   public async level(): Promise<void> {
     const { _csrf, level, slug, password } = this.user;

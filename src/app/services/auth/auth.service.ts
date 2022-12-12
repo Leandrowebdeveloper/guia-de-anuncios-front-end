@@ -47,11 +47,6 @@ export class AuthService extends HttpService<User> {
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  public get getState(): boolean {
-    return this.getUser?.authState;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   public get getSlug() {
     return this.getUser?.slug;
   }
@@ -95,11 +90,6 @@ export class AuthService extends HttpService<User> {
     this.setUser = this.user.value;
   }
 
-  public set setState(value: boolean) {
-    this.user.value.state = value;
-    this.setUser = this.user.value;
-  }
-
   public set setIsPassword(value: boolean) {
     this.user.value.isPassword = value;
     this.setUser = this.user.value;
@@ -125,7 +115,9 @@ export class AuthService extends HttpService<User> {
     return this.patch(user, 'email');
   }
 
-  public emailIsValidToChange(params: { token: string; slug: string }) {
+  public emailIsValidToChange(
+    params: Required<{ token: string; slug: string }>
+  ) {
     return this.findOne(`change-email/`, params).pipe(
       tap((user_: User) => {
         this.setEmail = user_;
@@ -134,7 +126,9 @@ export class AuthService extends HttpService<User> {
   }
 
   public password(user: User): Observable<User | number[]> {
-    return this.patch(user, 'password');
+    return this.patch(user, 'password').pipe(
+      tap((user_: User) => (this.setIsPassword = user_?.isPassword))
+    );
   }
 
   public delete(user: User): Observable<User> {

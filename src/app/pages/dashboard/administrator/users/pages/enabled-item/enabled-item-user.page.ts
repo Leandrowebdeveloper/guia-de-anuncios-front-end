@@ -13,14 +13,26 @@ import {
   SearchbarCustomEvent,
 } from '@ionic/angular';
 
+export type EnabledItemUser =
+  | 'name'
+  | 'plan'
+  | 'image'
+  | 'level'
+  | 'slug'
+  | 'state'
+  | 'blockade'
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt';
+
 @Component({
   selector: 'app-enabled-item-user',
   templateUrl: './enabled-item-user.page.html',
   styleUrls: ['./enabled-item-user.page.scss', '../../users.page.scss'],
 })
 export class EnabledItemUserPage implements OnInit, OnDestroy {
-  public users$: Observable<User[]>;
-  public users: User[];
+  public users$: Observable<Pick<User, EnabledItemUser>[]>;
+  public users: Pick<User, EnabledItemUser>[];
   public error = new Subject<boolean>();
   public endListUser = true;
 
@@ -32,6 +44,8 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   private $users: Subscription;
   private $search: Subscription;
   private $searchBy: Subscription;
+  private $update: Subscription;
+  private $delete: Subscription;
 
   private limit = 12;
   private offset = 0;
@@ -39,7 +53,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   private searchBy: object;
 
   constructor(
-    private usersService: AdminUsersService,
+    private adminUsersService: AdminUsersService,
     private helpService: HelpsService,
     private searchService: SearchService,
     private plt: Platform
@@ -60,10 +74,14 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
     this.plt.ready().then(() => {
       this.isMobile = this.plt.is('mobile');
     });
+    this.update();
+    this.delete();
   }
 
   ngOnDestroy(): void {
     this.$searchBy.unsubscribe();
+    this.$update.unsubscribe();
+    this.$delete.unsubscribe();
   }
 
   public refresher(event: any): void {
@@ -78,9 +96,9 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   public search(event: SearchbarCustomEvent): Subscription {
     if (event?.target?.value.length >= 3) {
       const data = this.setDataSearch(event?.target?.value);
-      return (this.$search = this.usersService
+      return (this.$search = this.adminUsersService
         .searchBy(data)
-        .subscribe((user: User[]) => {
+        .subscribe((user: Pick<User, EnabledItemUser>[]) => {
           this.searchService.search = user;
           setTimeout(() => this.$search.unsubscribe(), 2000);
         }));
@@ -89,10 +107,10 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
 
   public findMoreUsers(event: any): Subscription {
     this.calculatePagination();
-    return (this.$users = this.usersService
+    return (this.$users = this.adminUsersService
       .index(`management/`, { limit: this.limit, offset: this.offset })
       .subscribe(
-        (user: User[]) => this.success(event, user),
+        (user: Pick<User, EnabledItemUser>[]) => this.success(event, user),
         (error: HttpErrorResponse) => this.error.next(true),
         () => this.helpService.delay(this.$users.unsubscribe(), 2000)
       ));
@@ -154,12 +172,12 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
     this.getSearchBy[key] = value;
   }
 
-  private findUsers(): Observable<User[]> {
-    return (this.users$ = this.usersService
+  private findUsers(): Observable<Pick<User, EnabledItemUser>[]> {
+    return (this.users$ = this.adminUsersService
       .index(`management/`, { limit: this.limit, offset: this.offset })
       .pipe(
         delay(300),
-        tap((user: User[]) => {
+        tap((user: Pick<User, EnabledItemUser>[]) => {
           setTimeout(() => (this.menssage = false), 300);
           return (this.users = user);
         }),
@@ -177,7 +195,10 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
     return;
   }
 
-  private success(event: InfiniteScrollCustomEvent, user: User[]): void {
+  private success(
+    event: InfiniteScrollCustomEvent,
+    user: Pick<User, EnabledItemUser>[]
+  ): void {
     this.setMoreData(user);
     this.updateScrollEvent(event, user);
     return;
@@ -185,7 +206,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
 
   private updateScrollEvent(
     event: InfiniteScrollCustomEvent,
-    user: User[]
+    user: Pick<User, EnabledItemUser>[]
   ): void {
     event.target.complete();
     if (user.length < 8) {
@@ -195,7 +216,51 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
     return;
   }
 
-  private setMoreData(user: User[]): void {
+  private setMoreData(user: Pick<User, EnabledItemUser>[]): void {
     return user.forEach((item: User) => this.users.push(item));
+  }
+
+  private delete(): Subscription {
+    return (this.$delete = this.adminUsersService.deleteObservable.subscribe(
+      (user: Pick<User, 'id'>) => {
+        if (user) {
+          const i = this.users.findIndex(
+            (item: Pick<User, 'id'>) => item?.id === user?.id
+          );
+          this.users.splice(i, 1);
+        }
+      }
+    ));
+  }
+
+  private update(): void {
+    this.$update = this.adminUsersService.userObservable.subscribe(
+      (user: User) => {
+        if (user && this.users?.length > 0) {
+          this.setUser(user);
+        }
+      }
+    );
+  }
+
+  private setUser(user: User) {
+    const i = this.users.findIndex((item: User) => item?.id === user?.id);
+    const response: Pick<User, EnabledItemUser> = this.filter(user);
+    this.users.splice(i, 1, response);
+  }
+
+  private filter(user: User): Pick<User, EnabledItemUser> {
+    return {
+      name: user?.name,
+      plan: user?.plan,
+      image: user?.image,
+      level: user?.level,
+      slug: user?.slug,
+      state: user?.state,
+      blockade: user?.blockade,
+      id: user?.id,
+      createdAt: user?.createdAt,
+      updatedAt: user?.updatedAt,
+    };
   }
 }

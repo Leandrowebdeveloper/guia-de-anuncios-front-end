@@ -7,5 +7,7 @@ import { User } from 'src/app/interface';
   styleUrls: ['./card.component.scss'],
 })
 export class UserCardComponent {
-  @Input() user!: User;
+  @Input() user!: Required<
+    Pick<User, 'name' | 'updatedAt' | 'createdAt' | 'plan' | 'email'>
+  >;
 }

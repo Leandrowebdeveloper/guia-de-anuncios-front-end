@@ -1,20 +1,20 @@
 import { ModalController } from '@ionic/angular';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { User, UserMessage } from 'src/app/interface';
 import { MessageService } from 'src/app/utilities/message/message.service';
-import { FormSendUserMessageComponent } from '../userMessage/form/form.component';
-import { UserMessageService } from '../userMessage/service/user-message.service';
+import { FormSendUserMessageComponent } from '../user-message/form/form.component';
+import { UserMessageService } from '../user-message/service/user-message.service';
 
 @Component({
-  selector: 'app-message-user-component',
+  selector: 'app-card-message-user-component',
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss'],
 })
-export class UserMessageComponent {
-  @Input() user!: User;
-  @Input() isAdmin!: boolean;
+export class UserCardMessageComponent {
+  @Input() user!: Required<Pick<User, 'name' | '_csrf' | 'id' | 'userMessage'>>;
+  @Input() isAuth!: boolean;
   private $close: Subscription;
   constructor(
     private userMessageService: UserMessageService,
@@ -46,12 +46,12 @@ export class UserMessageComponent {
     return await modal.present();
   }
 
-  private setCsrf(message: UserMessage) {
+  private setCsrf(message: Pick<UserMessage, '_csrf'>) {
     // eslint-disable-next-line no-underscore-dangle
     message._csrf = this.user?._csrf;
   }
 
-  private success(index: number, userMesssage: UserMessage) {
+  private success(index: number, userMesssage: Pick<UserMessage, 'message'>) {
     if (userMesssage?.message) {
       this.user.userMessage.splice(index, 1);
       this.$close.unsubscribe();

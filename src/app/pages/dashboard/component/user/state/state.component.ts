@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { StateService } from './service/state.service';
 import { User } from 'src/app/interface';
+import { UserState } from './interface';
 
 @Component({
   selector: 'app-state-user-component',
@@ -13,7 +14,7 @@ import { User } from 'src/app/interface';
   styleUrls: ['./state.component.scss'],
 })
 export class UserStateComponent {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, UserState | 'state' | 'blockade'>>;
   private form: FormGroup;
   private $state: Subscription;
   constructor(

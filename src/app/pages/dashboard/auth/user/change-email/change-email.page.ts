@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({

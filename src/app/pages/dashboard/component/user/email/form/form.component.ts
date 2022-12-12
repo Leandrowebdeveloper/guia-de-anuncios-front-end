@@ -9,14 +9,16 @@ import { ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { EmailService } from '../service/email.service';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
 export class FormUserEmailComponent implements OnInit {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, '_csrf' | 'email' | 'slug' | 'password'>>;
   @Input() label!: string;
+  @Input() isAuth!: boolean;
 
   public attrButton: AttrButton = {
     route: '/email',
@@ -29,13 +31,14 @@ export class FormUserEmailComponent implements OnInit {
 
   public config: object;
   private form: FormGroup;
-  private write: Subscription;
+  private $email: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
     private authService: AuthService,
     private loadingService: LoadingService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private emailService: EmailService
   ) {}
 
   ngOnInit(): void {
@@ -53,19 +56,26 @@ export class FormUserEmailComponent implements OnInit {
   private email(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Alterando email...');
     event.value.slug = this.user?.slug;
-    return (this.write = this.authService.email(event.value).subscribe(
+    if (this.isAuth) {
+      return (this.$email = this.authService.email(event.value).subscribe(
+        (user: User) => this.messsage(user, loading),
+        (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$email)
+      ));
+    }
+    return (this.$email = this.emailService.email(event.value).subscribe(
       (user: User) => this.messsage(user, loading),
       (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
+        this.messageService.error(error, loading, this.$email)
     ));
   }
 
   private messsage(
-    user: User,
+    user: Required<Pick<User, 'message'>>,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(user?.message, loading, this.write);
+    return this.messageService.success(user?.message, loading, this.$email);
   }
 
   private getData(): void {

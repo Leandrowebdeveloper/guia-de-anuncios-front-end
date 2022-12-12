@@ -7,7 +7,6 @@ import {
 } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { User, HttpResponse, Image } from 'src/app/interface';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { ToastService } from 'src/app/utilities/toast/toast.service';
 import { AvatarService } from './service/image.service';
@@ -18,7 +17,7 @@ import { AvatarService } from './service/image.service';
   styleUrls: ['./avatar-component.scss'],
 })
 export class AvatarComponent implements OnInit {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, 'id' | 'image' | '_csrf' | 'blockade'>>;
   public btnPlatform: boolean;
   public isMobile: boolean;
   private upload: Subscription;
@@ -37,7 +36,11 @@ export class AvatarComponent implements OnInit {
     this.plt.ready().then(() => this.togglePLatform());
   }
 
-  public async action(user: User, files: HTMLElement, file: HTMLElement) {
+  public async action(
+    user: Required<Pick<User, 'image' | '_csrf'>>,
+    files: HTMLElement,
+    file: HTMLElement
+  ) {
     const { image } = user;
     // eslint-disable-next-line no-underscore-dangle
     image._csrf = user._csrf;
@@ -96,7 +99,10 @@ export class AvatarComponent implements OnInit {
     await actionSheet.present();
   }
 
-  public sendFile(input: HTMLInputElement, user: User): boolean {
+  public sendFile(
+    input: HTMLInputElement,
+    user: Pick<User, '_csrf' | 'id'>
+  ): boolean {
     if (input.files.length === 0) {
       return false;
     }
@@ -145,7 +151,10 @@ export class AvatarComponent implements OnInit {
     return (this.isMobile = this.plt.is('mobile'));
   }
 
-  private build(file: File, user: User): FormData {
+  private build(
+    file: File,
+    user: Required<Pick<User, '_csrf' | 'id'>>
+  ): FormData {
     const formData = new FormData();
     formData.append('userId', String(user?.id));
     // eslint-disable-next-line no-underscore-dangle

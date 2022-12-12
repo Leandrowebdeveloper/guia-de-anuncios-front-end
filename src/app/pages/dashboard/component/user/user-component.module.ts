@@ -15,7 +15,7 @@ import { UserEmailComponent } from './email/email.component';
 import { FormUserEmailComponent } from './email/form/form.component';
 import { FormUserLevelComponent } from './level/form/form.component';
 import { UserLevelComponent } from './level/level.component';
-import { UserMessageComponent } from './message/message.component';
+import { UserCardMessageComponent } from './card-message/message.component';
 import { FormUserNameComponent } from './name/form/form.component';
 import { UserNameComponent } from './name/name.component';
 import { FormUserPasswordComponent } from './password/form/form.component';
@@ -26,10 +26,10 @@ import { UserPlanComponent } from './plan/plan.component';
 import { SegmentComponent } from './segment/segment.component';
 import { UserStateComponent } from './state/state.component';
 
-import { FormSendUserMessageComponent } from './userMessage/form/form.component';
-import { SendUserMessageComponent } from './userMessage/user-message.component';
+import { FormSendUserMessageComponent } from './user-message/form/form.component';
+import { SendUserMessageComponent } from './user-message/user-message.component';
 import { FormUserBlockadeComponent } from './blockade/form/form.component';
-import { UserMessageService } from './userMessage/service/user-message.service';
+import { UserMessageService } from './user-message/service/user-message.service';
 import { StateService } from './state/service/state.service';
 import { UserPlanService } from './plan/service/user-plan.service';
 import { AdminPasswordService } from './password/service/password.service';
@@ -38,6 +38,7 @@ import { UserLevelService } from './level/service/user-level.service';
 import { UserDestroyService } from './destroy/service/user-destroy.service';
 import { AvatarService } from './avatar/service/image.service';
 import { UserBlockadeService } from './blockade/services/user-blockade.service';
+import { EmailService } from './email/service/email.service';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,7 @@ import { UserBlockadeService } from './blockade/services/user-blockade.service';
     UserLevelComponent,
     UserNameComponent,
     UserPlanComponent,
-    UserMessageComponent,
+    UserCardMessageComponent,
     UserEmailComponent,
     UserDestroyComponent,
     UserCardComponent,
@@ -76,7 +77,7 @@ import { UserBlockadeService } from './blockade/services/user-blockade.service';
   exports: [
     UserNameComponent,
     UserPasswordComponent,
-    UserMessageComponent,
+    UserCardMessageComponent,
     UserStateComponent,
     SegmentComponent,
     UserPlanComponent,
@@ -99,6 +100,7 @@ import { UserBlockadeService } from './blockade/services/user-blockade.service';
     UserLevelService,
     UserDestroyService,
     AvatarService,
+    EmailService,
   ],
 })
 export class UserComponentsModule {}

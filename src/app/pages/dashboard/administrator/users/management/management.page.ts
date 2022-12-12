@@ -1,4 +1,8 @@
-import { NavController, SegmentCustomEvent } from '@ionic/angular';
+import {
+  NavController,
+  SegmentChangeEventDetail,
+  SegmentCustomEvent,
+} from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -33,8 +37,12 @@ export class ManagementPage implements OnInit {
     this.toggleList = e;
   }
 
-  public toggleSegment(e: SegmentCustomEvent) {
-    this.toggleRoute = e.detail?.value as 'announcement' | 'statistic' | 'user';
+  public toggleSegment(event: unknown) {
+    if (event instanceof CustomEvent) {
+      console.log(event);
+
+      // this.toggleRoute = e.detail as 'announcement' | 'statistic' | 'user';
+    }
   }
 
   public back() {

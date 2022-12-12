@@ -36,7 +36,9 @@ export class UserMessageService extends HttpService<UserMessage> {
     this.usersService.setUsers = this.usersService.getUsers;
   }
 
-  public send(message: UserMessage): Observable<UserMessage | number[]> {
+  public send(
+    message: Required<UserMessage>
+  ): Observable<UserMessage | number[]> {
     if (message?.id) {
       return this.patch(message, 'management/message').pipe(
         tap((message_: UserMessage) => (this.setUserMessage = message_))

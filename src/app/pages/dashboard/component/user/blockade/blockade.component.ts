@@ -1,5 +1,5 @@
 import { User } from 'src/app/interface';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormUserBlockadeComponent } from './form/form.component';
 import { UserBlockade } from './interface';
@@ -10,7 +10,7 @@ import { UserBlockade } from './interface';
   styleUrls: ['./blockade.component.scss'],
 })
 export class UserBlockadeComponent {
-  @Input() user!: Omit<User, UserBlockade>;
+  @Input() user!: Required<Pick<User, UserBlockade>>;
   @Input() isAuth!: boolean;
   constructor(private modalController: ModalController) {}
 

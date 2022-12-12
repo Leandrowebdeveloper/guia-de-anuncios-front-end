@@ -25,7 +25,7 @@ export class AvatarService extends HttpService<Image> {
     return this.usersService.getUsers?.image;
   }
 
-  public set avatar(value: Image) {
+  public set avatar(value: Required<Image>) {
     this.usersService.getUsers.image = value;
     this.usersService.setUsers = this.usersService.getUsers;
   }
@@ -34,13 +34,13 @@ export class AvatarService extends HttpService<Image> {
     this.csrf = csrf;
   }
 
-  public delete(avatar: Image): Observable<number | Image> {
+  public delete(avatar: Required<Image>): Observable<number | Image> {
     return this.destroy(avatar).pipe(
       tap((image: Image) => this.setAuthAvatar(image))
     );
   }
 
-  public setAuthAvatar(avatar: Image): void {
+  public setAuthAvatar(avatar: Required<Image>): void {
     if (this.avatar?.userId === avatar?.userId) {
       this.avatar = avatar;
     }

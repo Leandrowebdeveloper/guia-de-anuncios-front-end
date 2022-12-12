@@ -14,15 +14,27 @@ import {
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 
+export type DeletedItemUser =
+  | 'name'
+  | 'plan'
+  | 'image'
+  | 'level'
+  | 'slug'
+  | 'state'
+  | 'blockade'
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt';
+
 @Component({
   selector: 'app-deleted-item-user',
   templateUrl: './deleted-item-user.page.html',
   styleUrls: ['./deleted-item-user.page.scss', '../../users.page.scss'],
 })
 export class DeletedItemUserPage implements OnInit, OnDestroy {
-  public users$: Observable<User[]>;
+  public users$: Observable<Pick<User, DeletedItemUser>[]>;
   public toggleList: boolean;
-  public users: User[];
+  public users: Pick<User, DeletedItemUser>[];
   public error = new Subject<boolean>();
   public endListUser = true;
 
@@ -81,7 +93,7 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
       const data = this.setDataSearch(event?.target?.value);
       return (this.$search = this.usersService
         .searchBy(data)
-        .subscribe((user: User[]) => {
+        .subscribe((user: Pick<User, DeletedItemUser>[]) => {
           this.searchService.search = user;
           setTimeout(() => this.$search.unsubscribe(), 2000);
         }));
@@ -93,13 +105,16 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
     return (this.$users = this.usersService
       .index(`management/deleted`, { limit: this.limit, offset: this.offset })
       .subscribe(
-        (user: User[]) => this.success(event, user),
+        (user: Pick<User, DeletedItemUser>[]) => this.success(event, user),
         (error: HttpErrorResponse) => this.error.next(true),
         () => this.helpService.delay(this.$users.unsubscribe(), 2000)
       ));
   }
 
-  public async restore(user: User, index: number): Promise<void> {
+  public async restore(
+    user: Pick<User, DeletedItemUser>,
+    index: number
+  ): Promise<void> {
     const alert = await this.alertController.create({
       header: 'Restaurar',
       subHeader: user?.name,
@@ -113,11 +128,9 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
           text: 'OK',
           role: 'confirm',
           handler: (event) => {
-            const data: User = {
+            const data: Pick<User, 'slug' | 'password' | '_csrf'> = {
               ...event,
               slug: user?.slug,
-              // eslint-disable-next-line no-underscore-dangle
-              _csrf: user?._csrf,
             };
             const loading = this.loadingService.show('Excluindo usuário...');
             return (this.$delete = this.usersService.restore(data).subscribe(
@@ -143,7 +156,10 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
   }
 
   // Destroy
-  public async destroy(user: User, index: number): Promise<void> {
+  public async destroy(
+    user: Pick<User, DeletedItemUser>,
+    index: number
+  ): Promise<void> {
     const alert = await this.alertController.create({
       header: 'Excluir',
       subHeader: user?.name,
@@ -160,8 +176,6 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
             const data: User = {
               ...event,
               slug: user?.slug,
-              // eslint-disable-next-line no-underscore-dangle
-              _csrf: user?._csrf,
             };
             return this.delete(data, index);
           },
@@ -237,12 +251,12 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
     this.getSearchBy[key] = value;
   }
 
-  private findUsers(): Observable<User[]> {
+  private findUsers(): Observable<Pick<User, DeletedItemUser>[]> {
     return (this.users$ = this.usersService
       .index(`management/deleted`, { limit: this.limit, offset: this.offset })
       .pipe(
         delay(300),
-        tap((user: User[]) => {
+        tap((user: Pick<User, DeletedItemUser>[]) => {
           setTimeout(() => (this.menssage = false), 300);
           return (this.users = user);
         }),
@@ -260,7 +274,10 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
     return;
   }
 
-  private success(event: InfiniteScrollCustomEvent, user: User[]): void {
+  private success(
+    event: InfiniteScrollCustomEvent,
+    user: Pick<User, DeletedItemUser>[]
+  ): void {
     this.setMoreData(user);
     this.updateScrollEvent(event, user);
     return;
@@ -268,7 +285,7 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
 
   private updateScrollEvent(
     event: InfiniteScrollCustomEvent,
-    user: User[]
+    user: Pick<User, DeletedItemUser>[]
   ): void {
     event.target.complete();
     if (user.length < 8) {
@@ -278,7 +295,7 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
     return;
   }
 
-  private setMoreData(user: User[]): void {
+  private setMoreData(user: Pick<User, DeletedItemUser>[]): void {
     return user.forEach((item: User) => this.users.push(item));
   }
 

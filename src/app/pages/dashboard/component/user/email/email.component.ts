@@ -9,7 +9,13 @@ import { FormUserEmailComponent } from './form/form.component';
   styleUrls: ['./email.component.scss'],
 })
 export class UserEmailComponent {
-  @Input() user!: User;
+  @Input() user!: Required<
+    Pick<
+      User,
+      '_csrf' | 'email' | 'slug' | 'blockade' | 'password' | 'isPassword'
+    >
+  >;
+  @Input() isAuth!: boolean;
   constructor(private modalController: ModalController) {}
 
   public async email(): Promise<void> {
@@ -22,6 +28,7 @@ export class UserEmailComponent {
       componentProps: {
         action: 'email',
         label: 'Editar email',
+        isAuth: this.isAuth,
         user: { _csrf, email, slug, password },
       },
     });

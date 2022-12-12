@@ -1,14 +1,11 @@
-import { Subscription } from 'rxjs';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthAnnouncementService } from './announcement/service/auth-announcement.service';
-import { Announcement } from 'src/app/interface';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
 })
-export class DashboardPage implements OnInit, OnDestroy {
+export class DashboardPage {
   public readonly nav = [
     {
       name: 'Usuário',
@@ -29,29 +26,4 @@ export class DashboardPage implements OnInit, OnDestroy {
       icon: 'analytics',
     },
   ];
-  private announcement: Subscription;
-  constructor(private authAnnouncementService: AuthAnnouncementService) {}
-
-  ngOnInit(): void {
-    this.getAnnouncement();
-  }
-
-  ngOnDestroy(): void {
-    this.announcement.unsubscribe();
-  }
-
-  private getAnnouncement(): void {
-    this.announcement =
-      this.authAnnouncementService.announcementObservable.subscribe(
-        (announcement: Announcement[]) => {
-          if (announcement.length === 0) {
-            this.nav[1].router = [
-              '/painel-de-controle',
-              'anuncio',
-              'cadastrar',
-            ];
-          }
-        }
-      );
-  }
 }

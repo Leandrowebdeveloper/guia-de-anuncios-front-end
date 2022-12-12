@@ -9,7 +9,9 @@ import { Plan } from 'src/app/interface';
 import { AdminUsersService } from 'src/app/pages/dashboard/administrator/users/services/admin-users.service';
 
 @Injectable()
-export class UserPlanService extends HttpService<Plan> {
+export class UserPlanService extends HttpService<
+  Pick<Plan, 'password' | 'period' | 'type' | 'userId' | '_csrf'>
+> {
   constructor(
     http: HttpClient,
     public storageService: StorageService,
@@ -24,9 +26,13 @@ export class UserPlanService extends HttpService<Plan> {
     this.usersService.setUsers = this.usersService.getUsers;
   }
 
-  public plan(plan: Plan): Observable<Plan | number[]> {
+  public plan(
+    plan: Pick<Plan, 'password' | 'period' | 'type' | 'userId' | '_csrf'>
+  ): Observable<Plan | number[]> {
+    console.log(plan);
+
     return this.patch(plan, 'management/plan').pipe(
-      tap((plan_: Plan) => (this.setPlan = plan_))
+      tap((plan_: Required<Plan>) => (this.setPlan = plan_))
     );
   }
 }

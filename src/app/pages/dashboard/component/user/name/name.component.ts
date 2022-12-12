@@ -2,6 +2,7 @@ import { FormUserNameComponent } from './form/form.component';
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { User } from 'src/app/interface';
+import { UserName } from './interface';
 
 @Component({
   selector: 'app-name-user-component',
@@ -9,7 +10,7 @@ import { User } from 'src/app/interface';
   styleUrls: ['./name.component.scss'],
 })
 export class UserNameComponent {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, UserName | 'blockade'>>;
   @Input() isAuth!: boolean;
   constructor(private modalController: ModalController) {}
 

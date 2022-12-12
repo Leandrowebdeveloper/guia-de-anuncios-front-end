@@ -12,10 +12,10 @@
     <!-- Messagem -->
     <ion-row>
       <ion-col size="12">
-        <app-message-user-component
+        <app-card-message-user-component
           [user]="user"
-          [isAdmin]="false"
-        ></app-message-user-component>
+          [isAuth]="false"
+        ></app-card-message-user-component>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -48,16 +48,19 @@
               <!-- Email -->
               <app-email-user-component
                 [user]="user"
+                [isAuth]="true"
               ></app-email-user-component>
 
               <!-- Passwprd -->
               <app-password-user-component
                 [user]="user"
+                [isAuth]="true"
               ></app-password-user-component>
 
               <!-- Destroy -->
               <app-destroy-user-component
                 [user]="user"
+                [isAuth]="true"
               ></app-destroy-user-component>
             </ion-col>
           </ion-row>

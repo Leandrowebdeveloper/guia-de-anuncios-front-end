@@ -47,7 +47,7 @@
 
     <!-- Buttom create -->
     <ion-fab
-      *ngIf="toggleList && user?.plan === 'special'"
+      *ngIf="toggleList && (user?.plan?.type === 'special')"
       vertical="bottom"
       horizontal="end"
       title="Cadastrar novo anúncio."

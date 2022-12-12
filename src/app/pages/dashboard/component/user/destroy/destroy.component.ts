@@ -2,6 +2,7 @@ import { FormUserDestroyComponent } from './form/form.component';
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { User } from 'src/app/interface';
+import { UserDestroy } from './interface';
 
 @Component({
   selector: 'app-destroy-user-component',
@@ -9,7 +10,7 @@ import { User } from 'src/app/interface';
   styleUrls: ['./destroy.component.scss'],
 })
 export class UserDestroyComponent {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, UserDestroy | 'blockade' | 'isPassword'>>;
   @Input() isAuth!: boolean;
   constructor(private modalController: ModalController) {}
 

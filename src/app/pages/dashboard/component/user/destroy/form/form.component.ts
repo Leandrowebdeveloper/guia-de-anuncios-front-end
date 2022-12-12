@@ -10,13 +10,14 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { UserDestroyService } from '../service/user-destroy.service';
+import { UserDestroy } from '../interface';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
 export class FormUserDestroyComponent implements OnInit {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, UserDestroy>>;
   @Input() label!: string;
   @Input() isAuth!: boolean;
   public attrButton: AttrButton = {

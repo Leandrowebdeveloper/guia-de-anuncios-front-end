@@ -15,7 +15,7 @@ import { UserMessageService } from '../service/user-message.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormSendUserMessageComponent implements OnInit {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, '_csrf' | 'id' | 'userMessage'>>;
   @Input() label!: string;
   @Input() isAuth!: boolean;
 
@@ -55,6 +55,8 @@ export class FormSendUserMessageComponent implements OnInit {
     const loading = this.loadingService.show('Salvando menssagem...');
     event.value.userId = this.user?.userMessage[0]?.userId;
     event.value.id = this.user?.userMessage[0]?.id;
+
+    console.log(event.value);
 
     return (this.write = this.userMessageService.send(event.value).subscribe(
       (userMessage: UserMessage) => this.messsage(userMessage, loading),

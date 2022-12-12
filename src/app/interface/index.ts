@@ -9,7 +9,7 @@ export interface User {
   email: string;
   plan: Plan;
   password: string;
-  isPassword?: boolean;
+  isPassword: boolean;
   level: '1' | '2';
   slug: string;
   authState: boolean;
@@ -332,6 +332,7 @@ export interface Plan {
   period: '03' | '06' | '12';
   type: 'free' | 'basic' | 'special';
   userId: number;
+  password?: string;
   message?: string;
   _csrf?: string;
 }
@@ -342,9 +343,10 @@ export interface UserMessage {
   type: 'info' | 'warning' | 'success' | 'danger';
   userId: number;
   message?: string;
+  password?: string;
   response: boolean;
   sender: number;
-  userSender: Omit<User, UserSender>;
+  userSender: Required<Pick<User, 'slug' | 'name' | 'email' | 'image'>>;
   _csrf?: string;
 }
 

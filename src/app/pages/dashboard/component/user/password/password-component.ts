@@ -9,8 +9,10 @@ import { User } from 'src/app/interface';
   styleUrls: ['./password-component.scss'],
 })
 export class UserPasswordComponent {
-  @Input() user!: User;
-  @Input() isAuth: boolean;
+  @Input() user!: Required<
+    Pick<User, '_csrf' | 'password' | 'blockade' | 'slug' | 'isPassword'>
+  >;
+  @Input() isAuth!: boolean;
   constructor(private modalController: ModalController) {}
 
   public async password(): Promise<void> {
@@ -36,7 +38,9 @@ export class UserPasswordComponent {
     return await modal.present();
   }
 
-  public async passwordCreate(user: User): Promise<void> {
+  public async passwordCreate(
+    user: Required<Pick<User, '_csrf' | 'password' | 'blockade' | 'slug'>>
+  ): Promise<void> {
     if (user?.blockade) {
       return;
     }

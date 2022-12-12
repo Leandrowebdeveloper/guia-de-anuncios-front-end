@@ -9,7 +9,7 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./user-message.component.scss'],
 })
 export class SendUserMessageComponent {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, '_csrf' | 'id' | 'blockade'>>;
   constructor(private modalController: ModalController) {}
 
   public async open(): Promise<void> {

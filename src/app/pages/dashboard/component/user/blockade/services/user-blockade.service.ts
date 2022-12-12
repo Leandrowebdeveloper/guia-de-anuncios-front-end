@@ -7,11 +7,11 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { tap } from 'rxjs/operators';
 import { AdminUsersService } from 'src/app/pages/dashboard/administrator/users/services/admin-users.service';
 import { UserBlockade } from '../interface';
-import { UserMessageService } from '../../userMessage/service/user-message.service';
+import { UserMessageService } from '../../user-message/service/user-message.service';
 
 @Injectable()
 export class UserBlockadeService extends HttpService<
-  Omit<User & UserMessage, UserBlockade>
+  Required<Pick<User, UserBlockade>>
 > {
   constructor(
     http: HttpClient,
@@ -29,11 +29,11 @@ export class UserBlockadeService extends HttpService<
   }
 
   public blockade(
-    user: Omit<User & UserMessage, UserBlockade>
-  ): Observable<Omit<User & UserMessage, UserBlockade> | number[]> {
+    user: Required<Pick<User, UserBlockade | 'id'>>
+  ): Observable<Required<Pick<User, UserBlockade>> | number[]> {
     if (user?.id) {
       return this.patch(user, 'management/blockade').pipe(
-        tap((data: Omit<User & UserMessage, UserBlockade>) => {
+        tap((data: Required<Pick<User, UserBlockade | 'message'>>) => {
           this.setBlockade = data?.blockade;
           this.userMessageService.setUserMessage =
             data.userMessage as unknown as UserMessage;
@@ -41,7 +41,7 @@ export class UserBlockadeService extends HttpService<
       );
     }
     return this.create(user, 'management/blockade').pipe(
-      tap((data: Omit<User & UserMessage, UserBlockade>) => {
+      tap((data: Required<Pick<User, UserBlockade | 'message'>>) => {
         this.setBlockade = data?.blockade;
         this.userMessageService.setUserMessage =
           data.userMessage as unknown as UserMessage;

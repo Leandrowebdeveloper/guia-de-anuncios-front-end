@@ -16,7 +16,7 @@ import { UserBlockadeService } from '../services/user-blockade.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormUserBlockadeComponent implements OnInit {
-  @Input() user!: Omit<User, UserBlockade>;
+  @Input() user!: Required<Pick<User, UserBlockade>>;
   @Input() label!: string;
   @Input() isAuth!: boolean;
   public attrButton: AttrButton = {
@@ -60,7 +60,7 @@ export class FormUserBlockadeComponent implements OnInit {
     return (this.write = this.userBlockadeService
       .blockade(event.value)
       .subscribe(
-        (user: Omit<User & UserMessage, UserBlockade>) =>
+        (user: Required<Pick<User, UserBlockade | 'message'>>) =>
           this.messsage(user, loading),
         (error: HttpErrorResponse) =>
           this.messageService.error(error, loading, this.write)
@@ -68,7 +68,7 @@ export class FormUserBlockadeComponent implements OnInit {
   }
 
   private messsage(
-    user: Omit<User & UserMessage, UserBlockade>,
+    user: Required<Pick<User, 'message'>>,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);

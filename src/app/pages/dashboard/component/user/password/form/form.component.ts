@@ -11,13 +11,16 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { AdminPasswordService } from '../service/password.service';
 import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
+import { UserPassword } from '../interface';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
 export class FormUserPasswordComponent implements OnInit {
-  @Input() user!: User;
+  @Input() user!: Required<
+    Pick<User & { passwordCurrent: string }, UserPassword>
+  >;
   @Input() action!: string;
   @Input() label!: string;
   @Input() isAuth: boolean;
@@ -68,14 +71,21 @@ export class FormUserPasswordComponent implements OnInit {
     return (this.$password = this.adminPasswordService
       .password(event.value)
       .subscribe(
-        (user: User) => this.messsage(user, loading),
+        (
+          user: Required<
+            Pick<
+              User & { passwordCurrent: string },
+              UserPassword | 'isPassword' | 'message'
+            >
+          >
+        ) => this.messsage(user, loading),
         (error: HttpErrorResponse) =>
           this.messageService.error(error, loading, this.$password)
       ));
   }
 
   private messsage(
-    user: User,
+    user: Required<Pick<User, 'message'>>,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);

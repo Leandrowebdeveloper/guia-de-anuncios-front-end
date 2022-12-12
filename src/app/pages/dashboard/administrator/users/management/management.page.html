@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button (click)="back()" defaultHref></ion-back-button>
     </ion-buttons>
-    <ion-title>Gerenciamento do usuário</ion-title>
+    <ion-title>Gerenciamento</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -29,10 +29,10 @@
         <!-- Messagem -->
         <ion-row>
           <ion-col size="12">
-            <app-message-user-component
+            <app-card-message-user-component
               [user]="user"
-              [isAdmin]="true"
-            ></app-message-user-component>
+              [isAuth]="true"
+            ></app-card-message-user-component>
           </ion-col>
         </ion-row>
 
@@ -78,7 +78,10 @@
             ></app-name-user-component>
 
             <!-- Email -->
-            <app-email-user-component [user]="user"></app-email-user-component>
+            <app-email-user-component
+              [user]="user"
+              [isAuth]="false"
+            ></app-email-user-component>
 
             <!-- Passwprd -->
             <app-password-user-component

@@ -1,0 +1,88 @@
+<ng-container *ngIf="user">
+  <ion-card *ngFor="let item of user?.userMessage | reverse; let i = index">
+    <ion-card-header
+      class="ion-margin-bottom"
+      [color]="
+        (item?.type === 'info' && 'secondary') ||
+        (item?.type === 'warning' && 'warning') ||
+        (item?.type === 'danger' && 'danger') ||
+        (item?.type === 'success' && 'success')
+      "
+      [ngClass]="{ 'flex-header': item?.type !== 'danger' }"
+    >
+      <ion-card-title>
+        <span [ngSwitch]="item?.type">
+          <span *ngSwitchCase="'warning'">Aviso</span>
+          <span *ngSwitchCase="'info'">Informação</span>
+          <span *ngSwitchCase="'success'">Parabéns</span>
+          <span *ngSwitchCase="'danger'">Atenção</span>
+        </span>
+      </ion-card-title>
+
+      <!-- Botão fechar -->
+      <ion-fab-button
+        *ngIf="item?.type !== 'danger'"
+        (click)="close(i, item)"
+        size="small"
+        [color]="
+          (item?.type === 'info' && 'secondary') ||
+          (item?.type === 'warning' && 'warning') ||
+          (item?.type === 'danger' && 'danger') ||
+          (item?.type === 'success' && 'success')
+        "
+      >
+        <ion-icon name="close"></ion-icon>
+      </ion-fab-button>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        <em>{{ user?.name }}</em>
+      </p>
+      <div class="ion-margin-top" [innerHtml]="item?.description"></div>
+      <!-- Buttons -->
+
+      <div class="d-flex" [hidden]="!isAuth && !item?.response">
+        <div [hidden]="item?.type === 'danger'">
+          <ion-button size="small" *ngIf="isAuth" (click)="update(i)">
+            <ion-icon slot="start" name="create"></ion-icon>
+            editar
+          </ion-button>
+        </div>
+        <div>
+          <ion-button size="small" color="light" *ngIf="item?.response">
+            <ion-icon slot="start" name="call"></ion-icon>
+            suporte
+          </ion-button>
+        </div>
+      </div>
+    </ion-card-content>
+    <ion-card-content *ngIf="isAuth">
+      <ion-item-divider>
+        <ion-label>Remetente</ion-label>
+      </ion-item-divider>
+      <ion-item
+        lines="none"
+        [routerLink]="[
+          '/painel-de-controle',
+          'admin',
+          'usuario',
+          item?.userSender?.slug
+        ]"
+        button
+      >
+        <ion-avatar slot="start">
+          <img
+            [src]="
+              item?.userSender?.image?.url ||
+              './../../../../../../assets/avatar.svg'
+            "
+          />
+        </ion-avatar>
+        <div>
+          <ion-label>{{ item?.userSender?.name }}</ion-label>
+          <small>{{ item?.userSender?.email }}</small>
+        </div>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ng-container>

@@ -9,9 +9,7 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { HttpService } from 'src/app/services/http/http.service';
 import { Announcement } from 'src/app/interface';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class StateService extends HttpService<Announcement> {
   constructor(
     http: HttpClient,

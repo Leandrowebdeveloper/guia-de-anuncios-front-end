@@ -11,13 +11,14 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { NameService } from '../service/name.service';
 import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
+import { UserName } from '../interface';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
 export class FormUserNameComponent implements OnInit {
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, UserName>>;
   @Input() label!: string;
   @Input() isAuth!: boolean;
 
@@ -64,14 +65,15 @@ export class FormUserNameComponent implements OnInit {
       ));
     }
     return (this.$name = this.nameService.name(event.value).subscribe(
-      (user: User) => this.messsage(user, loading),
+      (user: Required<Pick<User, UserName | 'name' | 'message'>>) =>
+        this.messsage(user, loading),
       (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$name)
     ));
   }
 
   private messsage(
-    user: User,
+    user: Required<Pick<User, UserName | 'message'>>,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);

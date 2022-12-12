@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/interface';
+import { EnabledItemUser } from '../../enabled-item-user.page';
 
 @Component({
   selector: 'app-user-card-mobile',
@@ -10,7 +11,7 @@ import { User } from 'src/app/interface';
   ],
 })
 export class CardMobileComponent implements OnInit {
-  @Input() users!: User[];
+  @Input() users!: Pick<User, EnabledItemUser>[];
   constructor() {}
 
   ngOnInit() {}

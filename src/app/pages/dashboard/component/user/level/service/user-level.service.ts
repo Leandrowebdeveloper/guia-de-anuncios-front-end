@@ -8,10 +8,10 @@ import { AdminUsersService } from 'src/app/pages/dashboard/administrator/users/s
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class UserLevelService extends HttpService<User> {
+@Injectable()
+export class UserLevelService extends HttpService<
+  Required<Pick<User, '_csrf' | 'slug' | 'password' | 'level'>>
+> {
   constructor(
     http: HttpClient,
     public storageService: StorageService,
@@ -26,9 +26,11 @@ export class UserLevelService extends HttpService<User> {
     this.usersService.setUsers = this.usersService.getUsers;
   }
 
-  public level(user: User): Observable<User | number[]> {
+  public level(
+    user: Required<Pick<User, '_csrf' | 'slug' | 'password' | 'level'>>
+  ): Observable<Required<User>> {
     return this.patch(user, 'management/level').pipe(
-      tap((user_: User) => (this.setLevel = user_?.level))
+      tap((user_: Required<User>): '1' | '2' => (this.setLevel = user_?.level))
     );
   }
 }
