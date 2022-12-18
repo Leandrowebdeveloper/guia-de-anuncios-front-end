@@ -7,8 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { DeletedItemUserPageRoutingModule } from './deleted-item-user-routing.module';
 
 import { DeletedItemUserPage } from './deleted-item-user.page';
-import { SearchModule } from 'src/app/components/search/search.module';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { UserComponentsModule } from 'src/app/pages/dashboard/component/user/user-component.module';
 
 @NgModule({
   imports: [
@@ -16,8 +16,8 @@ import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
     FormsModule,
     IonicModule,
     DeletedItemUserPageRoutingModule,
-    SearchModule,
     PipeModule,
+    UserComponentsModule,
   ],
   declarations: [DeletedItemUserPage],
   exports: [DeletedItemUserPage],

@@ -46,12 +46,12 @@ export class FormComponent implements OnInit {
 
   public onSubmit(event: FormGroup): Subscription {
     switch (this.action) {
-      case 'destroy':
-        return this.destroy(event);
+      // case 'destroy':
+      //   return this.destroy(event);
       case 'drop':
         return this.drop(event);
-      case 'name':
-        return this.update(event);
+      // case 'name':
+      //   return this.update(event);
       case 'register':
         return this.register(event);
       case 'restore':
@@ -60,15 +60,15 @@ export class FormComponent implements OnInit {
   }
 
   // Destroy
-  private destroy(event: FormGroup): Subscription {
-    const loading = this.loadingService.show('Excluindo categoria...');
-    this.getSlug(event);
-    return (this.write = this.categoryService.delete(event.value).subscribe(
-      (category: Category) => this.messsage(category, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
-  }
+  // private destroy(event: FormGroup): Subscription {
+  //   const loading = this.loadingService.show('Excluindo categoria...');
+  //   this.getSlug(event);
+  //   return (this.write = this.categoryService.delete(event.value).subscribe(
+  //     (category: Category) => this.messsage(category, loading),
+  //     (error: HttpErrorResponse) =>
+  //       this.messageService.error(error, loading, this.write)
+  //   ));
+  // }
 
   // Destroy
   private drop(event: FormGroup): Subscription {
@@ -87,17 +87,17 @@ export class FormComponent implements OnInit {
     }
   }
 
-  // Update Name description
-  private update(event: FormGroup): Subscription {
-    const loading = this.loadingService.show('Cadastrar categoria...');
-    return (this.write = this.categoryService
-      .updateNameAndDescription(event.value)
-      .subscribe(
-        (category: Category) => this.messsage(category, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.write)
-      ));
-  }
+  // // Update Name description
+  // private update(event: FormGroup): Subscription {
+  //   const loading = this.loadingService.show('Cadastrar categoria...');
+  //   return (this.write = this.categoryService
+  //     .updateNameAndDescription(event.value)
+  //     .subscribe(
+  //       (category: Category) => this.messsage(category, loading),
+  //       (error: HttpErrorResponse) =>
+  //         this.messageService.error(error, loading, this.write)
+  //     ));
+  // }
 
   // Update Name description
   private register(event: FormGroup): Subscription {

@@ -1,0 +1,127 @@
+<ng-container *ngIf="category$ | async; else Loading">
+  <!-- Searsh -->
+  <ion-col size="12" class="ion-no-padding">
+    <app-search-category-component
+      *ngIf="category?.length > 10"
+      (search)="search($event)"
+    ></app-search-category-component>
+  </ion-col>
+  <!-- List item -->
+  <ion-list>
+    <ion-reorder-group
+      (ionItemReorder)="doReorder($event)"
+      [disabled]="!isOrder"
+    >
+      <ion-reorder *ngFor="let category of category">
+        <ion-item
+          detail="true"
+          color="none"
+          button
+          [routerLink]="[
+            '/painel-de-controle',
+            'admin',
+            'categoria',
+            category?.slug
+          ]"
+        >
+          <ion-icon
+            slot="start"
+            size="large"
+            title="Imagem do categorias."
+            [src]="category?.image?.url || './../../../../assets/thumbnail.svg'"
+          ></ion-icon>
+
+          <div class="item">
+            <div>
+              <ion-label
+                [title]="'Nome: ' + category?.name"
+                [attr.data-message]="'Nome: ' + category?.name"
+              >
+                {{ category?.name | lnWords : ln }}</ion-label
+              >
+              <div class="time">
+                <small>{{ category?.createdAt | time : "create" }}</small>
+                <small>{{ category?.updatedAt | time : "update" }}</small>
+              </div>
+            </div>
+
+            <div class="flex">
+              <small
+                [hidden]="!isOrder"
+                attr.data-message="Ordenar categorias"
+                title="Ordenar categorias"
+              >
+                <ion-icon name="reorder-three" color="medium"></ion-icon>
+                ordenar
+              </small>
+              <small
+                [attr.data-message]="
+                  category?.state
+                    ? 'Categorias está online'
+                    : 'Categorias está offline'
+                "
+                [title]="
+                  category?.state
+                    ? 'Categorias está online'
+                    : 'Categorias está offline'
+                "
+              >
+                <ion-icon
+                  size="small"
+                  [color]="category?.state ? 'success' : 'danger'"
+                  slot="end"
+                  [name]="category?.state ? 'power' : 'radio-button-off'"
+                ></ion-icon>
+                {{ category?.state ? "online" : "offline" }}
+              </small>
+            </div>
+          </div>
+        </ion-item>
+      </ion-reorder>
+    </ion-reorder-group>
+  </ion-list>
+  <!-- Buttom create -->
+  <app-category-announcement-create-component
+    [category]="category"
+  ></app-category-announcement-create-component>
+
+  <ion-card *ngIf="!endListCategory">
+    <ion-text color="primary" class="ion-text-center">
+      <p>FIM</p>
+      <p *ngIf="category">{{ category?.length }} categorias</p>
+    </ion-text>
+  </ion-card>
+
+  <ion-infinite-scroll
+    (ionInfinite)="findMoreCategory($event)"
+    *ngIf="endListCategory"
+  >
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Carregando mais dados…"
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ng-container>
+
+<ng-template #Loading>
+  <ion-row class="ion-margin-top">
+    <ion-col size="12">
+      <div *ngIf="error | async; else loadingNoError">error</div>
+      <ng-template #loadingNoError>
+        <span size="12" class="ion-padding-bottom ion-padding-horizontal">
+          <ion-skeleton-text animated class="search"></ion-skeleton-text>
+        </span>
+        <span *ngFor="let item of sizeSkeleton">
+          <div class="skeleton">
+            <ion-skeleton-text animated class="avatar"></ion-skeleton-text>
+            <div>
+              <ion-skeleton-text animated class="title"></ion-skeleton-text>
+              <ion-skeleton-text animated class="line"></ion-skeleton-text>
+            </div>
+          </div>
+        </span>
+      </ng-template>
+    </ion-col>
+  </ion-row>
+</ng-template>

@@ -2,10 +2,10 @@
   <ion-row *ngIf="(users$ | async); else Error">
     <!-- Campo de pesquiza -->
     <ion-col size="12" class="ion-no-padding">
-      <app-search
+      <app-user-search-component
         *ngIf="users?.length > 10"
         (search)="search($event)"
-      ></app-search>
+      ></app-user-search-component>
     </ion-col>
 
     <!-- Abilitars -->

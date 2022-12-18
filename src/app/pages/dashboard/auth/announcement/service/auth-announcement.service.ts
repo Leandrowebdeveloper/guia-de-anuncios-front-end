@@ -1,12 +1,13 @@
 import { NavController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
-import { MessageService } from 'src/app/utilities/message/message.service';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Announcement, Galery } from 'src/app/interface';
+
+import { Announcement } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
+import { MessageService } from 'src/app/utilities/message/message.service';
 
 @Injectable({
   providedIn: 'root',
@@ -56,7 +57,9 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
   }
 
   public createAnnouncement(
-    announcement: Announcement
+    announcement: Required<
+      Pick<Announcement, '_csrf' | 'description' | 'title' | 'userId'>
+    >
   ): Observable<Announcement> {
     return this.create(announcement, 'announcement').pipe(
       tap((announcement_: Announcement) => {
@@ -75,18 +78,22 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
     );
   }
 
-  public delete(announcement: Announcement): Observable<Announcement> {
+  public delete(
+    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
+  ): Observable<Announcement> {
     const { id, _csrf } = announcement;
     return this.destroy({ id, _csrf }, `management/`);
   }
 
-  public drop(announcement: Announcement): Observable<Announcement> {
+  public drop(
+    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
+  ): Observable<Announcement> {
     const { id, _csrf } = announcement;
     return this.destroy({ id, _csrf }, `management/drop`);
   }
 
   public toRestore(
-    announcement: Announcement
+    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
   ): Observable<Announcement | number[]> {
     const { id, _csrf } = announcement;
     return this.patch({ id, _csrf }, `management/to-restore`);
@@ -94,7 +101,7 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
 
   public getAnnouncementAll(
     url: string,
-    query: { userId: number; limit: number; offset: number }
+    query: Required<{ userId: number; limit: number; offset: number }>
   ): Observable<Announcement[]> {
     return this.index(`management/${url}`, { ...query });
   }

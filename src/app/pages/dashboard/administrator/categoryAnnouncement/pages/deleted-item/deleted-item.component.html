@@ -1,0 +1,102 @@
+<ng-container *ngIf="category$ | async; let i = index; else: Loading">
+  <!-- Searsh -->
+  <ion-col size="12" class="ion-no-padding">
+    <app-search-category-component
+      *ngIf="category?.length > 10"
+      (search)="search($event)"
+    ></app-search-category-component>
+  </ion-col>
+  <!-- List item -->
+  <ion-item *ngFor="let item of category">
+    <ion-icon
+      slot="start"
+      size="large"
+      title="Imagem do categorias."
+      [src]="item?.image?.url || './../../../../assets/thumbnail.svg'"
+    ></ion-icon>
+    <div class="item">
+      <div>
+        <ion-label
+          [title]="'Nome: ' + item?.name"
+          [attr.data-message]="'Nome: ' + item?.name"
+        >
+          {{ item?.name | lnWords : 16 }}</ion-label
+        >
+        <div class="time">
+          <small>{{ item?.createdAt | time : "create" }}</small>
+          <small>{{ item?.updatedAt | time : "update" }}</small>
+        </div>
+      </div>
+
+      <div>
+        <ion-button
+          (click)="destroy(item, i)"
+          class="cursor-pointer"
+          title="Exclui permanentemente"
+          data-message="Exclui permanentemente"
+          color="none"
+        >
+          <ion-icon slot="icon-only" color="danger" name="trash"></ion-icon>
+        </ion-button>
+        <ion-button
+          (click)="restore(item, i)"
+          class="cursor-pointer"
+          title="Restaurar categorias"
+          data-message="Restaurar categorias"
+          color="none"
+        >
+          <ion-icon
+            slot="icon-only"
+            color="success"
+            name="play-back"
+          ></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </ion-item>
+
+  <div class="content-center" [hidden]="category?.length > 0">
+    <ion-icon size="large" color="medium" name="trash-outline"></ion-icon>
+    <ion-text color="medium"> Não á itens na lixeira. </ion-text>
+  </div>
+
+  <ion-card *ngIf="!endListCategory">
+    <ion-text color="primary" class="ion-text-center">
+      <p>FIM</p>
+      <p *ngIf="category">{{ category?.length }} categorias</p>
+    </ion-text>
+  </ion-card>
+
+  <ion-infinite-scroll
+    (ionInfinite)="findMoreCategory($event)"
+    *ngIf="endListCategory"
+  >
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Carregando mais dados…"
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ng-container>
+
+<ng-template #Loading>
+  <ion-row class="ion-margin-top">
+    <ion-col size="12">
+      <div *ngIf="error | async; else loadingNoError">error</div>
+      <ng-template #loadingNoError>
+        <span size="12" class="ion-padding-bottom ion-padding-horizontal">
+          <ion-skeleton-text animated class="search"></ion-skeleton-text>
+        </span>
+        <span *ngFor="let item of sizeSkeleton">
+          <div class="skeleton">
+            <ion-skeleton-text animated class="avatar"></ion-skeleton-text>
+            <div>
+              <ion-skeleton-text animated class="title"></ion-skeleton-text>
+              <ion-skeleton-text animated class="line"></ion-skeleton-text>
+            </div>
+          </div>
+        </span>
+      </ng-template>
+    </ion-col>
+  </ion-row>
+</ng-template>

@@ -1,4 +1,4 @@
-<ion-item *ngIf="announcement">
+<ion-item *ngIf="announcement && isAdmin">
   <ion-label>{{
     announcement?.blockade ? "Bloqueado" : "Desbloqueado"
   }}</ion-label>

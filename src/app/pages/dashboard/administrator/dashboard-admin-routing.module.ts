@@ -80,16 +80,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'categorias/excluidas',
-    canActivate: [PrivateAutorizationGuard],
-    canLoad: [PrivateAutorizationGuard],
-    loadChildren: () =>
-      import('./categoryAnnouncement/category-announcement.module').then(
-        (m) => m.CategoryAnnouncementPageModule
-      ),
-  },
-  {
-    path: 'manutencao/categoria/:id',
+    path: 'categoria/:id',
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>

@@ -2,10 +2,9 @@ import { tap, delay, catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subject, Subscription, EMPTY } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User, UserSearch } from 'src/app/interface';
+import { User, Search } from 'src/app/interface';
 import { AdminUsersService } from '../../services/admin-users.service';
 import { HelpsService } from 'src/app/services/helps/helps.service';
-import { SearchService } from 'src/app/components/search/service/service.service';
 import {
   AlertController,
   InfiniteScrollCustomEvent,
@@ -13,6 +12,7 @@ import {
 } from '@ionic/angular';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { SearchUserService } from 'src/app/pages/dashboard/component/user/search/service/search.service';
 
 export type DeletedItemUser =
   | 'name'
@@ -55,7 +55,7 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
   constructor(
     private usersService: AdminUsersService,
     private helpService: HelpsService,
-    private searchService: SearchService,
+    private searchUserService: SearchUserService,
     private alertController: AlertController,
     private loadingService: LoadingService,
     private messageService: MessageService
@@ -65,7 +65,7 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
     return this.searchBy;
   }
 
-  private set setSearchBy(value: UserSearch) {
+  private set setSearchBy(value: Search) {
     const build = JSON.parse(`{ "${value}":"null" }`);
     this.searchBy = build;
   }
@@ -94,7 +94,7 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
       return (this.$search = this.usersService
         .searchBy(data)
         .subscribe((user: Pick<User, DeletedItemUser>[]) => {
-          this.searchService.search = user;
+          this.searchUserService.search = user;
           setTimeout(() => this.$search.unsubscribe(), 2000);
         }));
     }
@@ -195,7 +195,7 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  private orderBy(search: UserSearch): void {
+  private orderBy(search: Search): void {
     if (!this.users) {
       return;
     }
@@ -219,8 +219,8 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchService.getSearchBy.subscribe(
-      (filter: UserSearch) => {
+    this.$searchBy = this.searchUserService.getSearchBy.subscribe(
+      (filter: Search) => {
         if (
           filter === 'firstName' ||
           filter === 'lastName' ||

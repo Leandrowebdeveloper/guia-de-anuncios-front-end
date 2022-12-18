@@ -1,12 +1,13 @@
 import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
-import { Announcement } from 'src/app/interface/index';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
-import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
-import { HttpErrorResponse } from '@angular/common/http';
-import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Announcement } from 'src/app/interface/index';
+import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
+import { HelpsService } from 'src/app/services/helps/helps.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
@@ -16,7 +17,9 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
   styleUrls: ['./form.component.scss'],
 })
 export class FormAnnouncementComponent implements OnInit {
-  @Input() announcement!: Announcement;
+  @Input() announcement!: Required<
+    Pick<Announcement, 'id' | '_csrf' | 'title' | 'description' | 'userId'>
+  >;
   @Input() action!: string;
   @Input() label!: string;
 
@@ -70,7 +73,7 @@ export class FormAnnouncementComponent implements OnInit {
       return (this.$announcement = this.managementAnnouncementService
         .updateAnnouncement(event.value)
         .subscribe(
-          (announcement: Announcement) =>
+          (announcement: Pick<Announcement, 'message'>) =>
             this.messsage(announcement?.message, loading),
           (error: HttpErrorResponse) =>
             this.messageService.error(error, loading, this.$announcement)
@@ -79,7 +82,7 @@ export class FormAnnouncementComponent implements OnInit {
     return (this.$announcement = this.authAnnouncementService
       .createAnnouncement(event.value)
       .subscribe(
-        (announcement: Announcement) =>
+        (announcement: Pick<Announcement, 'message'>) =>
           this.messsage(announcement?.message, loading),
         (error: HttpErrorResponse) =>
           this.messageService.error(error, loading, this.$announcement)

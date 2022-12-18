@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Announcement } from 'src/app/interface';
 import { HttpErrorResponse } from '@angular/common/http';
-import { StateService } from './service/state.service';
+import { StateAnnouncementService } from './service/state.service';
 
 @Component({
   selector: 'app-state-announcement-component',
@@ -12,12 +12,12 @@ import { StateService } from './service/state.service';
   styleUrls: ['./state.component.scss'],
 })
 export class AnnouncementStateComponent {
-  @Input() announcement!: Announcement;
+  @Input() announcement!: Required<Pick<Announcement, '_csrf' | 'id'>>;
   private form: FormGroup;
   private $state: Subscription;
   constructor(
     private fb: FormBuilder,
-    private stateService: StateService,
+    private stateService: StateAnnouncementService,
     public messageService: MessageService
   ) {}
 
@@ -26,13 +26,16 @@ export class AnnouncementStateComponent {
     const { id, _csrf } = this.announcement;
     this.form = this.fb.group({ id, _csrf });
     return (this.$state = this.stateService.state(this.form.value).subscribe(
-      (announcement_: Announcement) => this.success(announcement_),
+      (announcement_: Pick<Announcement, 'message'>) =>
+        this.success(announcement_),
       (error: HttpErrorResponse) =>
         this.messageService.error(error, null, this.$state)
     ));
   }
 
-  private success(announcement_: Announcement): Promise<number> {
+  private success(
+    announcement_: Pick<Announcement, 'message'>
+  ): Promise<number> {
     return this.messageService.success(
       announcement_.message,
       null,

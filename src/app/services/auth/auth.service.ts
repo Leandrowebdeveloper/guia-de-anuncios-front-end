@@ -29,6 +29,10 @@ export class AuthService extends HttpService<User> {
     this.setUrlApi();
   }
 
+  public get getPLan() {
+    return this.getUser?.plan;
+  }
+
   public get getCsrf(): string {
     // eslint-disable-next-line no-underscore-dangle
     return this.user.value._csrf;

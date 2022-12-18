@@ -8,9 +8,9 @@ import { EnabledItemUserPageRoutingModule } from './enabled-item-user-routing.mo
 
 import { EnabledItemUserPage } from './enabled-item-user.page';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
-import { SearchModule } from 'src/app/components/search/search.module';
 import { CardMobileComponent } from './component/card-mobile/card-mobile.component';
 import { CardDesktopComponent } from './component/card-desktop/card-desktop.component';
+import { UserComponentsModule } from 'src/app/pages/dashboard/component/user/user-component.module';
 
 @NgModule({
   imports: [
@@ -18,8 +18,8 @@ import { CardDesktopComponent } from './component/card-desktop/card-desktop.comp
     FormsModule,
     IonicModule,
     EnabledItemUserPageRoutingModule,
-    SearchModule,
     PipeModule,
+    UserComponentsModule,
   ],
   declarations: [
     EnabledItemUserPage,

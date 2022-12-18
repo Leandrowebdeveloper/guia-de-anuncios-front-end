@@ -1,3 +1,6 @@
+import { CategoryAnnouncementCreateComponent } from './../../component/category-announcement/create/create.component';
+import { EnabledItemComponent } from './pages/enabled-item/enabled-item.component';
+import { CategoryAnnouncementComponentModule } from './../../component/category-announcement/category-announcement.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,8 +12,8 @@ import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
 import { FormPageModule } from './form/form.module';
-import { CategoryAnnouncementSearchModule } from 'src/app/components/categotyAnnouncementSearch/search.module';
 import { CategoryAnnouncementPageRoutingModule } from './category-announcement-routing.module';
+import { DeletedItemComponent } from './pages/deleted-item/deleted-item.component';
 
 @NgModule({
   imports: [
@@ -18,12 +21,13 @@ import { CategoryAnnouncementPageRoutingModule } from './category-announcement-r
     FormsModule,
     IonicModule,
     CategoryAnnouncementPageRoutingModule,
-    CategoryAnnouncementSearchModule,
     PipeModule,
     HeaderModule,
     FooterModule,
     FormPageModule,
+    CategoryAnnouncementComponentModule,
   ],
-  declarations: [CategoryPage],
+  declarations: [CategoryPage, DeletedItemComponent, EnabledItemComponent],
+  providers: [CategoryAnnouncementCreateComponent],
 })
 export class CategoryAnnouncementPageModule {}

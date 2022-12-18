@@ -5,9 +5,10 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { AlertService } from 'src/app//utilities/alert/alert.service';
 import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
-import { Announcement } from 'src/app/interface/index';
+import { Announcement, User } from 'src/app/interface';
 import { Observable, Subject, Subscription, EMPTY } from 'rxjs';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-enabled-item-announcement-page',
@@ -15,10 +16,11 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
   styleUrls: ['./enabled-item.page.scss', '../../dashboard.page.scss'],
 })
 export class EnabledItemAnnouncementPage implements OnInit {
-  @Input() userId!: number;
+  @Input() user!: Required<Pick<User, 'id' | '_csrf' | 'plan'>>;
   @Output() isAnnouncement = new EventEmitter<boolean>(undefined);
   public announcement$: Observable<Announcement[]>;
   public announcement: Announcement[];
+  public isAdmin: boolean;
 
   public isDeleted: number;
   public error = new Subject<boolean>();
@@ -34,6 +36,7 @@ export class EnabledItemAnnouncementPage implements OnInit {
   constructor(
     private plt: Platform,
     private authAnnouncementService: AuthAnnouncementService,
+    private authService: AuthService,
     private alertService: AlertService,
     public messageService: MessageService,
     private loadingService: LoadingService
@@ -41,10 +44,11 @@ export class EnabledItemAnnouncementPage implements OnInit {
 
   ngOnInit() {
     this.getAnnouncement();
-    this.plt.ready().then(() => this.isPlatform());
+    this.isPlatform();
+    this.setButtonCreate();
   }
 
-  public trackByFn(index: number, announcement: Announcement) {
+  public trackByFn(index: number, announcement: Announcement): number {
     return announcement ? announcement.id : undefined;
   }
 
@@ -60,7 +64,7 @@ export class EnabledItemAnnouncementPage implements OnInit {
   public actionButton(event: {
     action: 'destroy' | 'restore' | 'drop';
     index: number;
-    announcement: Announcement;
+    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>;
   }): Promise<void> {
     const { action, index, announcement } = event;
     if (action === 'destroy') {
@@ -68,7 +72,10 @@ export class EnabledItemAnnouncementPage implements OnInit {
     }
   }
 
-  public async destroy(index: number, announcement: Announcement) {
+  public async destroy(
+    index: number,
+    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
+  ) {
     this.isDeleted = index;
     const alert = await this.alertService.alertController.create({
       header: 'Atenção',
@@ -100,12 +107,12 @@ export class EnabledItemAnnouncementPage implements OnInit {
   }
 
   private getAnnouncement(): Observable<Announcement[]> {
-    if (this.userId) {
+    if (this.user?.id) {
       return (this.announcement$ = this.authAnnouncementService
         .getAnnouncementAll('', {
           limit: this.limit,
           offset: this.offset,
-          userId: this.userId,
+          userId: this.user?.id,
         })
         .pipe(
           tap((announcement: Announcement[]) => {
@@ -121,7 +128,10 @@ export class EnabledItemAnnouncementPage implements OnInit {
     }
   }
 
-  private deleted(announcement: Announcement, index: number) {
+  private deleted(
+    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>,
+    index: number
+  ) {
     const loading = this.loadingService.show('Enviando para lixeira...');
     this.destroyAnnouncement = this.authAnnouncementService
       .delete(announcement)
@@ -154,7 +164,13 @@ export class EnabledItemAnnouncementPage implements OnInit {
     );
   }
 
-  private isPlatform(): boolean {
-    return (this.isDesktop = this.plt.is('desktop'));
+  private async isPlatform(): Promise<boolean> {
+    return this.plt
+      .ready()
+      .then(() => (this.isDesktop = this.plt.is('desktop')));
+  }
+
+  private setButtonCreate() {
+    this.isAdmin = this.authService.getLevel === '1';
   }
 }

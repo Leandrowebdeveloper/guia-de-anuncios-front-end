@@ -97,6 +97,8 @@
           </ion-col>
         </ion-row>
       </div>
+
+      <!-- Anúncios -->
       <div *ngSwitchCase="'announcement'">
         <ion-row>
           <ion-col size="12">
@@ -108,7 +110,7 @@
             <!--  Abilitados -->
             <ng-container *ngIf="toggleList;else ItemDeleted">
               <app-enabled-item-announcement-page
-                [userId]="user?.id"
+                [user]="user"
                 (isAnnouncement)="getIsAnnouncement($event)"
               ></app-enabled-item-announcement-page>
             </ng-container>

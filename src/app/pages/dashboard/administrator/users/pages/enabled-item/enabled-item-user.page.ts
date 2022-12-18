@@ -3,15 +3,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subject, Subscription, EMPTY } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { User, UserSearch } from 'src/app/interface';
+import { User, Search } from 'src/app/interface';
 import { AdminUsersService } from '../../services/admin-users.service';
 import { HelpsService } from 'src/app/services/helps/helps.service';
-import { SearchService } from 'src/app/components/search/service/service.service';
 import {
   InfiniteScrollCustomEvent,
   Platform,
   SearchbarCustomEvent,
 } from '@ionic/angular';
+import { SearchUserService } from 'src/app/pages/dashboard/component/user/search/service/search.service';
 
 export type EnabledItemUser =
   | 'name'
@@ -55,7 +55,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   constructor(
     private adminUsersService: AdminUsersService,
     private helpService: HelpsService,
-    private searchService: SearchService,
+    private searchUserService: SearchUserService,
     private plt: Platform
   ) {}
 
@@ -63,7 +63,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
     return this.searchBy;
   }
 
-  private set setSearchBy(value: UserSearch) {
+  private set setSearchBy(value: Search) {
     const build = JSON.parse(`{ "${value}":"null" }`);
     this.searchBy = build;
   }
@@ -99,7 +99,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
       return (this.$search = this.adminUsersService
         .searchBy(data)
         .subscribe((user: Pick<User, EnabledItemUser>[]) => {
-          this.searchService.search = user;
+          this.searchUserService.search = user;
           setTimeout(() => this.$search.unsubscribe(), 2000);
         }));
     }
@@ -116,7 +116,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
       ));
   }
 
-  private orderBy(search: UserSearch): void {
+  private orderBy(search: Search): void {
     if (!this.users) {
       return;
     }
@@ -140,8 +140,8 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchService.getSearchBy.subscribe(
-      (filter: UserSearch) => {
+    this.$searchBy = this.searchUserService.getSearchBy.subscribe(
+      (filter: Search) => {
         if (
           filter === 'firstName' ||
           filter === 'lastName' ||

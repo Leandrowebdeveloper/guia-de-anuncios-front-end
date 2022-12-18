@@ -39,9 +39,8 @@ export class ManagementPage implements OnInit {
 
   public toggleSegment(event: unknown) {
     if (event instanceof CustomEvent) {
-      console.log(event);
-
-      // this.toggleRoute = e.detail as 'announcement' | 'statistic' | 'user';
+      const data: 'announcement' | 'statistic' | 'user' = event.detail?.value;
+      this.toggleRoute = data;
     }
   }
 

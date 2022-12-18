@@ -39,6 +39,9 @@ import { UserDestroyService } from './destroy/service/user-destroy.service';
 import { AvatarService } from './avatar/service/image.service';
 import { UserBlockadeService } from './blockade/services/user-blockade.service';
 import { EmailService } from './email/service/email.service';
+import { UserSearchMenuComponent } from './search/filter/filter-menu.component';
+import { SearchUserService } from './search/service/search.service';
+import { SearchUserComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +67,8 @@ import { EmailService } from './email/service/email.service';
     FormSendUserMessageComponent,
     SendUserMessageComponent,
     FormUserBlockadeComponent,
+    UserSearchMenuComponent,
+    SearchUserComponent,
   ],
   imports: [
     CommonModule,
@@ -89,6 +94,8 @@ import { EmailService } from './email/service/email.service';
     UserBlockadeComponent,
     SendUserMessageComponent,
     FormUserBlockadeComponent,
+    UserSearchMenuComponent,
+    SearchUserComponent,
   ],
   providers: [
     UserBlockadeService,
@@ -101,6 +108,7 @@ import { EmailService } from './email/service/email.service';
     UserDestroyService,
     AvatarService,
     EmailService,
+    SearchUserService,
   ],
 })
 export class UserComponentsModule {}

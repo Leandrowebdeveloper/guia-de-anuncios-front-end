@@ -24,4 +24,15 @@
       ></app-list-item-announcement-component>
     </ng-template>
   </ion-col>
+  <ion-col size="12" [hidden]="announcement?.length > 0 || !isAdmin">
+    <div class="content-center">
+      <ion-icon color="medium" name="megaphone"></ion-icon>
+      <ion-text color="medium"> Não á anúncio cadastrado. </ion-text>
+    </div>
+  </ion-col>
+
+  <app-admin-button-create-announcement
+    [isAdmin]="isAdmin"
+    [user]="user"
+  ></app-admin-button-create-announcement>
 </ion-row>

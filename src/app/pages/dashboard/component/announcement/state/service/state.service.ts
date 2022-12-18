@@ -10,7 +10,7 @@ import { HttpService } from 'src/app/services/http/http.service';
 import { Announcement } from 'src/app/interface';
 
 @Injectable()
-export class StateService extends HttpService<Announcement> {
+export class StateAnnouncementService extends HttpService<Announcement> {
   constructor(
     http: HttpClient,
     public storageService: StorageService,
@@ -21,14 +21,17 @@ export class StateService extends HttpService<Announcement> {
     this.setApi = `auth-announcement/state`;
   }
 
+  public set setSate(value: Pick<Announcement, 'state'>) {
+    this.managementAnnouncementService.getAnnouncement.state = value.state;
+    this.managementAnnouncementService.setAnnouncement =
+      this.managementAnnouncementService.getAnnouncement;
+  }
+
   public state(
-    announcement: Announcement
+    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
   ): Observable<Announcement | number[]> {
     return this.patch(announcement).pipe(
-      tap(
-        (announcement_: Announcement) =>
-          (this.managementAnnouncementService.setSate = announcement_)
-      )
+      tap((announcement_: Announcement) => (this.setSate = announcement_))
     );
   }
 }

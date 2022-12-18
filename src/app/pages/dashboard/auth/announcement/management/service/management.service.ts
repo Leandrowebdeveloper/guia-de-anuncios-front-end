@@ -1,19 +1,14 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import {
-  Announcement,
-  CategoryAnnouncement,
-  Galery,
-  OpeningHour,
-} from 'src/app/interface';
-import { HttpService } from 'src/app/services/http/http.service';
+import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
+
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
-import { NavController } from '@ionic/angular';
-import { tap } from 'rxjs/operators';
 import { BreadcrumbsService } from 'src/app/header/breadcrumbs/service/breadcrumbs.service';
-import { Location } from '@angular/common';
+import { Announcement, Galery, OpeningHour } from 'src/app/interface';
+import { HttpService } from 'src/app/services/http/http.service';
 
 @Injectable({
   providedIn: 'root',
@@ -67,12 +62,9 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
     this.setAnnouncement = this.announcement?.value;
   }
 
-  public set setSate(value: Announcement) {
-    this.announcement.value.state = value.state;
-    this.setAnnouncement = this.announcement?.value;
-  }
-
-  public set setTitleDescription(value: Announcement) {
+  public set setTitleDescription(
+    value: Pick<Announcement, 'title' | 'slug' | 'description'>
+  ) {
     this.announcement.value.title = value?.title;
     this.announcement.value.description = value?.description;
     this.announcement.value.slug = value?.slug;

@@ -1,3 +1,4 @@
+import { FormAnnouncementComponent } from 'src/app/pages/dashboard/component/announcement/announcement/form/form.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,11 +21,17 @@ import { CardAnnouncementComponent } from './card/card.component';
 import { CardAnnouncementComponentRoutingModule } from './card/card.component-routing.module';
 import { FormContactAnnouncementComponent } from './contant/form/form.component';
 import { ContantAnnouncementComponent } from './contant/contant.component';
-import { ButtonCreateAnnouncementComponent } from './button-create/button-create.component';
+import { ButtonCreateAnnouncementComponent } from './button-create/auth/button-create.component';
 import { FormAddressAnnouncementComponent } from './address/form/form.component';
 import { AddressAnnouncementComponent } from './address/address.component';
 import { PresentPlanComponentModule } from 'src/app/components/present-plan/present-plan.module';
 import { AnnouncementBlockadeComponent } from './blockade/blockade.component';
+import { SearchMenuAnnouncementComponent } from './search/filter/filter-menu.component';
+import { SearchAnnouncementService } from './search/service/search.service';
+import { SearchAnnouncementComponent } from './search/search.component';
+import { StateAnnouncementService } from './state/service/state.service';
+import { AnnouncementComponent } from './announcement/announcement.component';
+import { AdminButtonCreateAnnouncementComponent } from './button-create/admin/button-create.component';
 
 @NgModule({
   imports: [
@@ -52,9 +59,14 @@ import { AnnouncementBlockadeComponent } from './blockade/blockade.component';
     FormContactAnnouncementComponent,
     ContantAnnouncementComponent,
     ButtonCreateAnnouncementComponent,
+    AdminButtonCreateAnnouncementComponent,
     FormAddressAnnouncementComponent,
     AddressAnnouncementComponent,
     AnnouncementBlockadeComponent,
+    SearchMenuAnnouncementComponent,
+    SearchAnnouncementComponent,
+    FormAnnouncementComponent,
+    AnnouncementComponent,
   ],
   exports: [
     AnnouncementStateComponent,
@@ -67,8 +79,14 @@ import { AnnouncementBlockadeComponent } from './blockade/blockade.component';
     CardAnnouncementComponent,
     ContantAnnouncementComponent,
     ButtonCreateAnnouncementComponent,
+    AdminButtonCreateAnnouncementComponent,
     AddressAnnouncementComponent,
     AnnouncementBlockadeComponent,
+    SearchMenuAnnouncementComponent,
+    SearchAnnouncementComponent,
+    FormAnnouncementComponent,
+    AnnouncementComponent,
   ],
+  providers: [SearchAnnouncementService, StateAnnouncementService],
 })
 export class AnnouncementComponentsModule {}

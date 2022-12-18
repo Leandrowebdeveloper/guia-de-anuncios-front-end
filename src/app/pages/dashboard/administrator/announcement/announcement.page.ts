@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, delay, tap } from 'rxjs/operators';
-import { Announcement, CategorySearch } from 'src/app/interface';
+import { Announcement, Search } from 'src/app/interface';
 import { Observable, EMPTY, Subject, Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 import { AnnouncementService } from './services/announcement.service';
 import { FormComponent } from './form/form.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { SearchService } from 'src/app/components/categotyAnnouncementSearch/service/service.service';
+
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 
@@ -59,7 +59,7 @@ export class AnnouncementPage implements OnInit, OnDestroy {
   constructor(
     private announcementService: AnnouncementService,
     private helpService: HelpsService,
-    private searchService: SearchService,
+    // private searchService: SearchService,
     private route: Router,
     private modalController: ModalController,
     private authService: AuthService,
@@ -72,7 +72,7 @@ export class AnnouncementPage implements OnInit, OnDestroy {
     return this.searchBy;
   }
 
-  private set setSearchBy(value: CategorySearch) {
+  private set setSearchBy(value: Search) {
     const build = JSON.parse(`{ "${value}":"null" }`);
     this.searchBy = build;
   }
@@ -152,7 +152,7 @@ export class AnnouncementPage implements OnInit, OnDestroy {
       return (this.$search = this.announcementService
         .searchBy(data)
         .subscribe((announcement: Announcement[]) => {
-          this.searchService.search = announcement;
+          // this.searchService.search = announcement;
           setTimeout(() => this.$search.unsubscribe(), 2000);
         }));
     }
@@ -230,7 +230,7 @@ export class AnnouncementPage implements OnInit, OnDestroy {
       this.route.routerState.snapshot.url.includes('excluidas');
   }
 
-  private orderBy(search: CategorySearch): void {
+  private orderBy(search: Search | 'position'): void {
     if (!this.announcement) {
       return;
     }
@@ -254,19 +254,19 @@ export class AnnouncementPage implements OnInit, OnDestroy {
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchService.getSearchBy.subscribe(
-      (filter: CategorySearch) => {
-        if (filter === 'name') {
-          this.setSearchBy = filter;
-        } else {
-          if (filter === 'orderName') {
-            filter = 'name';
-          }
-          this.setSearchBy = 'name';
-          this.orderBy(filter);
-        }
-      }
-    );
+    // this.$searchBy = this.searchService.getSearchBy.subscribe(
+    //   (filter: Search | 'orderName') => {
+    //     if (filter === 'name') {
+    //       this.setSearchBy = filter;
+    //     } else {
+    //       if (filter === 'orderName') {
+    //         filter = 'name';
+    //       }
+    //       this.setSearchBy = 'name';
+    //       this.orderBy(filter);
+    //     }
+    //   }
+    // );
   }
 
   private setDataSearch(value: string): object {

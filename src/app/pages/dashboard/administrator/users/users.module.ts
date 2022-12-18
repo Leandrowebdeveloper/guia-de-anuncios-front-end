@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { UsersPageRoutingModule } from './users-routing.module';
 
 import { UsersPage } from './users.page';
-import { SearchModule } from 'src/app/components/search/search.module';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
@@ -21,7 +20,6 @@ import { EnabledItemUserPageModule } from './pages/enabled-item/enabled-item-use
     FormsModule,
     IonicModule,
     UsersPageRoutingModule,
-    SearchModule,
     PipeModule,
     HeaderModule,
     FooterModule,

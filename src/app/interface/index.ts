@@ -109,7 +109,7 @@ export interface HttpResponse {
   body: Body;
 }
 
-export type UserSearch =
+export type Search =
   | 'firstName'
   | 'lastName'
   | 'email'
@@ -117,14 +117,6 @@ export type UserSearch =
   | 'createdAt'
   | 'state'
   | 'blockade'
-  | 'updatedAt';
-
-export type CategorySearch =
-  | 'name'
-  | 'orderName'
-  | 'state'
-  | 'position'
-  | 'createdAt'
   | 'updatedAt';
 
 export interface SocialLogin {

@@ -65,6 +65,7 @@
               <!-- Blockade -->
               <app-blockade-announcement-component
                 [announcement]="announcement"
+                [isAdmin]="user?.level === '1'"
               ></app-blockade-announcement-component>
 
               <!-- State -->

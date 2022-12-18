@@ -9,9 +9,9 @@ import { MaintenancePageRoutingModule } from './management-routing.module';
 import { ManagementPage } from './management.page';
 import { HeaderModalModule } from 'src/app/components/header-modal/header-modal.module';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
-import { HeaderModule } from 'src/app/header/header.module';
-import { FooterModule } from 'src/app/footer/footer.module';
+
 import { FormPageModule } from '../form/form.module';
+import { CategoryAnnouncementComponentModule } from '../../../component/category-announcement/category-announcement.module';
 
 @NgModule({
   imports: [
@@ -21,9 +21,8 @@ import { FormPageModule } from '../form/form.module';
     MaintenancePageRoutingModule,
     HeaderModalModule,
     PipeModule,
-    HeaderModule,
-    FooterModule,
     FormPageModule,
+    CategoryAnnouncementComponentModule,
   ],
   declarations: [ManagementPage],
 })

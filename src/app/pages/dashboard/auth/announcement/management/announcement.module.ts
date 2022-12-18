@@ -15,7 +15,6 @@ import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
 import { GaleryComponentModule } from '../../../component/announcement/galery/component/galery-component.module';
 import { OpeningHourComponentModule } from '../../../component/announcement/opening-hour/opening-hour.component.module';
 import { CategoryComponentModule } from '../../../component/announcement/category/category.component.module';
-import { AnnouncementComponentModule } from '../../../component/announcement/announcement/announcement.module';
 import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
 
 @NgModule({
@@ -29,7 +28,6 @@ import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/
     AnnouncementComponentsModule,
     OpeningHourComponentModule,
     CategoryComponentModule,
-    AnnouncementComponentModule,
     HeaderModule,
     FooterModule,
     PipeModule,

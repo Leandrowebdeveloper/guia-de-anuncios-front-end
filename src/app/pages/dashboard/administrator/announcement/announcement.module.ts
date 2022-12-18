@@ -11,7 +11,6 @@ import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
 import { FormPageModule } from './form/form.module';
-import { CategoryAnnouncementSearchModule } from 'src/app/components/categotyAnnouncementSearch/search.module';
 
 @NgModule({
   imports: [
@@ -19,7 +18,6 @@ import { CategoryAnnouncementSearchModule } from 'src/app/components/categotyAnn
     FormsModule,
     IonicModule,
     AnnouncementPageRoutingModule,
-    CategoryAnnouncementSearchModule,
     PipeModule,
     HeaderModule,
     FooterModule,

@@ -12,7 +12,6 @@ import { FooterModule } from 'src/app/footer/footer.module';
 import { HeaderModule } from 'src/app/header/header.module';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
 import { EnabledItemAnnouncementPageModule } from './pages/enabled-item/enabled-item.module';
-import { AnnouncementComponentModule } from 'src/app/pages/dashboard/component/announcement/announcement/announcement.module';
 import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
 import { DeletedItemAnnouncememtPageModule } from './pages/deleted-item/deleted-item.module';
 
@@ -27,7 +26,6 @@ import { DeletedItemAnnouncememtPageModule } from './pages/deleted-item/deleted-
     PipeModule,
     EnabledItemAnnouncementPageModule,
     DeletedItemAnnouncememtPageModule,
-    AnnouncementComponentModule,
     AnnouncementComponentsModule,
   ],
   declarations: [DashboardPage],

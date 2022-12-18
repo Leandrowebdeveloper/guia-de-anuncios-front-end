@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Announcement, User } from 'src/app/interface';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
@@ -13,6 +13,7 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
 })
 export class AnnouncementBlockadeComponent {
   @Input() announcement!: Announcement;
+  @Input() isAdmin!: boolean;
   private form: FormGroup;
   private $blockade: Subscription;
 

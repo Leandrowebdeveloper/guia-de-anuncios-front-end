@@ -1,63 +1,21 @@
 <app-header-component></app-header-component>
 
 <ion-content [fullscreen]="true">
-  <ng-container *ngIf="user$ | async; let user;">
-    <ion-grid fixed>
-      <ng-container
-        *ngIf="user?.plan?.type === 'free' || user?.plan?.type === 'basic'; else Plan"
-      >
-        <ion-row>
-          <ion-col size="12">
-            <app-enabled-item-announcement-page
-              [userId]="user?.id"
-              (isAnnouncement)="getIsAnnouncement($event)"
-            ></app-enabled-item-announcement-page>
+  <ion-grid fixed *ngIf="user$ | async; let user;">
+    <ion-row>
+      <ion-col size="12">
+        <app-enabled-item-announcement-page
+          [user]="user"
+          (isAnnouncement)="getIsAnnouncement($event)"
+        ></app-enabled-item-announcement-page>
 
-            <app-button-create-announcement
-              [isButton]="isAnnouncement"
-              (create)="create()"
-            ></app-button-create-announcement>
-          </ion-col>
-        </ion-row>
-      </ng-container>
-
-      <ng-template #Plan>
-        <!-- Navegação -->
-        <app-segment-announcement-component
-          [isAdmin]="false"
-          (togglePage)="togglePage($event)"
-        ></app-segment-announcement-component>
-
-        <!--  Abilitados -->
-        <ng-container *ngIf="toggleList;else ItemDeleted">
-          <app-enabled-item-announcement-page
-            [userId]="user?.id"
-            (isAnnouncement)="getIsAnnouncement($event)"
-          ></app-enabled-item-announcement-page>
-        </ng-container>
-
-        <!-- Deletados -->
-        <ng-template #ItemDeleted>
-          <app-deleted-item-announcement-page
-            [userId]="user?.id"
-          ></app-deleted-item-announcement-page>
-        </ng-template>
-      </ng-template>
-    </ion-grid>
-
-    <!-- Buttom create -->
-    <ion-fab
-      *ngIf="toggleList && (user?.plan?.type === 'special')"
-      vertical="bottom"
-      horizontal="end"
-      title="Cadastrar novo anúncio."
-      slot="fixed"
-    >
-      <ion-fab-button (click)="create()">
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-  </ng-container>
+        <app-button-create-announcement
+          [isButton]="isAnnouncement"
+          [user]="user"
+        ></app-button-create-announcement>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 <app-footer></app-footer>
