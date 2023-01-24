@@ -1,0 +1,65 @@
+<ion-item-divider>
+  <ion-label><ion-icon name="location"></ion-icon> Endereço</ion-label>
+</ion-item-divider>
+<ion-item-sliding class="ion-margin-bottom">
+  <ion-item lines="true">
+    <ion-icon
+      title="Pressione e arraste para a esquerda."
+      data-message="Pressione e arraste para a esquerda."
+      slot="end"
+      name="chevron-back"
+    ></ion-icon>
+    <ion-text color="medium">
+      <address
+        [title]="announcement?.address | address"
+        *ngIf="announcement?.address; else Else"
+      >
+        {{ announcement?.address | address }}
+      </address>
+    </ion-text>
+
+    <ng-template #Else>
+      <ion-text> Não está cadastrado. </ion-text>
+    </ng-template>
+  </ion-item>
+
+  <ion-item-options>
+    <ion-item-option
+      *ngIf="user?.level === '1' && announcement?.address"
+      slot="end"
+      color="danger"
+      size="small"
+      class="cursor-pointer"
+      title="Exclui endereço"
+      data-message="Exclui endereço"
+      (click)="destroy()"
+    >
+      <ion-icon name="trash" slot="start"></ion-icon>
+      delete
+    </ion-item-option>
+    <ion-item-option
+      *ngIf="announcement?.address"
+      slot="end"
+      size="small"
+      class="cursor-pointer"
+      title="Editar endereço"
+      data-message="Editar endereço"
+      (click)="send()"
+    >
+      <ion-icon name="create" slot="start"></ion-icon>
+      editar
+    </ion-item-option>
+    <ion-item-option
+      *ngIf="!announcement?.address"
+      slot="end"
+      size="small"
+      class="cursor-pointer"
+      title="Editar endereço"
+      data-message="Editar endereço"
+      (click)="send()"
+    >
+      <ion-icon name="create" slot="start"></ion-icon>
+      Cadastrar
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

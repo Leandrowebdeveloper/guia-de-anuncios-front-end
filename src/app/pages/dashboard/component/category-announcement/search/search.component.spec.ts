@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { SearchCategoryComponent } from './search.component';
-import { SearchService } from './service/search.service';
 
 describe('SearchCategoryComponent', () => {
   let component: SearchCategoryComponent;

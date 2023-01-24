@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { BlockadeComponent } from './blockade.component';
+import { UserBlockadeComponent } from './blockade.component';
 
-describe('BlockadeComponent', () => {
-  let component: BlockadeComponent;
-  let fixture: ComponentFixture<BlockadeComponent>;
+describe('UserBlockadeComponent', () => {
+  let component: UserBlockadeComponent;
+  let fixture: ComponentFixture<UserBlockadeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ BlockadeComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [UserBlockadeComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BlockadeComponent);
+    fixture = TestBed.createComponent(UserBlockadeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

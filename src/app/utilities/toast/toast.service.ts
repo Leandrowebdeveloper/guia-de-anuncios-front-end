@@ -34,12 +34,14 @@ export class ToastService {
 
   public async loading(
     message: string,
-    position: 'bottom' | 'middle' | 'top'
+    position: 'bottom' | 'middle' | 'top',
+    icon?: string
   ): Promise<HTMLIonToastElement> {
     const toast = await this.toastController.create({
       message,
       position,
       color: 'light',
+      icon,
     });
     toast.present();
     return toast;

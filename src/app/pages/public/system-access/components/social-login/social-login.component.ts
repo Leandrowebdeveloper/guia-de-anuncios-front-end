@@ -1,3 +1,4 @@
+import { SystemAccessPage } from './../../system-access.page';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { Subscription } from 'rxjs';
 import { SystemAccessService } from './../../services/system-access.service';
@@ -32,6 +33,7 @@ export class SocialLoginComponent implements OnInit {
     private plt: Platform,
     private http: HttpClient,
     private socialLoginService: SocialLoginService,
+    private systemAccessPage: SystemAccessPage,
     private messageService: MessageService,
     private loadingService: LoadingService
   ) {}
@@ -95,15 +97,24 @@ export class SocialLoginComponent implements OnInit {
       return (this.systemAccess = this.socialLoginService
         .create(data)
         .subscribe(
-          (user_: User) =>
-            this.messageService.success(
-              user_?.message,
-              loading,
-              this.systemAccess
-            ),
+          (user_: User) => this.success(user_, loading),
           (error: HttpErrorResponse) => this.error(error, loading)
         ));
     }
+  }
+
+  private success(
+    user_: User,
+    loading: Promise<HTMLIonLoadingElement>
+  ): Promise<number> {
+    this.systemAccessPage.disableCanDeactivate(user_);
+    this.systemAccessService.isLogin(user_);
+    this.systemAccessService.goToUserPage();
+    return this.messageService.success(
+      user_?.message,
+      loading,
+      this.systemAccess
+    );
   }
 
   private build(data: any): SocialLogin {

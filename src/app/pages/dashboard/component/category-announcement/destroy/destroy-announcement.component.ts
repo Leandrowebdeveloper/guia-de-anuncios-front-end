@@ -9,7 +9,7 @@ import { FormDestroyAnnouncementComponent } from './form/form.component';
   styleUrls: ['./destroy-announcement.component.scss'],
 })
 export class DestroyAnnouncementComponent {
-  @Input() category!: Required<Pick<Category, '_csrf' | 'id'>>;
+  @Input() category!: Category;
 
   constructor(private modalController: ModalController) {}
 

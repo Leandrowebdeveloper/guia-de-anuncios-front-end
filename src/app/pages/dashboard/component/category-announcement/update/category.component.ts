@@ -10,9 +10,7 @@ import { Category } from 'src/app/interface';
   styleUrls: ['./category.component.scss'],
 })
 export class CategoryAnnouncementUpdateComponent {
-  @Input() category!: Required<
-    Pick<Category, '_csrf' | 'name' | 'description' | 'slug'>
-  >;
+  @Input() category!: Category;
 
   constructor(private modalController: ModalController) {}
 

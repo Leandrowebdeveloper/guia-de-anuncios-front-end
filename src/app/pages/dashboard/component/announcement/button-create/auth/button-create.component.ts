@@ -1,8 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { User } from 'src/app/interface';
 import { FormAnnouncementComponent } from 'src/app/pages/dashboard/component/announcement/announcement/form/form.component';
-import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-button-create-announcement',

@@ -98,7 +98,7 @@ export class ConfigForm {
       name: 'numberr',
       label: 'Número',
       placeholder: 'Digite o numero',
-      type: 'text',
+      type: 'number',
       actionLabel: 'Digite o numero',
       readonly: false,
       msg: {
@@ -249,7 +249,7 @@ export class ConfigForm {
       name: 'facebook',
       label: 'Facebook',
       placeholder: 'https://www.facebook.com/******.*****.9876543',
-      type: 'text',
+      type: 'url',
       actionLabel: 'Digite o endereço do facebook',
       readonly: false,
       msg: {
@@ -261,7 +261,7 @@ export class ConfigForm {
       name: 'instagran',
       label: 'Instagran',
       placeholder: 'https://www.instagram.com/',
-      type: 'text',
+      type: 'url',
       actionLabel: 'Digite o endereço do instagran',
       readonly: false,
       msg: {

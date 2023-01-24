@@ -12,7 +12,7 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
   styleUrls: ['./blockade.component.scss'],
 })
 export class AnnouncementBlockadeComponent {
-  @Input() announcement!: Announcement;
+  @Input() announcement!: Pick<Announcement, '_csrf' | 'slug' | 'blockade'>;
   @Input() isAdmin!: boolean;
   private form: FormGroup;
   private $blockade: Subscription;
@@ -29,7 +29,7 @@ export class AnnouncementBlockadeComponent {
     return (this.$blockade = this.managementAnnouncementService
       .blockade(this.form.value)
       .subscribe(
-        (user_: User) =>
+        (user_: Pick<User, 'message'>) =>
           this.messageService.success(
             user_?.message,
             null,

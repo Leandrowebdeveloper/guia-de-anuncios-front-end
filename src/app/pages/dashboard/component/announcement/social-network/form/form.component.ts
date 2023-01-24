@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
-import { SocialNetworkService } from '../service/social-network.service';
+import { SocialNetworkAnnouncementService } from '../service/social-network.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
@@ -15,7 +15,7 @@ import { AttrButton } from 'src/app/pages/public/system-access/components/button
   styleUrls: ['./form.component.scss'],
 })
 export class FormSocialNetworkAnnouncementComponent implements OnInit {
-  @Input() socialNetwork!: SocialNetwork;
+  @Input() socialNetwork!: Required<SocialNetwork>;
   @Input() label!: string;
 
   public attrButton: AttrButton = {
@@ -33,7 +33,7 @@ export class FormSocialNetworkAnnouncementComponent implements OnInit {
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
-    private socialNetworkService: SocialNetworkService,
+    private socialNetworkService: SocialNetworkAnnouncementService,
     public messageService: MessageService,
     private loadingService: LoadingService
   ) {}

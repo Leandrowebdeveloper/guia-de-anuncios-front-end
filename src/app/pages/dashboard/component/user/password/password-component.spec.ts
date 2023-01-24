@@ -1,18 +1,18 @@
-import { PasswordComponentModule } from './password.module';
+import { UserPasswordComponent } from './password-component';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-describe('PasswordComponentModule', () => {
-  let component: PasswordComponentModule;
-  let fixture: ComponentFixture<PasswordComponentModule>;
+describe('UserPasswordComponent', () => {
+  let component: UserPasswordComponent;
+  let fixture: ComponentFixture<UserPasswordComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PasswordComponentModule],
+      declarations: [UserPasswordComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PasswordComponentModule);
+    fixture = TestBed.createComponent(UserPasswordComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

@@ -58,7 +58,7 @@ const routes: Routes = [
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
       import('./announcement/announcement.module').then(
-        (m) => m.AnnouncementPageModule
+        (m) => m.AdminAnnouncementPageModule
       ),
   },
   {
@@ -67,7 +67,7 @@ const routes: Routes = [
     canLoad: [PrivateAutorizationGuard],
     loadChildren: () =>
       import('./announcement/announcement.module').then(
-        (m) => m.AnnouncementPageModule
+        (m) => m.AdminAnnouncementPageModule
       ),
   },
   {

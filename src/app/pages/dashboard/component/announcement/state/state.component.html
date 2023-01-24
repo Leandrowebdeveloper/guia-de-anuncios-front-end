@@ -1,18 +1,20 @@
 <ion-item
-  [disabled]="announcement?.categoryAnnouncement === null || announcement?.blockade"
+  [disabled]="announcement?.category === null || announcement?.blockade"
 >
-  <ion-label>{{ announcement?.state ? 'Online' : 'Offline'}}</ion-label>
+  <ion-label>{{ announcement?.state ? "Online" : "Offline" }}</ion-label>
   <ion-toggle
     slot="end"
     (ionChange)="toggle()"
     [checked]="announcement?.state"
     title="Alternar entre anúncio online ou offline."
     aria-label="Clique para alternar entre anúncio online ou offline."
-    [attr.aria-disabled]="'Status ' + announcement?.blockade ? 'online.' : 'offline'"
+    [attr.aria-disabled]="
+      'Status ' + announcement?.blockade ? 'online.' : 'offline'
+    "
   >
   </ion-toggle>
   <ion-icon
     slot="start"
-    [name]="announcement?.state  ? 'power': 'radio-button-off'"
+    [name]="announcement?.state ? 'power' : 'radio-button-off'"
   ></ion-icon>
 </ion-item>

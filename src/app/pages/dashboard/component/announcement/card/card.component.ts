@@ -1,30 +1,50 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Announcement } from 'src/app/interface';
+import { Observable, Subscription } from 'rxjs';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Announcement, Galery, User } from 'src/app/interface';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { GaleryAnnouncementService } from '../galery/service/galery.service';
 
 @Component({
   selector: 'app-card-announcement-component',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
 })
-export class CardAnnouncementComponent {
+export class CardAnnouncementComponent implements OnInit, OnDestroy {
   @Input() announcement!: Announcement;
-  @Input() index!: number;
-  @Input() action!: number;
-  @Output() actionButtons = new EventEmitter<{
-    action: 'destroy' | 'restore' | 'drop';
-    index: number;
-    announcement: Announcement;
-  }>(undefined);
+  public user$: Observable<User>;
+  public hasHeader: boolean;
 
-  public destroy(index: number, announcement: Announcement): void {
-    return this.actionButtons.emit({ action: 'destroy', index, announcement });
+  private $update: Subscription;
+  constructor(
+    private authService: AuthService,
+    private galeryAnnouncementService: GaleryAnnouncementService
+  ) {}
+
+  ngOnDestroy(): void {
+    this.$update.unsubscribe();
   }
 
-  public drop(index: number, announcement: Announcement): void {
-    return this.actionButtons.emit({ action: 'drop', index, announcement });
+  ngOnInit(): void {
+    this.user$ = this.authService.userObservable;
+    this.updateGalery();
   }
 
-  public toRestore(index: number, announcement: Announcement): void {
-    return this.actionButtons.emit({ action: 'restore', index, announcement });
+  public isHeader(e: boolean): void {
+    this.hasHeader = e;
+  }
+
+  private updateGalery(): Subscription {
+    return (this.$update =
+      this.galeryAnnouncementService.galeryAsObservable.subscribe(
+        (galery: Galery) => {
+          if (galery) {
+            if (this.announcement.galery.length > 0) {
+              this.announcement.galery.unshift(galery);
+            } else {
+              this.announcement.galery = [galery];
+            }
+          }
+        }
+      ));
   }
 }

@@ -18,7 +18,10 @@ import { CategoryAnnouncementService } from './service/category.service';
   styleUrls: ['./category.component.scss'],
 })
 export class CategoryComponent implements OnInit {
-  @Input() announcement!: Announcement;
+  @Input() announcement!: Pick<
+    Announcement,
+    'category' | '_csrf' | 'id' | 'categoryAnnouncement' | 'blockade'
+  >;
   public category$: Observable<Category[]>;
   private form: FormGroup;
   private $category: Subscription;
@@ -44,6 +47,7 @@ export class CategoryComponent implements OnInit {
       // eslint-disable-next-line no-underscore-dangle
       _csrf: this.announcement?._csrf,
     });
+
     const message: string = id
       ? 'Editando categoria...'
       : 'Cadastrando categoria...';
@@ -51,7 +55,7 @@ export class CategoryComponent implements OnInit {
     return (this.$category = this.categoryAnnouncementService
       .category(this.form.value)
       .subscribe(
-        (categoryAnnouncement_: CategoryAnnouncement) =>
+        (categoryAnnouncement_: Pick<CategoryAnnouncement, 'message'>) =>
           this.messageService.success(
             categoryAnnouncement_?.message,
             loading,

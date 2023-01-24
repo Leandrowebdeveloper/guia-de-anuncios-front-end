@@ -73,7 +73,7 @@ export class DeletedItemAnnouncementPage implements OnInit {
   public actionButton(event: {
     action: 'destroy' | 'restore' | 'drop';
     index: number;
-    announcement: Required<Pick<Announcement, '_csrf' | 'id' | 'title'>>;
+    announcement: Pick<Announcement, '_csrf' | 'id' | 'title'>;
   }): Promise<void> {
     const { action, index, announcement } = event;
     if (action === 'drop') {
@@ -84,7 +84,7 @@ export class DeletedItemAnnouncementPage implements OnInit {
 
   public async destroy(
     index: number,
-    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
+    announcement: Pick<Announcement, '_csrf' | 'id'>
   ) {
     this.isDeleted = index;
     const alert = await this.alertService.alertController.create({
@@ -111,7 +111,7 @@ export class DeletedItemAnnouncementPage implements OnInit {
 
   public async toRestore(
     index: number,
-    announcement: Required<Pick<Announcement, '_csrf' | 'id' | 'title'>>
+    announcement: Pick<Announcement, '_csrf' | 'id' | 'title'>
   ) {
     this.isToRestore = index;
     const alert = await this.alertService.alertController.create({
@@ -136,7 +136,7 @@ export class DeletedItemAnnouncementPage implements OnInit {
   }
 
   private restore(
-    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>,
+    announcement: Pick<Announcement, '_csrf' | 'id'>,
     index: number
   ): Subscription {
     const loading = this.loadingService.show('Restaurar anúncio...');
@@ -180,7 +180,7 @@ export class DeletedItemAnnouncementPage implements OnInit {
   }
 
   private drop(
-    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>,
+    announcement: Pick<Announcement, '_csrf' | 'id'>,
     index: number
   ) {
     const loading = this.loadingService.show('Enviando para lixeira...');

@@ -2,16 +2,21 @@
   *ngIf="announcement"
   [disabled]="announcement?.blockade"
   detail="true"
-  (click)="coordinates(announcement)"
-  title="Alterar Titulo e descrição"
-  aria-label="Clique para alterar Titulo e descrição"
+  (click)="coordinates()"
+  title="Alterar mapa"
+  aria-label="Clique para alterar mapa"
   [attr.aria-disabled]="
-    'Botão alterar Titulo e descrição ' + announcement?.blockade
+    'Botão alterar mapa ' + announcement?.blockade
       ? 'abilitado.'
       : 'desabilitado'
   "
   button
 >
   <ion-icon name="map" slot="start"></ion-icon>
-  <ion-label>Mapa</ion-label>
+  <ion-label
+    >Mapa
+    <ion-text [color]="announcement?.coordinate ? 'success' : 'danger'">
+      *
+    </ion-text>
+  </ion-label>
 </ion-item>

@@ -84,6 +84,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
     this.$delete.unsubscribe();
   }
 
+  /*********************************************************************************** */
   public refresher(event: any): void {
     this.findUsers();
     event.target.complete();
@@ -93,6 +94,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
     this.menssage = true;
   }
 
+  /************************************************************************************ */
   public search(event: SearchbarCustomEvent): Subscription {
     if (event?.target?.value.length >= 3) {
       const data = this.setDataSearch(event?.target?.value);

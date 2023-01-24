@@ -6,7 +6,7 @@ import { AttrButton } from 'src/app/pages/public/system-access/components/button
 import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
-import { CityService } from '../service/city.service';
+import { CityAnnouncementService } from '../service/city.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 
@@ -15,7 +15,7 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormCityAnnouncementComponent implements OnInit {
-  @Input() citie!: Citie;
+  @Input() citie!: Required<Citie>;
   @Input() label!: string;
 
   public attrButton: AttrButton = {
@@ -35,7 +35,7 @@ export class FormCityAnnouncementComponent implements OnInit {
     private modalController: ModalController,
     private messageService: MessageService,
     private loadingService: LoadingService,
-    private cityService: CityService
+    private cityService: CityAnnouncementService
   ) {}
 
   ngOnInit(): void {
@@ -79,11 +79,11 @@ export class FormCityAnnouncementComponent implements OnInit {
   }
 
   private send(
-    event: FormGroup<any>,
+    event: FormGroup,
     loading: Promise<HTMLIonLoadingElement>
   ): Subscription {
     return (this.$citie = this.cityService.citie(event.value).subscribe(
-      (citie: Citie) => this.messsage(citie.message, loading),
+      (citie: Pick<Citie, 'message'>) => this.messsage(citie?.message, loading),
       (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$citie)
     ));

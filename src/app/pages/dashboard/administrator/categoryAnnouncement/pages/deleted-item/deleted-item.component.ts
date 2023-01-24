@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CategoryService } from 'src/app/pages/dashboard/administrator/categoryAnnouncement/services/category.service';
 import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Category, Search } from 'src/app/interface';
+import { Category, Search, SearchCategory } from 'src/app/interface';
 import { tap, delay, catchError } from 'rxjs/operators';
 import {
   AlertController,
@@ -38,6 +38,7 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
 
   public isOrder = false;
   public sendOrder = false;
+  public menssage: boolean;
 
   private limit = 12;
   private offset = 0;
@@ -84,6 +85,18 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
     this.$searchBy.unsubscribe();
   }
 
+  /*********************************************************************************** */
+  public refresher(event: any): void {
+    this.findCategory();
+    event.target.complete();
+  }
+
+  public hideMenssage() {
+    this.menssage = true;
+  }
+
+  /************************************************************************************ */
+
   public togglePage(e: boolean) {
     this.toggleList = e;
   }
@@ -112,7 +125,7 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
   }
 
   public async restore(
-    category: Required<Pick<Category, 'name' | 'id' | '_csrf'>>,
+    category: Pick<Category, 'name' | 'id' | '_csrf'>,
     index: number
   ): Promise<void> {
     const alert = await this.alertController.create({
@@ -224,14 +237,11 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchService.getSearchBy.subscribe(
-      (filter: Search | 'orderName') => {
+    this.$searchBy = this.searchService.getSearchCategoryBy.subscribe(
+      (filter: SearchCategory | 'name') => {
         if (filter === 'name') {
           this.setSearchBy = filter;
         } else {
-          if (filter === 'orderName') {
-            filter = 'name';
-          }
           this.setSearchBy = 'name';
           this.orderBy(filter);
         }

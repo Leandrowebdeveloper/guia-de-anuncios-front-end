@@ -1,4 +1,3 @@
-import { AuthAnnouncementService } from './../../dashboard/auth/pages/announcement/service/announcement.service';
 import { Storage } from '@ionic/storage';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -31,7 +30,6 @@ describe('SystemAccessPage', () => {
   let systemAccessService: SystemAccessService;
   let recoverService: RecoverService;
   let loginService: LoginService;
-  let authAnnouncementService: AuthAnnouncementService;
   let socialLoginService: SocialLoginService;
   let guard: SystemAccessResolver;
 
@@ -56,7 +54,6 @@ describe('SystemAccessPage', () => {
         RecoverService,
         SystemAccessResolver,
         SocialLoginService,
-        AuthAnnouncementService,
       ],
     }).compileComponents();
 
@@ -80,7 +77,6 @@ describe('SystemAccessPage', () => {
     recoverService = TestBed.inject(RecoverService);
     loginService = TestBed.inject(LoginService);
     socialLoginService = TestBed.inject(SocialLoginService);
-    authAnnouncementService = TestBed.inject(AuthAnnouncementService);
     systemAccessService = TestBed.inject(SystemAccessService);
     guard = TestBed.inject(SystemAccessResolver);
   });
@@ -111,10 +107,6 @@ describe('SystemAccessPage', () => {
 
   it('systemAccessService', () => {
     expect(systemAccessService).toBeTruthy();
-  });
-
-  it('AuthAnnouncementService', () => {
-    expect(authAnnouncementService).toBeTruthy();
   });
 
   it('guard', () => {

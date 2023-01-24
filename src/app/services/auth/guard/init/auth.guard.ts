@@ -10,17 +10,19 @@ import {
 } from '@angular/router';
 import { Observable, EMPTY } from 'rxjs';
 
-import { Announcement, Category, User } from 'src/app/interface';
+import { Category, User } from 'src/app/interface';
 import { InitService } from 'src/app/services/init/init.service';
 import { AuthService } from '../../auth.service';
 import { HomeService } from 'src/app/pages/public/home/services/home.service';
-import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard
-  implements CanLoad, CanActivate, Resolve<User[] & Category[]>
+  implements
+    CanLoad,
+    CanActivate,
+    Resolve<{ user: User; category: Category[] }>
 {
   constructor(
     private storageService: StorageService,
@@ -34,11 +36,11 @@ export class AuthGuard
     return;
   }
 
-  resolve(): Observable<User[] & Category[]> {
+  resolve(): Observable<{ user: User; category: Category[] }> {
     return this.init.boot().pipe(
-      tap((init: User[] & Category[][]) => {
-        this.homeService.setIcons = init[1];
-        this.confirmAuthenticationAndSetUser(init[0]);
+      tap((init: { user: User; category: Category[] }) => {
+        this.homeService.setCategories = init?.category;
+        this.confirmAuthenticationAndSetUser(init?.user);
       }),
       catchError(() => {
         this.router.navigate(['/erro']);

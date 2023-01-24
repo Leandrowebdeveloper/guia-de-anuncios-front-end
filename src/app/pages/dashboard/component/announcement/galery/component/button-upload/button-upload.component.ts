@@ -1,3 +1,4 @@
+import { AlertService } from 'src/app/utilities/alert/alert.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { Subscription } from 'rxjs';
 import { DataUpload, Galery, HttpResponse, Plan } from 'src/app/interface';
@@ -9,7 +10,6 @@ import {
 } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
 import { ToastService } from 'src/app/utilities/toast/toast.service';
-import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 import { GaleryAnnouncementService } from '../../service/galery.service';
 import { PresentPlanComponent } from 'src/app/components/present-plan/present-plan.component';
 import { ModalService } from 'src/app/components/present-plan/animations/modal.service';
@@ -20,7 +20,7 @@ import { ModalService } from 'src/app/components/present-plan/animations/modal.s
   styleUrls: ['./button-upload.component.scss'],
 })
 export class GaleryButtonUploadComponent implements OnInit {
-  @Input() data!: DataUpload;
+  @Input() data!: Required<DataUpload>;
   @Input() plan!: Plan;
   public isMobile: boolean;
 
@@ -31,7 +31,7 @@ export class GaleryButtonUploadComponent implements OnInit {
     private actionSheetController: ActionSheetController,
     private galeryAnnouncementService: GaleryAnnouncementService,
     private messageService: MessageService,
-    private managementService: ManagementAnnouncementService,
+    private alertService: AlertService,
     private toastService: ToastService,
     private modalController: ModalController,
     private modalService: ModalService
@@ -41,7 +41,7 @@ export class GaleryButtonUploadComponent implements OnInit {
     this.plt.ready().then(() => this.togglePLatform());
   }
 
-  public async loadFile(file: HTMLElement) {
+  public async loadFile(file: HTMLElement): Promise<void> {
     if (this.plan?.type === 'free') {
       const modal = await this.modalController.create({
         component: PresentPlanComponent,
@@ -53,16 +53,33 @@ export class GaleryButtonUploadComponent implements OnInit {
     file.click();
   }
 
-  public sendFile(input: HTMLInputElement) {
-    if (input.files.length === 0) {
+  public sendFile(input: HTMLInputElement): boolean {
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    if (input?.files?.length === 0) {
       return false;
     }
-    const loading = this.toastService.loading('Transferindo imagen', 'top');
-    this.setCsrf();
-    const count = input.files.length;
+
+    for (const key in input.files) {
+      if (Object.prototype.hasOwnProperty.call(input.files, key)) {
+        if (!allowedExtensions.exec(input.files[key].name)) {
+          this.alertService.alert(
+            'Atenção',
+            'Arquivo de imagem não é válido.<br>Só serão permitidos arquivos com exteção .jpg, .jpeg, .png'
+          );
+          return false;
+        }
+      }
+    }
+
+    const loading = this.toastService.loading(
+      'Transferindo imagem',
+      'top',
+      'images'
+    );
+    const count = input?.files?.length;
     for (let i = 0; i < count; i++) {
       this.upload = this.galeryAnnouncementService
-        .upload(this.build(input.files[i]), 'upload')
+        .sendFiles(input?.files[i], this.data)
         .subscribe(
           (response: any) => this.success(response, response, loading),
           (error: HttpErrorResponse) =>
@@ -71,7 +88,10 @@ export class GaleryButtonUploadComponent implements OnInit {
     }
   }
 
-  public async selectImage(file: HTMLElement, files: HTMLElement) {
+  public async selectImage(
+    file: HTMLElement,
+    files: HTMLElement
+  ): Promise<void> {
     const actionSheet = await this.actionSheetController.create({
       header: 'Selecionar fonte da imagem',
       buttons: [
@@ -117,8 +137,11 @@ export class GaleryButtonUploadComponent implements OnInit {
     }
   }
 
-  private async update(image: Galery, loading: Promise<HTMLIonToastElement>) {
-    this.managementService.addItemGalery = image;
+  private async update(
+    image: Galery,
+    loading: Promise<HTMLIonToastElement>
+  ): Promise<void> {
+    this.galeryAnnouncementService.setGalery = image;
     (await loading).dismiss();
     if (image) {
       this.upload.unsubscribe();
@@ -127,19 +150,5 @@ export class GaleryButtonUploadComponent implements OnInit {
 
   private togglePLatform(): boolean {
     return (this.isMobile = this.plt.is('mobile'));
-  }
-
-  private build(file: File): FormData {
-    const formData = new FormData();
-    formData.append('announcementId', String(this.data?.id));
-    // eslint-disable-next-line no-underscore-dangle
-    formData.append('_csrf', this.data?._csrf);
-    formData.append('filename', file, file?.name);
-    return formData;
-  }
-
-  private setCsrf() {
-    // eslint-disable-next-line no-underscore-dangle
-    this.galeryAnnouncementService.setCsrf = this.data._csrf;
   }
 }

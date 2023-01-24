@@ -10,24 +10,27 @@ import { ModalController } from '@ionic/angular';
 })
 export class AnnouncementComponent implements OnInit {
   @Input() announcement!: Announcement;
-  @Input() user!: User;
+  @Input() user!: Required<Pick<User, '_csrf' | 'id'>>;
 
   constructor(private modalController: ModalController) {}
 
   ngOnInit() {}
 
   public async open(): Promise<void> {
-    let announcement: Announcement = this.announcement;
+    let announcement: Pick<
+      Announcement,
+      '_csrf' | 'title' | 'description' | 'slug' | 'id' | 'userId'
+    >;
     let label: string;
 
     if (this.announcement?.id) {
       announcement = {
         // eslint-disable-next-line no-underscore-dangle
-        _csrf: announcement?._csrf,
-        title: announcement?.title,
-        description: announcement?.description,
-        slug: announcement?.slug,
-        id: announcement?.id,
+        _csrf: this.announcement?._csrf,
+        title: this.announcement?.title,
+        description: this.announcement?.description,
+        slug: this.announcement?.slug,
+        id: this.announcement?.id,
       };
       label = 'Editar anúcio';
     } else {

@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { BreadcrumbsService } from 'src/app/header/breadcrumbs/service/breadcrumbs.service';
-import { Announcement, Galery, OpeningHour } from 'src/app/interface';
+import { Announcement, Galery, WorkDays } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 
 @Injectable({
@@ -25,6 +25,10 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
   ) {
     super(http, storageService);
     this.setApi = `auth-announcement`;
+  }
+
+  public get galery(): Galery[] {
+    return this.announcement.value.galery;
   }
 
   public get announcementObservable(): Observable<Announcement> {
@@ -57,8 +61,8 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
     this.setAnnouncement = this.announcement?.value;
   }
 
-  public set setOpeningHour(value: OpeningHour) {
-    this.announcement.value.openingHour = value;
+  public set setBlockade(value: Pick<Announcement, 'blockade'>) {
+    this.announcement.value.blockade = value?.blockade;
     this.setAnnouncement = this.announcement?.value;
   }
 
@@ -85,10 +89,7 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
 
   public blockade(announcement: Announcement): Observable<Announcement> {
     return this.patch(announcement, 'blockade').pipe(
-      tap(
-        (announcement_: Announcement) =>
-          (this.setTitleDescription = announcement_)
-      )
+      tap((announcement_: Announcement) => (this.setBlockade = announcement_))
     );
   }
 

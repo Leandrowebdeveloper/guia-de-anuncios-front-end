@@ -1,16 +1,15 @@
 import { tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { SocialNetwork } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class SocialNetworkService extends HttpService<SocialNetwork> {
+@Injectable()
+export class SocialNetworkAnnouncementService extends HttpService<SocialNetwork> {
+  private socialNetworkEvent = new EventEmitter<SocialNetwork>(undefined);
   constructor(
     http: HttpClient,
     public storageService: StorageService,
@@ -18,6 +17,10 @@ export class SocialNetworkService extends HttpService<SocialNetwork> {
   ) {
     super(http, storageService);
     this.setApi = `auth-announcement/socialNetwork`;
+  }
+
+  public get getSocialNetworkEvent() {
+    return this.socialNetworkEvent.asObservable();
   }
 
   public set setSocialNetwork(socialNetwork: SocialNetwork) {

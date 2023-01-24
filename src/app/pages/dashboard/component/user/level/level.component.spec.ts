@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { LevelComponent } from './level.component';
+import { UserLevelComponent } from './level.component';
 
-describe('LevelComponent', () => {
-  let component: LevelComponent;
-  let fixture: ComponentFixture<LevelComponent>;
+describe('UserLevelComponent', () => {
+  let component: UserLevelComponent;
+  let fixture: ComponentFixture<UserLevelComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LevelComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [UserLevelComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LevelComponent);
+    fixture = TestBed.createComponent(UserLevelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

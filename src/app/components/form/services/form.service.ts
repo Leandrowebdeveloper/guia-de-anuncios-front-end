@@ -43,7 +43,7 @@ export class FormServices {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     zip_code: ['', [Validators.required]],
     district: ['', [Validators.required]],
-    numberr: [''],
+    numberr: ['', [Validators.required]],
     complement: [''],
     mobilePhone: ['', [Validators.required]],
     phone: [''],

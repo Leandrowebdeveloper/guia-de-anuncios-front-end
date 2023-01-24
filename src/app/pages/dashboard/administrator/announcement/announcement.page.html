@@ -1,253 +1,32 @@
 <app-header-component></app-header-component>
-<!-- 
-<ion-content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
+
+<ion-content
+  [scrollEvents]="true"
+  [scrollY]="true"
+  (ionScroll)="logScrolling($event)"
+>
   <ion-grid fixed>
-    <ion-row *ngIf="(category$ | async);else Loading">
-      <ion-col size="12" class="ion-no-padding">
-        <app-search
-          *ngIf="category && category?.length > 10"
-          (search)="search($event)"
-        ></app-search>
-      </ion-col>
-
-      <ion-col size-xl="11" size-lg="11" size-sm="11" size-md="11" size-xs="11">
-        <ion-chip
-          [routerLink]="['/painel-de-controle', 'admin', 'categorias']"
-          [color]="!toggleListCategory ? 'success' : 'secondary'"
-          title="Categorias abilitados"
-          routerDirection="back"
-        >
-          <ion-icon
-            name="list-circle"
-            [color]="!toggleListCategory ? 'success' : 'dark'"
-          ></ion-icon>
-          <ion-label>Abilitados</ion-label>
-        </ion-chip>
-
-        <ion-chip
-          [routerLink]="['/painel-de-controle', 'admin', 'categorias', 'excluidas']"
-          [color]="toggleListCategory ? 'success' : 'secondary'"
-          title="Categorias excluidas"
-          routerDirection="back"
-        >
-          <ion-icon
-            name="trash"
-            [color]="toggleListCategory ? 'success' : 'dark'"
-          ></ion-icon>
-          <ion-label>Excluidos</ion-label>
-        </ion-chip>
-      </ion-col>
-      <ion-col size-xl="1" size-lg="1" size-sm="1" size-md="1" size-xs="1">
-        <ion-fab vertical="center" horizontal="center">
-          <ion-fab-button size="small">
-            <ion-icon name="ellipsis-vertical"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-list side="start">
-            <ion-fab-button
-              color="none"
-              (click)="register()"
-              size="small"
-              class="ion-float-right"
-              title="Catastrar categoria"
-              aria-message="Catastrar categoria"
-            >
-              <ion-icon name="add"></ion-icon>
-            </ion-fab-button>
-
-            <ion-fab-button color="none" (click)="orderList()"
-              ><ion-icon name="reorder-three"></ion-icon
-            ></ion-fab-button>
-          </ion-fab-list>
-        </ion-fab>
-      </ion-col>
-
+    <ion-row>
+      <!-- Menu segmentento -->
       <ion-col size="12">
-        <ion-list *ngIf="toggleListCategory;else Able">
-          <ion-item *ngFor="let category of categoryDrop;">
-            <ion-thumbnail slot="start">
-              <img
-                [src]="category?.image?.url || './../../../../assets/thumbnail.svg'"
-                title="Imagem do categorias."
-                alt="Imagem do categorias."
-              />
-            </ion-thumbnail>
-            <div class="item">
-              <div>
-                <ion-label
-                  [title]="'Nome: ' + category?.name"
-                  [attr.data-message]="'Nome: ' + category?.name"
-                >
-                  {{ category?.title }}</ion-label
-                >
-                <div class="time">
-                  <small>{{ category?.createdAt | time:'create' }}</small>
-                  <small>{{ category?.updatedAt | time:'update' }}</small>
-                </div>
-              </div>
+        <app-segment-announcement-component
+          (togglePage)="togglePage($event)"
+        ></app-segment-announcement-component>
+        <!--  Abilitados -->
+        <ng-container *ngIf="toggleList;else ItemDeleted">
+          <app-enabled-item-admin-announcement-page></app-enabled-item-admin-announcement-page>
+        </ng-container>
 
-              <div>
-                <ion-button
-                  (click)="destroy(category)"
-                  class="cursor-pointer"
-                  title="Exclui permanentemente"
-                  data-message="Exclui permanentemente"
-                  color="none"
-                >
-                  <ion-icon
-                    slot="icon-only"
-                    color="danger"
-                    name="trash"
-                  ></ion-icon>
-                </ion-button>
-                <ion-button
-                  (click)="restore(category)"
-                  class="cursor-pointer"
-                  title="Restaurar categorias"
-                  data-message="Restaurar categorias"
-                  color="none"
-                >
-                  <ion-icon
-                    slot="icon-only"
-                    color="success"
-                    name="play-back"
-                  ></ion-icon>
-                </ion-button>
-              </div>
-            </div>
-          </ion-item>
-        </ion-list>
-
-        <ion-card *ngIf="categoryDrop?.length === 0">
-          <ion-card-content>
-            <ion-text color="primary" class="ion-text-center">
-              <p style="font-size: 1.5em">Não a categorias exluidas</p>
-              <ion-button
-                expand="block"
-                [routerLink]="['/painel-de-controle', 'admin', 'categorias']"
-              >
-                <ion-icon slot="icon-only" name="list-circle"></ion-icon>
-                &nbsp; listar categorias
-              </ion-button>
-            </ion-text>
-          </ion-card-content>
-        </ion-card>
-
-        <!-- Abilitados -->
-<!-- <ng-template #Able>
-          <ion-list>
-            <ion-reorder-group
-              (ionItemReorder)="doReorder($event)"
-              [disabled]="!isOrder"
-            >
-              <ion-reorder *ngFor="let item of category">
-                <ion-item
-                  color="none"
-                  button
-                  [routerLink]="['/painel-de-controle', 'admin', 'manutencao', 'categoria', item?.slug]"
-                >
-                  <ion-thumbnail slot="start">
-                    <img
-                      [src]="item?.image?.url || './../../../../assets/thumbnail.svg'"
-                      referrerpolicy="no-referrer"
-                      title="Imagem do categorias."
-                      alt="Imagem do categorias."
-                    />
-                  </ion-thumbnail>
-
-                  <div class="item">
-                    <div>
-                      <ion-label
-                        [title]="'Nome: ' + item?.name"
-                        [attr.data-message]="'Nome: ' + item?.name"
-                      >
-                        {{ item?.name }}</ion-label
-                      >
-                      <div class="time">
-                        <small>{{ item?.createdAt | time:'create' }}</small>
-                        <small>{{ item?.updatedAt | time:'update' }}</small>
-                      </div>
-                    </div>
-
-                    <div>
-                      <span [hidden]="!isOrder">
-                        <ion-icon
-                          name="reorder-three"
-                          color="medium"
-                        ></ion-icon>
-                      </span>
-                      <span
-                        [title]="item?.state ? 'Categoria está online' : 'Categoria está offline'"
-                        [attr.data-message]="item?.state ? 'Categoria está online' : 'Categoria está offline'"
-                      >
-                        <ion-icon
-                          color="medium"
-                          slot="start"
-                          [name]="item?.state  ? 'power': 'radio-button-off'"
-                        ></ion-icon>
-                      </span>
-                    </div>
-                  </div>
-                </ion-item>
-              </ion-reorder>
-            </ion-reorder-group>
-          </ion-list>
-          <ion-card *ngIf="category?.length === 0">
-            <ion-card-content>
-              <ion-text color="primary" class="ion-text-center">
-                <p style="font-size: 1.5em">Não a categoria cadastrada</p>
-                <ion-button expand="block" (click)="register()">
-                  <ion-icon slot="icon-only" name="add"></ion-icon>
-                  &nbsp; Cadastrar categorias
-                </ion-button>
-              </ion-text>
-            </ion-card-content>
-          </ion-card>
-        </ng-template> -->
-
-<!-- <ion-card *ngIf="!endListCategory">
-          <ion-text color="primary" class="ion-text-center">
-            <p>FIM</p>
-            <p *ngIf="category">{{ category?.length }} categorias</p>
-            <p *ngIf="categoryDrop">{{ categoryDrop?.length }} categorias</p>
-          </ion-text>
-        </ion-card>
-
-        <ion-infinite-scroll
-          (ionInfinite)="findMoreCategory($event)"
-          *ngIf="endListCategory"
-        >
-          <ion-infinite-scroll-content
-            loadingSpinner="bubbles"
-            loadingText="Carregando mais dados…"
-          >
-          </ion-infinite-scroll-content>
-        </ion-infinite-scroll>
+        <!-- Deletados -->
+        <ng-template #ItemDeleted>
+          <app-deleted-item-admin-announcement-page></app-deleted-item-admin-announcement-page>
+        </ng-template>
       </ion-col>
-    </ion-row> -->
+    </ion-row>
+  </ion-grid>
 
-<!-- <ng-template #Loading>
-      <ion-row class="ion-margin-top">
-        <ion-col size="12">
-          <div *ngIf="error | async; else loadingNoError">error</div>
-          <ng-template #loadingNoError>
-            <span size="12" class="ion-padding-bottom ion-padding-horizontal">
-              <ion-skeleton-text animated class="search"></ion-skeleton-text>
-            </span>
-            <span *ngFor="let item of sizeSkeleton">
-              <div class="skeleton">
-                <ion-skeleton-text animated class="avatar"></ion-skeleton-text>
-                <div>
-                  <ion-skeleton-text animated class="title"></ion-skeleton-text>
-                  <ion-skeleton-text animated class="line"></ion-skeleton-text>
-                </div>
-              </div>
-            </span>
-          </ng-template>
-        </ion-col>
-      </ion-row>
-    </ng-template>
-  </ion-grid> -->
-<!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <!-- Scroll top -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button
       size="small"
       color="primary"
@@ -258,23 +37,6 @@
       <ion-icon name="arrow-up-circle" color="light"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
-  <ion-fab
-    vertical="bottom"
-    horizontal="center"
-    slot="fixed"
-    title="Salvar ordem da lista de categorias"
-    aria-message="Salvar ordem da lista de categorias"
-  >
-    <ion-fab-button
-      [hidden]="!sendOrder"
-      size="small"
-      color="primary"
-      (click)="saveOrder()"
-      ><ion-icon name="save" color="light"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-</ion-content> -->
--->
+</ion-content>
 
 <app-footer></app-footer>

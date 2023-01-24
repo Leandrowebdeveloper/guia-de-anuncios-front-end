@@ -54,9 +54,10 @@
             offset-lg="1"
           >
             <!-- message -->
-            <app-user-message-component
+            <app-messages-component
               [user]="user"
-            ></app-user-message-component>
+              [action]="'users'"
+            ></app-messages-component>
             <!-- Blockade -->
             <app-blockade-user-component
               [user]="user"

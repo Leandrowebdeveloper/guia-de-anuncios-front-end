@@ -1,45 +1,40 @@
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Announcement, Coordinate, User } from 'src/app/interface';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/utilities/alert/alert.service';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MapService } from './service/map.service';
+import { CoordinateAnnouncementService } from './service/map.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { PresentPlanComponent } from 'src/app/components/present-plan/present-plan.component';
 import { ModalService } from 'src/app/components/present-plan/animations/modal.service';
 
 @Component({
-  selector: 'app-map-component',
+  selector: 'app-map-announcement-component',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit {
-  @Input() announcement!: Announcement;
-  @Input() user!: User;
+export class MapAnnouncementComponent {
+  @Input() announcement!: Pick<
+    Announcement,
+    '_csrf' | 'id' | 'coordinate' | 'blockade' | 'plan'
+  >;
   private form: FormGroup;
   private map: Subscription;
   constructor(
     private fb: FormBuilder,
-    private mapService: MapService,
-    public messageService: MessageService,
-    private authService: AuthService,
+    private coordinateAnnouncementService: CoordinateAnnouncementService,
+    private messageService: MessageService,
     private alertService: AlertService,
     private loadingService: LoadingService,
     private modalController: ModalController,
     private modalService: ModalService
   ) {}
 
-  ngOnInit(): void {}
-
-  // Coordenadas
-  public async coordinates(
-    announcement: Announcement
-  ): Promise<void | Subscription> {
-    if (this.user?.plan?.type === 'free') {
+  public async coordinates(): Promise<void | Subscription> {
+    if (this.announcement?.plan?.type === 'free') {
       const modal = await this.modalController.create({
         component: PresentPlanComponent,
         enterAnimation: this.modalService.enterAnimation,
@@ -47,87 +42,54 @@ export class MapComponent implements OnInit {
       });
       return await modal.present();
     }
-    const position = await this.getCoordinate();
+    const position = await this.coordinateAnnouncementService.getCoordinate();
     if (position instanceof GeolocationPosition) {
-      return this.addCoordinate(position, announcement);
+      return this.addCoordinate(position);
     } else if (position instanceof GeolocationPositionError) {
-      this.showError(position);
+      this.coordinateAnnouncementService.showError(position);
     } else {
-      this.alertService.alert('Ateção', position.message);
+      this.alertService.alert('Ateção', position?.message);
     }
   }
 
-  private addCoordinate(
-    position: GeolocationPosition,
-    announcement: Announcement
-  ): Subscription {
-    const message: string = announcement?.coordinate?.announcementId
+  private addCoordinate(position: GeolocationPosition): Subscription {
+    let data: Coordinate;
+    const message: string = this.announcement?.coordinate?.announcementId
       ? 'Editando mapa...'
       : 'Cadastrando mapa...';
     const loading = this.loadingService.show(message);
-    this.form = this.fb.group({
-      announcementId: announcement?.coordinate?.announcementId,
-      latitude: String(position?.coords?.latitude),
-      longitude: String(position?.coords?.longitude),
-      _csrf: this.authService?.getCsrf,
-    });
+
+    if (this.announcement?.coordinate?.announcementId) {
+      data = this.announcement?.coordinate;
+    } else {
+      data = {
+        announcementId: this.announcement?.id,
+        latitude: position?.coords?.latitude,
+        longitude: position?.coords?.longitude,
+      };
+    }
+    // eslint-disable-next-line no-underscore-dangle
+    data._csrf = this.announcement?._csrf;
+
+    this.form = this.fb.group(data);
     return this.send(loading);
   }
 
   private send(loading: Promise<HTMLIonLoadingElement>): Subscription {
-    return (this.map = this.mapService.coordinate(this.form.value).subscribe(
-      (coordinate_: Coordinate) =>
-        this.messageService.success(
-          coordinate_.message,
-          loading,
-          this.map,
-          2000
-        ),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, null, this.map)
-    ));
-  }
-
-  private async getCoordinate(): Promise<
-    GeolocationPosition | GeolocationPositionError | Error
-  > {
-    return await new Promise((resolve, reject) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position: GeolocationPosition) => resolve(position),
-          (error: GeolocationPositionError) => reject(error)
-        );
-      } else {
-        reject(
-          new Error('A geolocalização não é suportada por este navegador.')
-        );
-      }
-    });
-  }
-
-  private async showError(error: GeolocationPositionError): Promise<void> {
-    switch (error.code) {
-      case error.PERMISSION_DENIED:
-        this.alertService.alert(
-          'Ateção',
-          'O usuário negou a solicitação de geolocalização.'
-        );
-        break;
-      case error.POSITION_UNAVAILABLE:
-        this.alertService.alert(
-          'Ateção',
-          'As informações de localização não estão disponíveis.'
-        );
-        break;
-      case error.TIMEOUT:
-        this.alertService.alert(
-          'Ateção',
-          'A solicitação para obter a localização do usuário expirou.'
-        );
-        break;
-      default:
-        this.alertService.alert('Ateção', 'Ocorreu um erro desconhecido.');
-        break;
-    }
+    return (this.map = this.coordinateAnnouncementService
+      .coordinate(this.form.value)
+      .subscribe(
+        (coordinate_: Required<Coordinate>) => {
+          this.coordinateAnnouncementService.setCoordinate = coordinate_;
+          this.messageService.success(
+            coordinate_?.message,
+            loading,
+            this.map,
+            2000
+          );
+        },
+        (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.map)
+      ));
   }
 }

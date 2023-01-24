@@ -56,9 +56,7 @@ export class MessageService {
     subscribe?: Subscription
   ) {
     this.disableLoadingUnsubscribeVariable(loading, subscribe).then();
-    if (error.status !== 403) {
-      return this.alert(error);
-    }
+    return this.alert(error);
   }
 
   public async disable(

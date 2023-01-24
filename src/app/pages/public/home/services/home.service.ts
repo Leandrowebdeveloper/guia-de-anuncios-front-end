@@ -8,11 +8,11 @@ import { Category } from 'src/app/interface';
 export class HomeService {
   private category = new BehaviorSubject<Category[]>(undefined);
 
-  public get getIcons(): Category[] {
+  public get getCategories(): Category[] {
     return this.category.value;
   }
 
-  public set setIcons(value: Category[]) {
+  public set setCategories(value: Category[]) {
     this.category.next(value);
   }
 

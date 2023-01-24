@@ -1,0 +1,16 @@
+<ion-item
+  [disabled]="announcement?.category === null || announcement?.blockade"
+  detail="true"
+  (click)="route()"
+  title="Clique para inserir o horário de funcionamento"
+  aria-label="Clique para inserir o horário de funcionamento"
+  button
+>
+  <ion-icon name="timer" slot="start"></ion-icon>
+  <ion-label
+    >Horário de funcionamento
+    <ion-text [color]="announcement?.workDay ? 'success' : 'danger'">
+      *
+    </ion-text>
+  </ion-label>
+</ion-item>

@@ -15,7 +15,7 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormAddressAnnouncementComponent implements OnInit {
-  @Input() address!: Address;
+  @Input() address!: Required<Address>;
   @Input() label!: string;
 
   public attrButton: AttrButton = {
@@ -64,11 +64,12 @@ export class FormAddressAnnouncementComponent implements OnInit {
   }
 
   private send(
-    event: FormGroup<any>,
+    event: FormGroup,
     loading: Promise<HTMLIonLoadingElement>
   ): Subscription {
     return (this.$address = this.addressService.address(event.value).subscribe(
-      (address: Address) => this.messsage(address.message, loading),
+      (address: Pick<Address, 'message'>) =>
+        this.messsage(address?.message, loading),
       (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$address)
     ));

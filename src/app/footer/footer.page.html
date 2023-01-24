@@ -5,6 +5,7 @@
       <span class="ion-text-center">
         <ion-button
           title="Pagína inicíal."
+          data-label="Início"
           [routerLink]="['/inicio']"
           routerLinkActive="router-link-active"
         >
@@ -20,19 +21,20 @@
 
       <!-- CLassificados -->
       <span class="ion-text-center">
-        <ion-button
-          title="CLassificados."
-          [routerLink]="['/categoria', 'classificados']"
-          routerLinkActive="router-link-active"
-        >
+        <ion-button [routerLink]="['/categoria', 'classificados']">
           <ion-icon
+            title="Classificados."
+            aria-labelledby="classificado-label"
             size="large"
             color="light"
             slot="icon-only"
             src="./../../assets/ion-icon/classificad.svg"
+            alt="Classificados"
           ></ion-icon>
         </ion-button>
-        <ion-title size="small">Classificados</ion-title>
+        <ion-title id="classificado-label" size="small"
+          >Classificados</ion-title
+        >
       </span>
 
       <!-- Anúncio -->

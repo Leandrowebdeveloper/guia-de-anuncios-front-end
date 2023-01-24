@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { CategoryAnnouncementCreateComponent } from '../../component/category-announcement/create/create.component';
 import { CategoryService } from './services/category.service';
@@ -14,6 +14,8 @@ export class CategoryPage {
   public sendOrder: boolean;
   public saveSorting: boolean;
   public toggleList: boolean;
+  public error: boolean;
+  public empty: boolean;
 
   public fab = false;
 
@@ -21,6 +23,14 @@ export class CategoryPage {
     private categoryService: CategoryService,
     private categoryAnnouncementCreateComponent: CategoryAnnouncementCreateComponent
   ) {}
+
+  public setError(event: boolean) {
+    this.error = event;
+  }
+
+  public isEmpty(event: boolean) {
+    this.empty = event;
+  }
 
   public register() {
     this.categoryAnnouncementCreateComponent.register();

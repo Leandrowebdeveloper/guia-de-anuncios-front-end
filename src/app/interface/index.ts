@@ -31,7 +31,7 @@ export interface User {
   };
   _csrf: string;
   message: string;
-  userMessage: UserMessage[];
+  messages: Messages[];
   socialLogin: SocialLogin;
   requisitionLimit: RequisitionLimit;
 }
@@ -108,12 +108,26 @@ export interface HttpResponse {
   type: number;
   body: Body;
 }
+export type SearchCategory =
+  | 'name'
+  | 'position'
+  | 'state'
+  | 'blockade'
+  | 'createdAt'
+  | 'updatedAt';
 
 export type Search =
   | 'firstName'
   | 'lastName'
   | 'email'
   | 'name'
+  | 'createdAt'
+  | 'state'
+  | 'blockade'
+  | 'updatedAt';
+
+export type SearchAnnouncement =
+  | 'title'
   | 'createdAt'
   | 'state'
   | 'blockade'
@@ -176,21 +190,23 @@ export interface Category {
   message?: string;
   _csrf?: string;
   order?: number[];
+  // announcement?: Announcement[];
+  associationId?: number;
 }
 /************************************** */
 
 export interface Address {
   id?: number;
-  announcementId?: number;
-  allotment?: string;
-  block?: string;
-  complement?: string;
-  district?: string;
-  numberr?: number;
-  street?: string;
+  announcementId: number;
+  allotment: string;
+  block: string;
+  complement: string;
+  district: string;
+  numberr: number;
+  street: string;
   message?: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  zip_code?: string;
+  zip_code: string | number;
   _csrf?: string;
 }
 export interface Citie {
@@ -204,18 +220,18 @@ export interface Citie {
 
 export interface Contact {
   id?: number;
-  announcementId?: number;
-  mobilePhone?: string;
-  phone?: string;
-  whatsapp?: string;
+  announcementId: number;
+  mobilePhone: number;
+  phone: number;
+  whatsapp: number;
   message?: string;
   _csrf?: string;
 }
 export interface Coordinate {
   id?: number;
-  announcementId?: number;
-  latitude?: number;
-  longitude?: number;
+  announcementId: number;
+  latitude: number;
+  longitude: number;
   message?: string;
   _csrf?: string;
 }
@@ -227,21 +243,21 @@ export interface Like {
   message?: string;
 }
 
-export interface OpeningHour {
+export interface WorkDays {
   id?: number;
   announcementId?: number;
-  sunday: FieldsOpeningHour;
-  monday: FieldsOpeningHour;
-  third: FieldsOpeningHour;
-  fourth: FieldsOpeningHour;
-  thursday: FieldsOpeningHour;
-  friday: FieldsOpeningHour;
-  saturday: FieldsOpeningHour;
+  sunday: WorkDaysFields;
+  monday: WorkDaysFields;
+  tuesday: WorkDaysFields;
+  wednesday: WorkDaysFields;
+  thursday: WorkDaysFields;
+  friday: WorkDaysFields;
+  saturday: WorkDaysFields;
   message?: string;
   _csrf?: string;
 }
 
-export interface FieldsOpeningHour {
+export interface WorkDaysFields {
   start: string;
   startInterval: string;
   endInterval: string;
@@ -265,7 +281,7 @@ export interface Announcement {
   _csrf?: string;
   level?: '1' | '2' | '3';
   coordinate?: Coordinate;
-  openingHour?: OpeningHour;
+  workDay?: WorkDays;
   socialNetwork?: SocialNetwork;
   like?: Like;
   contact?: Contact;
@@ -273,6 +289,10 @@ export interface Announcement {
   citie?: Citie;
   galery?: Galery[];
   categoryAnnouncement?: CategoryAnnouncement;
+  announcement?: { user: User };
+  plan?: Plan;
+  category?: Category;
+  user?: User;
 }
 
 export interface CategoryAnnouncement {
@@ -286,14 +306,14 @@ export interface CategoryAnnouncement {
 
 export interface SocialNetwork {
   id?: number;
-  announcementId?: number;
-  facebook?: string;
-  instagran?: string;
+  announcementId: number;
+  facebook: string;
+  instagran: string;
   message?: string;
-  _csrf: string;
+  _csrf?: string;
 }
 
-export interface OpeningHourFields {
+export interface WorkDayFields {
   start: string | null;
   startInterval: string | null;
   endInterval: string | null;
@@ -303,8 +323,8 @@ export interface OpeningHourFields {
 export type DaysOfTheWeek =
   | 'sunday'
   | 'monday'
-  | 'third'
-  | 'fourth'
+  | 'tuesday'
+  | 'wednesday'
   | 'thursday'
   | 'friday'
   | 'saturday';
@@ -329,16 +349,17 @@ export interface Plan {
   _csrf?: string;
 }
 
-export interface UserMessage {
+export interface Messages {
   id: number;
+  userId: number;
+  announcementId: number;
   description: string;
   type: 'info' | 'warning' | 'success' | 'danger';
-  userId: number;
-  message?: string;
-  password?: string;
   response: boolean;
   sender: number;
   userSender: Required<Pick<User, 'slug' | 'name' | 'email' | 'image'>>;
+  message?: string;
+  password?: string;
   _csrf?: string;
 }
 
@@ -347,7 +368,7 @@ export interface DataUpload {
   id: number;
 }
 
-export type AnnouncementRoute = 'OpeningHours' | 'announcement' | 'galery';
+export type AnnouncementRoute = 'WorkDays' | 'announcement' | 'galery';
 export type UserSender =
   | 'updatedAt'
   | 'deletedAt'
@@ -359,7 +380,7 @@ export type UserSender =
   | 'message'
   | 'id'
   | 'blockade'
-  | 'userMessage'
+  | 'messages'
   | '_csrf'
   | 'plan'
   | 'level'

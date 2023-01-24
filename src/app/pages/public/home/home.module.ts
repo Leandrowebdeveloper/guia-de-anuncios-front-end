@@ -15,8 +15,8 @@ import { FooterModule } from 'src/app/footer/footer.module';
     FormsModule,
     HomePageRoutingModule,
     HeaderModule,
-    FooterModule
+    FooterModule,
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
 })
 export class HomePageModule {}

@@ -1,25 +1,33 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Address, Announcement } from 'src/app/interface';
 import { FormAddressAnnouncementComponent } from './form/form.component';
+import { AddressService } from './service/address.service';
 
 @Component({
   selector: 'app-address-announcement-component',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss'],
 })
-export class AddressAnnouncementComponent implements OnInit {
-  @Input() announcement!: Announcement;
-  constructor(private modalController: ModalController) {}
+export class AddressAnnouncementComponent {
+  @Input() announcement!: Pick<
+    Announcement,
+    '_csrf' | 'id' | 'address' | 'category' | 'blockade'
+  >;
 
-  ngOnInit(): void {}
+  constructor(
+    private modalController: ModalController,
+    private addressService: AddressService
+  ) {}
 
-  public async address(): Promise<void> {
-    const announcement: Announcement = this.announcement;
+  public async address(
+    announcement: Pick<Announcement, '_csrf' | 'id' | 'address'>
+  ): Promise<void> {
     let address: Address;
     let label: string;
     if (announcement?.address) {
       address = announcement?.address;
+      address.zip_code = this.addressService.mask(address);
       // eslint-disable-next-line no-underscore-dangle
       address._csrf = announcement?._csrf;
       label = 'Editar endereço';

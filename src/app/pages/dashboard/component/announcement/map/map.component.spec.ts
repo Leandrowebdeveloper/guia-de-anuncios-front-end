@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MapComponent } from './map.component';
+import { MapAnnouncementComponent } from './map.component';
 
-describe('MapComponent', () => {
-  let component: MapComponent;
-  let fixture: ComponentFixture<MapComponent>;
+describe('MapAnnouncementComponent', () => {
+  let component: MapAnnouncementComponent;
+  let fixture: ComponentFixture<MapAnnouncementComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MapComponent],
+      declarations: [MapAnnouncementComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MapComponent);
+    fixture = TestBed.createComponent(MapAnnouncementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

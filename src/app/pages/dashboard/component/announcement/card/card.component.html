@@ -1,91 +1,102 @@
-<ion-card [ngClass]="{ isDeleted: index === action }">
-  <ion-card-header>
-    <ion-card-title [title]="announcement?.title">{{
-      announcement?.title | lnWords
-    }}</ion-card-title>
+<ion-card *ngIf="user$ | async; let user">
+  <div>
+    <!-- header -->
+    <app-header-card [announcement]="announcement"></app-header-card>
 
-    <ion-card-subtitle
-      [hidden]="!announcement?.categoryAnnouncement?.category?.name"
-      class="d-flex"
+    <!-- botão pagina do usuário -->
+    <ion-fab
+      *ngIf="user?.level === '1'"
+      vertical="top"
+      horizontal="end"
+      slot="fixed"
     >
-      <b>Categoria: &nbsp; </b>
-      {{ announcement?.categoryAnnouncement?.category?.name }}
-    </ion-card-subtitle>
-
-    <ion-card-subtitle>
-      <!-- Chips -->
-      <ion-chip
-        disabled="true"
-        [outline]="!announcement?.state"
-        [color]="announcement?.state ? 'dark' : ''"
+      <ion-fab-button
+        size="small"
+        title="Painel do usuário"
+        [routerLink]="[
+          '/painel-de-controle',
+          'admin',
+          'usuario',
+          announcement?.user?.slug
+        ]"
       >
-        <ion-icon
-          [name]="announcement?.state ? 'eye' : 'eye-off'"
-          class="ion-margin-end"
-        ></ion-icon>
-        {{ announcement?.state ? "Online" : "Offline" }}
-      </ion-chip>
-      <ion-chip outline="true" disabled="true">
-        <ion-icon name="thumbs-up"></ion-icon>
-        {{ announcement?.like ? announcement?.like?.yes : 0 }}
-        <span class="separaitor"></span>
-        {{ announcement?.like ? announcement?.like?.not : 0 }}
-        <ion-icon name="thumbs-down"></ion-icon>
-      </ion-chip>
-    </ion-card-subtitle>
-  </ion-card-header>
+        <ion-icon name="person"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <!-- botão gerenciamento -->
+    <ion-fab vertical="center" horizontal="end" slot="fixed">
+      <ion-fab-button
+        size="small"
+        title="Gerenciamento do anúncio"
+        [routerLink]="['/painel-de-controle', 'anuncio', announcement?.slug]"
+      >
+        <ion-icon name="construct"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <!-- botão modal gerenciamento -->
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button
+        size="small"
+        title="Visialisar dados do anúncio"
+        [id]="'open-modal_' + announcement?.id"
+      >
+        <ion-icon name="eye"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
 
-  <!-- Buttons -->
-  <ion-card-content class="d-flex">
-    <!-- Destroy -->
-    <ion-button
-      *ngIf="!announcement?.deletedAt && index !== 0"
-      expand="block"
-      color="danger"
-      (click)="destroy(index, announcement)"
-    >
-      <ion-icon slot="icon-only" name="trash" class="ion-margin-end"></ion-icon>
-      Excluir
-    </ion-button>
+    <ion-modal [trigger]="'open-modal_' + announcement?.id">
+      <ng-template>
+        <app-header-component-modal
+          [hidden]="hasHeader"
+          [label]="announcement?.title"
+        ></app-header-component-modal>
+        <ion-content class="ion-padding">
+          <ion-item-group>
+            <!-- Cidade -->
+            <app-citie-card
+              [announcement]="announcement"
+              [user]="user"
+            ></app-citie-card>
 
-    <!-- Drop -->
-    <ion-button
-      *ngIf="announcement?.deletedAt"
-      expand="block"
-      color="danger"
-      (click)="drop(index, announcement)"
-    >
-      <ion-icon slot="icon-only" name="trash" class="ion-margin-end"></ion-icon>
-      Excluir
-    </ion-button>
+            <!-- Endereço -->
+            <app-address-card
+              [announcement]="announcement"
+              [user]="user"
+            ></app-address-card>
 
-    <!-- Editar -->
-    <ion-button
-      *ngIf="!announcement?.deletedAt"
-      expand="block"
-      [routerLink]="['/painel-de-controle', 'anuncio', announcement?.slug]"
-    >
-      <ion-icon
-        slot="icon-only"
-        name="create"
-        class="ion-margin-end"
-      ></ion-icon>
-      editar
-    </ion-button>
+            <!-- Contato -->
+            <app-contact-card
+              [announcement]="announcement"
+              [user]="user"
+            ></app-contact-card>
 
-    <!-- Restore -->
-    <ion-button
-      *ngIf="announcement?.deletedAt"
-      expand="block"
-      color="success"
-      (click)="toRestore(index, announcement)"
-    >
-      <ion-icon
-        slot="icon-only"
-        name="arrow-back-circle"
-        class="ion-margin-end"
-      ></ion-icon>
-      restaurar
-    </ion-button>
-  </ion-card-content>
+            <!-- Horario de funcionamento -->
+            <app-work-days-card
+              [announcement]="announcement"
+              [user]="user"
+            ></app-work-days-card>
+
+            <!-- Imagens -->
+            <app-galery-announcement-component
+              [announcement]="announcement"
+              [user]="user"
+              (isHeader)="isHeader($event)"
+            ></app-galery-announcement-component>
+
+            <!-- Mapa -->
+            <app-maps-card
+              [announcement]="announcement"
+              [user]="user"
+            ></app-maps-card>
+
+            <!-- Rede Social -->
+            <app-social-network-card
+              [announcement]="announcement"
+              [user]="user"
+            ></app-social-network-card>
+          </ion-item-group>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </div>
 </ion-card>

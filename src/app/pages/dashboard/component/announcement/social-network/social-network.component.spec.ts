@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { SocialNetworkComponent } from './social-network.component';
+import { SocialNetworkAnnouncementComponent } from './social-network.component';
 
-describe('SocialNetworkComponent', () => {
-  let component: SocialNetworkComponent;
-  let fixture: ComponentFixture<SocialNetworkComponent>;
+describe('SocialNetworkAnnouncementComponent', () => {
+  let component: SocialNetworkAnnouncementComponent;
+  let fixture: ComponentFixture<SocialNetworkAnnouncementComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SocialNetworkComponent],
+      declarations: [SocialNetworkAnnouncementComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SocialNetworkComponent);
+    fixture = TestBed.createComponent(SocialNetworkAnnouncementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

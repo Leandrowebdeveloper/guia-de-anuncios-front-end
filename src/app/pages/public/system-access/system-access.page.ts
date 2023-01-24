@@ -85,6 +85,21 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     this.time = this.requiriment?.delay;
   }
 
+  public disableCanDeactivate(user: User): boolean {
+    if (user.auth) {
+      return (this.urlTree = user.auth);
+    }
+  }
+
+  public formUpdate(): void {
+    this.helpsService.delay(() => {
+      this.helpsService.correctFormGroupValueRecalculatingStatusControlsAndErrorMessages(
+        this.form,
+        this.config
+      );
+    }, 2500);
+  }
+
   private initAttrButton(): void {
     switch (this.activeRoute()) {
       case 'entrar':
@@ -101,12 +116,6 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
 
   private setAttrButtonPage() {
     this.attrButtonPage = attrButton;
-  }
-
-  private disableCanDeactivate(user: User): boolean {
-    if (user.auth) {
-      return (this.urlTree = user.auth);
-    }
   }
 
   private authorizeRoute(): boolean {
@@ -127,9 +136,8 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     return (this.systemAccess = this.systemAccessService
       .sendLoginData(event.value)
       .subscribe(
-        (login: User & Announcement) => {
-          this.success(login[0], loading);
-          this.authAnnouncementService.setAnnouncement = login[1];
+        (auth: User) => {
+          this.success(auth, loading);
         },
         (error: HttpErrorResponse) => this.error(error, loading)
       ));
@@ -193,15 +201,6 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
 
   private setError(error: HttpErrorResponse): void {
     this.requiriment = error?.error;
-  }
-
-  private formUpdate(): void {
-    this.helpsService.delay(() => {
-      this.helpsService.correctFormGroupValueRecalculatingStatusControlsAndErrorMessages(
-        this.form,
-        this.config
-      );
-    }, 2500);
   }
 
   private setConfig(): any {

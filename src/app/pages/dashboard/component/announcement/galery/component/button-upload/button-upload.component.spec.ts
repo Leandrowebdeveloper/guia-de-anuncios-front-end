@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { HeaderComponent } from './button-upload.component';
+import { GaleryButtonUploadComponent } from './button-upload.component';
 
-describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+describe('GaleryButtonUploadComponent', () => {
+  let component: GaleryButtonUploadComponent;
+  let fixture: ComponentFixture<GaleryButtonUploadComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [HeaderComponent],
+      declarations: [GaleryButtonUploadComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HeaderComponent);
+    fixture = TestBed.createComponent(GaleryButtonUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

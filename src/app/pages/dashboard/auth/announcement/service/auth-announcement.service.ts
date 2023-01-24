@@ -86,14 +86,14 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
   }
 
   public drop(
-    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
+    announcement: Pick<Announcement, '_csrf' | 'id'>
   ): Observable<Announcement> {
     const { id, _csrf } = announcement;
     return this.destroy({ id, _csrf }, `management/drop`);
   }
 
   public toRestore(
-    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
+    announcement: Pick<Announcement, '_csrf' | 'id'>
   ): Observable<Announcement | number[]> {
     const { id, _csrf } = announcement;
     return this.patch({ id, _csrf }, `management/to-restore`);
@@ -104,5 +104,11 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
     query: Required<{ userId: number; limit: number; offset: number }>
   ): Observable<Announcement[]> {
     return this.index(`management/${url}`, { ...query });
+  }
+
+  public getAnnouncementFindOne(
+    userId: Required<{ userId: number }>
+  ): Observable<Announcement[]> {
+    return this.index(`management/get`, userId);
   }
 }

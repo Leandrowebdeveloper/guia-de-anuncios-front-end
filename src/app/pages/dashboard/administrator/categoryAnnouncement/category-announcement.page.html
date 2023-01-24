@@ -1,6 +1,10 @@
 <app-header-component></app-header-component>
 
-<ion-content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
+<ion-content
+  [scrollEvents]="true"
+  [scrollY]="true"
+  (ionScroll)="logScrolling($event)"
+>
   <ion-grid fixed>
     <ion-row>
       <!-- Menu segmentento -->
@@ -16,6 +20,8 @@
           <app-category-announcement-enabled-item
             [isOrder]="isOrder"
             (sendOrder)="isSaveOrder($event)"
+            (setError)="setError($event)"
+            (isEmpty)="isEmpty($event)"
           ></app-category-announcement-enabled-item>
         </ng-container>
 
@@ -56,7 +62,7 @@
 
   <!-- Cadastrar e ordenar -->
   <ion-fab
-    [hidden]="!toggleList"
+    [hidden]="!toggleList || error || !empty"
     vertical="center"
     horizontal="end"
     slot="fixed"

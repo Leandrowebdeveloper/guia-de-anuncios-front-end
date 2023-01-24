@@ -1,3 +1,4 @@
+import { FormSendMessagesComponent } from './../messages/form/form.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -26,10 +27,7 @@ import { UserPlanComponent } from './plan/plan.component';
 import { SegmentComponent } from './segment/segment.component';
 import { UserStateComponent } from './state/state.component';
 
-import { FormSendUserMessageComponent } from './user-message/form/form.component';
-import { SendUserMessageComponent } from './user-message/user-message.component';
 import { FormUserBlockadeComponent } from './blockade/form/form.component';
-import { UserMessageService } from './user-message/service/user-message.service';
 import { StateService } from './state/service/state.service';
 import { UserPlanService } from './plan/service/user-plan.service';
 import { AdminPasswordService } from './password/service/password.service';
@@ -42,6 +40,8 @@ import { EmailService } from './email/service/email.service';
 import { UserSearchMenuComponent } from './search/filter/filter-menu.component';
 import { SearchUserService } from './search/service/search.service';
 import { SearchUserComponent } from './search/search.component';
+import { SendMessagesComponent } from '../messages/messages.component';
+import { MessagesService } from '../messages/service/messages.service';
 
 @NgModule({
   declarations: [
@@ -64,8 +64,8 @@ import { SearchUserComponent } from './search/search.component';
     UserCardComponent,
     UserBlockadeComponent,
     AvatarComponent,
-    FormSendUserMessageComponent,
-    SendUserMessageComponent,
+    FormSendMessagesComponent,
+    SendMessagesComponent,
     FormUserBlockadeComponent,
     UserSearchMenuComponent,
     SearchUserComponent,
@@ -92,14 +92,14 @@ import { SearchUserComponent } from './search/search.component';
     AvatarComponent,
     UserCardComponent,
     UserBlockadeComponent,
-    SendUserMessageComponent,
+    SendMessagesComponent,
     FormUserBlockadeComponent,
     UserSearchMenuComponent,
     SearchUserComponent,
   ],
   providers: [
     UserBlockadeService,
-    UserMessageService,
+    MessagesService,
     StateService,
     UserPlanService,
     AdminPasswordService,

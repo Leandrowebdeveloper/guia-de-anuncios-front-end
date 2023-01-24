@@ -11,9 +11,6 @@
     <ng-container *ngIf="isDesktop;else Mobile">
       <app-card-announcement-component
         [announcement]="item"
-        [index]="i"
-        [action]="isToRestore"
-        (actionButtons)="actionButton($event)"
       ></app-card-announcement-component>
     </ng-container>
     <ng-template #Mobile>

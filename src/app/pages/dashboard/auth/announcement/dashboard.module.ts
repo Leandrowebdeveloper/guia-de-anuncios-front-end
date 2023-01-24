@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -11,9 +11,9 @@ import { DashboardPage } from './dashboard.page';
 import { FooterModule } from 'src/app/footer/footer.module';
 import { HeaderModule } from 'src/app/header/header.module';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
-import { EnabledItemAnnouncementPageModule } from './pages/enabled-item/enabled-item.module';
 import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
-import { DeletedItemAnnouncememtPageModule } from './pages/deleted-item/deleted-item.module';
+import { AddressPipe } from 'src/app/utilities/pipe/address/address.pipe';
+import { WorkDaysPipe } from 'src/app/utilities/pipe/workDays/workDays.pipe';
 
 @NgModule({
   imports: [
@@ -24,10 +24,9 @@ import { DeletedItemAnnouncememtPageModule } from './pages/deleted-item/deleted-
     HeaderModule,
     FooterModule,
     PipeModule,
-    EnabledItemAnnouncementPageModule,
-    DeletedItemAnnouncememtPageModule,
     AnnouncementComponentsModule,
   ],
   declarations: [DashboardPage],
+  providers: [AddressPipe, WorkDaysPipe],
 })
 export class DashboardPageModule {}

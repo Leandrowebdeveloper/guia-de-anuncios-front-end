@@ -7,9 +7,7 @@ import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CategoryAnnouncementService extends HttpService<CategoryAnnouncement> {
   constructor(
     http: HttpClient,
@@ -32,19 +30,19 @@ export class CategoryAnnouncementService extends HttpService<CategoryAnnouncemen
   }
 
   public category(
-    category: CategoryAnnouncement
+    category: Required<CategoryAnnouncement>
   ): Observable<CategoryAnnouncement> {
     if (category.id) {
       return this.patch(category).pipe(
         tap(
-          (category_: CategoryAnnouncement) =>
+          (category_: Required<CategoryAnnouncement>) =>
             (this.setCategoryAnnouncement = category_)
         )
       );
     } else {
       return this.create(category).pipe(
         tap(
-          (category_: CategoryAnnouncement) =>
+          (category_: Required<CategoryAnnouncement>) =>
             (this.setCategoryAnnouncement = category_)
         )
       );

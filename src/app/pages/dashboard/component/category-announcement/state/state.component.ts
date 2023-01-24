@@ -1,4 +1,3 @@
-import { CategoryService } from 'src/app/pages/dashboard/administrator/categoryAnnouncement/services/category.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { Component, Input } from '@angular/core';
@@ -13,7 +12,7 @@ import { StateService } from './service/state.service';
   styleUrls: ['./state.component.scss'],
 })
 export class CategoryAnnouncementStateComponent {
-  @Input() category!: Required<Pick<Category, 'slug' | '_csrf' | 'state'>>;
+  @Input() category!: Category;
   private form: FormGroup;
   private $state: Subscription;
   constructor(
@@ -23,9 +22,7 @@ export class CategoryAnnouncementStateComponent {
   ) {}
 
   // State
-  public state(
-    category: Required<Pick<Category, 'slug' | '_csrf'>>
-  ): Subscription {
+  public state(category: Pick<Category, 'slug' | '_csrf'>): Subscription {
     const { slug, _csrf } = category;
     this.form = this.fb.group({ slug, _csrf });
     return (this.$state = this.stateService.state(this.form.value).subscribe(

@@ -1,20 +1,20 @@
 <ion-item
   *ngIf="announcement"
-  [disabled]="announcement?.blockade"
+  [disabled]="announcement?.category === null || announcement?.blockade"
   detail="true"
-  (click)="socialNetwork()"
+  (click)="socialNetwork(announcement)"
   title="Alterar rede social"
   aria-label="Clique para alterar rede social"
-  [attr.aria-disabled]="
-    'Botão alterar rede social ' + announcement?.blockade
-      ? 'abilitado.'
-      : 'desabilitado'
-  "
   button
 >
   <ion-icon
     src="../../../../../../assets/ion-icon/socialNetwork.svg"
     slot="start"
   ></ion-icon>
-  <ion-label>Rede social</ion-label>
+  <ion-label
+    >Rede social
+    <ion-text [color]="announcement?.socialNetwork ? 'success' : 'danger'">
+      *
+    </ion-text>
+  </ion-label>
 </ion-item>

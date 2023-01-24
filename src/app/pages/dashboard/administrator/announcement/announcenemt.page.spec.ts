@@ -4,15 +4,15 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-import { AnnouncementPage } from './announcement.page';
+import { AdminAnnouncementPage } from './announcement.page';
 
-describe('AnnouncementPage', () => {
-  let component: AnnouncementPage;
-  let fixture: ComponentFixture<AnnouncementPage>;
+describe('AdminAnnouncementPage', () => {
+  let component: AdminAnnouncementPage;
+  let fixture: ComponentFixture<AdminAnnouncementPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AnnouncementPage],
+      declarations: [AdminAnnouncementPage],
       imports: [
         IonicModule.forRoot(),
         RouterTestingModule,
@@ -21,7 +21,7 @@ describe('AnnouncementPage', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AnnouncementPage);
+    fixture = TestBed.createComponent(AdminAnnouncementPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

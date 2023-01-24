@@ -48,10 +48,6 @@ export class EnabledItemAnnouncementPage implements OnInit {
     this.setButtonCreate();
   }
 
-  public trackByFn(index: number, announcement: Announcement): number {
-    return announcement ? announcement.id : undefined;
-  }
-
   public refresher(event: any): void {
     this.getAnnouncement();
     event.target.complete();

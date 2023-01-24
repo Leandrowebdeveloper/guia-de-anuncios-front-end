@@ -10,11 +10,11 @@ const routes: Routes = [
       import('../pages/public/home/home.module').then((m) => m.HomePageModule),
   },
   {
-    path: 'categoria/:announcement',
+    path: 'categoria/:slug',
     loadChildren: () =>
-      import('../pages/public/announcement/announcement.module').then(
-        (m) => m.AnnouncementPageModule
-      ),
+      import(
+        '../pages/public/category-announcement/category-announcement.module'
+      ).then((m) => m.CategoryAnnouncementPageModule),
   },
   {
     path: 'erro',
@@ -29,10 +29,10 @@ const routes: Routes = [
       import('../pages/public/news/news.module').then((m) => m.NewsPageModule),
   },
   {
-    path: 'classificados',
+    path: 'pagina/:slug',
     loadChildren: () =>
-      import('../pages/public/classified/classified.module').then(
-        (m) => m.ClassifiedPageModule
+      import('../pages/public/announcement/announcement.module').then(
+        (m) => m.AnnouncementPageModule
       ),
   },
   {

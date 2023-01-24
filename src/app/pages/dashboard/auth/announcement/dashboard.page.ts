@@ -1,7 +1,7 @@
-import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { Announcement, User } from 'src/app/interface';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { User } from 'src/app/interface/index';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,25 +9,20 @@ import { User } from 'src/app/interface/index';
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
-  public user$: Observable<User>;
-  public isAnnouncement: boolean;
-  public toggleList: boolean;
+  public announcement: Announcement[];
+  public user: User;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.getUser();
+    this.init();
   }
 
-  public getIsAnnouncement(e: boolean): boolean {
-    return (this.isAnnouncement = e);
-  }
-
-  public togglePage(e: boolean): boolean {
-    return (this.toggleList = e);
-  }
-
-  private getUser(): Observable<User> {
-    return (this.user$ = this.authService.userObservable);
+  public init() {
+    this.announcement = this.activatedRoute.snapshot.data.announcement;
+    this.user = this.authService.getUser;
   }
 }

@@ -39,6 +39,7 @@ import { FooterModule } from 'src/app/footer/footer.module';
     RecoverService,
     LoginService,
     SocialLoginService,
+    SystemAccessPage,
   ],
 })
 export class SystemAccessPageModule {}

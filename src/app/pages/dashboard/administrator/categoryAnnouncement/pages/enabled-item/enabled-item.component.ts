@@ -18,7 +18,7 @@ import {
 } from '@ionic/angular';
 import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
 import { catchError, delay, tap } from 'rxjs/operators';
-import { Category, Search } from 'src/app/interface';
+import { Category, Search, SearchCategory } from 'src/app/interface';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { HelpsService } from 'src/app/services/helps/helps.service';
@@ -35,6 +35,8 @@ import { SearchCategoryAnnouncementService } from 'src/app/pages/dashboard/compo
 })
 export class EnabledItemComponent implements OnInit, OnDestroy {
   @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
+  @Output() setError = new EventEmitter<boolean>(false);
+  @Output() isEmpty = new EventEmitter<boolean>(false);
   @Output() sendOrder = new EventEmitter<boolean>(false);
   @Input() isOrder!: boolean;
   public category$: Observable<Category[]>;
@@ -44,6 +46,7 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
   public ln: number | undefined;
 
   public fab = false;
+  public menssage: boolean;
 
   public sizeSkeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -95,6 +98,18 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
     this.$update.unsubscribe();
   }
 
+  /*********************************************************************************** */
+  public refresher(event: any): void {
+    this.findCategory();
+    event.target.complete();
+  }
+
+  public hideMenssage() {
+    this.menssage = true;
+  }
+
+  /************************************************************************************ */
+
   public doReorder(ev: any): void {
     if (ev) {
       this.sendOrder.emit(true);
@@ -117,7 +132,7 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
       const category: Category = {
         order: result,
         // eslint-disable-next-line no-underscore-dangle
-        _csrf: this.category[0]._csrf,
+        _csrf: this.category[0]?._csrf,
       };
       this.$order = this.categoryService.order(category).subscribe(
         (category_: Category) => {
@@ -139,7 +154,10 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
       .index(`management`, { limit: this.limit, offset: this.offset })
       .subscribe(
         (category: Category[]) => this.success(event, category),
-        (error: HttpErrorResponse) => this.error.next(true),
+        (error: HttpErrorResponse) => {
+          this.error.next(true);
+          return this.setError.next(true);
+        },
         () => this.helpService.delay(this.$category.unsubscribe(), 2000)
       ));
   }
@@ -180,14 +198,11 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchService.getSearchBy.subscribe(
-      (filter: Search | 'orderName') => {
+    this.$searchBy = this.searchService.getSearchCategoryBy.subscribe(
+      (filter: SearchCategory | 'name') => {
         if (filter === 'name') {
           this.setSearchBy = filter;
         } else {
-          if (filter === 'orderName') {
-            filter = 'name';
-          }
           this.setSearchBy = 'name';
           this.orderBy(filter);
         }
@@ -215,10 +230,14 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
     return (this.category$ = this.categoryService
       .index(`management`, { limit: this.limit, offset: this.offset })
       .pipe(
-        tap((category: Category[] | []) => (this.category = category)),
+        tap((category: Category[] | []) => {
+          this.category = category;
+          return this.isEmpty.emit(this.category?.length > 0);
+        }),
         delay(500),
         catchError((error: HttpErrorResponse) => {
           this.error.next(true);
+          this.setError.next(true);
           return EMPTY;
         })
       ));
@@ -263,6 +282,7 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
             this.getIndexCategoryCurrent(category),
             1
           );
+          this.isEmpty.emit(this.category?.length > 0);
           if (result.length > 0) {
             return this.navCtrl.navigateBack([
               '/painel-de-controle',
@@ -288,6 +308,7 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
     return (this.$category = this.categoryService.add.subscribe(
       (category: Category) => {
         if (category) {
+          this.isEmpty.emit(false);
           this.category.unshift(category);
         }
       }

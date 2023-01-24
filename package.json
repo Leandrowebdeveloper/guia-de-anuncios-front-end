@@ -11,9 +11,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "android": "ionic capacitor run android --livereload --external --consolelogs --verbose --open",
-    "serve": "ionic serve --consolelogs --verbose --external",
+    "serve": "ionic serve --consolelogs --verbose --external --port 8100",
     "splash": "pwa-asset-generator ./src/assets/icon.png ./src/assets/icons --icon-only --portrait-only true --quality 100 --opaque false --padding '10px' --type png --manifest ./src/manifest.webmanifest",
-    "icons": "ngx-pwa-icons --icon ./src/assets/icon.png --output ./src/assets/icons"
+    "icons": "ngx-pwa-icons --icon ./src/assets/icon.png --output ./src/assets/icons",
+    "http-serve": "npx http-server ./www --port 8100 --ssl --proxy http://172.17.0.1:3001 --cert /home/souza/Documentos/ssl/ionic/ionic+4.pem --key /home/souza/Documentos/ssl/ionic/ionic+4-key.pem"
   },
   "private": true,
   "dependencies": {
@@ -28,10 +29,13 @@
     "@capacitor-community/facebook-login": "^4.0.0",
     "@capacitor/android": "^4.6.1",
     "@capacitor/app": "^4.1.1",
+    "@capacitor/browser": "^4.1.1",
     "@capacitor/core": "^4.6.1",
+    "@capacitor/google-maps": "^4.3.2",
     "@capacitor/haptics": "^4.1.0",
     "@capacitor/ios": "^4.6.1",
     "@capacitor/keyboard": "^4.1.0",
+    "@capacitor/share": "^4.1.0",
     "@capacitor/splash-screen": "^4.1.2",
     "@capacitor/status-bar": "^4.1.1",
     "@codetrix-studio/capacitor-google-auth": "^3.2.0",
@@ -46,6 +50,7 @@
     "native-run": "^1.7.0",
     "ngx-tinymce": "^14.1.1",
     "rxjs": "~6.6.0",
+    "ts-clipboard": "^1.0.17",
     "tslib": "^2.4.1",
     "zone.js": "~0.11.4"
   },
@@ -71,6 +76,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsdoc": "30.7.6",
     "eslint-plugin-prefer-arrow": "^1.2.3",
+    "http-server": "^14.1.1",
     "jasmine-core": "~3.8.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "^6.4.1",

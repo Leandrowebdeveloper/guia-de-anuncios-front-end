@@ -11,33 +11,36 @@
       <ion-col
         class="ion-align-self-center ion-margin-vertical"
         size-xl="2"
-        size-lg="2"
+        size-lg="3"
         size-md="3"
         size-sm="4"
         size="4"
-        *ngFor="let cat of category"
+        *ngFor="let item of category"
       >
         <ion-card
+          [ngClass]="{'ion-no-margin': !isDesktop}"
           button="true"
-          [title]="cat?.name + ': ' + cat?.description"
-          [attr.aria-message]="cat?.name + ': ' + cat?.description"
-          [routerLink]="['/categoria', cat?.slug]"
+          [title]="item?.name + ': ' + item?.description"
+          [attr.data-message]="item?.name + ': ' + item?.description"
+          [routerLink]="['/categoria', item?.slug]"
         >
           <ion-card-header class="no-padding-horizontal">
-            <!-- <ion-icon
-              size="large"
-              [src]="cat?.image?.url || './../../../../assets/thumbnail.svg'"
-            ></ion-icon> -->
             <ion-thumbnail>
               <img
-                [src]="cat?.image?.url || './../../../../assets/thumbnail.svg'"
-                [alt]="cat?.name"
+                [src]="item?.image?.url || './../../../../assets/thumbnail.svg'"
+                [alt]="item?.name"
+                [title]="item?.name"
+                [attr.aria-labelledby]="item?.name"
               />
             </ion-thumbnail>
           </ion-card-header>
           <ion-card-content class="ion-text-center no-padding-horizontal">
-            <ion-text class="ion-text-nowrap">
-              <small [title]="cat?.name">{{cat?.name}}</small>
+            <ion-text
+              [id]="item?.name"
+              [title]="item?.name"
+              class="ion-text-nowrap"
+            >
+              {{item?.name}}
             </ion-text>
           </ion-card-content>
         </ion-card>

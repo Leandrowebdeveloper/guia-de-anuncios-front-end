@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PasswordService } from './password.service';
+import { AdminPasswordService } from './password.service';
 
-describe('PasswordService', () => {
-  let service: PasswordService;
+describe('AdminPasswordService', () => {
+  let service: AdminPasswordService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PasswordService);
+    service = TestBed.inject(AdminPasswordService);
   });
 
   it('should be created', () => {

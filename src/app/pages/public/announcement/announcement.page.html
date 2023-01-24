@@ -1,7 +1,186 @@
 <app-header-component></app-header-component>
 
 <ion-content [fullscreen]="true">
-  <ion-grid fixed> Anúncio </ion-grid>
+  <ion-grid fixed>
+    <ion-row *ngIf="announcement$ | async;let announcement;else Loading">
+      <ion-col size-xl="7" size-lg="7" size-md="12" size-sm="12" size="12">
+        <!-- Slide -->
+        <ion-card>
+          <ion-slides
+            autoplay="5000"
+            loop="true"
+            pager="true"
+            [options]="slideOpts"
+          >
+            <ion-slide
+              *ngFor="let galery of announcement?.galery; let i = index"
+            >
+              <ion-thumbnail>
+                <ion-img
+                  [src]="galery?.url"
+                  [alt]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
+                  [title]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
+                  [attr.data-message]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
+                ></ion-img>
+              </ion-thumbnail>
+            </ion-slide>
+          </ion-slides>
+          <ion-segment [scrollable]="true" mode="md" color="none">
+            <ion-segment-button
+              layout="icon-top"
+              title="Gostei"
+              data-message="Gostei"
+            >
+              <ion-icon name="thumbs-up"></ion-icon>
+              <ion-label>123</ion-label>
+            </ion-segment-button>
+            <ion-segment-button
+              layout="icon-top"
+              title="Não gostei"
+              data-message="Não gostei"
+            >
+              <ion-icon name="thumbs-down"></ion-icon>
+              <ion-label>32</ion-label>
+            </ion-segment-button>
+            <ion-segment-button
+              layout="icon-top"
+              title="Copiar link da página"
+              data-message="Copiar link da página"
+              (click)="clipboard()"
+            >
+              <ion-icon name="copy"></ion-icon>
+              <ion-label>Link</ion-label>
+            </ion-segment-button>
+            <ion-segment-button
+              [hidden]="!isSupportShare"
+              layout="icon-top"
+              title="Compartilhar página"
+              data-message="Compartilhar página"
+              (click)="share(announcement)"
+            >
+              <ion-icon name="share-social"></ion-icon>
+              <ion-label>Compartilhar</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-card>
+      </ion-col>
+      <ion-col size-xl="5" size-lg="5" size-md="12" size-sm="12" size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle [hidden]="!announcement?.workDay">
+              <time>{{ datetimes | time:'workDays' }}</time>
+              <ion-text
+                [color]="(announcement?.workDay | workDays) === 'Aberto' ? 'success' : 'danger'"
+                class="ion-text-start"
+              >
+                <p
+                  class="ion-no-margin"
+                  [title]="announcement | attrTitle:'workDay'"
+                  [attr.data-message]="announcement | attrTitle:'workDay'"
+                >
+                  {{ announcement?.workDay | workDays }}
+                </p>
+              </ion-text>
+            </ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+        <ion-card>
+          <!-- Titulo e descrição -->
+          <ion-card-header>
+            <ion-card-title
+              [title]="announcement?.title"
+              [attr.data-message]="announcement?.title"
+              >{{ announcement?.title }}</ion-card-title
+            >
+
+            <ion-card-subtitle
+              [innerHtml]="announcement?.description"
+            ></ion-card-subtitle>
+          </ion-card-header>
+
+          <!-- Cidade -->
+          <ion-card-content
+            [hidden]="!announcement?.citie"
+            class="ion-margin-top"
+          >
+            <ion-card-title color="medium">
+              <ion-icon name="business"></ion-icon>
+              Cidade</ion-card-title
+            >
+            <ion-card-subtitle>
+              <address
+                [title]="announcement | attrTitle:'citie'"
+                [attr.data-message]="announcement | attrTitle:'citie'"
+              >
+                {{ announcement?.citie | citie }}
+              </address>
+            </ion-card-subtitle>
+          </ion-card-content>
+
+          <!-- Endereço -->
+          <ion-card-content
+            [hidden]="!announcement?.address"
+            class="ion-margin-top"
+          >
+            <ion-card-title color="medium">
+              <ion-icon name="location"></ion-icon>
+              Endereço</ion-card-title
+            >
+            <ion-card-subtitle>
+              <address
+                [title]="announcement | attrTitle:'address'"
+                [attr.data-message]="announcement | attrTitle:'address'"
+              >
+                {{ announcement?.address | address }}
+              </address>
+            </ion-card-subtitle>
+          </ion-card-content>
+          <!-- Contato -->
+          <ion-card-content
+            [hidden]="!announcement?.contact"
+            class="ion-margin-top"
+          >
+            <ion-card-title color="medium">
+              <ion-icon
+                src="../../../../../../assets/ion-icon/contact.svg"
+              ></ion-icon>
+              Contato</ion-card-title
+            >
+            <app-show-contact-announcement-component
+              [contact]="announcement?.contact"
+            ></app-show-contact-announcement-component>
+          </ion-card-content>
+          <!-- Rede Social -->
+          <ion-card-content
+            [hidden]="!announcement?.socialNetwork"
+            class="ion-margin-top"
+          >
+            <ion-card-title color="medium">
+              <ion-icon
+                src="../../../../../../assets/ion-icon/socialNetwork.svg"
+              ></ion-icon>
+              Rede Social</ion-card-title
+            >
+            <app-show-social-network-announcement-component
+              [socialNetwork]="announcement?.socialNetwork"
+            ></app-show-social-network-announcement-component>
+          </ion-card-content>
+
+          <!-- Mapa -->
+          <ion-card-content
+            [hidden]="!announcement?.coordinate"
+            class="ion-margin-top"
+          >
+            <ion-card-title color="medium">
+              <ion-icon name="map"></ion-icon>
+              Mapa</ion-card-title
+            >
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ng-template #Loading> carregando... </ng-template>
+  </ion-grid>
 </ion-content>
 
 <app-footer></app-footer>

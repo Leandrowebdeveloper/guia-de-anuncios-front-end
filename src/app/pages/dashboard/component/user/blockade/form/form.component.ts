@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
 import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
-import { User, UserMessage } from 'src/app/interface';
+import { User, Messages } from 'src/app/interface';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
@@ -76,9 +76,9 @@ export class FormUserBlockadeComponent implements OnInit {
   }
 
   private getData(): void {
-    const { blockade, _csrf, userMessage } = this.user;
-    if (userMessage.length > 0) {
-      const i = userMessage.findIndex((item) => item?.type === 'danger');
+    const { blockade, _csrf, messages } = this.user;
+    if (messages.length > 0) {
+      const i = messages.findIndex((item) => item?.type === 'danger');
       if (i === -1) {
         this.config = {
           _csrf,
@@ -89,7 +89,7 @@ export class FormUserBlockadeComponent implements OnInit {
           response: false,
         };
       } else {
-        const { type, description, id, response } = userMessage[i];
+        const { type, description, id, response } = messages[i];
         this.id = id;
         this.config = {
           _csrf,

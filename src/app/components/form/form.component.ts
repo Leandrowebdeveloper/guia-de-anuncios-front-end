@@ -62,6 +62,7 @@ export class FormComponent implements OnInit, AfterContentChecked {
     // ordenar inputs
     this.orderImputsBlockade();
     this.orderImputsMessages();
+    this.orderImputsAddress();
   }
 
   public setPediod(period: '03' | '06' | '12') {
@@ -149,6 +150,20 @@ export class FormComponent implements OnInit, AfterContentChecked {
         this.buildInputs[0],
         this.buildInputs[3],
         this.buildInputs[4],
+      ];
+    }
+  }
+
+  private orderImputsAddress(): void {
+    if (this.attrButton?.route === '/address') {
+      this.buildInputs = [
+        this.buildInputs[1],
+        this.buildInputs[0],
+        this.buildInputs[4],
+        this.buildInputs[5],
+        this.buildInputs[2],
+        this.buildInputs[3],
+        this.buildInputs[6],
       ];
     }
   }

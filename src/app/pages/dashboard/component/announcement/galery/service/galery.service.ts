@@ -3,18 +3,16 @@ import { MessageService } from 'src/app/utilities/message/message.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Injectable, OnDestroy } from '@angular/core';
-import { Galery } from 'src/app/interface';
+import { DataUpload, Galery } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class GaleryAnnouncementService
   extends HttpService<Galery>
   implements OnDestroy
 {
-  private galery = new BehaviorSubject<Galery[]>(undefined);
+  private galery = new BehaviorSubject<Galery>(undefined);
 
   constructor(
     http: HttpClient,
@@ -30,7 +28,7 @@ export class GaleryAnnouncementService
     return this.galery.asObservable();
   }
 
-  public set setGalery(value: Galery[]) {
+  public set setGalery(value: Galery) {
     this.galery.next(value);
   }
 
@@ -50,7 +48,22 @@ export class GaleryAnnouncementService
     return this.patch(galery, 'order');
   }
 
+  public sendFiles(file: File, data: Required<DataUpload>): Observable<any> {
+    return this.upload(this.build(file, data), 'upload');
+  }
+
   public async showLoading(message: string): Promise<HTMLIonLoadingElement> {
     return await this.loadingService.show(message);
+  }
+
+  private build(file: File, data: Required<DataUpload>): FormData {
+    // eslint-disable-next-line no-underscore-dangle
+    this.setCsrf = data?._csrf;
+    const formData = new FormData();
+    formData.append('announcementId', String(data?.id));
+    // eslint-disable-next-line no-underscore-dangle
+    formData.append('_csrf', data?._csrf);
+    formData.append('filename', file, file?.name);
+    return formData;
   }
 }

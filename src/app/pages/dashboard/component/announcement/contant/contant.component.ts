@@ -8,16 +8,25 @@ import { FormContactAnnouncementComponent } from './form/form.component';
   templateUrl: './contant.component.html',
   styleUrls: ['./contant.component.scss'],
 })
-export class ContantAnnouncementComponent implements OnInit {
-  @Input() announcement!: Announcement;
+export class ContactAnnouncementComponent implements OnInit {
+  @Input() announcement!: Pick<
+    Announcement,
+    '_csrf' | 'id' | 'contact' | 'categoryAnnouncement' | 'blockade'
+  >;
+
   constructor(private modalController: ModalController) {}
 
   ngOnInit(): void {}
 
-  public async contacts(): Promise<void> {
-    const announcement: Announcement = this.announcement;
+  public async contacts(
+    announcement: Pick<
+      Announcement,
+      '_csrf' | 'id' | 'contact' | 'categoryAnnouncement' | 'blockade'
+    >
+  ): Promise<void> {
     let contact: Contact;
     let label: string;
+
     if (announcement?.contact) {
       contact = announcement?.contact;
       // eslint-disable-next-line no-underscore-dangle

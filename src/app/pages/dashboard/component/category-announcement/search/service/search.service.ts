@@ -1,16 +1,16 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Search } from 'src/app/interface';
+import { SearchCategory } from 'src/app/interface';
 
 @Injectable()
 export class SearchCategoryAnnouncementService {
   public result = new EventEmitter<any[]>(undefined);
-  private search$ = new BehaviorSubject<Search>(undefined);
+  private search$ = new BehaviorSubject<SearchCategory>(undefined);
   constructor() {
-    this.setSearchBy = 'name';
+    this.setSearchCategoryBy = 'name';
   }
 
-  public get getSearchBy(): Observable<Search> {
+  public get getSearchCategoryBy(): Observable<SearchCategory> {
     return this.search$.asObservable();
   }
 
@@ -22,7 +22,7 @@ export class SearchCategoryAnnouncementService {
     this.result.emit(value);
   }
 
-  public set setSearchBy(searchBy: Search) {
+  public set setSearchCategoryBy(searchBy: SearchCategory) {
     this.search$.next(searchBy);
   }
 }

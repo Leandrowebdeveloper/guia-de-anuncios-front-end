@@ -15,7 +15,7 @@ export class UserBlockadeComponent {
   constructor(private modalController: ModalController) {}
 
   public async blockade(): Promise<void> {
-    const { _csrf, slug, blockade, userMessage } = this.user;
+    const { _csrf, slug, blockade, messages } = this.user;
     const modal = await this.modalController.create({
       component: FormUserBlockadeComponent,
       componentProps: {
@@ -26,7 +26,7 @@ export class UserBlockadeComponent {
           _csrf,
           slug,
           blockade,
-          userMessage,
+          messages,
         },
       },
     });

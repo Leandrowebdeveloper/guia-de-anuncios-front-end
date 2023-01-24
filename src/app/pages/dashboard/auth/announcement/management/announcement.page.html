@@ -1,9 +1,9 @@
-<ion-header [hidden]="hasHeader || isRoute === 'galery'">
+<ion-header [hidden]="hasHeader">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button (click)="back()" defaultHref></ion-back-button>
     </ion-buttons>
-    <ion-title>Anúncio</ion-title>
+    <ion-title>Gerenciamento do anúncio</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -22,20 +22,26 @@
             </h1>
           </ion-text>
         </ion-col>
-        <ion-col size="12">
-          <ion-card>
-            <ion-card-header color="warning">
-              <ion-card-title>Atenção</ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="ion-margin-top">
-              <ion-text>
-                <p>Éste anúncio será avaliado em 24 horas.</p>
-              </ion-text>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-
         <ng-container *ngIf="isAnnouncement; else Association">
+          <ion-col size="12" *ngIf="announcement | allowAd">
+            <ion-card>
+              <ion-card-header color="warning">
+                <ion-card-title>Observação!</ion-card-title>
+                <ion-card-subtitle>Cadastro incompleto </ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content class="ion-margin-top">
+                <ion-text>
+                  <ul>
+                    <li>Cidade obrigatório.</li>
+                    <li>Endereço obrigatório.</li>
+                    <li>Contato obrigatório.</li>
+                  </ul>
+                  <p class="ion-text-end">Estes itens são obrigatórios.</p>
+                </ion-text>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+
           <!-- Categorias  -->
           <ion-col size="12" class="ion-margin-vertical">
             <app-category-component
@@ -45,19 +51,18 @@
 
           <!-- Galery -->
           <ion-col
-            *ngIf="announcement?.categoryAnnouncement"
+            *ngIf="announcement?.category"
             size="12"
             class="ion-margin-vertical"
           >
-            <app-galery-component
+            <app-galery-announcement-component
               [announcement]="announcement"
-              [user]="user"
               (isHeader)="isHeader($event)"
-            ></app-galery-component>
+            ></app-galery-announcement-component>
           </ion-col>
           <!-- List Item -->
           <ion-col
-            *ngIf="announcement?.categoryAnnouncement"
+            *ngIf="announcement?.category"
             size="12"
             class="ion-margin-vertical"
           >
@@ -80,9 +85,9 @@
               ></app-announcement-component>
 
               <!-- Cidade estado -->
-              <app-city-component
+              <app-city-announcement-component
                 [announcement]="announcement"
-              ></app-city-component>
+              ></app-city-announcement-component>
 
               <!-- Endereço -->
               <app-address-announcement-component
@@ -95,32 +100,26 @@
               ></app-contant-announcement-component>
 
               <!-- Coordenadas -->
-              <app-map-component
-                [user]="user"
+              <app-map-announcement-component
                 [announcement]="announcement"
-              ></app-map-component>
+              ></app-map-announcement-component>
 
               <!-- Redes Sociais -->
               <app-social-network-component
-                [user]="user"
                 [announcement]="announcement"
               ></app-social-network-component>
 
               <!-- Horario de funcionamento -->
-              <app-button-opening-hour
+              <app-button-work-days
                 [announcement]="announcement"
-                (route)="toggleRoute($event)"
-              ></app-button-opening-hour>
+              ></app-button-work-days>
             </ion-item-group>
           </ion-col>
         </ng-container>
 
         <ng-template #Association>
-          <ion-col *ngIf="announcement?.categoryAnnouncement" size="12">
-            <app-opening-hour
-              [announcement]="announcement"
-              (route)="toggleRoute($event)"
-            ></app-opening-hour>
+          <ion-col *ngIf="announcement?.category" size="12">
+            <app-work-days [announcement]="announcement"></app-work-days>
           </ion-col>
         </ng-template>
       </ng-container>

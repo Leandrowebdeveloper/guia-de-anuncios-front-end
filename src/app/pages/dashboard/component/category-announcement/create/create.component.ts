@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 
 import { FormCategoryCreateComponent } from './form/form.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { CategoryAnnouncement } from 'src/app/interface';
+import { Category, CategoryAnnouncement } from 'src/app/interface';
 
 @Component({
   selector: 'app-category-announcement-create-component',
@@ -11,7 +11,7 @@ import { CategoryAnnouncement } from 'src/app/interface';
   styleUrls: ['./create.component.scss'],
 })
 export class CategoryAnnouncementCreateComponent {
-  @Input() category!: CategoryAnnouncement;
+  @Input() category!: Category[];
 
   constructor(
     private authService: AuthService,

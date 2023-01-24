@@ -1,12 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
-// import 'moment/locale/pt-br';
 
 @Pipe({
   name: 'time',
 })
 export class TimePipe implements PipeTransform {
-  transform(value: string, data = 'create' || 'update' || 'plan'): unknown {
+  transform(
+    value: string,
+    data = 'create' || 'update' || 'plan' || 'workDay'
+  ): unknown {
     if (this.isTimestamp(value)) {
       const minutes = moment().diff(value, 'minutes'); //minutos
       const hours = moment().diff(value, 'hours'); //horas
@@ -17,50 +19,50 @@ export class TimePipe implements PipeTransform {
       switch (data) {
         case 'create':
           if (minutes <= 60) {
-            return `Criado à ${minutes} minuto${this.pluralMinutes(minutes)}.`;
+            return `Criado há ${minutes} minuto${this.pluralMinutes(minutes)}.`;
           }
           if (hours <= 24) {
-            return `Criado à ${hours} hora${this.pluralHours(hours)}.`;
+            return `Criado há ${hours} hora${this.pluralHours(hours)}.`;
           }
           if (days >= 1) {
-            return `Criado à ${days} dia${this.pluralDays(days)}.`;
+            return `Criado há ${days} dia${this.pluralDays(days)}.`;
           }
           if (month < 60) {
-            return `Criado à ${month} mese${this.pluralMonth(month)}.`;
+            return `Criado há ${month} mese${this.pluralMonth(month)}.`;
           }
           if (year > 0) {
-            return `Criado à ${year} ano${this.pluralYear(year)}.`;
+            return `Criado há ${year} ano${this.pluralYear(year)}.`;
           }
           break;
         case 'update':
           if (minutes <= 60) {
-            return `Atualizado à ${minutes} minuto${this.pluralMinutes(
+            return `Atualizado há ${minutes} minuto${this.pluralMinutes(
               minutes
             )}.`;
           }
           if (hours <= 24) {
-            return `Atualizado à ${hours} hora${this.pluralHours(hours)}.`;
+            return `Atualizado há ${hours} hora${this.pluralHours(hours)}.`;
           }
           if (days >= 1) {
-            return `Atualizado à ${days} dia${this.pluralDays(days)}.`;
+            return `Atualizado há ${days} dia${this.pluralDays(days)}.`;
           }
           if (month < 60) {
-            return `Atualizado à ${month} mese${this.pluralMonth(month)}.`;
+            return `Atualizado há ${month} mese${this.pluralMonth(month)}.`;
           }
           if (year > 0) {
-            return `Atualizado à ${year} ano${this.pluralYear(year)}.`;
+            return `Atualizado há ${year} ano${this.pluralYear(year)}.`;
           }
           break;
         case 'plan':
           return `Restão ${Math.abs(days)} dia${this.pluralDays(
             days
           )} para o vencimento.`;
-
-        default:
-          return null;
+        case 'workDay':
+          const moments = moment().format('LLLL');
+          const d = moments.slice(0, 1);
+          return moments.replace(d, d.toUpperCase());
       }
     }
-    return null;
   }
 
   private pluralYear(year: number): string | '' {

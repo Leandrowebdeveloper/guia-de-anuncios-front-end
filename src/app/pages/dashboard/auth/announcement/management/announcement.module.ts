@@ -13,7 +13,7 @@ import { FooterModule } from 'src/app/footer/footer.module';
 import { AnnouncementUtilities } from 'src/app/utilities/announcement/announcement-utilities.service';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
 import { GaleryComponentModule } from '../../../component/announcement/galery/component/galery-component.module';
-import { OpeningHourComponentModule } from '../../../component/announcement/opening-hour/opening-hour.component.module';
+import { WorkDayComponentModule } from '../../../component/announcement/work-days/work-days.component.module';
 import { CategoryComponentModule } from '../../../component/announcement/category/category.component.module';
 import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
 
@@ -26,7 +26,7 @@ import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/
     HeaderModalModule,
     GaleryComponentModule,
     AnnouncementComponentsModule,
-    OpeningHourComponentModule,
+    WorkDayComponentModule,
     CategoryComponentModule,
     HeaderModule,
     FooterModule,

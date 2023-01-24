@@ -12,7 +12,10 @@ import { StateAnnouncementService } from './service/state.service';
   styleUrls: ['./state.component.scss'],
 })
 export class AnnouncementStateComponent {
-  @Input() announcement!: Required<Pick<Announcement, '_csrf' | 'id'>>;
+  @Input() announcement!: Pick<
+    Announcement,
+    '_csrf' | 'id' | 'category' | 'blockade' | 'state'
+  >;
   private form: FormGroup;
   private $state: Subscription;
   constructor(
@@ -37,7 +40,7 @@ export class AnnouncementStateComponent {
     announcement_: Pick<Announcement, 'message'>
   ): Promise<number> {
     return this.messageService.success(
-      announcement_.message,
+      announcement_?.message,
       null,
       this.$state,
       350

@@ -10,18 +10,31 @@ import { FormSocialNetworkAnnouncementComponent } from './form/form.component';
   templateUrl: './social-network.component.html',
   styleUrls: ['./social-network.component.scss'],
 })
-export class SocialNetworkComponent {
-  @Input() announcement!: Announcement;
-  @Input() user!: User;
+export class SocialNetworkAnnouncementComponent {
+  @Input() announcement!: Pick<
+    Announcement,
+    | 'title'
+    | 'socialNetwork'
+    | '_csrf'
+    | 'id'
+    | 'plan'
+    | 'blockade'
+    | 'category'
+  >;
   constructor(
     private modalController: ModalController,
     private modalService: ModalService
   ) {}
 
   // Rede social
-  public async socialNetwork(): Promise<void> {
+  public async socialNetwork(
+    announcement: Pick<
+      Announcement,
+      'title' | 'socialNetwork' | '_csrf' | 'id' | 'plan'
+    >
+  ): Promise<void> {
     let modal: HTMLIonModalElement;
-    if (this.user?.plan?.type === 'free') {
+    if (announcement?.plan?.type === 'free') {
       modal = await this.modalController.create({
         component: PresentPlanComponent,
         enterAnimation: this.modalService.enterAnimation,
@@ -29,7 +42,6 @@ export class SocialNetworkComponent {
       });
       return await modal.present();
     }
-    const announcement: Announcement = this.announcement;
     let socialNetwork: SocialNetwork;
     let label: string;
     if (announcement?.socialNetwork) {

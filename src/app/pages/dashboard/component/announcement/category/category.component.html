@@ -3,12 +3,12 @@
     <ion-icon color="mediun" name="list" slot="start"></ion-icon>
     <ion-label>Categoria</ion-label>
   </ion-item-divider>
-  <ion-item>
+  <ion-item [disabled]="announcement?.blockade">
     <ion-select
       *ngIf="category$ | async; let category"
       placeholder="Selecione uma categoria"
       (ionChange)="select($event)"
-      [value]="announcement?.categoryAnnouncement?.catAdId || null"
+      [value]="announcement?.category?.id || null"
     >
       <ion-select-option *ngFor="let item of category" [value]="item?.id">{{
         item?.name
@@ -16,3 +16,10 @@
     </ion-select>
   </ion-item>
 </ion-item-group>
+<div [hidden]="!announcement?.category || announcement?.blockade">
+  <ion-text class="tooltip" color="danger">
+    <p class="tooltiptext">
+      {{ announcement?.category?.description }}
+    </p>
+  </ion-text>
+</div>

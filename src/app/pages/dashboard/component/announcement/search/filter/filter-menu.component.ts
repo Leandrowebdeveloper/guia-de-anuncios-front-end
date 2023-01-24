@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Search } from 'src/app/interface';
+import { SearchAnnouncement } from 'src/app/interface';
 import { SearchAnnouncementService } from '../service/search.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { SearchAnnouncementService } from '../service/search.service';
   styleUrls: ['filter-menu.component.scss'],
 })
 export class SearchMenuAnnouncementComponent implements OnInit, OnDestroy {
-  public isIcon: Search;
+  public isIcon: SearchAnnouncement;
   public $isIcon: Subscription;
   constructor(
     private searchAnnouncementService: SearchAnnouncementService,
@@ -25,7 +25,7 @@ export class SearchMenuAnnouncementComponent implements OnInit, OnDestroy {
     this.$isIcon.unsubscribe();
   }
 
-  public searchBy(searchBy: Search): void {
+  public searchBy(searchBy: SearchAnnouncement): void {
     this.searchAnnouncementService.setSearchBy = searchBy;
   }
 
@@ -35,7 +35,7 @@ export class SearchMenuAnnouncementComponent implements OnInit, OnDestroy {
 
   private filter(): void {
     this.$isIcon = this.searchAnnouncementService.getSearchBy.subscribe(
-      (filter: Search) => (this.isIcon = filter)
+      (filter: SearchAnnouncement) => (this.isIcon = filter)
     );
   }
 }

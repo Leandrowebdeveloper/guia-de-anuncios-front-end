@@ -1,4 +1,4 @@
-import { Contact } from 'src/app/interface/index';
+import { Contact } from 'src/app/interface';
 import { Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
@@ -6,16 +6,17 @@ import { AttrButton } from 'src/app/pages/public/system-access/components/button
 import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
-import { ContactService } from '../service/contact.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
+import { MaskPipe } from 'src/app/utilities/pipe/mask/mask.pipe';
+import { ContactAnnouncementService } from './../service/contact.service';
 
 @Component({
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
 export class FormContactAnnouncementComponent implements OnInit {
-  @Input() contact!: Contact;
+  @Input() contact!: Required<Contact>;
   @Input() label!: string;
 
   public attrButton: AttrButton = {
@@ -31,9 +32,10 @@ export class FormContactAnnouncementComponent implements OnInit {
   private form: FormGroup;
   private $contact: Subscription;
   constructor(
+    private maskPipe: MaskPipe,
     private helpService: HelpsService,
     private modalController: ModalController,
-    private contactService: ContactService,
+    private contactService: ContactAnnouncementService,
     public messageService: MessageService,
     private loadingService: LoadingService
   ) {}
@@ -59,6 +61,8 @@ export class FormContactAnnouncementComponent implements OnInit {
       event.value.announcementId = this.contact?.announcementId;
       message = 'Cadastrando contatos...';
     }
+    // eslint-disable-next-line no-underscore-dangle
+    event.value._csrf = this.contact._csrf;
     const loading = this.loadingService.show(message);
     return this.send(event, loading);
   }
@@ -67,8 +71,9 @@ export class FormContactAnnouncementComponent implements OnInit {
     event: FormGroup<any>,
     loading: Promise<HTMLIonLoadingElement>
   ): Subscription {
-    return (this.$contact = this.contactService.contact(event.value).subscribe(
-      (contact: Contact) => this.messsage(contact.message, loading),
+    const data = this.contactService.filter(event.value) as Required<Contact>;
+    return (this.$contact = this.contactService.contact(data).subscribe(
+      (contact: Contact) => this.messsage(contact?.message, loading),
       (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$contact)
     ));
@@ -83,6 +88,13 @@ export class FormContactAnnouncementComponent implements OnInit {
   }
 
   private getData(): void {
-    this.config = { ...this.contact };
+    const whatsapp = this.maskPipe.transform(this.contact.whatsapp, 'whatsapp');
+    const mobilePhone = this.maskPipe.transform(
+      this.contact.mobilePhone,
+      'mobilePhone'
+    );
+    const phone = this.maskPipe.transform(this.contact.phone, 'phone');
+
+    this.config = { whatsapp, phone, mobilePhone };
   }
 }
