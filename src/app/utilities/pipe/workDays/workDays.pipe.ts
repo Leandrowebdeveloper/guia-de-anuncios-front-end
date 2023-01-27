@@ -6,12 +6,12 @@ import * as moment from 'moment';
   name: 'workDays',
 })
 export class WorkDaysPipe implements PipeTransform {
-  transform(workDay: WorkDays): string {
+  transform(workDays: WorkDays): string {
     // console.log(moment.weekdays());
     const weekdays = moment.weekdays();
-    if (workDay) {
+    if (workDays) {
       const { sunday, monday, tuesday, thursday, wednesday, friday, saturday } =
-        workDay;
+        workDays;
       switch (moment().format('dddd')) {
         case weekdays[0]:
           return this.businessHours(sunday);

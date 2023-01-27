@@ -17,11 +17,11 @@ export class DeleteWorkDayService extends HttpService<
     private workDayService: WorkDayAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `admin-announcement/workDay`;
+    this.setApi = `admin-announcement/workDays`;
   }
 
   public delete(
-    workDay: Pick<WorkDays & { password: string }, '_csrf' | 'id' | 'password'>
+    workDays: Pick<WorkDays & { password: string }, '_csrf' | 'id' | 'password'>
   ): Observable<
     Pick<
       WorkDays & {
@@ -30,7 +30,7 @@ export class DeleteWorkDayService extends HttpService<
       '_csrf' | 'id' | 'password' | 'message'
     >
   > {
-    return this.destroy(workDay).pipe(
+    return this.destroy(workDays).pipe(
       tap(() => (this.workDayService.setworkDay = null))
     );
   }

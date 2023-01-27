@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { BreadcrumbsService } from 'src/app/header/breadcrumbs/service/breadcrumbs.service';
-import { Announcement, Galery, WorkDays } from 'src/app/interface';
+import { Announcement, CategoryAnnouncement, Galery } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 
 @Injectable({
@@ -63,6 +63,14 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
 
   public set setBlockade(value: Pick<Announcement, 'blockade'>) {
     this.announcement.value.blockade = value?.blockade;
+    this.setAnnouncement = this.announcement?.value;
+  }
+
+  public set setCategoryAnnouncement(value: CategoryAnnouncement) {
+    this.announcement.value.category = value?.category;
+    this.announcement.value.categoryAnnouncement = {
+      id: value?.id,
+    } as CategoryAnnouncement;
     this.setAnnouncement = this.announcement?.value;
   }
 

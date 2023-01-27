@@ -41,7 +41,7 @@ export class FormComponent implements OnInit {
 
   @Output() route = new EventEmitter<AnnouncementRoute>(undefined);
 
-  public workDay: WorkDays;
+  public workDays: WorkDays;
   public start: string;
   public startInterval: string;
   public endInterval: string;
@@ -51,7 +51,7 @@ export class FormComponent implements OnInit {
   public minuteValue = '0,5,10,15,20,25,30,35,40,45,50,55';
 
   public form: FormGroup;
-  private $workDay: Subscription;
+  private $workDays: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -161,12 +161,12 @@ export class FormComponent implements OnInit {
     // eslint-disable-next-line no-underscore-dangle
     this.form.value._csrf = this.announcement?._csrf;
 
-    return (this.$workDay = this.workDayService
-      .workDay(this.form.value)
+    return (this.$workDays = this.workDayService
+      .workDays(this.form.value)
       .subscribe(
-        (workDay: WorkDays) => this.messsage(workDay?.message, loading),
+        (workDays: WorkDays) => this.messsage(workDays?.message, loading),
         (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$workDay)
+          this.messageService.error(error, loading, this.$workDays)
       ));
   }
 
@@ -196,8 +196,8 @@ export class FormComponent implements OnInit {
   }
 
   private formInit() {
-    if (this.workDay?.id) {
-      return (this.form = this.fb.group<WorkDays>({ ...this.workDay }));
+    if (this.workDays?.id) {
+      return (this.form = this.fb.group<WorkDays>({ ...this.workDays }));
     }
 
     return (this.form = this.fb.group({
@@ -216,10 +216,10 @@ export class FormComponent implements OnInit {
     message: string,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
-    return this.messageService.success(message, loading, this.$workDay);
+    return this.messageService.success(message, loading, this.$workDays);
   }
 
   private init(): WorkDays {
-    return (this.workDay = this.announcement?.workDay);
+    return (this.workDays = this.announcement?.workDays);
   }
 }

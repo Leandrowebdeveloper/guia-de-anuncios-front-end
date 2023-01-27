@@ -17,7 +17,7 @@ export class StateService extends HttpService<
     private categoryService: CategoryService
   ) {
     super(http, storageService);
-    this.setApi = `category-announcement`;
+    this.setApi = `category`;
   }
 
   public set setState(

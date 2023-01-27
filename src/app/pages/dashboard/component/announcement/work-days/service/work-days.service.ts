@@ -61,29 +61,29 @@ export class WorkDayAnnouncementService extends HttpService<Announcement> {
 
   public set setworkDay(value: WorkDays) {
     if (this.managementService.getAnnouncement) {
-      this.managementService.getAnnouncement.workDay = value;
+      this.managementService.getAnnouncement.workDays = value;
       this.managementService.setAnnouncement =
         this.managementService.getAnnouncement;
     }
     this.workDayEvent.emit(value);
   }
 
-  public workDay(workDay: WorkDays): Observable<WorkDays> {
-    if (workDay?.id) {
-      return this.patch(workDay, 'workDay').pipe(
+  public workDays(workDays: WorkDays): Observable<WorkDays> {
+    if (workDays?.id) {
+      return this.patch(workDays, 'workDays').pipe(
         tap((workDay_: WorkDays) => (this.setworkDay = workDay_))
       );
     } else {
-      return this.create(workDay, 'workDay').pipe(
+      return this.create(workDays, 'workDays').pipe(
         tap((workDay_: WorkDays) => (this.setworkDay = workDay_))
       );
     }
   }
 
-  public valid(workDay: WorkDays): boolean {
+  public valid(workDays: WorkDays): boolean {
     return this.daysEs.every(
       (day) =>
-        Object.prototype.toString.call(workDay[day]) === '[object Object]'
+        Object.prototype.toString.call(workDays[day]) === '[object Object]'
     );
   }
 }

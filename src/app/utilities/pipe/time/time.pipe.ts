@@ -7,7 +7,7 @@ import * as moment from 'moment';
 export class TimePipe implements PipeTransform {
   transform(
     value: string,
-    data = 'create' || 'update' || 'plan' || 'workDay'
+    data = 'create' || 'update' || 'plan' || 'workDays'
   ): unknown {
     if (this.isTimestamp(value)) {
       const minutes = moment().diff(value, 'minutes'); //minutos
@@ -57,7 +57,7 @@ export class TimePipe implements PipeTransform {
           return `Restão ${Math.abs(days)} dia${this.pluralDays(
             days
           )} para o vencimento.`;
-        case 'workDay':
+        case 'workDays':
           const moments = moment().format('LLLL');
           const d = moments.slice(0, 1);
           return moments.replace(d, d.toUpperCase());

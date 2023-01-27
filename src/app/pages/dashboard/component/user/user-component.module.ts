@@ -16,7 +16,7 @@ import { UserEmailComponent } from './email/email.component';
 import { FormUserEmailComponent } from './email/form/form.component';
 import { FormUserLevelComponent } from './level/form/form.component';
 import { UserLevelComponent } from './level/level.component';
-import { UserCardMessageComponent } from './card-message/message.component';
+import { UserCardMessageComponent } from '../messages/card-message/message.component';
 import { FormUserNameComponent } from './name/form/form.component';
 import { UserNameComponent } from './name/name.component';
 import { FormUserPasswordComponent } from './password/form/form.component';

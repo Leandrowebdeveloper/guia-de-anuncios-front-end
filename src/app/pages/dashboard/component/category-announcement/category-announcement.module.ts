@@ -23,6 +23,7 @@ import { FormDestroyAnnouncementComponent } from './destroy/form/form.component'
 import { SearchCategoryComponent } from './search/search.component';
 import { FilterMenuCategoryComponent } from './search/filter/filter-menu.component';
 import { SearchCategoryAnnouncementService } from './search/service/search.service';
+import { CategoryComponent } from './category/category.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { SearchCategoryAnnouncementService } from './search/service/search.servi
     HeaderModalModule,
   ],
   declarations: [
+    CategoryComponent,
     SegmentComponent,
     CategoryAnnouncementStateComponent,
     CategoryAnnouncementCreateComponent,
@@ -46,6 +48,7 @@ import { SearchCategoryAnnouncementService } from './search/service/search.servi
     FilterMenuCategoryComponent,
   ],
   exports: [
+    CategoryComponent,
     SegmentComponent,
     CategoryAnnouncementStateComponent,
     CategoryAnnouncementCreateComponent,

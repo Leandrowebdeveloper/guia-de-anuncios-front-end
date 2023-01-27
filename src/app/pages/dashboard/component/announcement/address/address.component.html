@@ -1,14 +1,12 @@
 <ion-item
-  *ngIf="announcement"
-  [disabled]="announcement?.category === null || announcement?.blockade"
+  [disabled]="!announcement?.categoryAnnouncement || !announcement?.citie"
   detail="true"
   (click)="address(announcement)"
-  title="Alterar endereço"
-  aria-label="Clique para alterar endereço"
+  title="Gerenciar endereço"
+  aria-label="Gerenciar endereço."
   [attr.aria-disabled]="
-    'Clique para alterar endereço ' + announcement?.blockade
-      ? 'abilitado.'
-      : 'desabilitado'
+    !announcement?.categoryAnnouncement &&
+    'Para gerenciar endereço cadastre uma categoria.'
   "
   button
 >

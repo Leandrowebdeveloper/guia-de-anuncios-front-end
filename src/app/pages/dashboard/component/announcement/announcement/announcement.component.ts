@@ -19,7 +19,13 @@ export class AnnouncementComponent implements OnInit {
   public async open(): Promise<void> {
     let announcement: Pick<
       Announcement,
-      '_csrf' | 'title' | 'description' | 'slug' | 'id' | 'userId'
+      | '_csrf'
+      | 'title'
+      | 'description'
+      | 'slug'
+      | 'id'
+      | 'userId'
+      | 'categoryAnnouncement'
     >;
     let label: string;
 

@@ -1,11 +1,13 @@
 <ion-item
-  [disabled]="
-    announcement?.categoryAnnouncement === null || announcement?.blockade
-  "
+  [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="open()"
-  title="Alterar anúncio"
-  aria-label="Clique para alterar anúncio"
+  title="Gerenciar anúncio"
+  aria-label="Gerenciar anúncio."
+  [attr.aria-disabled]="
+    !announcement?.categoryAnnouncement &&
+    'Para gerenciar o anúncio, cadastre uma categoria.'
+  "
   button
 >
   <ion-icon name="megaphone" slot="start"></ion-icon>

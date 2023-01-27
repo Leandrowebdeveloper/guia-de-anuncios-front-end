@@ -16,10 +16,10 @@ import { WorkDayAnnouncementService } from '../../../work-days/service/work-days
 export class CardWorkDayComponent implements OnInit, OnDestroy {
   @Input() announcement!: Pick<
     Announcement,
-    'slug' | 'title' | '_csrf' | 'id' | 'workDay'
+    'slug' | 'title' | '_csrf' | 'id' | 'workDays'
   >;
   @Input() user!: Pick<User, 'level'>;
-  public workDay: WorkDays;
+  public workDays: WorkDays;
   public readonly daysOfTheWeekPT = [
     'Domingo',
     'Segunda feira',
@@ -53,7 +53,7 @@ export class CardWorkDayComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.workDay = this.announcement?.workDay;
+    this.workDays = this.announcement?.workDays;
     this.update();
   }
 
@@ -66,7 +66,7 @@ export class CardWorkDayComponent implements OnInit, OnDestroy {
   }
 
   public async destroy(): Promise<void> {
-    if (this.user?.level === '1' && this.workDay) {
+    if (this.user?.level === '1' && this.workDays) {
       const alert = await this.alertController.create({
         header: 'Excluir horário de funcionamento',
         subHeader: this.announcement?.title,
@@ -87,7 +87,7 @@ export class CardWorkDayComponent implements OnInit, OnDestroy {
                 ...event,
                 // eslint-disable-next-line no-underscore-dangle
                 _csrf: this.announcement._csrf,
-                id: this.workDay?.id,
+                id: this.workDays?.id,
               };
               return this.delete(data);
             },
@@ -109,19 +109,19 @@ export class CardWorkDayComponent implements OnInit, OnDestroy {
   }
 
   private delete(
-    workDay: Pick<WorkDays & { password: string }, '_csrf' | 'id' | 'password'>
+    workDays: Pick<WorkDays & { password: string }, '_csrf' | 'id' | 'password'>
   ): Subscription {
-    if (this.user?.level === '1' && this.workDay) {
+    if (this.user?.level === '1' && this.workDays) {
       const loading = this.loadingService.show(
         'Excluindo horário de funcionamento...'
       );
       return (this.$delete = this.deleteworkDayService
-        .delete(workDay)
+        .delete(workDays)
         .subscribe(
           (workDay_: Pick<WorkDays, 'message'>) => {
             this.messsage(workDay_, loading);
-            this.announcement.workDay = null;
-            return (this.workDay = null);
+            this.announcement.workDays = null;
+            return (this.workDays = null);
           },
           (error: HttpErrorResponse) =>
             this.messageService.error(error, loading, this.$delete)
@@ -130,19 +130,23 @@ export class CardWorkDayComponent implements OnInit, OnDestroy {
   }
 
   private messsage(
-    workDay: Pick<WorkDays, 'message'>,
+    workDays: Pick<WorkDays, 'message'>,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
-    return this.messageService.success(workDay?.message, loading, this.$delete);
+    return this.messageService.success(
+      workDays?.message,
+      loading,
+      this.$delete
+    );
   }
 
   private update(): Subscription {
     return (this.$update =
       this.workDayAnnouncementService.getworkDayEvent.subscribe(
-        (workDay: WorkDays) => {
-          if (this.announcement?.id === workDay?.announcementId) {
-            this.announcement.workDay = workDay;
-            this.workDay = workDay;
+        (workDays: WorkDays) => {
+          if (this.announcement?.id === workDays?.announcementId) {
+            this.announcement.workDays = workDays;
+            this.workDays = workDays;
           }
         }
       ));

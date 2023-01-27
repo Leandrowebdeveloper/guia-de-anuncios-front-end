@@ -1,8 +1,14 @@
 import { Observable, Subscription } from 'rxjs';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Announcement, Galery, User } from 'src/app/interface';
+import {
+  Announcement,
+  Galery,
+  User,
+  CategoryAnnouncement,
+} from 'src/app/interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { GaleryAnnouncementService } from '../galery/service/galery.service';
+import { CategoryAnnouncementService } from '../../category-announcement/category/service/category.service';
 
 @Component({
   selector: 'app-card-announcement-component',
@@ -17,7 +23,8 @@ export class CardAnnouncementComponent implements OnInit, OnDestroy {
   private $update: Subscription;
   constructor(
     private authService: AuthService,
-    private galeryAnnouncementService: GaleryAnnouncementService
+    private galeryAnnouncementService: GaleryAnnouncementService,
+    private categoryAnnouncementService: CategoryAnnouncementService
   ) {}
 
   ngOnDestroy(): void {
@@ -27,6 +34,7 @@ export class CardAnnouncementComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.authService.userObservable;
     this.updateGalery();
+    this.updateCategory();
   }
 
   public isHeader(e: boolean): void {
@@ -42,6 +50,20 @@ export class CardAnnouncementComponent implements OnInit, OnDestroy {
               this.announcement.galery.unshift(galery);
             } else {
               this.announcement.galery = [galery];
+            }
+          }
+        }
+      ));
+  }
+  private updateCategory() {
+    return (this.$update =
+      this.categoryAnnouncementService.getCategoryEvent.subscribe(
+        (categoryAnnouncement: CategoryAnnouncement) => {
+          if (categoryAnnouncement) {
+            if (
+              this.announcement?.id === categoryAnnouncement?.announcementId
+            ) {
+              this.announcement.category = categoryAnnouncement?.category;
             }
           }
         }

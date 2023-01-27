@@ -1,16 +1,12 @@
 <ion-item
-  *ngIf="announcement"
-  [disabled]="
-    announcement?.categoryAnnouncement === null || announcement?.blockade
-  "
+  [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="contacts(announcement)"
-  title="Alterar Titulo e descrição"
-  aria-label="Clique para alterar Titulo e descrição"
+  title="Gerenciar contato."
+  aria-label="Gerenciar contato."
   [attr.aria-disabled]="
-    'Botão alterar Titulo e descrição ' + announcement?.blockade
-      ? 'abilitado.'
-      : 'desabilitado'
+    !announcement?.categoryAnnouncement &&
+    'Para gerenciar contato cadastre uma categoria.'
   "
   button
 >

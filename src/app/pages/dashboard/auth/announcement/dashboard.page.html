@@ -1,7 +1,7 @@
 <app-header-component></app-header-component>
 
 <ion-content [fullscreen]="true">
-  <ion-grid fixed>
+  <ion-grid *ngIf="announcement$ | async; let announcement" fixed>
     <ion-row>
       <ion-col size="12" *ngFor="let item of announcement">
         <!-- Anúncios -->

@@ -14,7 +14,14 @@ import { StateAnnouncementService } from './service/state.service';
 export class AnnouncementStateComponent {
   @Input() announcement!: Pick<
     Announcement,
-    '_csrf' | 'id' | 'category' | 'blockade' | 'state'
+    | '_csrf'
+    | 'id'
+    | 'category'
+    | 'state'
+    | 'categoryAnnouncement'
+    | 'address'
+    | 'citie'
+    | 'contact'
   >;
   private form: FormGroup;
   private $state: Subscription;

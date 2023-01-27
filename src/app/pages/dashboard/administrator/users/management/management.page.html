@@ -29,10 +29,9 @@
         <!-- Messagem -->
         <ion-row>
           <ion-col size="12">
-            <app-card-message-user-component
+            <app-card-message-component
               [user]="user"
-              [isAuth]="true"
-            ></app-card-message-user-component>
+            ></app-card-message-component>
           </ion-col>
         </ion-row>
 
@@ -54,10 +53,7 @@
             offset-lg="1"
           >
             <!-- message -->
-            <app-messages-component
-              [user]="user"
-              [action]="'users'"
-            ></app-messages-component>
+            <app-messages-component [user]="user"></app-messages-component>
             <!-- Blockade -->
             <app-blockade-user-component
               [user]="user"

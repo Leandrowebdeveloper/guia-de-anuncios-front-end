@@ -1,3 +1,4 @@
+import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,6 +23,7 @@ import { ButtonWorkDayComponent } from './component/button-work-days/button-work
     CommonModule,
     IonicModule,
     FormsModule,
+    PipeModule,
     ReactiveFormsModule,
     HeaderModule,
     FooterModule,

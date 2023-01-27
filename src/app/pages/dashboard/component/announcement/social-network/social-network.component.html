@@ -1,10 +1,13 @@
 <ion-item
-  *ngIf="announcement"
-  [disabled]="announcement?.category === null || announcement?.blockade"
+  [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="socialNetwork(announcement)"
-  title="Alterar rede social"
-  aria-label="Clique para alterar rede social"
+  title="Gerenciar rede social."
+  aria-label="Gerenciar rede social."
+  [attr.aria-disabled]="
+    !announcement?.categoryAnnouncement &&
+    'Para gerenciar rede social cadastre uma categoria.'
+  "
   button
 >
   <ion-icon

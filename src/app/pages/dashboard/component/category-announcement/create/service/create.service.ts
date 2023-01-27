@@ -16,7 +16,7 @@ export class CreateCategoryAnnouncementService extends HttpService<Category> {
     private categoryService: CategoryService
   ) {
     super(http, storageService);
-    this.setApi = `category-announcement`;
+    this.setApi = `category`;
   }
 
   public register(

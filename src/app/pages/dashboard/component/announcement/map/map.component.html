@@ -1,14 +1,13 @@
 <ion-item
   *ngIf="announcement"
-  [disabled]="announcement?.blockade"
+  [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="coordinates()"
-  title="Alterar mapa"
-  aria-label="Clique para alterar mapa"
+  title="Gerenciar mapa."
+  aria-label="Gerenciar mapa."
   [attr.aria-disabled]="
-    'Botão alterar mapa ' + announcement?.blockade
-      ? 'abilitado.'
-      : 'desabilitado'
+    !announcement?.categoryAnnouncement &&
+    'Para gerenciar mapa cadastre uma categoria.'
   "
   button
 >

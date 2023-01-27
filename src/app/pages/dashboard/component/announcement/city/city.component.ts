@@ -11,7 +11,7 @@ import { FormCityAnnouncementComponent } from './form/form.component';
 export class CityAnnouncementComponent implements OnInit {
   @Input() announcement!: Pick<
     Announcement,
-    'citie' | '_csrf' | 'id' | 'category' | 'blockade'
+    'citie' | '_csrf' | 'id' | 'category' | 'categoryAnnouncement'
   >;
   constructor(private modalController: ModalController) {}
 

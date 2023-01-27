@@ -14,7 +14,7 @@ export class ImageCategoryService extends HttpService<Category> {
     private categoryService: CategoryService
   ) {
     super(http, storageService);
-    this.setApi = `category-announcement`;
+    this.setApi = `category`;
   }
 
   public set setIcon(value: Image) {

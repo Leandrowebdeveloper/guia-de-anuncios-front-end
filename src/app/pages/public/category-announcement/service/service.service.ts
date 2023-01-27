@@ -17,7 +17,7 @@ export class CategoryAnnouncementService extends HttpService<{
     private adminAnnouncementService: AdminAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `category-announcement`;
+    this.setApi = `category`;
   }
 
   public order(

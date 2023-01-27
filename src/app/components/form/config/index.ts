@@ -86,7 +86,7 @@ export class ConfigForm {
       placeholder: 'Digite o cep',
       type: 'text',
       actionLabel: 'Digite o cep',
-      readonly: false,
+      readonly: true,
       msg: {
         invalid: null,
         empty: 'obrigatório!',

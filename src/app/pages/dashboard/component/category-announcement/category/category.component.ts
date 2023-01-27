@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import {
@@ -20,7 +20,7 @@ import { CategoryAnnouncementService } from './service/category.service';
 export class CategoryComponent implements OnInit {
   @Input() announcement!: Pick<
     Announcement,
-    'category' | '_csrf' | 'id' | 'categoryAnnouncement' | 'blockade'
+    'category' | '_csrf' | 'id' | 'categoryAnnouncement'
   >;
   public category$: Observable<Category[]>;
   private form: FormGroup;
@@ -55,16 +55,24 @@ export class CategoryComponent implements OnInit {
     return (this.$category = this.categoryAnnouncementService
       .category(this.form.value)
       .subscribe(
-        (categoryAnnouncement_: Pick<CategoryAnnouncement, 'message'>) =>
-          this.messageService.success(
-            categoryAnnouncement_?.message,
-            loading,
-            this.$category,
-            2000
-          ),
+        (categoryAnnouncement_: CategoryAnnouncement) =>
+          this.success(categoryAnnouncement_, loading),
         (error: HttpErrorResponse) =>
           this.messageService.error(error, loading, this.$category)
       ));
+  }
+
+  private success(
+    categoryAnnouncement_: CategoryAnnouncement,
+    loading: Promise<HTMLIonLoadingElement>
+  ): Promise<number> {
+    this.announcement.category = categoryAnnouncement_?.category;
+    return this.messageService.success(
+      categoryAnnouncement_?.message,
+      loading,
+      this.$category,
+      2000
+    );
   }
 
   private getCategory(): void {

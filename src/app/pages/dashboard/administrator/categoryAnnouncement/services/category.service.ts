@@ -17,7 +17,7 @@ export class CategoryService extends HttpService<Category> {
   private category = new BehaviorSubject<Category>(undefined);
   constructor(http: HttpClient, public storageService: StorageService) {
     super(http, storageService);
-    this.setApi = `category-announcement`;
+    this.setApi = `category`;
   }
 
   public get categoryObservable(): Observable<Category> {

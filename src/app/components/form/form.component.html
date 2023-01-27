@@ -130,11 +130,9 @@
               [formControlName]="input?.name"
               [inputmode]="input?.type"
               [placeholder]="input?.placeholder"
+              [readonly]="input?.readonly"
               [attr.aria-invalid]="submitted"
               [attr.aria-placeholder]="input?.actionLabel"
-              maxlength="10"
-              minlength="10"
-              mask="**.***-***"
             >
             </ion-input>
 
@@ -472,7 +470,11 @@
           [attr.aria-label]="attrButton?.aria"
           [title]="attrButton?.title"
         >
-          <ion-icon class="ion-margin-end" [name]="attrButton?.icon"></ion-icon>
+          <ion-icon
+            class="ion-margin-end"
+            color="light"
+            [name]="attrButton?.icon"
+          ></ion-icon>
           {{ attrButton?.label }}
         </ion-button>
       </ion-col>

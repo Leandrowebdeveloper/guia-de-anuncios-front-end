@@ -18,8 +18,8 @@ export class SocialNetworkAnnouncementComponent {
     | '_csrf'
     | 'id'
     | 'plan'
-    | 'blockade'
     | 'category'
+    | 'categoryAnnouncement'
   >;
   constructor(
     private modalController: ModalController,

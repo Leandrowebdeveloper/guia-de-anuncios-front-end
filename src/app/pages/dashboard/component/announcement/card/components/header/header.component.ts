@@ -15,6 +15,6 @@ export class CardHeaderComponent {
     | 'updatedAt'
     | 'title'
     | 'plan'
-    | 'workDay'
+    | 'workDays'
   >;
 }

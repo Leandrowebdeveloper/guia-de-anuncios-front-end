@@ -106,9 +106,8 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
     return (this.systemAccess = this.systemAccessService
       .sendLoginData(event.value)
       .subscribe(
-        (login: User & Announcement) => {
-          this.success(login[0], loading);
-          this.authAnnouncementService.setAnnouncement = login[1];
+        (login: User) => {
+          this.success(login, loading);
         },
         (error: HttpErrorResponse) => this.error(error, loading)
       ));

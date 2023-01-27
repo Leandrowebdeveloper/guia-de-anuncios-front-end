@@ -67,18 +67,18 @@
       <ion-col size-xl="5" size-lg="5" size-md="12" size-sm="12" size="12">
         <ion-card>
           <ion-card-header>
-            <ion-card-subtitle [hidden]="!announcement?.workDay">
+            <ion-card-subtitle [hidden]="!announcement?.workDays">
               <time>{{ datetimes | time:'workDays' }}</time>
               <ion-text
-                [color]="(announcement?.workDay | workDays) === 'Aberto' ? 'success' : 'danger'"
+                [color]="(announcement?.workDays | workDays) === 'Aberto' ? 'success' : 'danger'"
                 class="ion-text-start"
               >
                 <p
                   class="ion-no-margin"
-                  [title]="announcement | attrTitle:'workDay'"
-                  [attr.data-message]="announcement | attrTitle:'workDay'"
+                  [title]="announcement | attrTitle:'workDays'"
+                  [attr.data-message]="announcement | attrTitle:'workDays'"
                 >
-                  {{ announcement?.workDay | workDays }}
+                  {{ announcement?.workDays | workDays }}
                 </p>
               </ion-text>
             </ion-card-subtitle>

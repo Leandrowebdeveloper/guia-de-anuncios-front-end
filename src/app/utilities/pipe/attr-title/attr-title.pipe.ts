@@ -14,11 +14,11 @@ export class AttrTitlePipe implements PipeTransform {
   transform(
     value: Pick<
       Announcement & Category,
-      'title' | 'citie' | 'address' | 'name' | 'workDay' | 'galery'
+      'title' | 'citie' | 'address' | 'name' | 'workDays' | 'galery'
     >,
     attr: keyof Pick<
       Announcement & Category,
-      'title' | 'citie' | 'address' | 'name' | 'workDay' | 'galery'
+      'title' | 'citie' | 'address' | 'name' | 'workDays' | 'galery'
     >
   ): string {
     if (value) {
@@ -34,9 +34,9 @@ export class AttrTitlePipe implements PipeTransform {
       if (attr === 'name') {
         return `Página de ${value?.name}`;
       }
-      if (attr === 'workDay') {
+      if (attr === 'workDays') {
         return `${value?.title} está ${this.workDaysPipe.transform(
-          value?.workDay
+          value?.workDays
         )}`;
       }
       if (attr === 'galery') {

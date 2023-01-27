@@ -1,21 +1,30 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { Observable, EMPTY } from 'rxjs';
+import { Observable, EMPTY, Subscription } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { Announcement } from 'src/app/interface/index';
+import { Announcement, User } from 'src/app/interface/index';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
 
 @Injectable()
-export class AnnouncementResolve implements Resolve<Announcement[]> {
+export class AnnouncementResolve implements Resolve<Announcement[]>, OnDestroy {
+  private $userId: Subscription;
   constructor(
     private authAnnouncementService: AuthAnnouncementService,
     private authService: AuthService
   ) {}
+
+  ngOnDestroy(): void {
+    this.$userId.unsubscribe();
+  }
+
   resolve(): Observable<Announcement[]> {
-    const userId = this.authService.getUser.id;
+    let userId: number;
+    this.$userId = this.authService.userObservable.subscribe(
+      (user: Pick<User, 'id'>) => (userId = user?.id)
+    );
 
     return this.authAnnouncementService.getAnnouncementFindOne({ userId }).pipe(
       map((item) =>
@@ -25,7 +34,7 @@ export class AnnouncementResolve implements Resolve<Announcement[]> {
             associationId: data?.categoryAnnouncement?.id,
           };
           delete data?.categoryAnnouncement;
-          delete data.user.plan;
+          delete data?.user?.plan;
           return data;
         })
       ),

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Observable } from 'rxjs';
 
 export interface User {
@@ -281,7 +282,7 @@ export interface Announcement {
   _csrf?: string;
   level?: '1' | '2' | '3';
   coordinate?: Coordinate;
-  workDay?: WorkDays;
+  workDays?: WorkDays;
   socialNetwork?: SocialNetwork;
   like?: Like;
   contact?: Contact;
@@ -290,6 +291,7 @@ export interface Announcement {
   galery?: Galery[];
   categoryAnnouncement?: CategoryAnnouncement;
   announcement?: { user: User };
+  messages?: Messages[];
   plan?: Plan;
   category?: Category;
   user?: User;
@@ -366,6 +368,15 @@ export interface Messages {
 export interface DataUpload {
   _csrf?: string;
   id: number;
+}
+
+export interface City {
+  'São Luiz dos Montes Belos': number;
+  Firminópolis: number;
+  Aurilândia: number;
+  Sanclerlândia: number;
+  Turvânia: number;
+  'Córrego do Ouro': number;
 }
 
 export type AnnouncementRoute = 'WorkDays' | 'announcement' | 'galery';

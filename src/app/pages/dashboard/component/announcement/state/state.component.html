@@ -1,15 +1,21 @@
 <ion-item
-  [disabled]="announcement?.category === null || announcement?.blockade"
+  [disabled]="
+    !announcement?.categoryAnnouncement ||
+    !announcement?.address ||
+    !announcement?.contact ||
+    !announcement?.citie
+  "
 >
   <ion-label>{{ announcement?.state ? "Online" : "Offline" }}</ion-label>
   <ion-toggle
     slot="end"
     (ionChange)="toggle()"
     [checked]="announcement?.state"
-    title="Alternar entre anúncio online ou offline."
-    aria-label="Clique para alternar entre anúncio online ou offline."
+    title="Gerenciar status."
+    aria-label="Gerenciar status."
     [attr.aria-disabled]="
-      'Status ' + announcement?.blockade ? 'online.' : 'offline'
+      !announcement?.categoryAnnouncement &&
+      'Para gerenciar status cadastre uma categoria.'
     "
   >
   </ion-toggle>

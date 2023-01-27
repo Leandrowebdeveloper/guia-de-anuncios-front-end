@@ -90,18 +90,18 @@
                             {{ item?.address | address }}
                           </address></ion-card-subtitle
                         >
-                        <ion-card-subtitle [hidden]="!item?.workDay">
+                        <ion-card-subtitle [hidden]="!item?.workDays">
                           <ion-text
                             [color]="
-                          (item?.workDay | workDays) === 'Aberto'
+                          (item?.workDays | workDays) === 'Aberto'
                             ? 'success'
                             : 'danger'
                         "
                             class="ion-hide-xl-up ion-hide-lg-up"
-                            [title]="item | attrTitle:'workDay'"
-                            [attr.data-message]="item | attrTitle:'workDay'"
+                            [title]="item | attrTitle:'workDays'"
+                            [attr.data-message]="item | attrTitle:'workDays'"
                           >
-                            {{ item?.workDay | workDays }}
+                            {{ item?.workDays | workDays }}
                           </ion-text>
                         </ion-card-subtitle>
                       </ion-card-header>
@@ -119,17 +119,17 @@
                       <ion-card-content>
                         <ion-text
                           [color]="
-                        (item?.workDay | workDays) === 'Aberto'
+                        (item?.workDays | workDays) === 'Aberto'
                           ? 'success'
                           : 'danger'
                       "
                           class="ion-text-center ion-hide-lg-down"
                         >
                           <p
-                            [title]="item | attrTitle:'workDay'"
-                            [attr.data-message]="item | attrTitle:'workDay'"
+                            [title]="item | attrTitle:'workDays'"
+                            [attr.data-message]="item | attrTitle:'workDays'"
                           >
-                            {{ item?.workDay | workDays }}
+                            {{ item?.workDays | workDays }}
                           </p>
                         </ion-text>
                         <ng-container
@@ -167,18 +167,18 @@
                       >
                         <ion-text
                           [color]="
-                        (item?.workDay | workDays) === 'Aberto'
+                        (item?.workDays | workDays) === 'Aberto'
                           ? 'success'
                           : 'danger'
                       "
                           class="ion-text-center ion-hide-lg-down"
                         >
                           <p
-                            [hidden]="!item?.workDay"
-                            [title]="item | attrTitle:'workDay'"
-                            [attr.data-message]="item | attrTitle:'workDay'"
+                            [hidden]="!item?.workDays"
+                            [title]="item | attrTitle:'workDays'"
+                            [attr.data-message]="item | attrTitle:'workDays'"
                           >
-                            {{ item?.workDay | workDays }}
+                            {{ item?.workDays | workDays }}
                           </p>
                         </ion-text>
                         <ng-container

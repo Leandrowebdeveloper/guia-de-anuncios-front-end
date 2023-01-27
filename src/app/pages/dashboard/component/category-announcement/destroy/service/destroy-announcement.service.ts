@@ -17,7 +17,7 @@ export class DestroyAnnouncementService extends HttpService<Category> {
     public categoryService: CategoryService
   ) {
     super(http, storageService);
-    this.setApi = `category-announcement`;
+    this.setApi = `category`;
   }
 
   public delete(category: Category): Observable<Category> {

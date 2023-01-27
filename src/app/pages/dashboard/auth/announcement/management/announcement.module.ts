@@ -14,8 +14,9 @@ import { AnnouncementUtilities } from 'src/app/utilities/announcement/announceme
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
 import { GaleryComponentModule } from '../../../component/announcement/galery/component/galery-component.module';
 import { WorkDayComponentModule } from '../../../component/announcement/work-days/work-days.component.module';
-import { CategoryComponentModule } from '../../../component/announcement/category/category.component.module';
 import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
+import { UserComponentsModule } from '../../../component/user/user-component.module';
+import { CategoryAnnouncementComponentModule } from '../../../component/category-announcement/category-announcement.module';
 
 @NgModule({
   imports: [
@@ -26,8 +27,9 @@ import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/
     HeaderModalModule,
     GaleryComponentModule,
     AnnouncementComponentsModule,
+    UserComponentsModule,
     WorkDayComponentModule,
-    CategoryComponentModule,
+    CategoryAnnouncementComponentModule,
     HeaderModule,
     FooterModule,
     PipeModule,

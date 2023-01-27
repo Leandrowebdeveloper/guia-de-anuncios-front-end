@@ -13,10 +13,10 @@ import { WorkDayAnnouncementService } from '../../service/work-days.service';
   styleUrls: ['./days-of-the-week.component.scss'],
 })
 export class DaysOfTheWeekComponent implements OnInit {
-  @Input() announcement!: Pick<Announcement, 'workDay' | 'id'>;
+  @Input() announcement!: Pick<Announcement, 'workDays' | 'id'>;
   @Output() eventDay = new EventEmitter<DayOfTheWeekPT>(undefined);
   @Output() route = new EventEmitter<AnnouncementRoute>(undefined);
-  public workDay: WorkDays;
+  public workDays: WorkDays;
   constructor(private workDayService: WorkDayAnnouncementService) {}
 
   ngOnInit() {
@@ -45,9 +45,9 @@ export class DaysOfTheWeekComponent implements OnInit {
   }
 
   private init(): WorkDays {
-    if (this.announcement?.workDay === null) {
-      return (this.workDay = this.setOperningHour());
+    if (this.announcement?.workDays === null) {
+      return (this.workDays = this.setOperningHour());
     }
-    return (this.workDay = this.announcement?.workDay);
+    return (this.workDays = this.announcement?.workDays);
   }
 }

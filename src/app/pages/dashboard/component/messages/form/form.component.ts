@@ -7,7 +7,7 @@ import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
-import { User, Messages } from 'src/app/interface';
+import { User, Messages, Announcement } from 'src/app/interface';
 import { MessagesService } from '../service/messages.service';
 
 @Component({
@@ -15,7 +15,9 @@ import { MessagesService } from '../service/messages.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormSendMessagesComponent implements OnInit {
-  @Input() user!: Required<Pick<User, '_csrf' | 'id' | 'messages'>>;
+  @Input() data!: Required<
+    Pick<User | Announcement, '_csrf' | 'id' | 'messages'>
+  >;
   @Input() label!: string;
   @Input() isAuth!: boolean;
 
@@ -53,32 +55,35 @@ export class FormSendMessagesComponent implements OnInit {
 
   private saveMessage(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Salvando menssagem...');
-    event.value.userId = this.user?.messages[0]?.userId;
-    event.value.id = this.user?.messages[0]?.id;
+    let action: 'users' | 'announcement';
+    if (this.data?.messages[0]?.userId) {
+      event.value.userId = this.data?.messages[0]?.userId;
+      event.value.id = this.data?.messages[0]?.id;
+      action = 'users';
+    } else {
+      action = 'announcement';
+      event.value.announcementId = this.data?.messages[0]?.announcementId;
+    }
 
-    console.log(event.value);
-
-    return (this.write = this.messagesService.send(event.value).subscribe(
-      (messages: Messages) => this.messsage(messages, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
+    return (this.write = this.messagesService
+      .send(event.value, action)
+      .subscribe(
+        (messages: Messages) => this.messsage(messages, loading),
+        (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.write)
+      ));
   }
 
   private messsage(
-    userMesssage: Messages,
+    response: Messages,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(
-      userMesssage?.message,
-      loading,
-      this.write
-    );
+    return this.messageService.success(response?.message, loading, this.write);
   }
 
   private getData(): void {
-    const { _csrf, messages } = this.user;
+    const { _csrf, messages } = this.data;
     this.config = { _csrf, password: null, ...messages[0] };
   }
 }

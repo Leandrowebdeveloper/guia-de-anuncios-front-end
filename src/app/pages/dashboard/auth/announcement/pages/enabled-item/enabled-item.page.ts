@@ -113,7 +113,19 @@ export class EnabledItemAnnouncementPage implements OnInit {
         .pipe(
           tap((announcement: Announcement[]) => {
             this.isAnnouncement.emit(announcement.length > 0);
-            this.announcement = announcement;
+            this.announcement = announcement.map((announcement_) => {
+              announcement_.category = {
+                ...announcement_?.categoryAnnouncement?.category,
+              };
+
+              delete announcement_?.announcement;
+              delete announcement_?.categoryAnnouncement?.catAdId;
+              delete announcement_?.categoryAnnouncement?.category;
+              delete announcement_?.categoryAnnouncement?.announcementId;
+              delete announcement_?.categoryAnnouncement?.message;
+
+              return announcement_;
+            });
           }),
           catchError((error: HttpErrorResponse) => {
             setTimeout(() => (this.menssage = false), 300);

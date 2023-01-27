@@ -5,6 +5,7 @@ import {
   Announcement,
   AnnouncementRoute,
   Galery,
+  CategoryAnnouncement,
 } from 'src/app/interface/index';
 import { NavController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';

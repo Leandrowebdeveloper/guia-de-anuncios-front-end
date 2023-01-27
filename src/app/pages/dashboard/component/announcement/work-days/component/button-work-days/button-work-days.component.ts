@@ -8,7 +8,10 @@ import { Announcement } from 'src/app/interface';
   styleUrls: ['./button-work-days.component.scss'],
 })
 export class ButtonWorkDayComponent implements OnInit {
-  @Input() announcement!: Announcement;
+  @Input() announcement!: Pick<
+    Announcement,
+    'workDays' | 'categoryAnnouncement' | 'slug'
+  >;
   constructor(private navCtrl: NavController) {}
 
   ngOnInit() {}

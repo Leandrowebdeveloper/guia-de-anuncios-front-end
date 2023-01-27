@@ -36,15 +36,28 @@ export class MessagesService extends HttpService<Messages> {
     this.usersService.setUsers = this.usersService.getUsers;
   }
 
-  public send(message: Required<Messages>): Observable<Messages | number[]> {
+  public send(
+    message: Required<Messages>,
+    action: 'users' | 'announcement'
+  ): Observable<Messages | number[]> {
     if (message?.id) {
       return this.patch(message, 'management').pipe(
-        tap((message_: Messages) => (this.setUserMessage = message_))
+        tap((message_: Messages) => {
+          if (action === 'users') {
+            return (this.setUserMessage = message_);
+          }
+          return;
+        })
       );
     }
     delete message.id;
     return this.create(message, 'management').pipe(
-      tap((message_: Messages) => (this.setUserMessage = message_))
+      tap((message_: Messages) => {
+        if (action === 'users') {
+          return (this.setUserMessage = message_);
+        }
+        return;
+      })
     );
   }
 

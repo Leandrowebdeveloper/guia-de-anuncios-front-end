@@ -14,15 +14,15 @@
   >
 
   <!-- Horario de trabalho -->
-  <ion-card-subtitle [hidden]="!announcement?.workDay">
+  <ion-card-subtitle [hidden]="!announcement?.workDays">
     <ion-text
       [color]="
-        (announcement?.workDay | workDays) === 'Aberto' ? 'success' : 'danger'
+        (announcement?.workDays | workDays) === 'Aberto' ? 'success' : 'danger'
       "
-      [title]="announcement | attrTitle : 'workDay'"
-      [attr.data-message]="announcement | attrTitle : 'workDay'"
+      [title]="announcement | attrTitle : 'workDays'"
+      [attr.data-message]="announcement | attrTitle : 'workDays'"
     >
-      {{ announcement?.workDay | workDays }}
+      {{ announcement?.workDays | workDays }}
     </ion-text>
   </ion-card-subtitle>
 

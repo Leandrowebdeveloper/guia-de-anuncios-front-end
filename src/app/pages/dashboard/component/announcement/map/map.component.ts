@@ -19,7 +19,7 @@ import { ModalService } from 'src/app/components/present-plan/animations/modal.s
 export class MapAnnouncementComponent {
   @Input() announcement!: Pick<
     Announcement,
-    '_csrf' | 'id' | 'coordinate' | 'blockade' | 'plan'
+    '_csrf' | 'id' | 'coordinate' | 'plan' | 'categoryAnnouncement'
   >;
   private form: FormGroup;
   private map: Subscription;

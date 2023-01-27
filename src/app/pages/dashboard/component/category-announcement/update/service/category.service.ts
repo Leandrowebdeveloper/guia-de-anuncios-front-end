@@ -20,7 +20,7 @@ export class UpdateCategoryAnnouncementService extends HttpService<Category> {
     private breadcrumbsService: BreadcrumbsService
   ) {
     super(http, storageService);
-    this.setApi = `category-announcement`;
+    this.setApi = `category`;
   }
 
   private set setCategory(

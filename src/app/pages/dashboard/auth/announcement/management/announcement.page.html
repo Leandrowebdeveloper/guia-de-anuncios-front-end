@@ -1,7 +1,7 @@
 <ion-header [hidden]="hasHeader">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button (click)="back()" defaultHref></ion-back-button>
+      <ion-back-button mode="md" (click)="back()" defaultHref></ion-back-button>
     </ion-buttons>
     <ion-title>Gerenciamento do anúncio</ion-title>
   </ion-toolbar>
@@ -23,20 +23,37 @@
           </ion-text>
         </ion-col>
         <ng-container *ngIf="isAnnouncement; else Association">
-          <ion-col size="12" *ngIf="announcement | allowAd">
+          <ion-col size="12">
+            <app-card-message-component
+              [announcement]="announcement"
+            ></app-card-message-component>
+          </ion-col>
+
+          <!-- Messagem de boas vindas -->
+          <ion-col
+            size="12"
+            *ngIf="!announcement?.address &&
+          !announcement?.citie &&
+          !announcement?.contact"
+          >
             <ion-card>
-              <ion-card-header color="warning">
-                <ion-card-title>Observação!</ion-card-title>
-                <ion-card-subtitle>Cadastro incompleto </ion-card-subtitle>
+              <ion-card-header>
+                <ion-card-title>Bem-vindo!</ion-card-title>
+                <ion-card-subtitle
+                  >Cadastro sujeito a aprovação.</ion-card-subtitle
+                >
               </ion-card-header>
               <ion-card-content class="ion-margin-top">
-                <ion-text>
-                  <ul>
-                    <li>Cidade obrigatório.</li>
-                    <li>Endereço obrigatório.</li>
-                    <li>Contato obrigatório.</li>
-                  </ul>
-                  <p class="ion-text-end">Estes itens são obrigatórios.</p>
+                <ion-text class="ion-margin-bottom">
+                  <p>
+                    Selecione uma categoria para desbloquear os botões abaixo.
+                  </p>
+                  <p>É obrigatório o cadastro de cidade, endereço, contato.</p>
+                  <p>
+                    O botão de status permite que você altere a sua visibilidade
+                    para "online" e "offline" que será desbloqueado caso os
+                    itens obrigatórios seja cadastrados.
+                  </p>
                 </ion-text>
               </ion-card-content>
             </ion-card>
@@ -67,6 +84,10 @@
             class="ion-margin-vertical"
           >
             <ion-item-group>
+              <!-- message -->
+              <app-messages-component
+                [announcement]="announcement"
+              ></app-messages-component>
               <!-- Blockade -->
               <app-blockade-announcement-component
                 [announcement]="announcement"

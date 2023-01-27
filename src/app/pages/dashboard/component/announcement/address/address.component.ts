@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Address, Announcement } from 'src/app/interface';
+import { Address, Announcement, City } from 'src/app/interface';
 import { FormAddressAnnouncementComponent } from './form/form.component';
 import { AddressService } from './service/address.service';
 
@@ -12,7 +13,7 @@ import { AddressService } from './service/address.service';
 export class AddressAnnouncementComponent {
   @Input() announcement!: Pick<
     Announcement,
-    '_csrf' | 'id' | 'address' | 'category' | 'blockade'
+    '_csrf' | 'id' | 'address' | 'category' | 'categoryAnnouncement' | 'citie'
   >;
 
   constructor(
@@ -27,7 +28,6 @@ export class AddressAnnouncementComponent {
     let label: string;
     if (announcement?.address) {
       address = announcement?.address;
-      address.zip_code = this.addressService.mask(address);
       // eslint-disable-next-line no-underscore-dangle
       address._csrf = announcement?._csrf;
       label = 'Editar endereço';
@@ -48,6 +48,9 @@ export class AddressAnnouncementComponent {
       label = 'Cadastrar endereço';
     }
 
+    address.zip_code = this.zipCode();
+    address.zip_code = this.addressService.mask(address);
+
     const modal = await this.modalController.create({
       component: FormAddressAnnouncementComponent,
       componentProps: {
@@ -56,5 +59,17 @@ export class AddressAnnouncementComponent {
       },
     });
     return await modal.present();
+  }
+
+  public zipCode(): number {
+    const city: City = {
+      'São Luiz dos Montes Belos': 76100000,
+      Firminópolis: 76105000,
+      Aurilândia: 76120000,
+      Sanclerlândia: 76160000,
+      Turvânia: 76110000,
+      'Córrego do Ouro': 76145000,
+    };
+    return city[this.announcement?.citie?.city];
   }
 }
