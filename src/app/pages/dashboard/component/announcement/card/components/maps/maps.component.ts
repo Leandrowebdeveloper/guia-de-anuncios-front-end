@@ -203,7 +203,7 @@ export class CardMapsComponent implements OnInit, AfterViewInit {
       this.newMap = await GoogleMap.create({
         id: 'my-cool-map',
         element: this.mapRef.nativeElement,
-        apiKey: 'AIzaSyCTxavkMKLA6l6nh3CamGrzXKKzX2wQizU',
+        apiKey: '',
         config: {
           center: latLng,
           zoom: 13,
