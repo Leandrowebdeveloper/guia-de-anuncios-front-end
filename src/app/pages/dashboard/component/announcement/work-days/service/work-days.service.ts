@@ -52,7 +52,7 @@ export class WorkDayAnnouncementService extends HttpService<Announcement> {
     private managementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement`;
+    this.setApi = `workDays`;
   }
 
   public get getworkDayEvent() {

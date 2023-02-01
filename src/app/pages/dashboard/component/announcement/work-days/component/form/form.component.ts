@@ -9,7 +9,7 @@ import {
   ViewChild,
   EventEmitter,
 } from '@angular/core';
-import { IonDatetime, IonPopover, NavController } from '@ionic/angular';
+import { IonDatetime, IonPopover } from '@ionic/angular';
 import {
   Announcement,
   AnnouncementRoute,
@@ -20,6 +20,7 @@ import {
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { WorkDayAnnouncementService } from '../../service/work-days.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-form-component',
@@ -55,6 +56,7 @@ export class FormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private location: Location,
     private workDayService: WorkDayAnnouncementService,
     private messageService: MessageService,
     private loadingService: LoadingService
@@ -73,6 +75,7 @@ export class FormComponent implements OnInit {
     this.init();
     this.formInit();
     this.changeToEnglish();
+    console.log(this.location.path(true));
   }
 
   public changeToEnglish() {

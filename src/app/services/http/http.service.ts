@@ -37,7 +37,7 @@ export class HttpService<T> implements Http<T> {
   }
 
   public set setApi(value: string) {
-    this.api = `${environment.api}api/${value}`;
+    this.api = `/api/${value}`;
   }
 
   public set csrf(csrf: string) {

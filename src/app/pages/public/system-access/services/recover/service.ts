@@ -8,22 +8,21 @@ import { Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Injectable()
-
 export class RecoverService extends HttpService<User> {
-    constructor(
-        public http: HttpClient,
-        public storageService: StorageService,
-        private router: Router,
-        private helpsService: HelpsService
-    ) {
-        super(http, storageService);
-        this.setApi = `recover`;
-    }
+  constructor(
+    public http: HttpClient,
+    public storageService: StorageService,
+    private router: Router,
+    private helpsService: HelpsService
+  ) {
+    super(http, storageService);
+    this.setApi = `recover`;
+  }
 
-    public goToLoginPage(): number {
-        return this.helpsService.delay(
-            () => this.router.navigate(['/entrar']),
-            2500
-        );
-    }
+  public goToLoginPage(): number {
+    return this.helpsService.delay(
+      () => this.router.navigate(['/entrar']),
+      2500
+    );
+  }
 }

@@ -20,7 +20,7 @@ export class CoordinateAnnouncementService extends HttpService<Coordinate> {
     private alertService: AlertService
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement/coordinate`;
+    this.setApi = `coordinate`;
   }
 
   public get getCoordinateEvent() {
@@ -50,7 +50,7 @@ export class CoordinateAnnouncementService extends HttpService<Coordinate> {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position: GeolocationPosition) => resolve(position),
-          (error: GeolocationPositionError) => reject(error)
+          (error: GeolocationPositionError) => resolve(error)
         );
       } else {
         reject(

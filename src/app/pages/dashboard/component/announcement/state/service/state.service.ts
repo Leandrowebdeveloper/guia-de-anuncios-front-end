@@ -18,7 +18,7 @@ export class StateAnnouncementService extends HttpService<Announcement> {
     private managementAnnouncementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement/state`;
+    this.setApi = `announcement/state`;
   }
 
   public set setSate(value: Pick<Announcement, 'state'>) {

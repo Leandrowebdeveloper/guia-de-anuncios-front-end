@@ -24,7 +24,7 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
     private breadcrumbsService: BreadcrumbsService
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement`;
+    this.setApi = `announcement`;
   }
 
   public get galery(): Galery[] {
@@ -87,7 +87,7 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
   public updateAnnouncement(
     announcement: Announcement
   ): Observable<Announcement> {
-    return this.patch(announcement, 'announcement').pipe(
+    return this.patch(announcement).pipe(
       tap(
         (announcement_: Announcement) =>
           (this.setTitleDescription = announcement_)

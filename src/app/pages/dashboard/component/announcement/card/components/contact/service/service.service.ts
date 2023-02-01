@@ -17,7 +17,7 @@ export class DeleteContactService extends HttpService<
     private contactService: ContactAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `admin-announcement/contact`;
+    this.setApi = `contact`;
   }
 
   public delete(

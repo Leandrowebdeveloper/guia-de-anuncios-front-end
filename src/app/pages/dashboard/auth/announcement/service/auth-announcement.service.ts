@@ -21,7 +21,7 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
     private navCtrl: NavController
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement`;
+    this.setApi = `announcement`;
   }
 
   public get announcementObservable(): Observable<Announcement[]> {

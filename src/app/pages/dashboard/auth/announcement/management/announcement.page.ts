@@ -55,8 +55,8 @@ export class AnnouncementPage implements OnInit, OnDestroy {
   }
 
   public toggleRoute(): void {
-    this.isAnnouncement = !this.route.url.includes('horario-de-funcionamento');
-    this.isRoute = this.route.url.includes('horario-de-funcionamento')
+    this.isAnnouncement = !this.route.url.includes('dias-da-semana');
+    this.isRoute = this.route.url.includes('dias-da-semana')
       ? 'WorkDays'
       : null;
   }

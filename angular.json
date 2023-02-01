@@ -73,7 +73,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "app:build",
-            "proxyConfig": "./proxy.conf.json",
+            "proxyConfig": "./proxy.conf.mjs",
             "sslCert": "/home/souza/Documentos/ssl/ionic/ionic+4.pem",
             "sslKey": "/home/souza/Documentos/ssl/ionic/ionic+4-key.pem"
           },

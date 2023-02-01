@@ -16,7 +16,7 @@ export class CityAnnouncementService extends HttpService<Citie> {
     private managementAnnouncementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement/citie`;
+    this.setApi = `citie`;
   }
 
   public get getCitieEvent() {

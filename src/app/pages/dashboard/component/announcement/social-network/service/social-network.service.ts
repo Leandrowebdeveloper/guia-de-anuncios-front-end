@@ -16,7 +16,7 @@ export class SocialNetworkAnnouncementService extends HttpService<SocialNetwork>
     private managementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement/socialNetwork`;
+    this.setApi = `socialNetwork`;
   }
 
   public get getSocialNetworkEvent() {
@@ -27,6 +27,10 @@ export class SocialNetworkAnnouncementService extends HttpService<SocialNetwork>
     this.managementService.getAnnouncement.socialNetwork = socialNetwork;
     this.managementService.setAnnouncement =
       this.managementService.getAnnouncement;
+  }
+
+  public createSocialNetwork(key: string): Observable<SocialNetwork> {
+    return this.findOne('', { key });
   }
 
   public socialNetwork(

@@ -26,6 +26,7 @@ export class AnnouncementGuard implements Resolve<Announcement> {
             data.plan = {
               ...data?.announcement?.user?.plan,
             };
+            data.authSocial = { ...data?.announcement?.user?.authSocial };
             delete data?.announcement;
             delete data?.categoryAnnouncement?.catAdId;
             delete data?.categoryAnnouncement?.category;

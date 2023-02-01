@@ -17,7 +17,7 @@ export class AvatarService extends HttpService<Image> {
     private usersService: AdminUsersService
   ) {
     super(http, storageService);
-    this.setApi = 'avatar';
+    this.setApi = '/api/avatar';
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering

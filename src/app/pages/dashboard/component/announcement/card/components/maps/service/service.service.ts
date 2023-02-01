@@ -14,7 +14,7 @@ export class DeleteCoordinateService extends HttpService<
 > {
   constructor(http: HttpClient, public storageService: StorageService) {
     super(http, storageService);
-    this.setApi = `admin-announcement/coordinate`;
+    this.setApi = `coordinate`;
   }
 
   public delete(

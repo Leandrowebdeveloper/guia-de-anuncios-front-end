@@ -21,7 +21,7 @@ export class GaleryAnnouncementService
     private loadingService: LoadingService
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement`;
+    this.setApi = `announcement`;
   }
 
   public get galeryAsObservable() {

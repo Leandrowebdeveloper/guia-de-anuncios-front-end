@@ -10,24 +10,24 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Injectable()
 export class RegisterService extends HttpService<User> {
-    constructor(
-        public http: HttpClient,
-        public storageService: StorageService,
-        private navCtrl: NavController,
-        private helpsService: HelpsService
-    ) {
-        super(http, storageService);
-        this.setApi = `register`;
-    }
+  constructor(
+    public http: HttpClient,
+    public storageService: StorageService,
+    private navCtrl: NavController,
+    private helpsService: HelpsService
+  ) {
+    super(http, storageService);
+    this.setApi = `register`;
+  }
 
-    public register(user: User): Observable<User> {
-        return this.create(user);
-    }
+  public register(user: User): Observable<User> {
+    return this.create(user);
+  }
 
-    public goToLoginPage(): number {
-        return this.helpsService.delay(
-            () => this.navCtrl.navigateForward('/entrar'),
-            2500
-        );
-    }
+  public goToLoginPage(): number {
+    return this.helpsService.delay(
+      () => this.navCtrl.navigateForward('/entrar'),
+      2500
+    );
+  }
 }

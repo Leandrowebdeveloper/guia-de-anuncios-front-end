@@ -117,10 +117,17 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'termos-de-uso',
+    path: 'termos-de-serviço',
     loadChildren: () =>
-      import('../pages/public/terms-of-use/terms-of-use.module').then(
-        (m) => m.TermsOfUsePageModule
+      import('../pages/public/service-terms/service-terms.module').then(
+        (m) => m.ServiceTermsPageModule
+      ),
+  },
+  {
+    path: 'oauth/instagram',
+    loadChildren: () =>
+      import('../pages/public/popup-instagram/popup-instagram.module').then(
+        (m) => m.PopupInstagramPageModule
       ),
   },
   {

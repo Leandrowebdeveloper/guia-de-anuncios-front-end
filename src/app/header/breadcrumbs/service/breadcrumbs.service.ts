@@ -1,16 +1,17 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Breadcrumb } from 'src/app/interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class BreadcrumbsService {
+export class BreadcrumbsService implements OnDestroy {
   private breadcrumbEvent = new EventEmitter<string>(null);
   private breadcrumb = new BehaviorSubject<Breadcrumb[]>([]);
   private readonly breadcrumb$ = this.breadcrumb.asObservable();
+  private $router: Subscription;
 
   constructor(private router: Router) {
     this.init();
@@ -18,6 +19,10 @@ export class BreadcrumbsService {
 
   public get breadcrumbs$() {
     return this.breadcrumb$;
+  }
+
+  ngOnDestroy(): void {
+    this.$router.unsubscribe();
   }
 
   public getEvent(): Observable<string> {
@@ -53,7 +58,7 @@ export class BreadcrumbsService {
   }
 
   private init(): void {
-    this.router.events
+    this.$router = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((activeRoute: NavigationEnd) => this.start(activeRoute));
   }

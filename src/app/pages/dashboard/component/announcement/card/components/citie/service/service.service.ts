@@ -17,7 +17,7 @@ export class DeleteCitieService extends HttpService<
     private citieService: CityAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `admin-announcement/citie`;
+    this.setApi = `citie`;
   }
 
   public delete(

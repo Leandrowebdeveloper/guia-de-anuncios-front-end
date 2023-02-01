@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Contact } from 'src/app/interface';
+import { Announcement } from 'src/app/interface';
 import { Browser } from '@capacitor/browser';
 
 @Component({
@@ -8,14 +8,14 @@ import { Browser } from '@capacitor/browser';
   styleUrls: ['./show-contact.component.scss'],
 })
 export class ShowContactComponent implements OnInit {
-  @Input() contact!: Contact;
+  @Input() announcement!: Pick<Announcement, 'contact' | 'user'>;
   constructor() {}
 
   ngOnInit() {}
 
   public async send(e: Event, contacts: 'whatsapp' | 'phone' | 'mobilePhone') {
     e.preventDefault();
-    const { whatsapp, phone, mobilePhone } = this.contact;
+    const { whatsapp, phone, mobilePhone } = this.announcement?.contact;
     switch (contacts) {
       case 'whatsapp':
         return await Browser.open({

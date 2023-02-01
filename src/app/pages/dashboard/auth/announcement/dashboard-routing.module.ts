@@ -27,7 +27,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: ':slug/horario-de-funcionamento',
+    path: ':slug/dias-da-semana',
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
     resolve: {

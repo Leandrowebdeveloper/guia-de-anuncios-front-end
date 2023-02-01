@@ -1,5 +1,4 @@
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { CategoryService } from 'src/app/pages/dashboard/administrator/categoryAnnouncement/services/category.service';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -50,7 +49,6 @@ export class CategoryAnnouncementPage implements OnInit {
     private route: ActivatedRoute,
     private homeService: HomeService,
     private categoryAnnouncementService: CategoryAnnouncementService,
-    private categoryService: CategoryService,
     private loadingService: LoadingService,
     private messageService: MessageService,
     private helpService: HelpsService,
@@ -147,8 +145,9 @@ export class CategoryAnnouncementPage implements OnInit {
                 value.plan = {
                   ...value?.announcement?.user?.plan,
                 };
+                value.user = { email: value?.announcement.user.email } as User;
                 delete value?.announcement;
-
+                delete value?.user?.plan;
                 return value;
               })
               .filter((val) => {
@@ -199,7 +198,9 @@ export class CategoryAnnouncementPage implements OnInit {
               value.plan = {
                 ...value?.announcement?.user?.plan,
               };
+              value.user = { email: value?.announcement.user.email } as User;
               delete value?.announcement;
+              delete value?.user?.plan;
               return value;
             })
             .filter((val) => {

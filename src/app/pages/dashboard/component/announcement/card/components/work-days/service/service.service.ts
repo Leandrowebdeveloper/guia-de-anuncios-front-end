@@ -17,7 +17,7 @@ export class DeleteWorkDayService extends HttpService<
     private workDayService: WorkDayAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `admin-announcement/workDays`;
+    this.setApi = `workDays`;
   }
 
   public delete(

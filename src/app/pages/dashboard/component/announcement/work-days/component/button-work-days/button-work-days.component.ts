@@ -21,7 +21,7 @@ export class ButtonWorkDayComponent implements OnInit {
       '/painel-de-controle',
       'anuncio',
       this.announcement?.slug,
-      'horario-de-funcionamento',
+      'dias-da-semana',
     ]);
   }
 }

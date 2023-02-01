@@ -35,6 +35,13 @@ export interface User {
   messages: Messages[];
   socialLogin: SocialLogin;
   requisitionLimit: RequisitionLimit;
+  authSocial: AuthSocial;
+}
+
+export interface AuthSocial {
+  userId: number;
+  sid: null;
+  token: string;
 }
 
 export interface RequisitionLimit {
@@ -295,6 +302,7 @@ export interface Announcement {
   plan?: Plan;
   category?: Category;
   user?: User;
+  authSocial?: AuthSocial;
 }
 
 export interface CategoryAnnouncement {

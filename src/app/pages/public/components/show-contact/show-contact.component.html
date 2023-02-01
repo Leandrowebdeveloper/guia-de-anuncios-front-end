@@ -1,15 +1,22 @@
 <ion-row class="ion-justify-content-evenly">
-  <ion-col size="auto" class="center" [hidden]="!contact?.whatsapp">
+  <ion-col
+    size="auto"
+    class="center"
+    [hidden]="!announcement?.contact?.whatsapp"
+  >
     <a
-      [href]="'https://api.whatsapp.com/send?phone=55' + contact?.whatsapp"
+      [href]="
+        'https://api.whatsapp.com/send?phone=55' +
+        announcement?.contact?.whatsapp
+      "
       rel="noopener noreferrer"
       [title]="
         'Envie uma menssagem para whatsapp ' +
-        (contact?.whatsapp | mask : 'whatsapp')
+        (announcement?.contact?.whatsapp | mask : 'whatsapp')
       "
       [attr.data-message]="
         'Envie uma menssagem para whatsapp ' +
-        (contact?.whatsapp | mask : 'whatsapp')
+        (announcement?.contact?.whatsapp | mask : 'whatsapp')
       "
       (click)="send($event, 'whatsapp')"
     >
@@ -18,14 +25,16 @@
       </ion-fab-button>
     </a>
   </ion-col>
-  <ion-col size="auto" class="center" [hidden]="!contact?.phone">
+  <ion-col size="auto" class="center" [hidden]="!announcement?.contact?.phone">
     <a
-      [href]="'tel:' + contact?.phone"
+      [href]="'tel:' + announcement?.contact?.phone"
       [title]="
-        'Ligue para o telefone comercial ' + (contact?.phone | mask : 'phone')
+        'Ligue para o telefone comercial ' +
+        (announcement?.contact?.phone | mask : 'phone')
       "
       [attr.data-message]="
-        'Ligue para o telefone comercial ' + (contact?.phone | mask : 'phone')
+        'Ligue para o telefone comercial ' +
+        (announcement?.contact?.phone | mask : 'phone')
       "
       (click)="send($event, 'phone')"
     >
@@ -34,21 +43,37 @@
       </ion-fab-button>
     </a>
   </ion-col>
-  <ion-col size="auto" class="center" [hidden]="!contact?.mobilePhone">
+  <ion-col
+    size="auto"
+    class="center"
+    [hidden]="!announcement?.contact?.mobilePhone"
+  >
     <a
-      [href]="'tel:' + contact?.mobilePhone"
+      [href]="'tel:' + announcement?.contact?.mobilePhone"
       [title]="
         'Ligue para o telefone celular ' +
-        (contact?.mobilePhone | mask : 'mobilePhone')
+        (announcement?.contact?.mobilePhone | mask : 'mobilePhone')
       "
       [attr.data-message]="
         'Ligue para o telefone celular ' +
-        (contact?.mobilePhone | mask : 'mobilePhone')
+        (announcement?.contact?.mobilePhone | mask : 'mobilePhone')
       "
       (click)="send($event, 'mobilePhone')"
     >
       <ion-fab-button size="small" color="tertiary">
         <ion-icon color="light" name="phone-portrait"></ion-icon>
+      </ion-fab-button>
+    </a>
+  </ion-col>
+
+  <ion-col size="auto" class="center" [hidden]="!announcement?.user?.email">
+    <a
+      [href]="'mailto:' + announcement?.user?.email"
+      [title]="'Envie um email: ' + announcement?.user?.email"
+      [attr.data-message]="'Envie um email: ' + announcement?.user?.email"
+    >
+      <ion-fab-button size="small" color="tertiary">
+        <ion-icon color="light" name="mail"></ion-icon>
       </ion-fab-button>
     </a>
   </ion-col>

@@ -3,8 +3,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable, Subject } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { Announcement } from 'src/app/interface';
+import { catchError, tap } from 'rxjs/operators';
+import { Announcement, User } from 'src/app/interface';
 import { AnnouncementService } from './service/service.service';
 import { Share } from '@capacitor/share';
 import { Clipboard } from 'ts-clipboard';
@@ -74,19 +74,19 @@ export class AnnouncementPage implements OnInit {
   }
 
   private init(): Observable<Announcement> {
-    const { slug } = this.activatedRoute.snapshot.params;
+    const { slug } = this.activatedRoute.snapshot?.params;
     if (slug) {
       return (this.announcement$ = this.announcementService
         .findOne('show', { slug })
         .pipe(
-          // tap((item) => {
-          //   item.category = { ...item.categoryAnnouncement.category };
-          //   delete item.categoryAnnouncement;
-          //   return item;
-          // }),
+          tap((item) => {
+            item.user = { email: item?.announcement?.user?.email } as User;
+            item.authSocial = { ...item?.announcement?.user?.authSocial };
+            delete item?.announcement;
+            delete item?.announcement?.user?.plan;
+            return item;
+          }),
           catchError((error: HttpErrorResponse) => {
-            console.error(error);
-
             this.error.next(true);
             return EMPTY;
           })

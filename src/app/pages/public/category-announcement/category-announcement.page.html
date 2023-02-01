@@ -136,7 +136,7 @@
                           *ngIf="item?.plan?.type === 'free'; else Buttom"
                         >
                           <app-show-contact-announcement-component
-                            [contact]="item?.contact"
+                            [announcement]="item"
                           ></app-show-contact-announcement-component>
                         </ng-container>
 
@@ -185,7 +185,7 @@
                           *ngIf="item?.plan?.type === 'free'; else Buttom"
                         >
                           <app-show-contact-announcement-component
-                            [contact]="item?.contact"
+                            [announcement]="item"
                           ></app-show-contact-announcement-component>
                         </ng-container>
 

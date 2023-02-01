@@ -16,7 +16,7 @@ export class AddressService extends HttpService<Address> {
     private managementAnnouncementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement/address`;
+    this.setApi = `address`;
   }
 
   public get getAddressEvent() {

@@ -16,7 +16,7 @@ export class AdminAnnouncementService extends HttpService<Announcement> {
     public messageService: MessageService
   ) {
     super(http, storageService);
-    this.setApi = `admin-announcement`;
+    this.setApi = `announcement`;
   }
 
   public get asObservable(): Observable<Announcement> {

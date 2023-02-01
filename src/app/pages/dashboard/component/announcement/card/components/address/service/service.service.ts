@@ -17,7 +17,7 @@ export class DeleteAddressService extends HttpService<
     private addressService: AddressService
   ) {
     super(http, storageService);
-    this.setApi = `admin-announcement/address`;
+    this.setApi = `address`;
   }
 
   public delete(

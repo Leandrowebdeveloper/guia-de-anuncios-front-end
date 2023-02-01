@@ -20,7 +20,7 @@ export class DeleteSocialNetworkService extends HttpService<
     private socialNetworkAnnouncementService: SocialNetworkAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `admin-announcement/socialNetWork`;
+    this.setApi = `socialNetWork`;
   }
 
   public delete(

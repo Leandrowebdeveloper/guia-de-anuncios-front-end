@@ -16,7 +16,7 @@ export class ContactAnnouncementService extends HttpService<Contact> {
     private managementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `auth-announcement/contact`;
+    this.setApi = `contact`;
   }
 
   public get getContactEvent() {

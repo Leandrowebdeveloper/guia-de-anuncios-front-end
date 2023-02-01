@@ -20,6 +20,7 @@ export class SocialNetworkAnnouncementComponent {
     | 'plan'
     | 'category'
     | 'categoryAnnouncement'
+    | 'authSocial'
   >;
   constructor(
     private modalController: ModalController,
