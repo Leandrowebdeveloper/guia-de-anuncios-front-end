@@ -13,16 +13,41 @@
             [options]="slideOpts"
           >
             <ion-slide
-              *ngFor="let galery of announcement?.galery; let i = index"
+              *ngFor="let image of announcement?.galery; let i = index"
             >
-              <ion-thumbnail>
+              <!-- <ion-thumbnail>
                 <ion-img
                   [src]="galery?.url"
                   [alt]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
                   [title]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
                   [attr.data-message]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
                 ></ion-img>
-              </ion-thumbnail>
+              </ion-thumbnail> -->
+
+              <picture>
+                <source
+                  media="(max-width: 575.98px)"
+                  [srcset]="'/images/galery/small/' + image?.filename"
+                />
+                <source
+                  media="(max-width: 767.98px) and (min-width: 576px)"
+                  [srcset]="'/images/galery/small/' + image?.filename"
+                />
+                <source
+                  media="(max-width: 991.98px) and (min-width: 768px)"
+                  [srcset]="'/images/galery/medium/' + image?.filename"
+                />
+                <source
+                  media="(min-width: 992px)"
+                  [srcset]="'/images/galery/medium/' + image?.filename"
+                />
+                <img
+                  [src]="'/images/galery/large/' + image?.filename"
+                  [alt]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
+                  [title]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
+                  [attr.data-message]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
+                />
+              </picture>
             </ion-slide>
           </ion-slides>
           <ion-segment [scrollable]="true" mode="md" color="none">

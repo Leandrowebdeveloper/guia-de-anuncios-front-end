@@ -46,18 +46,34 @@
                       class="ion-no-padding"
                       [hidden]="item?.galery?.length === 0"
                     >
-                      <ion-thumbnail
-                        *ngFor="let image of item?.galery"
+                      <picture
                         class="cursor-pointer"
                         [routerLink]="['/pagina', item?.slug]"
+                        *ngFor="let image of item?.galery"
                       >
+                        <source
+                          media="(max-width: 575.98px)"
+                          [srcset]="'/images/galery/small/' + image?.filename"
+                        />
+                        <source
+                          media="(max-width: 767.98px) and (min-width: 576px)"
+                          [srcset]="'/images/galery/small/' + image?.filename"
+                        />
+                        <source
+                          media="(max-width: 991.98px) and (min-width: 768px)"
+                          [srcset]="'/images/galery/medium/' + image?.filename"
+                        />
+                        <source
+                          media="(min-width: 992px)"
+                          [srcset]="'/images/galery/x-small/' + image?.filename"
+                        />
                         <img
+                          [src]="'/images/galery/large/' + image?.filename"
                           [title]="item | attrTitle:'title'"
                           [attr.data-message]="item | attrTitle:'title'"
                           [alt]="'Imagem ' + item?.title"
-                          [src]="'/images/galery/x-small/' + image?.filename"
                         />
-                      </ion-thumbnail>
+                      </picture>
                     </ion-col>
 
                     <ion-col
