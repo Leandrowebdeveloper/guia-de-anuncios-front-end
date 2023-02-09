@@ -1,7 +1,11 @@
 <app-header-component></app-header-component>
 
 <ion-content [fullscreen]="true">
-  <ion-grid class="grid" *ngIf="category$ | async; let category; else loading">
+  <ion-grid
+    class="grid"
+    *ngIf="category$ | async; let category; else loading"
+    fixed
+  >
     <!-- <ion-searchbar
           class="ion-margin-top"
           placeholder="Pesquizar"

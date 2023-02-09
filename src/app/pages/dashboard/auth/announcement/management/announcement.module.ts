@@ -12,11 +12,11 @@ import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
 import { AnnouncementUtilities } from 'src/app/utilities/announcement/announcement-utilities.service';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
-import { GaleryComponentModule } from '../../../component/announcement/galery/component/galery-component.module';
 import { WorkDayComponentModule } from '../../../component/announcement/work-days/work-days.component.module';
 import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
 import { UserComponentsModule } from '../../../component/user/user-component.module';
 import { CategoryAnnouncementComponentModule } from '../../../component/category-announcement/category-announcement.module';
+import { GaleryComponentModule } from './../../../component/announcement/galery/galery-component.module';
 
 @NgModule({
   imports: [

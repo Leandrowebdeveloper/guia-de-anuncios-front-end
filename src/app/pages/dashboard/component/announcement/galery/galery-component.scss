@@ -25,6 +25,15 @@
   background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
   &.show {
     display: block;
+    overflow: auto;
+  }
+
+  /* Number text (1/3 etc) */
+  .numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    top: 0;
   }
 }
 
@@ -34,21 +43,22 @@
   width: 80%;
   display: block;
   max-width: 700px;
-  > ion-img {
-    height: 480px;
-  }
 }
 
 /* Caption of Modal Image (Image Text) - Same Width as the Image */
 #caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-direction: row;
   margin: auto;
-  display: block;
   width: 80%;
   max-width: 700px;
   text-align: center;
   color: #ccc;
   padding: 10px 0;
-  height: 150px;
+  height: 80px;
 }
 
 /* Add Animation - Zoom in the Modal */
@@ -92,60 +102,43 @@
   }
 }
 
+// scroll slide
+
 $width: 110px;
-$height: 110px;
+$height: 96px;
 .row {
   display: flex;
   flex-direction: row;
   height: $height;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  app-galery-button-upload:first-child {
-    min-width: $width;
-    background-color: var(--ion-color-light);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
   > div {
     display: flex;
     flex-direction: row;
+    overflow-x: auto;
     overflow-y: hidden;
-    section {
-      border-right: solid 2px var(--ion-color-light);
-      &:last-child {
-        border-right: none;
+    &.show {
+      &::-webkit-scrollbar {
+        visibility: visible;
+        height: 11px;
+      }
+      &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 10px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: var(--ion-color-medium);
+        border-radius: 10px;
       }
     }
-  }
-  ion-img {
-    min-width: $width;
-    height: $height;
-  }
-}
+    &::-webkit-scrollbar {
+      visibility: hidden;
+      height: 0px;
+    }
 
-.md {
-  /* width */
-  ::-webkit-scrollbar {
-    width: 20px;
-    height: 8px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    // box-shadow: inset 0 0 5px grey;
-    border-radius: 10px;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: var(--ion-color-light);
-    border-radius: 10px;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--ion-color-light);
+    ion-img {
+      width: 170px;
+      margin: 0 2px;
+    }
   }
 }

@@ -45,7 +45,7 @@ export class GaleryAnnouncementService
   }
 
   public order(galery: Galery) {
-    return this.patch(galery, 'order');
+    return this.patch(galery, 'management/galery/order');
   }
 
   public sendFiles(file: File, data: Required<DataUpload>): Observable<any> {

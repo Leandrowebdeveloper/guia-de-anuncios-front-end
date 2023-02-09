@@ -22,6 +22,7 @@ export default [
       "/api/redefine-password",
       "/api/recover",
       "/api/logout",
+      "/images/galery",
     ],
     target: "http://172.17.0.1:3001/",
     secure: false,

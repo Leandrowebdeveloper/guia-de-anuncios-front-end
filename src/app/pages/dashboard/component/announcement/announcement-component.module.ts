@@ -51,10 +51,10 @@ import { AdminAnnouncementService } from '../../administrator/announcement/servi
 import { DeleteContactService } from './card/components/contact/service/service.service';
 import { DeleteWorkDayService } from './card/components/work-days/service/service.service';
 import { WorkDayAnnouncementComponent } from './work-days/work-days.component';
-import { GaleryComponentModule } from './galery/component/galery-component.module';
 import { ShowAnnouncementComponentModule } from 'src/app/pages/public/components/announcement-component.module';
 import { DeleteCoordinateService } from './card/components/maps/service/service.service';
 import { DeleteSocialNetworkService } from './card/components/social-network/service/service.service';
+import { GaleryComponentModule } from './galery/galery-component.module';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
