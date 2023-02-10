@@ -15,15 +15,6 @@
             <ion-slide
               *ngFor="let image of announcement?.galery; let i = index"
             >
-              <!-- <ion-thumbnail>
-                <ion-img
-                  [src]="galery?.url"
-                  [alt]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
-                  [title]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
-                  [attr.data-message]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
-                ></ion-img>
-              </ion-thumbnail> -->
-
               <picture>
                 <source
                   media="(max-width: 575.98px)"
@@ -90,9 +81,9 @@
         </ion-card>
       </ion-col>
       <ion-col size-xl="5" size-lg="5" size-md="12" size-sm="12" size="12">
-        <ion-card>
+        <ion-card [hidden]="!announcement?.workDays">
           <ion-card-header>
-            <ion-card-subtitle [hidden]="!announcement?.workDays">
+            <ion-card-subtitle>
               <time>{{ datetimes | time:'workDays' }}</time>
               <ion-text
                 [color]="(announcement?.workDays | workDays) === 'Aberto' ? 'success' : 'danger'"
