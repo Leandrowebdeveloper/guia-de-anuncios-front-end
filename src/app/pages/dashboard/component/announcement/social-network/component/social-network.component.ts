@@ -1,7 +1,4 @@
-import { SocialNetworkAnnouncementService } from './../../../social-network/service/social-network.service';
-import { SocialNetworkAnnouncementComponent } from './../../../social-network/social-network.component';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
-import { DeleteSocialNetworkService } from './service/service.service';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Announcement, User } from 'src/app/interface';
@@ -9,13 +6,17 @@ import { SocialNetwork } from 'src/app/interface';
 import { AlertController } from '@ionic/angular';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AnnouncementSocialNetworkComponent } from '../social-network.component';
+import { SocialNetworkAnnouncementService } from '../service/social-network.service';
 
 @Component({
-  selector: 'app-social-network-card',
+  selector: 'app-social-network-admin-management',
   templateUrl: './social-network.component.html',
   styleUrls: ['./social-network.component.scss'],
 })
-export class CardSocialNetworkComponent implements OnInit, OnDestroy {
+export class AdminManagementSocialNetworkComponent
+  implements OnInit, OnDestroy
+{
   @Input() announcement!: Pick<
     Announcement,
     'title' | 'socialNetwork' | '_csrf' | 'id'
@@ -25,11 +26,10 @@ export class CardSocialNetworkComponent implements OnInit, OnDestroy {
   private $delete: Subscription;
   private $update: Subscription;
   constructor(
-    private deleteSocialNetworkService: DeleteSocialNetworkService,
     private alertController: AlertController,
     private loadingService: LoadingService,
     private messageService: MessageService,
-    private socialNetworkAnnouncementComponent: SocialNetworkAnnouncementComponent,
+    private socialNetworkAnnouncementComponent: AnnouncementSocialNetworkComponent,
     private socialNetworkAnnouncementService: SocialNetworkAnnouncementService
   ) {}
 
@@ -97,7 +97,7 @@ export class CardSocialNetworkComponent implements OnInit, OnDestroy {
   ): Subscription {
     if (this.user?.level === '1' && this.socialNetwork) {
       const loading = this.loadingService.show('Excluindo rede social...');
-      return (this.$delete = this.deleteSocialNetworkService
+      return (this.$delete = this.socialNetworkAnnouncementService
         .delete(socialNetwork)
         .subscribe(
           (socialNetwork_: Pick<SocialNetwork, 'message'>) => {

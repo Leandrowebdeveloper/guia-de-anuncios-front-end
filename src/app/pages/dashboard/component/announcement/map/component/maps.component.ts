@@ -7,26 +7,24 @@ import {
   ViewChild,
   OnInit,
   AfterViewInit,
-  OnDestroy,
 } from '@angular/core';
 import { GoogleMap } from '@capacitor/google-maps';
 import { Subscription } from 'rxjs';
-import { DeleteCoordinateService } from './service/service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
-import { CoordinateAnnouncementService } from '../../../map/service/map.service';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ModalService } from 'src/app/components/present-plan/animations/modal.service';
 import { PresentPlanComponent } from 'src/app/components/present-plan/present-plan.component';
 import { AlertService } from 'src/app/utilities/alert/alert.service';
+import { CoordinateAnnouncementService } from '../service/map.service';
 
 @Component({
-  selector: 'app-maps-card',
+  selector: 'app-maps-admin-management',
   templateUrl: './maps.component.html',
   styleUrls: ['./maps.component.scss'],
 })
-export class CardMapsComponent implements OnInit, AfterViewInit {
+export class AdminManagementMapsComponent implements OnInit, AfterViewInit {
   @ViewChild('map') mapRef!: ElementRef<HTMLElement>;
   @Input() announcement!: Pick<
     Announcement,
@@ -40,7 +38,6 @@ export class CardMapsComponent implements OnInit, AfterViewInit {
   private map: Subscription;
   constructor(
     private fb: FormBuilder,
-    private deleteCoordinateService: DeleteCoordinateService,
     private coordinateAnnouncementService: CoordinateAnnouncementService,
     private messageService: MessageService,
     private loadingService: LoadingService,
@@ -171,7 +168,7 @@ export class CardMapsComponent implements OnInit, AfterViewInit {
   ): Subscription {
     if (this.user?.level === '1' && this.coordinate) {
       const loading = this.loadingService.show('Excluindo coordenadas...');
-      return (this.$delete = this.deleteCoordinateService
+      return (this.$delete = this.coordinateAnnouncementService
         .delete(coordinate)
         .subscribe(
           (coordinate_: Pick<Coordinate, 'message'>) => {

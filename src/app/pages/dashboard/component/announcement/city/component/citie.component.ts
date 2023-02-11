@@ -2,34 +2,31 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Citie, Announcement, User } from 'src/app/interface';
+import { Citie, Announcement } from 'src/app/interface';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
-import { CityAnnouncementComponent } from '../../../city/city.component';
-import { CityAnnouncementService } from '../../../city/service/city.service';
-import { DeleteCitieService } from './service/service.service';
+import { AnnouncementCityComponent } from '../city.component';
+import { CityAnnouncementService } from '../service/city.service';
 
 @Component({
-  selector: 'app-citie-card',
+  selector: 'app-citie-admin-management',
   templateUrl: './citie.component.html',
   styleUrls: ['./citie.component.scss'],
 })
-export class CardCitieComponent implements OnInit, OnDestroy {
+export class AdminManagementCitieComponent implements OnInit, OnDestroy {
   @Input() announcement!: Pick<
     Announcement,
     '_csrf' | 'id' | 'title' | 'citie'
   >;
-  @Input() user!: Pick<User, 'level'>;
   public citie: Citie;
 
   private $delete: Subscription;
   private $update: Subscription;
   constructor(
-    private deleteAddressService: DeleteCitieService,
     private alertController: AlertController,
     private loadingService: LoadingService,
     private messageService: MessageService,
-    private cityAnnouncementComponent: CityAnnouncementComponent,
+    private cityAnnouncementComponent: AnnouncementCityComponent,
     private citieService: CityAnnouncementService
   ) {}
 
@@ -43,7 +40,7 @@ export class CardCitieComponent implements OnInit, OnDestroy {
   }
 
   public async destroy(): Promise<void> {
-    if (this.user?.level === '1' && this.citie) {
+    if (this.citie) {
       const alert = await this.alertController.create({
         header: 'Excluir endereço',
         subHeader: this.announcement?.title,
@@ -92,9 +89,9 @@ export class CardCitieComponent implements OnInit, OnDestroy {
   private delete(
     citie: Pick<Citie & { password: string }, '_csrf' | 'id' | 'password'>
   ): Subscription {
-    if (this.user?.level === '1' && this.citie) {
+    if (this.citie) {
       const loading = this.loadingService.show('Excluindo cidade...');
-      return (this.$delete = this.deleteAddressService.delete(citie).subscribe(
+      return (this.$delete = this.citieService.delete(citie).subscribe(
         (address_: Pick<Citie, 'message'>) => {
           this.messsage(address_, loading);
           this.announcement.citie = null;

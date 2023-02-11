@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { SegmentAnnouncementComponent } from './segment.component';
+import { AnnouncementSegmentComponent } from './segment.component';
 
-describe('SegmentAnnouncementComponent', () => {
-  let component: SegmentAnnouncementComponent;
-  let fixture: ComponentFixture<SegmentAnnouncementComponent>;
+describe('AnnouncementSegmentComponent', () => {
+  let component: AnnouncementSegmentComponent;
+  let fixture: ComponentFixture<AnnouncementSegmentComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SegmentAnnouncementComponent],
+      declarations: [AnnouncementSegmentComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SegmentAnnouncementComponent);
+    fixture = TestBed.createComponent(AnnouncementSegmentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

@@ -1,34 +1,31 @@
 import { Subscription } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Address, Announcement, User } from 'src/app/interface';
+import { Address, Announcement } from 'src/app/interface';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'src/app/utilities/message/message.service';
-import { DeleteAddressService } from './service/service.service';
-import { AddressAnnouncementComponent } from '../../../address/address.component';
-import { AddressService } from '../../../address/service/address.service';
+import { AddressService } from './../service/address.service';
+import { AnnouncementAddressComponent } from './../address.component';
 
 @Component({
-  selector: 'app-address-card',
+  selector: 'app-address-admin-management',
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss'],
 })
-export class CardAddressComponent implements OnInit, OnDestroy {
+export class AdminMaganementAddressComponent implements OnInit, OnDestroy {
   @Input() announcement!: Pick<
     Announcement,
     '_csrf' | 'id' | 'title' | 'address'
   >;
-  @Input() user!: Pick<User, 'level'>;
 
   private $delete: Subscription;
   private $update: Subscription;
   constructor(
-    private deleteAddressService: DeleteAddressService,
     private alertController: AlertController,
     private loadingService: LoadingService,
     private messageService: MessageService,
-    private addressAnnouncementComponent: AddressAnnouncementComponent,
+    private addressAnnouncementComponent: AnnouncementAddressComponent,
     private addressService: AddressService
   ) {}
 
@@ -41,7 +38,7 @@ export class CardAddressComponent implements OnInit, OnDestroy {
   }
 
   public async destroy(): Promise<void> {
-    if (this.user?.level === '1' && this.announcement?.address) {
+    if (this.announcement?.address) {
       const alert = await this.alertController.create({
         header: 'Excluir endereço',
         subHeader: this.announcement?.title,
@@ -90,19 +87,17 @@ export class CardAddressComponent implements OnInit, OnDestroy {
   private delete(
     address: Pick<Address & { password: string }, '_csrf' | 'id' | 'password'>
   ): Subscription {
-    if (this.user?.level === '1' && this.announcement?.address) {
+    if (this.announcement?.address) {
       const loading = this.loadingService.show('Excluindo endereço...');
-      return (this.$delete = this.deleteAddressService
-        .delete(address)
-        .subscribe(
-          (address_: Pick<Address, 'message'>) => {
-            this.messsage(address_, loading);
-            this.announcement.address = null;
-            return (this.announcement.address = null);
-          },
-          (error: HttpErrorResponse) =>
-            this.messageService.error(error, loading, this.$delete)
-        ));
+      return (this.$delete = this.addressService.delete(address).subscribe(
+        (address_: Pick<Address, 'message'>) => {
+          this.messsage(address_, loading);
+          this.announcement.address = null;
+          return (this.announcement.address = null);
+        },
+        (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$delete)
+      ));
     }
   }
 

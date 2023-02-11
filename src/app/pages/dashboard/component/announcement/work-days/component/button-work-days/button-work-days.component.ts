@@ -1,6 +1,7 @@
 import { NavController } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
 import { Announcement } from 'src/app/interface';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-button-work-days',
@@ -12,9 +13,15 @@ export class ButtonWorkDayComponent implements OnInit {
     Announcement,
     'workDays' | 'categoryAnnouncement' | 'slug'
   >;
-  constructor(private navCtrl: NavController) {}
+  public isAdmin: boolean;
+  constructor(
+    private navCtrl: NavController,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isAdmin = this.authService.getLevel === '1';
+  }
 
   public route(): Promise<boolean> {
     return this.navCtrl.navigateForward([

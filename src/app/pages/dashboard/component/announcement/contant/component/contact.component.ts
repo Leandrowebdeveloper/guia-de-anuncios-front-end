@@ -1,4 +1,3 @@
-import { ContactAnnouncementComponent } from './../../../contant/contant.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { AlertController } from '@ionic/angular';
@@ -6,15 +5,15 @@ import { Subscription } from 'rxjs';
 import { Announcement, Contact, User } from 'src/app/interface';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
-import { ContactAnnouncementService } from '../../../contant/service/contact.service';
-import { DeleteContactService } from './service/service.service';
+import { AnnouncementContactComponent } from '../contant.component';
+import { ContactAnnouncementService } from '../service/contact.service';
 
 @Component({
-  selector: 'app-contact-card',
+  selector: 'app-contact-admin-management',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
 })
-export class CardContactComponent implements OnInit, OnDestroy {
+export class AdminManagementContactComponent implements OnInit, OnDestroy {
   @Input() announcement!: Pick<
     Announcement,
     'title' | '_csrf' | 'id' | 'contact' | 'categoryAnnouncement' | 'blockade'
@@ -24,11 +23,10 @@ export class CardContactComponent implements OnInit, OnDestroy {
   private $delete: Subscription;
   private $update: Subscription;
   constructor(
-    private deleteAddressService: DeleteContactService,
     private alertController: AlertController,
     private loadingService: LoadingService,
     private messageService: MessageService,
-    private contactAnnouncementComponent: ContactAnnouncementComponent,
+    private contactAnnouncementComponent: AnnouncementContactComponent,
     private contactAnnouncementService: ContactAnnouncementService
   ) {}
 
@@ -93,7 +91,7 @@ export class CardContactComponent implements OnInit, OnDestroy {
   ): Subscription {
     if (this.user?.level === '1' && this.contact) {
       const loading = this.loadingService.show('Excluindo contato...');
-      return (this.$delete = this.deleteAddressService
+      return (this.$delete = this.contactAnnouncementService
         .delete(contact)
         .subscribe(
           (coordinate_: Pick<Contact, 'message'>) => {

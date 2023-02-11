@@ -1,8 +1,10 @@
+import { OnInit } from '@angular/core';
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Address, Announcement, City } from 'src/app/interface';
-import { FormAddressAnnouncementComponent } from './form/form.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { AnnouncementFormAddressComponent } from './form/form.component';
 import { AddressService } from './service/address.service';
 
 @Component({
@@ -10,16 +12,21 @@ import { AddressService } from './service/address.service';
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss'],
 })
-export class AddressAnnouncementComponent {
+export class AnnouncementAddressComponent implements OnInit {
   @Input() announcement!: Pick<
     Announcement,
     '_csrf' | 'id' | 'address' | 'category' | 'categoryAnnouncement' | 'citie'
   >;
 
+  public isAdmin: boolean;
   constructor(
     private modalController: ModalController,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private authService: AuthService
   ) {}
+  ngOnInit(): void {
+    this.isAdmin = this.authService.getLevel === '1';
+  }
 
   public async address(
     announcement: Pick<Announcement, '_csrf' | 'id' | 'address'>
@@ -52,7 +59,7 @@ export class AddressAnnouncementComponent {
     address.zip_code = this.addressService.mask(address);
 
     const modal = await this.modalController.create({
-      component: FormAddressAnnouncementComponent,
+      component: AnnouncementFormAddressComponent,
       componentProps: {
         label,
         address,

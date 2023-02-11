@@ -1,4 +1,5 @@
 <ion-item
+  *ngIf="!isAdmin; else Else"
   [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="socialNetwork(announcement)"
@@ -21,3 +22,11 @@
     </ion-text>
   </ion-label>
 </ion-item>
+
+<ng-template #Else>
+  <!-- Rede Social -->
+  <app-social-network-admin-management
+    [announcement]="announcement"
+    [user]="user"
+  ></app-social-network-admin-management>
+</ng-template>

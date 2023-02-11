@@ -8,7 +8,7 @@ import {
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SearchAnnouncementService } from './service/search.service';
-import { SearchMenuAnnouncementComponent } from './filter/filter-menu.component';
+import { AnnouncementSearchMenuComponent } from './filter/filter-menu.component';
 import { SearchAnnouncement } from 'src/app/interface';
 
 @Component({
@@ -16,7 +16,7 @@ import { SearchAnnouncement } from 'src/app/interface';
   templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
 })
-export class SearchAnnouncementComponent implements OnInit {
+export class AnnouncementSearchComponent implements OnInit {
   @Output() search = new EventEmitter<SearchbarCustomEvent>();
   public search$ = new Observable<any[]>();
   public triggerSearch$ = new Observable<SearchAnnouncement>(undefined);
@@ -52,7 +52,7 @@ export class SearchAnnouncementComponent implements OnInit {
 
   public async menuShow(ev: any): Promise<void> {
     const popover = await this.popoverController.create({
-      component: SearchMenuAnnouncementComponent,
+      component: AnnouncementSearchMenuComponent,
       event: ev,
       translucent: true,
     });

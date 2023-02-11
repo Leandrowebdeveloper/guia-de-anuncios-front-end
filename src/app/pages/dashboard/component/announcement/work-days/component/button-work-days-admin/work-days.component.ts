@@ -9,11 +9,11 @@ import { MessageService } from 'src/app/utilities/message/message.service';
 import { WorkDayAnnouncementService } from '../../../work-days/service/work-days.service';
 
 @Component({
-  selector: 'app-work-days-card',
+  selector: 'app-work-days-admin-management',
   templateUrl: './work-days.component.html',
   styleUrls: ['./work-days.component.scss'],
 })
-export class CardWorkDayComponent implements OnInit, OnDestroy {
+export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
   @Input() announcement!: Pick<
     Announcement,
     'slug' | 'title' | '_csrf' | 'id' | 'workDays'
@@ -48,8 +48,7 @@ export class CardWorkDayComponent implements OnInit, OnDestroy {
     private alertController: AlertController,
     private loadingService: LoadingService,
     private messageService: MessageService,
-    private workDayAnnouncementService: WorkDayAnnouncementService,
-    private modalController: ModalController
+    private workDayAnnouncementService: WorkDayAnnouncementService
   ) {}
 
   ngOnInit() {
@@ -59,10 +58,6 @@ export class CardWorkDayComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.$update.unsubscribe();
-  }
-
-  public modalClose() {
-    this.modalController.dismiss();
   }
 
   public async destroy(): Promise<void> {

@@ -1,4 +1,4 @@
-import { FormAnnouncementComponent } from './form/form.component';
+import { AnnouncementFormComponent } from './form/form.component';
 import { Announcement, User } from 'src/app/interface';
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
@@ -52,7 +52,7 @@ export class AnnouncementComponent implements OnInit {
     }
 
     const modal = await this.modalController.create({
-      component: FormAnnouncementComponent,
+      component: AnnouncementFormComponent,
       componentProps: {
         action: 'announcement',
         label,

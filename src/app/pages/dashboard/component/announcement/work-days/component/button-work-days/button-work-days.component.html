@@ -1,4 +1,5 @@
 <ion-item
+  *ngIf="!isAdmin; else Else"
   [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="route()"
@@ -18,3 +19,10 @@
     </ion-text>
   </ion-label>
 </ion-item>
+
+<ng-template #Else>
+  <!-- Horario de funcionamento -->
+  <app-work-days-admin-management
+    [announcement]="announcement"
+  ></app-work-days-admin-management>
+</ng-template>

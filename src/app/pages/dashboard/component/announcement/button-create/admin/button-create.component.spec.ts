@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AdminButtonCreateAnnouncementComponent } from './button-create.component';
+import { AnnouncementAdminButtonCreateComponent } from './button-create.component';
 
-describe('AdminButtonCreateAnnouncementComponent', () => {
-  let component: AdminButtonCreateAnnouncementComponent;
-  let fixture: ComponentFixture<AdminButtonCreateAnnouncementComponent>;
+describe('AnnouncementAdminButtonCreateComponent', () => {
+  let component: AnnouncementAdminButtonCreateComponent;
+  let fixture: ComponentFixture<AnnouncementAdminButtonCreateComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AdminButtonCreateAnnouncementComponent],
+      declarations: [AnnouncementAdminButtonCreateComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AdminButtonCreateAnnouncementComponent);
+    fixture = TestBed.createComponent(AnnouncementAdminButtonCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

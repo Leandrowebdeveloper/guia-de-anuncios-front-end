@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CardMapsComponent } from './maps.component';
+import { AdminManagementWorkDayComponent } from './work-days.component';
 
-describe('CardMapsComponent', () => {
-  let component: CardMapsComponent;
-  let fixture: ComponentFixture<CardMapsComponent>;
+describe('AdminManagementWorkDayComponent', () => {
+  let component: AdminManagementWorkDayComponent;
+  let fixture: ComponentFixture<AdminManagementWorkDayComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CardMapsComponent],
+      declarations: [AdminManagementWorkDayComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CardMapsComponent);
+    fixture = TestBed.createComponent(AdminManagementWorkDayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

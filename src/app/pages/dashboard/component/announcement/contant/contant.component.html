@@ -1,4 +1,5 @@
 <ion-item
+  *ngIf="!isAdmin; else Else"
   [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="contacts(announcement)"
@@ -22,3 +23,10 @@
     </ion-text>
   </ion-label>
 </ion-item>
+
+<ng-template #Else>
+  <!-- Contato -->
+  <app-contact-admin-management
+    [announcement]="announcement"
+  ></app-contact-admin-management>
+</ng-template>

@@ -8,7 +8,13 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 
 @Injectable()
-export class ContactAnnouncementService extends HttpService<Contact> {
+export class ContactAnnouncementService extends HttpService<
+  | Contact
+  | Pick<
+      Contact & { password: string },
+      '_csrf' | 'id' | 'password' | 'message'
+    >
+> {
   private contactEvent = new EventEmitter<Contact>(undefined);
   constructor(
     http: HttpClient,
@@ -74,5 +80,29 @@ export class ContactAnnouncementService extends HttpService<Contact> {
       );
     }
     return result as Required<Contact>;
+  }
+
+  public delete(
+    contact: Pick<Contact & { password: string }, '_csrf' | 'id' | 'password'>
+  ): Observable<
+    Pick<
+      Contact & {
+        password: string;
+      },
+      '_csrf' | 'id' | 'password' | 'message'
+    >
+  > {
+    return this.destroy(contact).pipe(
+      tap(
+        (
+          c: Pick<
+            Contact & {
+              password: string;
+            },
+            '_csrf' | 'id' | 'password' | 'message'
+          >
+        ) => (this.setContact = null)
+      )
+    );
   }
 }

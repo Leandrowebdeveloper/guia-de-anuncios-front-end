@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AddressAnnouncementComponent } from './address.component';
+import { AnnouncementAddressComponent } from './address.component';
 
-describe('AddressAnnouncementComponent', () => {
-  let component: AddressAnnouncementComponent;
-  let fixture: ComponentFixture<AddressAnnouncementComponent>;
+describe('AnnouncementAddressComponent', () => {
+  let component: AnnouncementAddressComponent;
+  let fixture: ComponentFixture<AnnouncementAddressComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AddressAnnouncementComponent],
+      declarations: [AnnouncementAddressComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AddressAnnouncementComponent);
+    fixture = TestBed.createComponent(AnnouncementAddressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

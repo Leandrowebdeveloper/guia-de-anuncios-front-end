@@ -1,31 +1,23 @@
-<ion-item-divider>
-  <ion-label><ion-icon name="location"></ion-icon> Endereço</ion-label>
-</ion-item-divider>
-<ion-item-sliding class="ion-margin-bottom">
+<ion-item-sliding>
   <ion-item lines="true">
+    <ion-icon slot="start" name="location"></ion-icon>
     <ion-icon
       title="Pressione e arraste para a esquerda."
       data-message="Pressione e arraste para a esquerda."
       slot="end"
       name="chevron-back"
     ></ion-icon>
-    <ion-text color="medium">
-      <address
-        [title]="announcement?.address | address"
-        *ngIf="announcement?.address; else Else"
-      >
-        {{ announcement?.address | address }}
-      </address>
-    </ion-text>
-
-    <ng-template #Else>
-      <ion-text> Não está cadastrado. </ion-text>
-    </ng-template>
+    <ion-label
+      >Endereço
+      <ion-text [color]="announcement?.address ? 'success' : 'danger'">
+        *
+      </ion-text>
+    </ion-label>
   </ion-item>
 
   <ion-item-options>
     <ion-item-option
-      *ngIf="user?.level === '1' && announcement?.address"
+      *ngIf="announcement?.address"
       slot="end"
       color="danger"
       size="small"

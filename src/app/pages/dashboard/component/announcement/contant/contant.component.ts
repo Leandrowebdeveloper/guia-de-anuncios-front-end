@@ -1,22 +1,29 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Announcement, Contact } from 'src/app/interface';
 import { ModalController } from '@ionic/angular';
-import { FormContactAnnouncementComponent } from './form/form.component';
+import { AnnouncementFormContactComponent } from './form/form.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-contant-announcement-component',
   templateUrl: './contant.component.html',
   styleUrls: ['./contant.component.scss'],
 })
-export class ContactAnnouncementComponent implements OnInit {
+export class AnnouncementContactComponent implements OnInit {
   @Input() announcement!: Pick<
     Announcement,
     '_csrf' | 'id' | 'contact' | 'categoryAnnouncement'
   >;
 
-  constructor(private modalController: ModalController) {}
+  public isAdmin: boolean;
+  constructor(
+    private modalController: ModalController,
+    private authService: AuthService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isAdmin = this.authService.getLevel === '1';
+  }
 
   public async contacts(
     announcement: Pick<
@@ -45,7 +52,7 @@ export class ContactAnnouncementComponent implements OnInit {
     }
 
     const modal = await this.modalController.create({
-      component: FormContactAnnouncementComponent,
+      component: AnnouncementFormContactComponent,
       componentProps: {
         action: 'contact',
         label,

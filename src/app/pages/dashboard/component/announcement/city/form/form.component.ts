@@ -14,7 +14,7 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormCityAnnouncementComponent implements OnInit {
+export class AnnouncementFormCityComponent implements OnInit {
   @Input() citie!: Required<Citie>;
   @Input() label!: string;
 
