@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CardSocialNetworkComponent } from './social-network.component';
+import { AdminManagementContactComponent } from './contact.component';
 
-describe('CardSocialNetworkComponent', () => {
-  let component: CardSocialNetworkComponent;
-  let fixture: ComponentFixture<CardSocialNetworkComponent>;
+describe('AdminManagementContactComponent', () => {
+  let component: AdminManagementContactComponent;
+  let fixture: ComponentFixture<AdminManagementContactComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CardSocialNetworkComponent],
+      declarations: [AdminManagementContactComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CardSocialNetworkComponent);
+    fixture = TestBed.createComponent(AdminManagementContactComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

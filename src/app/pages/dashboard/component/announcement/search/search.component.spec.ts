@@ -2,19 +2,19 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { SearchAnnouncementComponent } from './search.component';
+import { AnnouncementSearchComponent } from './search.component';
 
-describe('SearchAnnouncementComponent', () => {
-  let component: SearchAnnouncementComponent;
-  let fixture: ComponentFixture<SearchAnnouncementComponent>;
+describe('AnnouncementSearchComponent', () => {
+  let component: AnnouncementSearchComponent;
+  let fixture: ComponentFixture<AnnouncementSearchComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchAnnouncementComponent],
+      declarations: [AnnouncementSearchComponent],
       imports: [RouterTestingModule, IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SearchAnnouncementComponent);
+    fixture = TestBed.createComponent(AnnouncementSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

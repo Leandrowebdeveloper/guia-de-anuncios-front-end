@@ -15,7 +15,7 @@ import {
   templateUrl: './segment.component.html',
   styleUrls: ['./segment.component.scss'],
 })
-export class SegmentAnnouncementComponent implements OnInit, OnDestroy {
+export class AnnouncementSegmentComponent implements OnInit, OnDestroy {
   @Input() isAdmin: boolean;
   @ViewChild(IonSegment, { static: true }) segment: IonSegment;
   @Output() togglePage = new EventEmitter<boolean>(true);

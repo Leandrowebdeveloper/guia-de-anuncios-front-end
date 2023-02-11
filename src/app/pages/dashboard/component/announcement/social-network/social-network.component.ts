@@ -1,16 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ModalService } from 'src/app/components/present-plan/animations/modal.service';
 import { PresentPlanComponent } from 'src/app/components/present-plan/present-plan.component';
-import { Announcement, SocialNetwork, User } from 'src/app/interface';
-import { FormSocialNetworkAnnouncementComponent } from './form/form.component';
+import { Announcement, SocialNetwork } from 'src/app/interface';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { AnnouncementFormSocialNetworkComponent } from './form/form.component';
 
 @Component({
   selector: 'app-social-network-component',
   templateUrl: './social-network.component.html',
   styleUrls: ['./social-network.component.scss'],
 })
-export class SocialNetworkAnnouncementComponent {
+export class AnnouncementSocialNetworkComponent implements OnInit {
   @Input() announcement!: Pick<
     Announcement,
     | 'title'
@@ -22,10 +23,15 @@ export class SocialNetworkAnnouncementComponent {
     | 'categoryAnnouncement'
     | 'authSocial'
   >;
+  public isAdmin: boolean;
   constructor(
     private modalController: ModalController,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private authService: AuthService
   ) {}
+  ngOnInit(): void {
+    this.isAdmin = this.authService.getLevel === '1';
+  }
 
   // Rede social
   public async socialNetwork(
@@ -62,7 +68,7 @@ export class SocialNetworkAnnouncementComponent {
     }
 
     modal = await this.modalController.create({
-      component: FormSocialNetworkAnnouncementComponent,
+      component: AnnouncementFormSocialNetworkComponent,
       componentProps: {
         label,
         socialNetwork,

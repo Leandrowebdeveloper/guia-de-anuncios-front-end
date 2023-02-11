@@ -1,60 +1,53 @@
+import { AdminManagementCitieComponent } from './city/component/citie.component';
 import { IonicModule } from '@ionic/angular';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { AnnouncementStateComponent } from './state/state.component';
-import { FormSocialNetworkAnnouncementComponent } from './social-network/form/form.component';
-import { SocialNetworkAnnouncementComponent } from './social-network/social-network.component';
+import { AnnouncementFormSocialNetworkComponent } from './social-network/form/form.component';
+import { AnnouncementSocialNetworkComponent } from './social-network/social-network.component';
 import { SkeletonComponent } from './skeleton/skeleton.component';
-import { SegmentAnnouncementComponent } from './segment/segment.component';
-import { MapAnnouncementComponent } from './map/map.component';
+import { AnnouncementSegmentComponent } from './segment/segment.component';
+import { AnnouncementMapComponent } from './map/map.component';
 import { ListItemAnnouncementComponentRoutingModule } from './list-item/list-item.component-routing.module';
-import { ListItemAnnouncementComponent } from './list-item/list-item.component';
-import { FormCityAnnouncementComponent } from './city/form/form.component';
-import { CityAnnouncementComponent } from './city/city.component';
+import { AnnouncementListItemComponent } from './list-item/list-item.component';
+import { AnnouncementFormCityComponent } from './city/form/form.component';
+import { AnnouncementCityComponent } from './city/city.component';
 import { FormComponentModule } from 'src/app/components/form/form.module';
 import { HeaderModalModule } from 'src/app/components/header-modal/header-modal.module';
-import { CardAnnouncementComponent } from './card/card.component';
+import { AnnouncementCardComponent } from './card/card.component';
 import { CardAnnouncementComponentRoutingModule } from './card/card.component-routing.module';
-import { FormContactAnnouncementComponent } from './contant/form/form.component';
-import { ContactAnnouncementComponent } from './contant/contant.component';
-import { ButtonCreateAnnouncementComponent } from './button-create/auth/button-create.component';
-import { FormAddressAnnouncementComponent } from './address/form/form.component';
-import { AddressAnnouncementComponent } from './address/address.component';
+import { AnnouncementFormContactComponent } from './contant/form/form.component';
+import { AnnouncementContactComponent } from './contant/contant.component';
+import { AnnouncementButtonCreateComponent } from './button-create/auth/button-create.component';
+import { AnnouncementFormAddressComponent } from './address/form/form.component';
+import { AnnouncementAddressComponent } from './address/address.component';
 import { PresentPlanComponentModule } from 'src/app/components/present-plan/present-plan.module';
 import { AnnouncementBlockadeComponent } from './blockade/blockade.component';
-import { SearchMenuAnnouncementComponent } from './search/filter/filter-menu.component';
+import { AnnouncementSearchMenuComponent } from './search/filter/filter-menu.component';
 import { SearchAnnouncementService } from './search/service/search.service';
-import { SearchAnnouncementComponent } from './search/search.component';
+import { AnnouncementSearchComponent } from './search/search.component';
 import { StateAnnouncementService } from './state/service/state.service';
 import { AnnouncementComponent } from './announcement/announcement.component';
-import { AdminButtonCreateAnnouncementComponent } from './button-create/admin/button-create.component';
+import { AnnouncementAdminButtonCreateComponent } from './button-create/admin/button-create.component';
 import { CoordinateAnnouncementService } from './map/service/map.service';
 import { AddressService } from './address/service/address.service';
 import { SocialNetworkAnnouncementService } from './social-network/service/social-network.service';
 import { ContactAnnouncementService } from './contant/service/contact.service';
 import { CityAnnouncementService } from './city/service/city.service';
 import { CardHeaderComponent } from './card/components/header/header.component';
-import { CardCitieComponent } from './card/components/citie/citie.component';
-import { CardAddressComponent } from './card/components/address/address.component';
-import { CardContactComponent } from './card/components/contact/contact.component';
-import { CardWorkDayComponent } from './card/components/work-days/work-days.component';
-import { CardMapsComponent } from './card/components/maps/maps.component';
-import { CardSocialNetworkComponent } from './card/components/social-network/social-network.component';
 import { MaskPipe } from 'src/app/utilities/pipe/mask/mask.pipe';
-import { FormAnnouncementComponent } from 'src/app/pages/dashboard/component/announcement/announcement/form/form.component';
+import { AnnouncementFormComponent } from 'src/app/pages/dashboard/component/announcement/announcement/form/form.component';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
-import { DeleteAddressService } from './card/components/address/service/service.service';
-import { DeleteCitieService } from './card/components/citie/service/service.service';
 import { AdminAnnouncementService } from '../../administrator/announcement/service/admin-announcement.service';
-import { DeleteContactService } from './card/components/contact/service/service.service';
-import { DeleteWorkDayService } from './card/components/work-days/service/service.service';
 import { WorkDayAnnouncementComponent } from './work-days/work-days.component';
 import { ShowAnnouncementComponentModule } from 'src/app/pages/public/components/announcement-component.module';
-import { DeleteCoordinateService } from './card/components/maps/service/service.service';
-import { DeleteSocialNetworkService } from './card/components/social-network/service/service.service';
 import { GaleryComponentModule } from './galery/galery-component.module';
+import { AdminMaganementAddressComponent } from './address/component/address.component';
+import { AdminManagementContactComponent } from './contant/component/contact.component';
+import { AdminManagementSocialNetworkComponent } from './social-network/component/social-network.component';
+import { AdminManagementMapsComponent } from './map/component/maps.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -73,59 +66,57 @@ import { GaleryComponentModule } from './galery/galery-component.module';
   ],
   declarations: [
     AnnouncementStateComponent,
-    SocialNetworkAnnouncementComponent,
-    FormSocialNetworkAnnouncementComponent,
+    AnnouncementSocialNetworkComponent,
+    AnnouncementFormSocialNetworkComponent,
     SkeletonComponent,
-    SegmentAnnouncementComponent,
-    MapAnnouncementComponent,
-    ListItemAnnouncementComponent,
-    FormCityAnnouncementComponent,
-    CityAnnouncementComponent,
-    CardAnnouncementComponent,
-    FormContactAnnouncementComponent,
-    ContactAnnouncementComponent,
-    ButtonCreateAnnouncementComponent,
-    AdminButtonCreateAnnouncementComponent,
-    FormAddressAnnouncementComponent,
-    AddressAnnouncementComponent,
+    AnnouncementSegmentComponent,
+    AnnouncementMapComponent,
+    AnnouncementListItemComponent,
+    AnnouncementFormCityComponent,
+    AnnouncementCityComponent,
+    AnnouncementCardComponent,
+    AnnouncementFormContactComponent,
+    AnnouncementContactComponent,
+    AnnouncementButtonCreateComponent,
+    AnnouncementAdminButtonCreateComponent,
+    AnnouncementFormAddressComponent,
+    AnnouncementAddressComponent,
     AnnouncementBlockadeComponent,
-    SearchMenuAnnouncementComponent,
-    SearchAnnouncementComponent,
-    FormAnnouncementComponent,
+    AnnouncementSearchMenuComponent,
+    AnnouncementSearchComponent,
+    AnnouncementFormComponent,
     AnnouncementComponent,
     CardHeaderComponent,
-    CardCitieComponent,
-    CardContactComponent,
-    CardAddressComponent,
-    CardWorkDayComponent,
-    CardSocialNetworkComponent,
-    CardMapsComponent,
+    AdminManagementCitieComponent,
+    AdminManagementContactComponent,
+    AdminMaganementAddressComponent,
+    AdminManagementSocialNetworkComponent,
+    AdminManagementMapsComponent,
   ],
   exports: [
     AnnouncementStateComponent,
-    SocialNetworkAnnouncementComponent,
+    AnnouncementSocialNetworkComponent,
     SkeletonComponent,
-    SegmentAnnouncementComponent,
-    MapAnnouncementComponent,
-    ListItemAnnouncementComponent,
-    CityAnnouncementComponent,
-    CardAnnouncementComponent,
-    ContactAnnouncementComponent,
-    ButtonCreateAnnouncementComponent,
-    AdminButtonCreateAnnouncementComponent,
-    AddressAnnouncementComponent,
+    AnnouncementSegmentComponent,
+    AnnouncementMapComponent,
+    AnnouncementListItemComponent,
+    AnnouncementCityComponent,
+    AnnouncementCardComponent,
+    AnnouncementContactComponent,
+    AnnouncementButtonCreateComponent,
+    AnnouncementAdminButtonCreateComponent,
+    AnnouncementAddressComponent,
     AnnouncementBlockadeComponent,
-    SearchMenuAnnouncementComponent,
-    SearchAnnouncementComponent,
-    FormAnnouncementComponent,
+    AnnouncementSearchMenuComponent,
+    AnnouncementSearchComponent,
+    AnnouncementFormComponent,
     AnnouncementComponent,
-    CardMapsComponent,
-    CardSocialNetworkComponent,
+    AdminManagementMapsComponent,
+    AdminManagementSocialNetworkComponent,
     CardHeaderComponent,
-    CardWorkDayComponent,
-    CardCitieComponent,
-    CardContactComponent,
-    CardAddressComponent,
+    AdminManagementCitieComponent,
+    AdminManagementContactComponent,
+    AdminMaganementAddressComponent,
   ],
   providers: [
     AdminAnnouncementService,
@@ -134,22 +125,16 @@ import { GaleryComponentModule } from './galery/galery-component.module';
     MaskPipe,
     CoordinateAnnouncementService,
     AddressService,
-    DeleteAddressService,
     SocialNetworkAnnouncementService,
     CityAnnouncementService,
     ContactAnnouncementService,
-    DeleteContactService,
-    DeleteCitieService,
-    DeleteWorkDayService,
-    DeleteCoordinateService,
-    DeleteSocialNetworkService,
     //
-    AddressAnnouncementComponent,
-    CityAnnouncementComponent,
-    ContactAnnouncementComponent,
+    AnnouncementAddressComponent,
+    AnnouncementCityComponent,
+    AnnouncementContactComponent,
     WorkDayAnnouncementComponent,
-    MapAnnouncementComponent,
-    SocialNetworkAnnouncementComponent,
+    AnnouncementMapComponent,
+    AnnouncementSocialNetworkComponent,
   ],
 })
 export class AnnouncementComponentsModule {}

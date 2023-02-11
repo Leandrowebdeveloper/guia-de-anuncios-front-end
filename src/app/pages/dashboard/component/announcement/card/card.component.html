@@ -3,100 +3,45 @@
     <!-- header -->
     <app-header-card [announcement]="announcement"></app-header-card>
 
-    <!-- botão pagina do usuário -->
-    <ion-fab
-      *ngIf="user?.level === '1'"
-      vertical="top"
-      horizontal="end"
-      slot="fixed"
-    >
-      <ion-fab-button
-        size="small"
-        title="Painel do usuário"
-        [routerLink]="[
-          '/painel-de-controle',
-          'admin',
-          'usuario',
-          announcement?.user?.slug
-        ]"
-      >
-        <ion-icon color="light" name="person"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-    <!-- botão gerenciamento -->
-    <ion-fab vertical="center" horizontal="end" slot="fixed">
-      <ion-fab-button
-        size="small"
-        title="Gerenciamento do anúncio"
-        [routerLink]="['/painel-de-controle', 'anuncio', announcement?.slug]"
-      >
-        <ion-icon color="light" name="construct"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-    <!-- botão modal gerenciamento -->
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-      <ion-fab-button
-        size="small"
-        title="Visialisar dados do anúncio"
-        [id]="'open-modal_' + announcement?.id"
-      >
-        <ion-icon color="light" name="eye"></ion-icon>
+      <ion-fab-button>
+        <ion-icon name="ellipsis-vertical" color="light"></ion-icon>
       </ion-fab-button>
+      <ion-fab-list side="top">
+        <!-- botão pagina do usuário -->
+        <ion-fab-button
+          *ngIf="user?.level === '1'"
+          size="small"
+          title="Painel do usuário"
+          data-message="Painel do usuário"
+          [routerLink]="[
+            '/painel-de-controle',
+            'admin',
+            'usuario',
+            announcement?.user?.slug
+          ]"
+        >
+          <ion-icon name="person"></ion-icon>
+        </ion-fab-button>
+
+        <!-- botão gerenciamento -->
+        <ion-fab-button
+          size="small"
+          title="Gerenciamento do anúncio"
+          data-message="Gerenciamento do anúncio"
+          [routerLink]="['/painel-de-controle', 'anuncio', announcement?.slug]"
+        >
+          <ion-icon name="construct"></ion-icon>
+        </ion-fab-button>
+        <!-- botão modal gerenciamento -->
+        <ion-fab-button
+          title="Visialisar anúncio"
+          data-message="Visialisar anúncio"
+          [routerLink]="['/pagina', announcement?.slug]"
+        >
+          <ion-icon name="eye"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
     </ion-fab>
-
-    <ion-modal [trigger]="'open-modal_' + announcement?.id">
-      <ng-template>
-        <app-header-component-modal
-          [hidden]="hasHeader"
-          [label]="announcement?.title"
-        ></app-header-component-modal>
-        <ion-content class="ion-padding">
-          <ion-item-group>
-            <!-- Cidade -->
-            <app-citie-card
-              [announcement]="announcement"
-              [user]="user"
-            ></app-citie-card>
-
-            <!-- Endereço -->
-            <app-address-card
-              [announcement]="announcement"
-              [user]="user"
-            ></app-address-card>
-
-            <!-- Contato -->
-            <app-contact-card
-              [announcement]="announcement"
-              [user]="user"
-            ></app-contact-card>
-
-            <!-- Horario de funcionamento -->
-            <app-work-days-card
-              [announcement]="announcement"
-              [user]="user"
-            ></app-work-days-card>
-
-            <!-- Imagens -->
-            <app-galery-announcement-component
-              [announcement]="announcement"
-              [user]="user"
-              (isHeader)="isHeader($event)"
-            ></app-galery-announcement-component>
-
-            <!-- Mapa -->
-            <app-maps-card
-              [announcement]="announcement"
-              [user]="user"
-            ></app-maps-card>
-
-            <!-- Rede Social -->
-            <app-social-network-card
-              [announcement]="announcement"
-              [user]="user"
-            ></app-social-network-card>
-          </ion-item-group>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
   </div>
 </ion-card>

@@ -8,7 +8,15 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 
 @Injectable()
-export class CityAnnouncementService extends HttpService<Citie> {
+export class CityAnnouncementService extends HttpService<
+  | Citie
+  | Pick<
+      Citie & {
+        password: string;
+      },
+      '_csrf' | 'id' | 'password' | 'message'
+    >
+> {
   private citieEvent = new EventEmitter<Citie>(undefined);
   constructor(
     http: HttpClient,
@@ -42,5 +50,29 @@ export class CityAnnouncementService extends HttpService<Citie> {
         tap((citie_: Required<Citie>) => (this.setCitie = citie_))
       );
     }
+  }
+
+  public delete(
+    citie: Pick<Citie & { password: string }, '_csrf' | 'id' | 'password'>
+  ): Observable<
+    Pick<
+      Citie & {
+        password: string;
+      },
+      '_csrf' | 'id' | 'password' | 'message'
+    >
+  > {
+    return this.destroy(citie).pipe(
+      tap(
+        (
+          c: Pick<
+            Citie & {
+              password: string;
+            },
+            '_csrf' | 'id' | 'password' | 'message'
+          >
+        ) => (this.setCitie = null)
+      )
+    );
   }
 }

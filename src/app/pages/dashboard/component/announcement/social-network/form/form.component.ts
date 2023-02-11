@@ -20,7 +20,7 @@ import { SocialNetwork } from 'src/app/interface';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormSocialNetworkAnnouncementComponent implements OnInit {
+export class AnnouncementFormSocialNetworkComponent implements OnInit {
   @Input() socialNetwork!: Required<SocialNetwork>;
   @Input() label!: string;
 

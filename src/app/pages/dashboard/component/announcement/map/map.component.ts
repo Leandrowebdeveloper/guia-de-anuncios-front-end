@@ -1,7 +1,7 @@
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Announcement, Coordinate, User } from 'src/app/interface';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AlertService } from 'src/app/utilities/alert/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -10,17 +10,19 @@ import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { PresentPlanComponent } from 'src/app/components/present-plan/present-plan.component';
 import { ModalService } from 'src/app/components/present-plan/animations/modal.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-map-announcement-component',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapAnnouncementComponent {
+export class AnnouncementMapComponent implements OnInit {
   @Input() announcement!: Pick<
     Announcement,
     '_csrf' | 'id' | 'coordinate' | 'plan' | 'categoryAnnouncement'
   >;
+  public isAdmin: boolean;
   private form: FormGroup;
   private map: Subscription;
   constructor(
@@ -30,8 +32,12 @@ export class MapAnnouncementComponent {
     private alertService: AlertService,
     private loadingService: LoadingService,
     private modalController: ModalController,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private authService: AuthService
   ) {}
+  ngOnInit(): void {
+    this.isAdmin = this.authService.getLevel === '1';
+  }
 
   public async coordinates(): Promise<void | Subscription> {
     if (this.announcement?.plan?.type === 'free') {

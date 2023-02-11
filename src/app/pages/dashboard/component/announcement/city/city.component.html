@@ -1,4 +1,5 @@
 <ion-item
+  *ngIf="!isAdmin; else Else"
   [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="cities(announcement)"
@@ -18,3 +19,9 @@
     </ion-text>
   </ion-label>
 </ion-item>
+
+<ng-template #Else>
+  <app-citie-admin-management
+    [announcement]="announcement"
+  ></app-citie-admin-management>
+</ng-template>

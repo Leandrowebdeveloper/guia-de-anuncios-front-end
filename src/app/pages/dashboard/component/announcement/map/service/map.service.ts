@@ -1,4 +1,3 @@
-import { tap } from 'rxjs/operators';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -10,7 +9,13 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
 import { AlertService } from 'src/app/utilities/alert/alert.service';
 
 @Injectable()
-export class CoordinateAnnouncementService extends HttpService<Coordinate> {
+export class CoordinateAnnouncementService extends HttpService<
+  | Coordinate
+  | Pick<
+      Coordinate & { password: string },
+      '_csrf' | 'id' | 'password' | 'message'
+    >
+> {
   private coordinateEvent = new EventEmitter<Coordinate>(undefined);
   constructor(
     http: HttpClient,
@@ -35,7 +40,14 @@ export class CoordinateAnnouncementService extends HttpService<Coordinate> {
 
   public coordinate(
     coordinate: Required<Coordinate>
-  ): Observable<Coordinate | number[]> {
+  ): Observable<
+    | Coordinate
+    | Pick<
+        Coordinate & { password: string },
+        '_csrf' | 'id' | 'password' | 'message'
+      >
+    | number[]
+  > {
     if (coordinate?.id) {
       return this.patch(coordinate);
     } else {
@@ -84,5 +96,22 @@ export class CoordinateAnnouncementService extends HttpService<Coordinate> {
         this.alertService.alert('Ateção', 'Ocorreu um erro desconhecido.');
         break;
     }
+  }
+
+  public delete(
+    coordinate: Pick<
+      Coordinate & { password: string },
+      '_csrf' | 'id' | 'password'
+    >
+  ): Observable<
+    | Coordinate
+    | Pick<
+        Coordinate & {
+          password: string;
+        },
+        '_csrf' | 'id' | 'password' | 'message'
+      >
+  > {
+    return this.destroy(coordinate);
   }
 }

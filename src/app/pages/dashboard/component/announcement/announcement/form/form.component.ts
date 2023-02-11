@@ -16,7 +16,7 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormAnnouncementComponent implements OnInit {
+export class AnnouncementFormComponent implements OnInit {
   @Input() announcement!: Required<
     Pick<Announcement, 'id' | '_csrf' | 'title' | 'description' | 'userId'>
   >;

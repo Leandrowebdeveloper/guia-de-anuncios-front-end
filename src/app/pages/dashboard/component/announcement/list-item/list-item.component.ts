@@ -6,7 +6,7 @@ import { Announcement } from 'src/app/interface';
   templateUrl: './list-item.component.html',
   styleUrls: ['./list-item.component.scss'],
 })
-export class ListItemAnnouncementComponent {
+export class AnnouncementListItemComponent {
   @Input() announcement!: Announcement;
   @Input() index!: number;
   @Input() action!: number;

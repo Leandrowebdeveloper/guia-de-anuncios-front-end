@@ -8,7 +8,13 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 
 @Injectable()
-export class AddressService extends HttpService<Address> {
+export class AddressService extends HttpService<
+  | Address
+  | Pick<
+      Address & { password: string },
+      '_csrf' | 'id' | 'password' | 'message'
+    >
+> {
   private addressEvent = new EventEmitter<Address>(undefined);
   constructor(
     http: HttpClient,
@@ -53,5 +59,29 @@ export class AddressService extends HttpService<Address> {
         tap((address_: Required<Address>) => (this.setAddress = address_))
       );
     }
+  }
+
+  public delete(
+    address: Pick<Address & { password: string }, '_csrf' | 'id' | 'password'>
+  ): Observable<
+    Pick<
+      Address & {
+        password: string;
+      },
+      '_csrf' | 'id' | 'password' | 'message'
+    >
+  > {
+    return this.destroy(address).pipe(
+      tap(
+        (
+          c: Pick<
+            Address & {
+              password: string;
+            },
+            '_csrf' | 'id' | 'password' | 'message'
+          >
+        ) => (this.setAddress = null)
+      )
+    );
   }
 }

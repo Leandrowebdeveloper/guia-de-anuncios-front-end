@@ -9,7 +9,7 @@ import { SearchAnnouncementService } from '../service/search.service';
   templateUrl: 'filter-menu.component.html',
   styleUrls: ['filter-menu.component.scss'],
 })
-export class SearchMenuAnnouncementComponent implements OnInit, OnDestroy {
+export class AnnouncementSearchMenuComponent implements OnInit, OnDestroy {
   public isIcon: SearchAnnouncement;
   public $isIcon: Subscription;
   constructor(

@@ -8,7 +8,13 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 
 @Injectable()
-export class SocialNetworkAnnouncementService extends HttpService<SocialNetwork> {
+export class SocialNetworkAnnouncementService extends HttpService<
+  | SocialNetwork
+  | Pick<
+      SocialNetwork & { password: string },
+      '_csrf' | 'id' | 'password' | 'message'
+    >
+> {
   private socialNetworkEvent = new EventEmitter<SocialNetwork>(undefined);
   constructor(
     http: HttpClient,
@@ -29,9 +35,9 @@ export class SocialNetworkAnnouncementService extends HttpService<SocialNetwork>
       this.managementService.getAnnouncement;
   }
 
-  public createSocialNetwork(key: string): Observable<SocialNetwork> {
-    return this.findOne('', { key });
-  }
+  // public createSocialNetwork(key: string): Observable<SocialNetwork> {
+  //   return this.findOne('', { key });
+  // }
 
   public socialNetwork(
     socialNetwork: SocialNetwork
@@ -51,5 +57,32 @@ export class SocialNetworkAnnouncementService extends HttpService<SocialNetwork>
         )
       );
     }
+  }
+
+  public delete(
+    socialNetWork: Pick<
+      SocialNetwork & { password: string },
+      '_csrf' | 'id' | 'password'
+    >
+  ): Observable<
+    Pick<
+      SocialNetwork & {
+        password: string;
+      },
+      '_csrf' | 'id' | 'password' | 'message'
+    >
+  > {
+    return this.destroy(socialNetWork).pipe(
+      tap(
+        (
+          c: Pick<
+            SocialNetwork & {
+              password: string;
+            },
+            '_csrf' | 'id' | 'password' | 'message'
+          >
+        ) => (this.setSocialNetwork = null)
+      )
+    );
   }
 }

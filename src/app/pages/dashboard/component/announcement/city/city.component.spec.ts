@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CityAnnouncementComponent } from './city.component';
+import { AnnouncementCityComponent } from './city.component';
 
-describe('CityAnnouncementComponent', () => {
-  let component: CityAnnouncementComponent;
-  let fixture: ComponentFixture<CityAnnouncementComponent>;
+describe('AnnouncementCityComponent', () => {
+  let component: AnnouncementCityComponent;
+  let fixture: ComponentFixture<AnnouncementCityComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CityAnnouncementComponent],
+      declarations: [AnnouncementCityComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CityAnnouncementComponent);
+    fixture = TestBed.createComponent(AnnouncementCityComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

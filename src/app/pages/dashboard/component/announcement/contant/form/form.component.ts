@@ -15,7 +15,7 @@ import { ContactAnnouncementService } from './../service/contact.service';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormContactAnnouncementComponent implements OnInit {
+export class AnnouncementFormContactComponent implements OnInit {
   @Input() contact!: Required<Contact>;
   @Input() label!: string;
 
