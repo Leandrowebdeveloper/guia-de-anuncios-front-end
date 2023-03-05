@@ -22,19 +22,11 @@ export default [
       "/api/redefine-password",
       "/api/recover",
       "/api/logout",
-      "/images/galery",
+      "/images",
+      "manifest.webmanifest",
     ],
     target: "http://172.17.0.1:3001/",
     secure: false,
     changeOrigin: true,
-  },
-  {
-    context: ["/api/socialNetwork/"],
-    target: "https://api.instagram.com/",
-    secure: true,
-    changeOrigin: true,
-    pathRewrite: {
-      "^/api/socialNetwork/": "",
-    },
   },
 ];

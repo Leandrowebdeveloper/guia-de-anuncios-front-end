@@ -71,6 +71,7 @@
       [href]="'mailto:' + announcement?.user?.email"
       [title]="'Envie um email: ' + announcement?.user?.email"
       [attr.data-message]="'Envie um email: ' + announcement?.user?.email"
+      (click)="send($event, 'email')"
     >
       <ion-fab-button size="small" color="tertiary">
         <ion-icon color="light" name="mail"></ion-icon>

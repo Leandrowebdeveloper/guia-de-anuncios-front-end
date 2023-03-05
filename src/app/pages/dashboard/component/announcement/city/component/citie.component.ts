@@ -91,15 +91,15 @@ export class AdminManagementCitieComponent implements OnInit, OnDestroy {
   ): Subscription {
     if (this.citie) {
       const loading = this.loadingService.show('Excluindo cidade...');
-      return (this.$delete = this.citieService.delete(citie).subscribe(
-        (address_: Pick<Citie, 'message'>) => {
+      return (this.$delete = this.citieService.delete(citie).subscribe({
+        next: (address_: Pick<Citie, 'message'>) => {
           this.messsage(address_, loading);
           this.announcement.citie = null;
           return (this.citie = null);
         },
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$delete)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$delete),
+      }));
     }
   }
 
@@ -111,13 +111,13 @@ export class AdminManagementCitieComponent implements OnInit, OnDestroy {
   }
 
   private update(): Subscription {
-    return (this.$update = this.citieService.getCitieEvent.subscribe(
-      (citie: Citie) => {
+    return (this.$update = this.citieService.getCitieEvent.subscribe({
+      next: (citie: Citie) => {
         if (this.announcement?.id === citie?.announcementId) {
           this.announcement.citie = citie;
           this.citie = citie;
         }
-      }
-    ));
+      },
+    }));
   }
 }

@@ -58,18 +58,18 @@ export class FormUserNameComponent implements OnInit {
   private name(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Salvando nome...');
     if (this.isAuth) {
-      return (this.$name = this.authService.name(event.value).subscribe(
-        (user: User) => this.messsage(user, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$name)
-      ));
+      return (this.$name = this.authService.name(event.value).subscribe({
+        next: (user: User) => this.messsage(user, loading),
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$name),
+      }));
     }
-    return (this.$name = this.nameService.name(event.value).subscribe(
-      (user: Required<Pick<User, UserName | 'name' | 'message'>>) =>
+    return (this.$name = this.nameService.name(event.value).subscribe({
+      next: (user: Required<Pick<User, UserName | 'name' | 'message'>>) =>
         this.messsage(user, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.$name)
-    ));
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.$name),
+    }));
   }
 
   private messsage(

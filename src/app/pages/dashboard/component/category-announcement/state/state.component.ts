@@ -25,11 +25,11 @@ export class CategoryAnnouncementStateComponent {
   public state(category: Pick<Category, 'slug' | '_csrf'>): Subscription {
     const { slug, _csrf } = category;
     this.form = this.fb.group({ slug, _csrf });
-    return (this.$state = this.stateService.state(this.form.value).subscribe(
-      (category_: Required<Pick<Category, 'message'>>) =>
+    return (this.$state = this.stateService.state(this.form.value).subscribe({
+      next: (category_: Required<Pick<Category, 'message'>>) =>
         this.messageService.success(category_?.message, null, this.$state, 350),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, null, this.$state)
-    ));
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, null, this.$state),
+    }));
   }
 }

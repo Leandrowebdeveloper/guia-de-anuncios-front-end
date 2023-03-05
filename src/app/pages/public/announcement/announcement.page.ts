@@ -1,4 +1,4 @@
-import { ToastService } from 'src/app/utilities/toast/toast.service';
+import { ModalController } from '@ionic/angular';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -6,9 +6,9 @@ import { EMPTY, Observable, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Announcement, User } from 'src/app/interface';
 import { AnnouncementService } from './service/service.service';
-import { Share } from '@capacitor/share';
-import { Clipboard } from 'ts-clipboard';
+
 import * as moment from 'moment';
+import { MapsPage } from '../maps/maps.page';
 
 @Component({
   selector: 'app-announcement',
@@ -21,8 +21,6 @@ export class AnnouncementPage implements OnInit {
 
   public datetimes = moment().format();
 
-  public isSupportShare: boolean;
-
   public slideOpts = {
     initialSlide: 0,
     speed: 400,
@@ -32,45 +30,21 @@ export class AnnouncementPage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private announcementService: AnnouncementService,
-    private toastService: ToastService
+    private modalController: ModalController
   ) {}
 
   ngOnInit() {
     this.init();
-    this.canShare();
   }
 
-  public async share(announcement: Announcement) {
-    try {
-      if (this.isSupportShare) {
-        await Share.share({
-          title: `Site ${announcement?.title}`,
-          text: `O link a baixo para o site ${announcement?.title}`,
-          url: location?.href,
-          dialogTitle: 'Compartilhar página.',
-        });
-      }
-    } catch (error) {}
-  }
-
-  public async clipboard(): Promise<void> {
-    const url = location?.href;
-    try {
-      Clipboard.copy(url);
-      (
-        await this.toastService.show(
-          'Link copiado.',
-          'bottom',
-          'thumbs-up',
-          1000
-        )
-      ).present();
-    } catch (error) {}
-  }
-
-  private async canShare(): Promise<boolean> {
-    const { value } = await Share.canShare();
-    return (this.isSupportShare = value);
+  public async showMaps(announcement: Announcement) {
+    const modal = await this.modalController.create({
+      component: MapsPage,
+      componentProps: {
+        announcement,
+      },
+    });
+    return await modal.present();
   }
 
   private init(): Observable<Announcement> {
@@ -80,10 +54,15 @@ export class AnnouncementPage implements OnInit {
         .findOne('show', { slug })
         .pipe(
           tap((item) => {
-            item.user = { email: item?.announcement?.user?.email } as User;
+            item.user = {
+              email: item?.announcement?.user?.email,
+              plan: item?.announcement?.user?.plan,
+            } as User;
             item.authSocial = { ...item?.announcement?.user?.authSocial };
+
             delete item?.announcement;
             delete item?.announcement?.user?.plan;
+            delete item?.categoryAnnouncement;
             return item;
           }),
           catchError((error: HttpErrorResponse) => {

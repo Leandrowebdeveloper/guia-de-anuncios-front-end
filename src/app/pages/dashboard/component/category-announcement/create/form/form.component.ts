@@ -55,11 +55,11 @@ export class FormCategoryCreateComponent implements OnInit {
   // Update Name description
   private register(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Cadastrar categoria...');
-    return (this.write = this.categoryService.register(event.value).subscribe(
-      (category: Category) => this.messsage(category, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
+    return (this.write = this.categoryService.register(event.value).subscribe({
+      next: (category: Category) => this.messsage(category, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.write),
+    }));
   }
 
   private messsage(

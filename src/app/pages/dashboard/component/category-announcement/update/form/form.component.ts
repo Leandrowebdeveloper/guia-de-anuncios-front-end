@@ -58,12 +58,12 @@ export class FormCategoryUpdateComponent implements OnInit {
     const loading = this.loadingService.show('Cadastrar categoria...');
     return (this.write = this.categoryService
       .updateNameAndDescription(event.value)
-      .subscribe(
-        (category: Required<Pick<Category, 'message'>>) =>
+      .subscribe({
+        next: (category: Required<Pick<Category, 'message'>>) =>
           this.messsage(category, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.write)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.write),
+      }));
   }
 
   private messsage(

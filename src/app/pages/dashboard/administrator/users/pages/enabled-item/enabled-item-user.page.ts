@@ -98,12 +98,12 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   public search(event: SearchbarCustomEvent): Subscription {
     if (event?.target?.value.length >= 3) {
       const data = this.setDataSearch(event?.target?.value);
-      return (this.$search = this.adminUsersService
-        .searchBy(data)
-        .subscribe((user: Pick<User, EnabledItemUser>[]) => {
+      return (this.$search = this.adminUsersService.searchBy(data).subscribe({
+        next: (user: Pick<User, EnabledItemUser>[]) => {
           this.searchUserService.search = user;
           setTimeout(() => this.$search.unsubscribe(), 2000);
-        }));
+        },
+      }));
     }
   }
 
@@ -111,39 +111,23 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
     this.calculatePagination();
     return (this.$users = this.adminUsersService
       .index(`management/`, { limit: this.limit, offset: this.offset })
-      .subscribe(
-        (user: Pick<User, EnabledItemUser>[]) => this.success(event, user),
-        (error: HttpErrorResponse) => this.error.next(true),
-        () => this.helpService.delay(this.$users.unsubscribe(), 2000)
-      ));
+      .subscribe({
+        next: (user: Pick<User, EnabledItemUser>[]) =>
+          this.success(event, user),
+        error: (error: HttpErrorResponse) => this.error.next(true),
+        complete: () => this.helpService.delay(this.$users.unsubscribe(), 2000),
+      }));
   }
 
   private orderBy(search: Search): void {
     if (!this.users) {
       return;
     }
-    switch (search) {
-      case 'name':
-        this.users.sort((a, b) => a?.name < b?.name && -1);
-        break;
-      case 'createdAt':
-        this.users.sort((a, b) => a?.createdAt > b?.createdAt && -1);
-        break;
-      case 'updatedAt':
-        this.users.sort((a, b) => a?.updatedAt > b?.updatedAt && -1);
-        break;
-      case 'blockade':
-        this.users.sort((a, b) => a?.blockade > b?.blockade && -1);
-        break;
-      case 'state':
-        this.users.sort((a, b) => a?.state > b?.state && -1);
-        break;
-    }
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchUserService.getSearchBy.subscribe(
-      (filter: Search) => {
+    this.$searchBy = this.searchUserService.getSearchBy.subscribe({
+      next: (filter: Search) => {
         if (
           filter === 'firstName' ||
           filter === 'lastName' ||
@@ -154,8 +138,8 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
           this.setSearchBy = 'firstName';
           this.orderBy(filter);
         }
-      }
-    );
+      },
+    });
   }
 
   private setDataSearch(value: string): object {
@@ -223,26 +207,26 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   }
 
   private delete(): Subscription {
-    return (this.$delete = this.adminUsersService.deleteObservable.subscribe(
-      (user: Pick<User, 'id'>) => {
+    return (this.$delete = this.adminUsersService.deleteObservable.subscribe({
+      next: (user: Pick<User, 'id'>) => {
         if (user) {
           const i = this.users.findIndex(
             (item: Pick<User, 'id'>) => item?.id === user?.id
           );
           this.users.splice(i, 1);
         }
-      }
-    ));
+      },
+    }));
   }
 
   private update(): void {
-    this.$update = this.adminUsersService.userObservable.subscribe(
-      (user: User) => {
+    this.$update = this.adminUsersService.userObservable.subscribe({
+      next: (user: User) => {
         if (user && this.users?.length > 0) {
           this.setUser(user);
         }
-      }
-    );
+      },
+    });
   }
 
   private setUser(user: User) {

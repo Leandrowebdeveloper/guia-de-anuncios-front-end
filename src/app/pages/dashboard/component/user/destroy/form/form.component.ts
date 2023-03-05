@@ -57,17 +57,17 @@ export class FormUserDestroyComponent implements OnInit {
     const loading = this.loadingService.show('Alterando senha...');
     event.value.slug = this.user?.slug;
     if (this.isAuth) {
-      return (this.write = this.authService.delete(event.value).subscribe(
-        (user: User) => this.messsage(user, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.write)
-      ));
+      return (this.write = this.authService.delete(event.value).subscribe({
+        next: (user: User) => this.messsage(user, loading),
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.write),
+      }));
     }
-    return (this.write = this.userDestroyService.delete(event.value).subscribe(
-      (user: User) => this.messsage(user, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
+    return (this.write = this.userDestroyService.delete(event.value).subscribe({
+      next: (user: User) => this.messsage(user, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.write),
+    }));
   }
 
   private messsage(

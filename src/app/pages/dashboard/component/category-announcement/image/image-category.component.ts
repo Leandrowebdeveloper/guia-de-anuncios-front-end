@@ -26,11 +26,12 @@ export class ImageCategoryComponent {
     if (FILE.type === 'image/svg+xml') {
       return (this.$upload = this.imageCategoryService
         .uploadIcon(this.category, FILE)
-        .subscribe(
-          (response: any) => this.success(response, response, this.$upload),
-          (error: HttpErrorResponse) =>
-            this.messageService.error(error, null, this.$upload)
-        ));
+        .subscribe({
+          next: (response: any) =>
+            this.success(response, response, this.$upload),
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, null, this.$upload),
+        }));
     }
   }
 
@@ -43,9 +44,10 @@ export class ImageCategoryComponent {
     image._csrf = csrf;
     return (this.$deleteIcon = this.imageCategoryService
       .deleteIcon(image)
-      .subscribe((image_: Icon) =>
-        this.messageDeleteIcon(image_, this.$deleteIcon)
-      ));
+      .subscribe({
+        next: (image_: Icon) =>
+          this.messageDeleteIcon(image_, this.$deleteIcon),
+      }));
   }
 
   private success(

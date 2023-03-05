@@ -32,12 +32,12 @@ export class AnnouncementSegmentComponent implements OnInit, OnDestroy {
   }
 
   private toggleSegment(): Subscription {
-    return (this.segmentIonChange = this.segment.ionChange.subscribe(
-      (segment: SegmentCustomEvent) => {
+    return (this.segmentIonChange = this.segment.ionChange.subscribe({
+      next: (segment: SegmentCustomEvent) => {
         const event: boolean = segment?.detail?.value === 'enabled';
         this.togglePage.emit(event);
-      }
-    ));
+      },
+    }));
   }
 
   private init(): void {

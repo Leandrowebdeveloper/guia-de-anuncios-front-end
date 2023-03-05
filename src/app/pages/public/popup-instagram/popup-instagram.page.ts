@@ -29,13 +29,13 @@ export class PopupInstagramPage implements OnInit, OnDestroy {
   }
 
   private init(): Subscription {
-    return (this.$router = this.route.queryParams.subscribe(
-      (params: { code: string }) => {
+    return (this.$router = this.route.queryParams.subscribe({
+      next: (params: { code: string }) => {
         if (params?.code) {
           this.getDataInstagram(params?.code);
         }
-      }
-    ));
+      },
+    }));
   }
 
   private getDataInstagram(key: string) {
@@ -50,9 +50,9 @@ export class PopupInstagramPage implements OnInit, OnDestroy {
 
     this.socialNetworkAnnouncementService
       .create(this.form?.value, url)
-      .subscribe(
-        (response) => console.log(response),
-        (error: HttpErrorResponse) => console.log(error)
-      );
+      .subscribe({
+        next: (response) => console.log(response),
+        error: (error: HttpErrorResponse) => console.log(error),
+      });
   }
 }

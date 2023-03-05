@@ -54,12 +54,12 @@ export class CategoryComponent implements OnInit {
     const loading = this.loadingService.show(message);
     return (this.$category = this.categoryAnnouncementService
       .category(this.form.value)
-      .subscribe(
-        (categoryAnnouncement_: CategoryAnnouncement) =>
+      .subscribe({
+        next: (categoryAnnouncement_: CategoryAnnouncement) =>
           this.success(categoryAnnouncement_, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$category)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$category),
+      }));
   }
 
   private success(

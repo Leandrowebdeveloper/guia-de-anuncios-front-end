@@ -7,13 +7,15 @@ import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { Messages } from 'src/app/interface';
 import { AdminUsersService } from 'src/app/pages/dashboard/administrator/users/services/admin-users.service';
+import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 
 @Injectable()
 export class MessagesService extends HttpService<Messages> {
   constructor(
     http: HttpClient,
     public storageService: StorageService,
-    private usersService: AdminUsersService
+    private usersService: AdminUsersService,
+    private managementAnnouncementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
     this.setApi = `messages`;
@@ -46,7 +48,10 @@ export class MessagesService extends HttpService<Messages> {
           if (action === 'users') {
             return (this.setUserMessage = message_);
           }
-          return;
+          if (action === 'announcement') {
+            return (this.managementAnnouncementService.setAnnouncementMessage =
+              message_);
+          }
         })
       );
     }
@@ -56,7 +61,10 @@ export class MessagesService extends HttpService<Messages> {
         if (action === 'users') {
           return (this.setUserMessage = message_);
         }
-        return;
+        if (action === 'announcement') {
+          return (this.managementAnnouncementService.setAnnouncementMessage =
+            message_);
+        }
       })
     );
   }

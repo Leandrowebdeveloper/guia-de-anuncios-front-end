@@ -80,11 +80,11 @@ export class GaleryButtonUploadComponent implements OnInit {
     for (let i = 0; i < count; i++) {
       this.upload = this.galeryAnnouncementService
         .sendFiles(input?.files[i], this.data)
-        .subscribe(
-          (response: any) => this.success(response, response, loading),
-          (error: HttpErrorResponse) =>
-            this.messageService.error(error, null, undefined)
-        );
+        .subscribe({
+          next: (response: any) => this.success(response, response, loading),
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, null, undefined),
+        });
     }
   }
 

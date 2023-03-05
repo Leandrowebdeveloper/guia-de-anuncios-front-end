@@ -28,16 +28,16 @@ export class AnnouncementBlockadeComponent {
     this.form = this.fb.group({ slug, _csrf });
     return (this.$blockade = this.managementAnnouncementService
       .blockade(this.form.value)
-      .subscribe(
-        (user_: Pick<User, 'message'>) =>
+      .subscribe({
+        next: (user_: Pick<User, 'message'>) =>
           this.messageService.success(
             user_?.message,
             null,
             this.$blockade,
             350
           ),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, null, this.$blockade)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, null, this.$blockade),
+      }));
   }
 }

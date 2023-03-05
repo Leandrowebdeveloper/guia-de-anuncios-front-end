@@ -134,17 +134,17 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
         // eslint-disable-next-line no-underscore-dangle
         _csrf: this.category[0]?._csrf,
       };
-      this.$order = this.categoryService.order(category).subscribe(
-        (category_: Category) => {
+      this.$order = this.categoryService.order(category).subscribe({
+        next: (category_: Category) => {
           setTimeout(() => {
             this.isOrder = false;
             this.sendOrder.emit(false);
           }, 3500);
           this.messageService.success(category_?.message, loading, this.$order);
         },
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$order)
-      );
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$order),
+      });
     }
   }
 
@@ -152,25 +152,26 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
     this.calculatePagination();
     return (this.$category = this.categoryService
       .index(`management`, { limit: this.limit, offset: this.offset })
-      .subscribe(
-        (category: Category[]) => this.success(event, category),
-        (error: HttpErrorResponse) => {
+      .subscribe({
+        next: (category: Category[]) => this.success(event, category),
+        error: (error: HttpErrorResponse) => {
           this.error.next(true);
           return this.setError.next(true);
         },
-        () => this.helpService.delay(this.$category.unsubscribe(), 2000)
-      ));
+        complete: () =>
+          this.helpService.delay(this.$category.unsubscribe(), 2000),
+      }));
   }
 
   public search(event: SearchbarCustomEvent): Subscription {
     if (event?.target?.value.length >= 3) {
       const data = this.setDataSearch(event?.target?.value);
-      return (this.$search = this.categoryService
-        .searchBy(data)
-        .subscribe((category: Category[]) => {
+      return (this.$search = this.categoryService.searchBy(data).subscribe({
+        next: (category: Category[]) => {
           this.searchService.search = category;
           setTimeout(() => this.$search.unsubscribe(), 2000);
-        }));
+        },
+      }));
     }
   }
 
@@ -198,16 +199,16 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchService.getSearchCategoryBy.subscribe(
-      (filter: SearchCategory | 'name') => {
+    this.$searchBy = this.searchService.getSearchCategoryBy.subscribe({
+      next: (filter: SearchCategory | 'name') => {
         if (filter === 'name') {
           this.setSearchBy = filter;
         } else {
           this.setSearchBy = 'name';
           this.orderBy(filter);
         }
-      }
-    );
+      },
+    });
   }
 
   private setDataSearch(value: string): object {
@@ -275,8 +276,8 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
   }
 
   private delete(): void {
-    this.$delete = this.categoryService.deleted.subscribe(
-      (category: Category) => {
+    this.$delete = this.categoryService.deleted.subscribe({
+      next: (category: Category) => {
         if (category && this.category) {
           const result: Category[] = this.category.splice(
             this.getIndexCategoryCurrent(category),
@@ -291,8 +292,8 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
             ]);
           }
         }
-      }
-    );
+      },
+    });
   }
 
   private getIndexCategoryCurrent(category: Category): number {
@@ -305,33 +306,33 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
   }
 
   private add(): Subscription {
-    return (this.$category = this.categoryService.add.subscribe(
-      (category: Category) => {
+    return (this.$category = this.categoryService.add.subscribe({
+      next: (category: Category) => {
         if (category) {
           this.isEmpty.emit(false);
           this.category.unshift(category);
         }
-      }
-    ));
+      },
+    }));
   }
 
   private saveSorting(): Subscription {
-    return (this.$saveSorting = this.categoryService.saveSorting.subscribe(
-      (is: boolean) => is && this.saveOrder()
-    ));
+    return (this.$saveSorting = this.categoryService.saveSorting.subscribe({
+      next: (is: boolean) => is && this.saveOrder(),
+    }));
   }
 
   private update(): Subscription {
-    return (this.$update = this.categoryService.categoryObservable.subscribe(
-      (category: Required<Category>) => {
+    return (this.$update = this.categoryService.categoryObservable.subscribe({
+      next: (category: Required<Category>) => {
         if (category && this.category) {
           const i = this.category.findIndex(
             (category_: Pick<Category, 'id'>) => category_?.id === category?.id
           );
           this.category.splice(i, 1, category);
         }
-      }
-    ));
+      },
+    }));
   }
 
   private setLnWord() {

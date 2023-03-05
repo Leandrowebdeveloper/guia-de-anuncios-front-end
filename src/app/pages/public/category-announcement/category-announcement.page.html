@@ -1,21 +1,22 @@
 <app-header-component></app-header-component>
 
 <ion-content [fullscreen]="true">
-  <ion-grid fixed *ngIf="categoryAnnouncement$ | async;else Error">
-    <ion-row>
+  <ion-grid fixed>
+    <ion-row *ngIf="categoryAnnouncement$ | async;else Error">
       <!-- Titulo da categoria  -->
       <ion-col size="12">
-        <ion-text>
+        <ion-text class="d-flex">
+          <ion-icon
+            class="ion-margin-end"
+            size="large"
+            [src]="category?.image
+            ? '/images/icons/black/' + category?.image?.filename : './../../../../assets/thumbnail.svg'"
+          ></ion-icon>
           <h1
             [title]="category | attrTitle:'name'"
             [attr.data-message]="category | attrTitle:'name'"
             class="align-items"
           >
-            <ion-icon
-              class="ion-margin-end"
-              size="large"
-              [src]="category?.image?.url || './../../../../assets/thumbnail.svg'"
-            ></ion-icon>
             {{ category?.name }}
           </h1>
         </ion-text>
@@ -37,6 +38,7 @@
               >
                 <ion-card>
                   <ion-row>
+                    <!-- Image -->
                     <ion-col
                       size-xl="2"
                       size-lg="2"
@@ -75,7 +77,7 @@
                         />
                       </picture>
                     </ion-col>
-
+                    <!-- Dados do anúncio -->
                     <ion-col
                       size-xl="8"
                       size-lg="8"
@@ -122,7 +124,7 @@
                         </ion-card-subtitle>
                       </ion-card-header>
                     </ion-col>
-
+                    <!-- Item com imagens -->
                     <ion-col
                       size-xl="2"
                       size-lg="2"
@@ -148,27 +150,17 @@
                             {{ item?.workDays | workDays }}
                           </p>
                         </ion-text>
-                        <ng-container
-                          *ngIf="item?.plan?.type === 'free'; else Buttom"
+                        <ion-button
+                          shape="round"
+                          [routerLink]="['/pagina', item?.slug]"
+                          [title]="item | attrTitle:'title'"
+                          [attr.data-message]="item | attrTitle:'title'"
                         >
-                          <app-show-contact-announcement-component
-                            [announcement]="item"
-                          ></app-show-contact-announcement-component>
-                        </ng-container>
-
-                        <ng-template #Buttom>
-                          <ion-button
-                            shape="round"
-                            [routerLink]="['/pagina', item?.slug]"
-                            [title]="item | attrTitle:'title'"
-                            [attr.data-message]="item | attrTitle:'title'"
-                          >
-                            Ver página
-                          </ion-button>
-                        </ng-template>
+                          Ver página
+                        </ion-button>
                       </ion-card-content>
                     </ion-col>
-
+                    <!-- Item sem imagens -->
                     <ion-col
                       size-xl="4"
                       size-lg="4"
@@ -197,24 +189,14 @@
                             {{ item?.workDays | workDays }}
                           </p>
                         </ion-text>
-                        <ng-container
-                          *ngIf="item?.plan?.type === 'free'; else Buttom"
+                        <ion-button
+                          shape="round"
+                          [routerLink]="['/pagina', item?.slug]"
+                          [title]="item | attrTitle:'title'"
+                          [attr.data-message]="item | attrTitle:'title'"
                         >
-                          <app-show-contact-announcement-component
-                            [announcement]="item"
-                          ></app-show-contact-announcement-component>
-                        </ng-container>
-
-                        <ng-template #Buttom>
-                          <ion-button
-                            shape="round"
-                            [routerLink]="['/pagina', item?.slug]"
-                            [title]="item | attrTitle:'title'"
-                            [attr.data-message]="item | attrTitle:'title'"
-                          >
-                            Ver página
-                          </ion-button>
-                        </ng-template>
+                          Ver página
+                        </ion-button>
                       </ion-card-content>
                     </ion-col>
                   </ion-row>
@@ -229,112 +211,138 @@
           </ion-reorder-group>
         </ion-list>
       </ion-col>
+
+      <ion-card *ngIf="!endListCategory">
+        <ion-text color="primary" class="ion-text-center">
+          <p>FIM</p>
+          <p>{{ announcement?.length }} Anúncios</p>
+        </ion-text>
+      </ion-card>
+      <ion-infinite-scroll
+        (ionInfinite)="findMoreCategory($event)"
+        *ngIf="endListCategory"
+      >
+        <ion-infinite-scroll-content
+          loadingSpinner="bubbles"
+          loadingText="Carregando mais dados…"
+        >
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </ion-row>
 
-    <ion-card *ngIf="!endListCategory">
-      <ion-text color="primary" class="ion-text-center">
-        <p>FIM</p>
-        <p>{{ announcement?.length }} Anúncios</p>
-      </ion-text>
-    </ion-card>
-
-    <ion-infinite-scroll
-      (ionInfinite)="findMoreCategory($event)"
-      *ngIf="endListCategory"
-    >
-      <ion-infinite-scroll-content
-        loadingSpinner="bubbles"
-        loadingText="Carregando mais dados…"
-      >
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
-  </ion-grid>
-
-  <ng-template #Error>
-    <ng-container *ngIf="error | async; else loadingNoError">
-      <ion-row>
-        <ion-col size="12">
-          <div class="content-center">
-            <div>
-              <ion-text class="ion-text-center">
-                <p [ngClass]="{ hide: menssage }">Erro ao carregar anúncios.</p>
-              </ion-text>
-              <ion-refresher slot="fixed" (ionRefresh)="refresher($event)">
-                <ion-refresher-content
-                  pullingIcon="chevron-down-circle-outline"
-                  pullingText="Puxe para baixo"
-                  refreshingSpinner="circles"
-                  refreshingText="Atualizar..."
-                >
-                </ion-refresher-content>
-              </ion-refresher>
-              <ion-text class="ion-text-center">
-                <ion-button (mousedown)="hideMenssage()"
-                  >Puxe para atualizar
-                  <ion-icon
-                    class="ion-margin-start"
-                    name="arrow-down-circle"
-                  ></ion-icon>
-                </ion-button>
-              </ion-text>
+    <ng-template #Error>
+      <ng-container *ngIf="error | async; else loadingNoError">
+        <ion-row>
+          <ion-col size="12">
+            <div class="content-center">
+              <div>
+                <ion-text class="ion-text-center">
+                  <p [ngClass]="{ hide: menssage }">
+                    Erro ao carregar anúncios.
+                  </p>
+                </ion-text>
+                <ion-refresher slot="fixed" (ionRefresh)="refresher($event)">
+                  <ion-refresher-content
+                    pullingIcon="chevron-down-circle-outline"
+                    pullingText="Puxe para baixo"
+                    refreshingSpinner="circles"
+                    refreshingText="Atualizar..."
+                  >
+                  </ion-refresher-content>
+                </ion-refresher>
+                <ion-text class="ion-text-center">
+                  <ion-button (mousedown)="hideMenssage()"
+                    >Puxe para atualizar
+                    <ion-icon
+                      class="ion-margin-start"
+                      name="arrow-down-circle"
+                    ></ion-icon>
+                  </ion-button>
+                </ion-text>
+              </div>
             </div>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ng-container>
+          </ion-col>
+        </ion-row>
+      </ng-container>
 
-    <ng-template #loadingNoError>
-      <span size="12" class="ion-padding-bottom ion-padding-horizontal">
-        <ion-skeleton-text animated class="search"></ion-skeleton-text>
-      </span>
-      <span *ngFor="let item of sizeSkeleton">
-        <div class="skeleton">
-          <ion-skeleton-text animated class="avatar"></ion-skeleton-text>
-          <div>
-            <ion-skeleton-text animated class="title"></ion-skeleton-text>
-            <ion-skeleton-text animated class="line"></ion-skeleton-text>
-          </div>
-        </div>
-      </span>
+      <ng-template #loadingNoError>
+        <ion-row class="ion-margin-horizontal">
+          <ion-col size="12" class="ion-margin-vertical">
+            <span class="header">
+              <ion-skeleton-text animated class="icons"></ion-skeleton-text>
+              <ion-skeleton-text animated class="title"></ion-skeleton-text>
+            </span>
+          </ion-col>
+          <ion-col size="12">
+            <span *ngFor="let item of sizeSkeleton">
+              <div class="cards">
+                <ion-skeleton-text animated class="image"></ion-skeleton-text>
+                <div>
+                  <div class="item_cards">
+                    <ion-skeleton-text
+                      animated
+                      class="title"
+                    ></ion-skeleton-text>
+                    <ion-skeleton-text
+                      animated
+                      class="address"
+                    ></ion-skeleton-text>
+                    <ion-skeleton-text
+                      animated
+                      class="address_2"
+                    ></ion-skeleton-text>
+                  </div>
+                  <div class="item_cards_btn">
+                    <ion-skeleton-text animated class="btn"></ion-skeleton-text>
+                  </div>
+                </div>
+              </div>
+            </span>
+          </ion-col>
+        </ion-row>
+      </ng-template>
     </ng-template>
-  </ng-template>
 
-  <!-- Salvar ordenação -->
-  <ion-fab
-    vertical="bottom"
-    horizontal="center"
-    slot="fixed"
-    title="Salvar ordem da lista de anúncios"
-    data-message="Salvar ordem da lista de anúncios"
-  >
-    <ion-fab-button [hidden]="!sendOrder" color="primary" (click)="saveOrder()"
-      ><ion-icon name="save" color="light"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-  <!-- Ordenar -->
-  <ion-fab
-    *ngIf="isBtnOrder && error"
-    vertical="center"
-    horizontal="end"
-    slot="fixed"
-    title="Ordenar anúncios"
-    data-message="Ordenar categoria"
-  >
-    <ion-fab-button size="small">
-      <ion-icon name="ellipsis-vertical"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
+    <!-- Salvar ordenação -->
+    <ion-fab
+      vertical="bottom"
+      horizontal="center"
+      slot="fixed"
+      title="Salvar ordem da lista de anúncios"
+      data-message="Salvar ordem da lista de anúncios"
+    >
       <ion-fab-button
+        [hidden]="!sendOrder"
         color="primary"
-        title="Ordenar categorias"
-        data-message="Ordenar categorias"
-        (click)="orderList()"
-      >
-        <ion-icon name="reorder-four"></ion-icon>
+        (click)="saveOrder()"
+        ><ion-icon name="save" color="light"></ion-icon>
       </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
+    </ion-fab>
+
+    <!-- Ordenar -->
+    <ion-fab
+      *ngIf="isBtnOrder && error"
+      vertical="center"
+      horizontal="end"
+      slot="fixed"
+      title="Ordenar anúncios"
+      data-message="Ordenar categoria"
+    >
+      <ion-fab-button size="small">
+        <ion-icon name="ellipsis-vertical"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="top">
+        <ion-fab-button
+          color="primary"
+          title="Ordenar categorias"
+          data-message="Ordenar categorias"
+          (click)="orderList()"
+        >
+          <ion-icon name="reorder-four"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
+  </ion-grid>
 </ion-content>
 
 <app-footer></app-footer>

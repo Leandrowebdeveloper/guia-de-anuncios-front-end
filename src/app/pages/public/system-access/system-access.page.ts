@@ -135,12 +135,12 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     const loading = this.loadingService.show('Acessar o sistema...');
     return (this.systemAccess = this.systemAccessService
       .sendLoginData(event.value)
-      .subscribe(
-        (auth: User) => {
+      .subscribe({
+        next: (auth: User) => {
           this.success(auth, loading);
         },
-        (error: HttpErrorResponse) => this.error(error, loading)
-      ));
+        error: (error: HttpErrorResponse) => this.error(error, loading),
+      }));
   }
 
   private register(event: FormGroup): Subscription {
@@ -148,10 +148,10 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     const loading = this.loadingService.show('Cadastrando usuário...');
     return (this.systemAccess = this.systemAccessService
       .register(event.value)
-      .subscribe(
-        (user: User) => this.success(user, loading),
-        (error: HttpErrorResponse) => this.error(error, loading)
-      ));
+      .subscribe({
+        next: (user: User) => this.success(user, loading),
+        error: (error: HttpErrorResponse) => this.error(error, loading),
+      }));
   }
 
   private recover(event: FormGroup): Subscription {
@@ -159,10 +159,10 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     const loading = this.loadingService.show('Recuperando senha...');
     return (this.systemAccess = this.systemAccessService
       .passwordRecover(event.value)
-      .subscribe(
-        (user: User) => this.success(user, loading),
-        (error: HttpErrorResponse) => this.error(error, loading)
-      ));
+      .subscribe({
+        next: (user: User) => this.success(user, loading),
+        error: (error: HttpErrorResponse) => this.error(error, loading),
+      }));
   }
 
   // private showLoading(message: string): Promise<HTMLIonLoadingElement> {

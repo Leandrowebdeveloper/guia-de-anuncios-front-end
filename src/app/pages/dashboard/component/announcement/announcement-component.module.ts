@@ -47,7 +47,7 @@ import { GaleryComponentModule } from './galery/galery-component.module';
 import { AdminMaganementAddressComponent } from './address/component/address.component';
 import { AdminManagementContactComponent } from './contant/component/contact.component';
 import { AdminManagementSocialNetworkComponent } from './social-network/component/social-network.component';
-import { AdminManagementMapsComponent } from './map/component/maps.component';
+import { AdminManagementMapsComponent } from './map/form/maps.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -135,6 +135,7 @@ import { AdminManagementMapsComponent } from './map/component/maps.component';
     WorkDayAnnouncementComponent,
     AnnouncementMapComponent,
     AnnouncementSocialNetworkComponent,
+    AdminManagementMapsComponent,
   ],
 })
 export class AnnouncementComponentsModule {}

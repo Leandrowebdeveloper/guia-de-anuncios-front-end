@@ -1,5 +1,5 @@
 <ion-item
-  *ngIf="!isAdmin; else Else"
+  *ngIf="!(user?.level === '1'); else Else"
   [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="coordinates()"
@@ -24,5 +24,6 @@
   <!-- Mapa -->
   <app-maps-admin-management
     [announcement]="announcement"
+    [user]="user"
   ></app-maps-admin-management>
 </ng-template>

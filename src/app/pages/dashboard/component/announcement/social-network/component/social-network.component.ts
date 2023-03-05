@@ -99,15 +99,15 @@ export class AdminManagementSocialNetworkComponent
       const loading = this.loadingService.show('Excluindo rede social...');
       return (this.$delete = this.socialNetworkAnnouncementService
         .delete(socialNetwork)
-        .subscribe(
-          (socialNetwork_: Pick<SocialNetwork, 'message'>) => {
+        .subscribe({
+          next: (socialNetwork_: Pick<SocialNetwork, 'message'>) => {
             this.messsage(socialNetwork_, loading);
             this.announcement.socialNetwork = null;
             return (this.socialNetwork = null);
           },
-          (error: HttpErrorResponse) =>
-            this.messageService.error(error, loading, this.$delete)
-        ));
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, loading, this.$delete),
+        }));
     }
   }
 
@@ -124,13 +124,13 @@ export class AdminManagementSocialNetworkComponent
 
   private update(): Subscription {
     return (this.$update =
-      this.socialNetworkAnnouncementService.getSocialNetworkEvent.subscribe(
-        (socialNetwork: SocialNetwork) => {
+      this.socialNetworkAnnouncementService.getSocialNetworkEvent.subscribe({
+        next: (socialNetwork: SocialNetwork) => {
           if (this.announcement?.id === socialNetwork?.announcementId) {
             this.announcement.socialNetwork = socialNetwork;
             this.socialNetwork = socialNetwork;
           }
-        }
-      ));
+        },
+      }));
   }
 }

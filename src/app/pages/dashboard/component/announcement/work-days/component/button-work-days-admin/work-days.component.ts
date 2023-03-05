@@ -112,15 +112,15 @@ export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
       );
       return (this.$delete = this.deleteworkDayService
         .delete(workDays)
-        .subscribe(
-          (workDay_: Pick<WorkDays, 'message'>) => {
+        .subscribe({
+          next: (workDay_: Pick<WorkDays, 'message'>) => {
             this.messsage(workDay_, loading);
             this.announcement.workDays = null;
             return (this.workDays = null);
           },
-          (error: HttpErrorResponse) =>
-            this.messageService.error(error, loading, this.$delete)
-        ));
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, loading, this.$delete),
+        }));
     }
   }
 
@@ -137,13 +137,13 @@ export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
 
   private update(): Subscription {
     return (this.$update =
-      this.workDayAnnouncementService.getworkDayEvent.subscribe(
-        (workDays: WorkDays) => {
+      this.workDayAnnouncementService.getworkDayEvent.subscribe({
+        next: (workDays: WorkDays) => {
           if (this.announcement?.id === workDays?.announcementId) {
             this.announcement.workDays = workDays;
             this.workDays = workDays;
           }
-        }
-      ));
+        },
+      }));
   }
 }

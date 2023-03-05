@@ -105,12 +105,12 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
     const loading = this.loadingService.show('Acessar o sistema...');
     return (this.systemAccess = this.systemAccessService
       .sendLoginData(event.value)
-      .subscribe(
-        (login: User) => {
+      .subscribe({
+        next: (login: User) => {
           this.success(login, loading);
         },
-        (error: HttpErrorResponse) => this.error(error, loading)
-      ));
+        error: (error: HttpErrorResponse) => this.error(error, loading),
+      }));
   }
 
   private success(user: User, loading: Promise<HTMLIonLoadingElement>) {

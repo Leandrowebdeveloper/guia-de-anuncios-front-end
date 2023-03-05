@@ -35,8 +35,8 @@ export class AnnouncementCardComponent implements OnInit, OnDestroy {
 
   private updateCategory() {
     return (this.$update =
-      this.categoryAnnouncementService.getCategoryEvent.subscribe(
-        (categoryAnnouncement: CategoryAnnouncement) => {
+      this.categoryAnnouncementService.getCategoryEvent.subscribe({
+        next: (categoryAnnouncement: CategoryAnnouncement) => {
           if (categoryAnnouncement) {
             if (
               this.announcement?.id === categoryAnnouncement?.announcementId
@@ -44,7 +44,7 @@ export class AnnouncementCardComponent implements OnInit, OnDestroy {
               this.announcement.category = categoryAnnouncement?.category;
             }
           }
-        }
-      ));
+        },
+      }));
   }
 }

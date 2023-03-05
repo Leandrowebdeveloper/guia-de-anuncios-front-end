@@ -35,12 +35,12 @@ export class AnnouncementStateComponent {
   public toggle(): Subscription {
     const { id, _csrf } = this.announcement;
     this.form = this.fb.group({ id, _csrf });
-    return (this.$state = this.stateService.state(this.form.value).subscribe(
-      (announcement_: Pick<Announcement, 'message'>) =>
+    return (this.$state = this.stateService.state(this.form.value).subscribe({
+      next: (announcement_: Pick<Announcement, 'message'>) =>
         this.success(announcement_),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, null, this.$state)
-    ));
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, null, this.$state),
+    }));
   }
 
   private success(

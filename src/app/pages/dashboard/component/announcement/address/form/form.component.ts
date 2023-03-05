@@ -67,12 +67,12 @@ export class AnnouncementFormAddressComponent implements OnInit {
     event: FormGroup,
     loading: Promise<HTMLIonLoadingElement>
   ): Subscription {
-    return (this.$address = this.addressService.address(event.value).subscribe(
-      (address: Pick<Address, 'message'>) =>
+    return (this.$address = this.addressService.address(event.value).subscribe({
+      next: (address: Pick<Address, 'message'>) =>
         this.messsage(address?.message, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.$address)
-    ));
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.$address),
+    }));
   }
 
   private async messsage(

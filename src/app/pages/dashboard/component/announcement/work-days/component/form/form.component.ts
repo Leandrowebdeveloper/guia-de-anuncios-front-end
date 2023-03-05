@@ -166,11 +166,11 @@ export class FormComponent implements OnInit {
 
     return (this.$workDays = this.workDayService
       .workDays(this.form.value)
-      .subscribe(
-        (workDays: WorkDays) => this.messsage(workDays?.message, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$workDays)
-      ));
+      .subscribe({
+        next: (workDays: WorkDays) => this.messsage(workDays?.message, loading),
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$workDays),
+      }));
   }
 
   private cleanFields() {

@@ -1,7 +1,7 @@
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Coordinate } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
@@ -16,7 +16,6 @@ export class CoordinateAnnouncementService extends HttpService<
       '_csrf' | 'id' | 'password' | 'message'
     >
 > {
-  private coordinateEvent = new EventEmitter<Coordinate>(undefined);
   constructor(
     http: HttpClient,
     public storageService: StorageService,
@@ -26,10 +25,6 @@ export class CoordinateAnnouncementService extends HttpService<
   ) {
     super(http, storageService);
     this.setApi = `coordinate`;
-  }
-
-  public get getCoordinateEvent() {
-    return this.coordinateEvent.asObservable();
   }
 
   public set setCoordinate(coordinate: Required<Coordinate>) {
@@ -50,9 +45,8 @@ export class CoordinateAnnouncementService extends HttpService<
   > {
     if (coordinate?.id) {
       return this.patch(coordinate);
-    } else {
-      return this.create(coordinate);
     }
+    return this.create(coordinate);
   }
 
   public async getCoordinate(): Promise<

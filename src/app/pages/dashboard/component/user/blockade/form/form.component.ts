@@ -59,12 +59,12 @@ export class FormUserBlockadeComponent implements OnInit {
     event.value.id = this.id;
     return (this.write = this.userBlockadeService
       .blockade(event.value)
-      .subscribe(
-        (user: Required<Pick<User, UserBlockade | 'message'>>) =>
+      .subscribe({
+        next: (user: Required<Pick<User, UserBlockade | 'message'>>) =>
           this.messsage(user, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.write)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.write),
+      }));
   }
 
   private messsage(

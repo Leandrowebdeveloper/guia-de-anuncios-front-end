@@ -85,7 +85,9 @@ export class SocialLoginComponent implements OnInit {
   private async loadUserData(): Promise<void> {
     // eslint-disable-next-line max-len
     const url = `https://graph.facebook.com/${this.token.userId}?fields=id,name,picture.width(720),birthday,email&access_token=${this.token.token}`;
-    this.http.get(url).subscribe((facebook: Facebook) => this.login(facebook));
+    this.http
+      .get(url)
+      .subscribe({ next: (facebook: Facebook) => this.login(facebook) });
   }
 
   private login(social: Facebook | Google): Subscription {
@@ -96,10 +98,10 @@ export class SocialLoginComponent implements OnInit {
       const data = { ...this.build(social) };
       return (this.systemAccess = this.socialLoginService
         .create(data)
-        .subscribe(
-          (user_: User) => this.success(user_, loading),
-          (error: HttpErrorResponse) => this.error(error, loading)
-        ));
+        .subscribe({
+          next: (user_: User) => this.success(user_, loading),
+          error: (error: HttpErrorResponse) => this.error(error, loading),
+        }));
     }
   }
 

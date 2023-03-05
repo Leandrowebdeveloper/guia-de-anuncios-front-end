@@ -56,11 +56,11 @@ export class FormDestroyAnnouncementComponent implements OnInit {
 
   private destroy(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Excluindo categoria...');
-    return (this.write = this.categoryService.delete(event.value).subscribe(
-      (category: Category) => this.messsage(category, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
+    return (this.write = this.categoryService.delete(event.value).subscribe({
+      next: (category: Category) => this.messsage(category, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.write),
+    }));
   }
 
   private messsage(

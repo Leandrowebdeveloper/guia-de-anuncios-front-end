@@ -31,7 +31,7 @@
           <ion-card-header class="no-padding-horizontal">
             <ion-thumbnail>
               <img
-                [src]="item?.image?.url || './../../../../assets/thumbnail.svg'"
+                [src]="item?.image ? '/images/icons/' + item?.image?.filename : './../../../../assets/thumbnail.svg'"
                 [alt]="item?.name"
                 [title]="item?.name"
                 [attr.aria-labelledby]="item?.name"

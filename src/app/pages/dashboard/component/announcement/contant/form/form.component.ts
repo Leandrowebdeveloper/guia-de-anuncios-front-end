@@ -72,11 +72,11 @@ export class AnnouncementFormContactComponent implements OnInit {
     loading: Promise<HTMLIonLoadingElement>
   ): Subscription {
     const data = this.contactService.filter(event.value) as Required<Contact>;
-    return (this.$contact = this.contactService.contact(data).subscribe(
-      (contact: Contact) => this.messsage(contact?.message, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.$contact)
-    ));
+    return (this.$contact = this.contactService.contact(data).subscribe({
+      next: (contact: Contact) => this.messsage(contact?.message, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.$contact),
+    }));
   }
 
   private messsage(

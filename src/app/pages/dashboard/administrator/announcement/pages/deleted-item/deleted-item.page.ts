@@ -130,12 +130,12 @@ export class DeletedItemAdminAnnouncementPage implements OnInit {
     const loading = this.loadingService.show('Restaurar anúncio...');
     return (this.destroyAnnouncement = this.adminAnnouncementService
       .toRestore(announcement)
-      .subscribe(
-        (announcement_: Announcement) =>
+      .subscribe({
+        next: (announcement_: Announcement) =>
           this.success(index, announcement_, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.destroyAnnouncement)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.destroyAnnouncement),
+      }));
   }
 
   private removeItem(index: number) {
@@ -171,12 +171,12 @@ export class DeletedItemAdminAnnouncementPage implements OnInit {
     const loading = this.loadingService.show('Enviando para lixeira...');
     this.destroyAnnouncement = this.adminAnnouncementService
       .drop(announcement)
-      .subscribe(
-        (announcement_: Announcement) =>
+      .subscribe({
+        next: (announcement_: Announcement) =>
           this.success(index, announcement_, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.destroyAnnouncement)
-      );
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.destroyAnnouncement),
+      });
   }
 
   private success(

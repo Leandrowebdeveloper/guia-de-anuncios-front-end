@@ -4,10 +4,15 @@ import { ShowContactComponent } from './show-contact/show-contact.component';
 import { ShowSocialNetWorkComponent } from './show-social-network/show-social-network.component';
 import { IonicModule } from '@ionic/angular';
 import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { SegmentComponent } from './segment/segment.component';
 
 @NgModule({
-  declarations: [ShowContactComponent, ShowSocialNetWorkComponent],
+  declarations: [
+    ShowContactComponent,
+    ShowSocialNetWorkComponent,
+    SegmentComponent,
+  ],
   imports: [CommonModule, IonicModule, PipeModule],
-  exports: [ShowContactComponent, ShowSocialNetWorkComponent],
+  exports: [ShowContactComponent, ShowSocialNetWorkComponent, SegmentComponent],
 })
 export class ShowAnnouncementComponentModule {}

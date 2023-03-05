@@ -105,7 +105,7 @@ export class EnabledItemAnnouncementPage implements OnInit {
   private getAnnouncement(): Observable<Announcement[]> {
     if (this.user?.id) {
       return (this.announcement$ = this.authAnnouncementService
-        .getAnnouncementAll('', {
+        .getAnnouncementAll('get', {
           limit: this.limit,
           offset: this.offset,
           userId: this.user?.id,
@@ -143,12 +143,12 @@ export class EnabledItemAnnouncementPage implements OnInit {
     const loading = this.loadingService.show('Enviando para lixeira...');
     this.destroyAnnouncement = this.authAnnouncementService
       .delete(announcement)
-      .subscribe(
-        (announcement_: Announcement) =>
+      .subscribe({
+        next: (announcement_: Announcement) =>
           this.success(index, announcement_, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.destroyAnnouncement)
-      );
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.destroyAnnouncement),
+      });
   }
 
   private success(

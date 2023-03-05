@@ -111,11 +111,11 @@ export class AvatarComponent implements OnInit {
     this.avatarService.setCsrf = user?._csrf;
     this.upload = this.avatarService
       .upload(this.build(input.files[0], user))
-      .subscribe(
-        (response: any) => this.success(response, response, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, null, this.upload)
-      );
+      .subscribe({
+        next: (response: any) => this.success(response, response, loading),
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, null, this.upload),
+      });
   }
 
   private async success(

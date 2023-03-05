@@ -28,7 +28,11 @@
             slot="start"
             size="large"
             title="Imagem do categorias."
-            [src]="category?.image?.url || './../../../../assets/thumbnail.svg'"
+            [src]="
+              category?.image
+                ? '/images/icons/' + category?.image?.filename
+                : './../../../../assets/thumbnail.svg'
+            "
           ></ion-icon>
 
           <div class="item">

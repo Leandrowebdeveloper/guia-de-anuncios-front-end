@@ -22,9 +22,9 @@ export class AnnouncementResolve implements Resolve<Announcement[]>, OnDestroy {
 
   resolve(): Observable<Announcement[]> {
     let userId: number;
-    this.$userId = this.authService.userObservable.subscribe(
-      (user: Pick<User, 'id'>) => (userId = user?.id)
-    );
+    this.$userId = this.authService.userObservable.subscribe({
+      next: (user: Pick<User, 'id'>) => (userId = user?.id),
+    });
 
     return this.authAnnouncementService.getAnnouncementFindOne({ userId }).pipe(
       map((item) =>

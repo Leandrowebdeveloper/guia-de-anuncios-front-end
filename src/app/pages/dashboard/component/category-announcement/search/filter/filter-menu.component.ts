@@ -35,8 +35,8 @@ export class FilterMenuCategoryComponent implements OnInit, OnDestroy {
 
   private filter(): void {
     this.$isIcon =
-      this.searchCategoryAnnouncementService.getSearchCategoryBy.subscribe(
-        (filter: SearchCategory) => (this.isIcon = filter)
-      );
+      this.searchCategoryAnnouncementService.getSearchCategoryBy.subscribe({
+        next: (filter: SearchCategory) => (this.isIcon = filter),
+      });
   }
 }

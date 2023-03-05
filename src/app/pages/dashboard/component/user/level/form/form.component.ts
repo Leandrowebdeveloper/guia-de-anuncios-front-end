@@ -55,12 +55,12 @@ export class FormUserLevelComponent implements OnInit {
   private level(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Salvando nivel...');
     event.value.slug = this.user?.slug;
-    return (this.$level = this.userLevelService.level(event.value).subscribe(
-      (user: Required<Pick<User, 'message' | 'level'>>) =>
+    return (this.$level = this.userLevelService.level(event.value).subscribe({
+      next: (user: Required<Pick<User, 'message' | 'level'>>) =>
         this.messsage(user, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.$level)
-    ));
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.$level),
+    }));
   }
 
   private messsage(

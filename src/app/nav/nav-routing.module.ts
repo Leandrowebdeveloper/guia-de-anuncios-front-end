@@ -36,6 +36,11 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'mapa/localizacao',
+    loadChildren: () =>
+      import('../pages/public/maps/maps.module').then((m) => m.MapsPageModule),
+  },
+  {
     path: 'sair',
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],

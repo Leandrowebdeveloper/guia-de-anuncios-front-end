@@ -40,22 +40,22 @@
     <div class="ion-margin-top" [innerHtml]="item?.description"></div>
     <!-- Buttons -->
 
-    <div class="d-flex" [hidden]="!isAuth && !item?.response">
-      <div [hidden]="item?.type === 'danger'">
-        <ion-button size="small" *ngIf="isAuth" (click)="update(i)">
+    <div class="d-flex">
+      <div *ngIf="isButton">
+        <ion-button size="small" (click)="update(i)">
           <ion-icon slot="start" name="create"></ion-icon>
           editar
         </ion-button>
       </div>
-      <div>
-        <ion-button size="small" color="light" *ngIf="item?.response">
+      <div *ngIf="item?.response">
+        <ion-button size="small" color="light">
           <ion-icon slot="start" name="call"></ion-icon>
           suporte
         </ion-button>
       </div>
     </div>
   </ion-card-content>
-  <ion-card-content *ngIf="isButton">
+  <ion-card-content *ngIf="isButton && item?.userSender">
     <ion-item-divider>
       <ion-label>Remetente</ion-label>
     </ion-item-divider>

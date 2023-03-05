@@ -63,7 +63,7 @@
         >
           <ion-avatar class="cursor-pointer" title="Imágem do usuário.">
             <ion-img
-              [src]="user?.image?.url||'./../../assets/avatar.svg'"
+              [src]="user?.image?.filename ? '/images/avatar/' + user?.image?.filename : './../../assets/avatar.svg'"
               referrerpolicy="no-referrer"
               [title]="'Usuário ' + user?.name"
               alt="Usuário"

@@ -14,9 +14,10 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./message.component.scss'],
 })
 export class UserCardMessageComponent implements OnInit {
-  @Input() user!: Required<Pick<User, 'name' | '_csrf' | 'id' | 'messages'>>;
-  @Input() announcement!: Required<
-    Pick<Announcement, 'title' | '_csrf' | 'id' | 'messages'>
+  @Input() user!: Pick<User, 'name' | '_csrf' | 'id' | 'messages'>;
+  @Input() announcement!: Pick<
+    Announcement,
+    'title' | '_csrf' | 'id' | 'messages'
   >;
   public messages: Messages[];
   public isButton: boolean;
@@ -38,11 +39,11 @@ export class UserCardMessageComponent implements OnInit {
       _csrf: this.setCsrf(),
       id: message?.id,
     } as Messages;
-    return (this.$close = this.userMessageService.close(dataDel).subscribe(
-      (messages: Messages) => this.success(index),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, null, this.$close)
-    ));
+    return (this.$close = this.userMessageService.close(dataDel).subscribe({
+      next: (messages: Messages) => this.success(index),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, null, this.$close),
+    }));
   }
 
   public async update(index: number): Promise<void> {

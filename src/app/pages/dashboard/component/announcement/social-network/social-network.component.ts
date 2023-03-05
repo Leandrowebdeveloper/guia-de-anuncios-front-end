@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ModalService } from 'src/app/components/present-plan/animations/modal.service';
 import { PresentPlanComponent } from 'src/app/components/present-plan/present-plan.component';
-import { Announcement, SocialNetwork } from 'src/app/interface';
+import { Announcement, SocialNetwork, User } from 'src/app/interface';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { AnnouncementFormSocialNetworkComponent } from './form/form.component';
 
@@ -23,14 +23,14 @@ export class AnnouncementSocialNetworkComponent implements OnInit {
     | 'categoryAnnouncement'
     | 'authSocial'
   >;
-  public isAdmin: boolean;
+  public user: User;
   constructor(
     private modalController: ModalController,
     private modalService: ModalService,
     private authService: AuthService
   ) {}
   ngOnInit(): void {
-    this.isAdmin = this.authService.getLevel === '1';
+    this.user = this.authService.getUser;
   }
 
   // Rede social

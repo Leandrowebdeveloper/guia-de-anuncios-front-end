@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { Announcement } from 'src/app/interface';
+import { Announcement, Messages } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
@@ -61,7 +61,7 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
       Pick<Announcement, '_csrf' | 'description' | 'title' | 'userId'>
     >
   ): Observable<Announcement> {
-    return this.create(announcement, 'announcement').pipe(
+    return this.create(announcement).pipe(
       tap((announcement_: Announcement) => {
         if (this.getAnnouncement?.length > 0) {
           this.getAnnouncement.unshift(announcement_);

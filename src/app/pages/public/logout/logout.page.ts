@@ -18,7 +18,7 @@ export class LogoutPage {
   public logout_(): Subscription {
     return (this.logout = this.logoutService
       .destroySession()
-      .subscribe(() => this.logout.unsubscribe()));
+      .subscribe({ next: () => this.logout.unsubscribe() }));
   }
 
   public back(): void {

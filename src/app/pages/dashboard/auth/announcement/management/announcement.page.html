@@ -23,7 +23,10 @@
           </ion-text>
         </ion-col>
         <ng-container *ngIf="isAnnouncement; else Association">
-          <ion-col size="12">
+          <ion-col
+            size="12"
+            *ngIf="announcement?.citie && announcement?.address && announcement?.contact"
+          >
             <app-card-message-component
               [announcement]="announcement"
             ></app-card-message-component>
@@ -32,9 +35,7 @@
           <!-- Messagem de boas vindas -->
           <ion-col
             size="12"
-            *ngIf="!announcement?.address &&
-          !announcement?.citie &&
-          !announcement?.contact"
+            [hidden]="announcement?.citie && announcement?.address && announcement?.contact"
           >
             <ion-card>
               <ion-card-header>

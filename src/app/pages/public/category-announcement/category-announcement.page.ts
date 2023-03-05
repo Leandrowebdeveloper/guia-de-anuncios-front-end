@@ -36,7 +36,7 @@ export class CategoryAnnouncementPage implements OnInit {
   public fab = false;
   public menssage: boolean;
 
-  public sizeSkeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  public sizeSkeleton = [1, 2, 3, 4, 5, 6];
 
   private limit = 12;
   private offset = 0;
@@ -114,8 +114,8 @@ export class CategoryAnnouncementPage implements OnInit {
       };
       this.$order = this.categoryAnnouncementService
         .order(announcement)
-        .subscribe(
-          (announcement_: Announcement) => {
+        .subscribe({
+          next: (announcement_: Announcement) => {
             setTimeout(() => {
               this.sendOrder = false;
               this.isOrder = false;
@@ -126,9 +126,9 @@ export class CategoryAnnouncementPage implements OnInit {
               this.$order
             );
           },
-          (error: HttpErrorResponse) =>
-            this.messageService.error(error, loading, this.$order)
-        );
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, loading, this.$order),
+        });
     }
   }
 
@@ -138,8 +138,8 @@ export class CategoryAnnouncementPage implements OnInit {
     if (id) {
       return (this.$categoryAnnouncement = this.categoryAnnouncementService
         .findOne(`list`, { limit: this.limit, offset: this.offset, id })
-        .subscribe(
-          ({ category, announcement }) => {
+        .subscribe({
+          next: ({ category, announcement }) => {
             const data = announcement
               .map((value) => {
                 value.plan = {
@@ -157,13 +157,13 @@ export class CategoryAnnouncementPage implements OnInit {
               });
             return this.success(event, data);
           },
-          (error: HttpErrorResponse) => this.error.next(true),
-          () =>
+          error: (error: HttpErrorResponse) => this.error.next(true),
+          complete: () =>
             this.helpService.delay(
               this.$categoryAnnouncement.unsubscribe(),
               2000
-            )
-        ));
+            ),
+        }));
     }
   }
 

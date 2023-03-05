@@ -5,7 +5,6 @@ import {
   Announcement,
   AnnouncementRoute,
   Galery,
-  CategoryAnnouncement,
 } from 'src/app/interface/index';
 import { NavController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
@@ -81,8 +80,8 @@ export class AnnouncementPage implements OnInit, OnDestroy {
 
   private updateGalery(): Subscription {
     return (this.$updateGalery =
-      this.galeryAnnouncementService.galeryAsObservable.subscribe(
-        (galery: Galery) => {
+      this.galeryAnnouncementService.galeryAsObservable.subscribe({
+        next: (galery: Galery) => {
           if (galery) {
             if (this.managementAnnouncementService.galery.length > 0) {
               this.managementAnnouncementService.addItemGalery = galery;
@@ -90,7 +89,7 @@ export class AnnouncementPage implements OnInit, OnDestroy {
               this.managementAnnouncementService.setGalery = [galery];
             }
           }
-        }
-      ));
+        },
+      }));
   }
 }

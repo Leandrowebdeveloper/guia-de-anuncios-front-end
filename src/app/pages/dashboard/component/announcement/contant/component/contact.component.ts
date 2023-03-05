@@ -93,15 +93,15 @@ export class AdminManagementContactComponent implements OnInit, OnDestroy {
       const loading = this.loadingService.show('Excluindo contato...');
       return (this.$delete = this.contactAnnouncementService
         .delete(contact)
-        .subscribe(
-          (coordinate_: Pick<Contact, 'message'>) => {
+        .subscribe({
+          next: (coordinate_: Pick<Contact, 'message'>) => {
             this.messsage(coordinate_, loading);
             this.announcement.contact = null;
             return (this.contact = null);
           },
-          (error: HttpErrorResponse) =>
-            this.messageService.error(error, loading, this.$delete)
-        ));
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, loading, this.$delete),
+        }));
     }
   }
 
@@ -114,13 +114,13 @@ export class AdminManagementContactComponent implements OnInit, OnDestroy {
 
   private update(): Subscription {
     return (this.$update =
-      this.contactAnnouncementService.getContactEvent.subscribe(
-        (contact: Contact) => {
+      this.contactAnnouncementService.getContactEvent.subscribe({
+        next: (contact: Contact) => {
           if (this.announcement?.id === contact?.announcementId) {
             this.announcement.contact = contact;
             this.contact = contact;
           }
-        }
-      ));
+        },
+      }));
   }
 }

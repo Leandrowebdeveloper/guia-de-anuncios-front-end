@@ -56,11 +56,11 @@ export class FormUserPlanComponent implements OnInit {
   private plan(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Alterando plano...');
     event.value.userId = this.user?.id;
-    return (this.write = this.userPlanService.plan(event.value).subscribe(
-      (plan: Plan) => this.messsage(plan, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
+    return (this.write = this.userPlanService.plan(event.value).subscribe({
+      next: (plan: Plan) => this.messsage(plan, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.write),
+    }));
   }
 
   private messsage(

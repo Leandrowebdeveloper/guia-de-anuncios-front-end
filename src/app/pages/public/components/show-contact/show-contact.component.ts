@@ -13,9 +13,13 @@ export class ShowContactComponent implements OnInit {
 
   ngOnInit() {}
 
-  public async send(e: Event, contacts: 'whatsapp' | 'phone' | 'mobilePhone') {
+  public async send(
+    e: Event,
+    contacts: 'whatsapp' | 'phone' | 'mobilePhone' | 'email'
+  ) {
     e.preventDefault();
     const { whatsapp, phone, mobilePhone } = this.announcement?.contact;
+    const { email } = this.announcement?.user;
     switch (contacts) {
       case 'whatsapp':
         return await Browser.open({
@@ -30,6 +34,11 @@ export class ShowContactComponent implements OnInit {
       case 'mobilePhone':
         return await Browser.open({
           url: `tel:+${mobilePhone}`,
+          windowName: '_top',
+        });
+      case 'email':
+        return await Browser.open({
+          url: `mailto:${email}`,
           windowName: '_top',
         });
     }

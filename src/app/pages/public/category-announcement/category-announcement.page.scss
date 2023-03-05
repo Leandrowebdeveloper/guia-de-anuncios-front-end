@@ -44,3 +44,81 @@ ion-card-header.ios {
   display: flex;
   flex-flow: column;
 }
+
+.d-flex {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.header {
+  display: flex;
+  .icons {
+    width: 32px;
+    height: 32px;
+    border-radius: 50px;
+    margin-right: 16px;
+  }
+  .title {
+    max-width: 25%;
+    height: 32px;
+  }
+}
+
+.cards {
+  display: flex;
+  div {
+    width: 100%;
+    display: flex;
+    margin-bottom: 16px;
+  }
+  @media only screen and (max-width: 992px) {
+    justify-content: space-evenly;
+    flex-direction: column;
+  }
+  .image {
+    max-width: 180px;
+    height: 70px;
+    @media only screen and (max-width: 992px) {
+      min-width: 100%;
+      height: 280px;
+    }
+  }
+  .item_cards {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 16px;
+    @media only screen and (max-width: 992px) {
+      width: 60%;
+    }
+    .title {
+      margin-top: 12px;
+      max-width: 250px;
+      height: 16px;
+    }
+    .address {
+      max-width: 140px;
+      height: 10px;
+    }
+    .address_2 {
+      margin-top: 12px;
+      max-width: 350px;
+      height: 10px;
+    }
+  }
+  .item_cards_btn {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    @media only screen and (max-width: 992px) {
+      width: 39.98%;
+    }
+    .btn {
+      align-self: flex-start;
+      max-width: 100px;
+      height: 20px;
+      border-radius: 50px;
+    }
+  }
+}

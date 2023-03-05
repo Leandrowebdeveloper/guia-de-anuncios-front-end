@@ -72,21 +72,21 @@ export class AnnouncementFormComponent implements OnInit {
     if (event.value.id) {
       return (this.$announcement = this.managementAnnouncementService
         .updateAnnouncement(event.value)
-        .subscribe(
-          (announcement: Pick<Announcement, 'message'>) =>
+        .subscribe({
+          next: (announcement: Pick<Announcement, 'message'>) =>
             this.messsage(announcement?.message, loading),
-          (error: HttpErrorResponse) =>
-            this.messageService.error(error, loading, this.$announcement)
-        ));
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, loading, this.$announcement),
+        }));
     }
     return (this.$announcement = this.authAnnouncementService
       .createAnnouncement(event.value)
-      .subscribe(
-        (announcement: Pick<Announcement, 'message'>) =>
+      .subscribe({
+        next: (announcement: Pick<Announcement, 'message'>) =>
           this.messsage(announcement?.message, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$announcement)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$announcement),
+      }));
   }
 
   private messsage(

@@ -91,12 +91,12 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
   public search(event: SearchbarCustomEvent): Subscription {
     if (event?.target?.value.length >= 3) {
       const data = this.setDataSearch(event?.target?.value);
-      return (this.$search = this.usersService
-        .searchBy(data)
-        .subscribe((user: Pick<User, DeletedItemUser>[]) => {
+      return (this.$search = this.usersService.searchBy(data).subscribe({
+        next: (user: Pick<User, DeletedItemUser>[]) => {
           this.searchUserService.search = user;
           setTimeout(() => this.$search.unsubscribe(), 2000);
-        }));
+        },
+      }));
     }
   }
 
@@ -104,11 +104,12 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
     this.calculatePagination();
     return (this.$users = this.usersService
       .index(`management/deleted`, { limit: this.limit, offset: this.offset })
-      .subscribe(
-        (user: Pick<User, DeletedItemUser>[]) => this.success(event, user),
-        (error: HttpErrorResponse) => this.error.next(true),
-        () => this.helpService.delay(this.$users.unsubscribe(), 2000)
-      ));
+      .subscribe({
+        next: (user: Pick<User, DeletedItemUser>[]) =>
+          this.success(event, user),
+        error: (error: HttpErrorResponse) => this.error.next(true),
+        complete: () => this.helpService.delay(this.$users.unsubscribe(), 2000),
+      }));
   }
 
   public async restore(
@@ -133,11 +134,11 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
               slug: user?.slug,
             };
             const loading = this.loadingService.show('Excluindo usuário...');
-            return (this.$delete = this.usersService.restore(data).subscribe(
-              (user_: User) => this.messsage(user_, index, loading),
-              (error: HttpErrorResponse) =>
-                this.messageService.error(error, loading, this.$delete)
-            ));
+            return (this.$delete = this.usersService.restore(data).subscribe({
+              next: (user_: User) => this.messsage(user_, index, loading),
+              error: (error: HttpErrorResponse) =>
+                this.messageService.error(error, loading, this.$delete),
+            }));
           },
         },
       ],
@@ -219,8 +220,8 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchUserService.getSearchBy.subscribe(
-      (filter: Search) => {
+    this.$searchBy = this.searchUserService.getSearchBy.subscribe({
+      next: (filter: Search) => {
         if (
           filter === 'firstName' ||
           filter === 'lastName' ||
@@ -231,8 +232,8 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
           this.setSearchBy = 'firstName';
           this.orderBy(filter);
         }
-      }
-    );
+      },
+    });
   }
 
   private setDataSearch(value: string): object {
@@ -302,11 +303,11 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
   // Destroy
   private delete(user: User, index: number): Subscription {
     const loading = this.loadingService.show('Excluindo usuário...');
-    return (this.$delete = this.usersService.dropd(user).subscribe(
-      (user_: User) => this.messsage(user_, index, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.$delete)
-    ));
+    return (this.$delete = this.usersService.dropd(user).subscribe({
+      next: (user_: User) => this.messsage(user_, index, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.$delete),
+    }));
   }
 
   private messsage(

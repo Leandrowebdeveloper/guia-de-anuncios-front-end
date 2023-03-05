@@ -34,8 +34,8 @@ export class UserSearchMenuComponent implements OnInit, OnDestroy {
   }
 
   private filter(): void {
-    this.$isIcon = this.searchUserService.getSearchBy.subscribe(
-      (filter: Search) => (this.isIcon = filter)
-    );
+    this.$isIcon = this.searchUserService.getSearchBy.subscribe({
+      next: (filter: Search) => (this.isIcon = filter),
+    });
   }
 }

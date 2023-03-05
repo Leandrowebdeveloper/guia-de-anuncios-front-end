@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { DeleteWorkDayService } from './service.service';
 
-import { DeleteAddressService } from './service.service';
-
-describe('DeleteAddressService', () => {
-  let service: DeleteAddressService;
+describe('DeleteWorkDayService', () => {
+  let service: DeleteWorkDayService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DeleteAddressService);
+    service = TestBed.inject(DeleteWorkDayService);
   });
 
   it('should be created', () => {

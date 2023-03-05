@@ -26,11 +26,11 @@ export class UserStateComponent {
   public state(): Subscription {
     const { slug, _csrf } = this.user;
     this.form = this.fb.group({ slug, _csrf });
-    return (this.$state = this.stateService.state(this.form.value).subscribe(
-      (user_: User) =>
+    return (this.$state = this.stateService.state(this.form.value).subscribe({
+      next: (user_: User) =>
         this.messageService.success(user_?.message, null, this.$state, 350),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, null, this.$state)
-    ));
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, null, this.$state),
+    }));
   }
 }

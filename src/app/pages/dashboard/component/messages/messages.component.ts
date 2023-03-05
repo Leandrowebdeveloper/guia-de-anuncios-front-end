@@ -10,8 +10,8 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./messages.component.scss'],
 })
 export class SendMessagesComponent implements OnInit {
-  @Input() user!: Required<Pick<User, '_csrf' | 'id'>>;
-  @Input() announcement!: Required<Pick<Announcement, '_csrf' | 'id'>>;
+  @Input() user!: Pick<User, '_csrf' | 'id'>;
+  @Input() announcement!: Pick<Announcement, '_csrf' | 'id'>;
   public isButton: boolean;
   constructor(
     private modalController: ModalController,

@@ -88,9 +88,11 @@ export class EnabledItemAdminAnnouncementPage implements OnInit, OnDestroy {
       const data = this.setDataSearch(event?.target?.value);
       return (this.$search = this.adminAnnouncementService
         .searchBy(data)
-        .subscribe((announcement: Announcement[]) => {
-          this.searchAnnouncementService.search = announcement;
-          setTimeout(() => this.$search.unsubscribe(), 2000);
+        .subscribe({
+          next: (announcement: Announcement[]) => {
+            this.searchAnnouncementService.search = announcement;
+            setTimeout(() => this.$search.unsubscribe(), 2000);
+          },
         }));
     }
   }
@@ -161,12 +163,12 @@ export class EnabledItemAdminAnnouncementPage implements OnInit, OnDestroy {
     const loading = this.loadingService.show('Enviando para lixeira...');
     this.destroyAnnouncement = this.adminAnnouncementService
       .delete(announcement)
-      .subscribe(
-        (announcement_: Announcement) =>
+      .subscribe({
+        next: (announcement_: Announcement) =>
           this.success(index, announcement_, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.destroyAnnouncement)
-      );
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.destroyAnnouncement),
+      });
   }
 
   private success(
@@ -211,20 +213,23 @@ export class EnabledItemAdminAnnouncementPage implements OnInit, OnDestroy {
       case 'state':
         this.announcement.sort((a, b) => a?.state > b?.state && -1);
         break;
+      case 'blockade':
+        this.announcement.sort((a, b) => a?.blockade > b?.blockade && -1);
+        break;
     }
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchAnnouncementService.getSearchBy.subscribe(
-      (filter: SearchAnnouncement) => {
+    this.$searchBy = this.searchAnnouncementService.getSearchBy.subscribe({
+      next: (filter: SearchAnnouncement) => {
         if (filter === 'title') {
           this.setSearchBy = filter;
 
           this.setSearchBy = 'title';
         }
         this.orderBy(filter);
-      }
-    );
+      },
+    });
   }
 
   private setDataSearch(value: string): object {

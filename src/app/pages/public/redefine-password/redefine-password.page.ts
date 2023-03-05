@@ -57,10 +57,10 @@ export class RedefinePasswordPage implements OnInit {
     const loading = this.loadingService.show('Recuperando senha...');
     return (this.redefine = this.redefinePasswordService
       .passwordRecover(event.value)
-      .subscribe(
-        (user: User) => this.success(user, loading),
-        (error: HttpErrorResponse) => this.error(error, loading)
-      ));
+      .subscribe({
+        next: (user: User) => this.success(user, loading),
+        error: (error: HttpErrorResponse) => this.error(error, loading),
+      }));
   }
 
   private setMessageLinkInvalid() {

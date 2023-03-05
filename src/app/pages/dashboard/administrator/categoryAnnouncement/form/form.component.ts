@@ -74,11 +74,11 @@ export class FormComponent implements OnInit {
   private drop(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Excluindo categoria...');
     this.getSlug(event);
-    return (this.write = this.categoryService.dropd(event.value).subscribe(
-      (category: Category) => this.messsage(category, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
+    return (this.write = this.categoryService.dropd(event.value).subscribe({
+      next: (category: Category) => this.messsage(category, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.write),
+    }));
   }
 
   private getSlug(event: FormGroup<any>) {
@@ -102,21 +102,21 @@ export class FormComponent implements OnInit {
   // Update Name description
   private register(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Cadastrar categoria...');
-    return (this.write = this.categoryService.register(event.value).subscribe(
-      (category: Category) => this.messsage(category, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
+    return (this.write = this.categoryService.register(event.value).subscribe({
+      next: (category: Category) => this.messsage(category, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.write),
+    }));
   }
 
   // Name
   private restore(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Restaurar categoria...');
-    return (this.write = this.categoryService.restore(event.value).subscribe(
-      (category: Category) => this.messsage(category, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.write)
-    ));
+    return (this.write = this.categoryService.restore(event.value).subscribe({
+      next: (category: Category) => this.messsage(category, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.write),
+    }));
   }
 
   private messsage(

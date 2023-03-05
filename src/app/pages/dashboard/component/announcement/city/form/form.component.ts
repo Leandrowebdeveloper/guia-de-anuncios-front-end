@@ -82,11 +82,12 @@ export class AnnouncementFormCityComponent implements OnInit {
     event: FormGroup,
     loading: Promise<HTMLIonLoadingElement>
   ): Subscription {
-    return (this.$citie = this.cityService.citie(event.value).subscribe(
-      (citie: Pick<Citie, 'message'>) => this.messsage(citie?.message, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.$citie)
-    ));
+    return (this.$citie = this.cityService.citie(event.value).subscribe({
+      next: (citie: Pick<Citie, 'message'>) =>
+        this.messsage(citie?.message, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.$citie),
+    }));
   }
 
   private messsage(

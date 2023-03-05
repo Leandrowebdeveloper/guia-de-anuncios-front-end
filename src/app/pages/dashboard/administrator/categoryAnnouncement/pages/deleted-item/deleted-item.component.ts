@@ -105,22 +105,23 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
     this.calculatePagination();
     return (this.$category = this.categoryService
       .index(`management/deleted`, { limit: this.limit, offset: this.offset })
-      .subscribe(
-        (category: Category[]) => this.success(event, category),
-        (error: HttpErrorResponse) => this.error.next(true),
-        () => this.helpService.delay(this.$category.unsubscribe(), 2000)
-      ));
+      .subscribe({
+        next: (category: Category[]) => this.success(event, category),
+        error: (error: HttpErrorResponse) => this.error.next(true),
+        complete: () =>
+          this.helpService.delay(this.$category.unsubscribe(), 2000),
+      }));
   }
 
   public search(event: SearchbarCustomEvent): Subscription {
     if (event?.target?.value.length >= 3) {
       const data = this.setDataSearch(event?.target?.value);
-      return (this.$search = this.categoryService
-        .searchBy(data)
-        .subscribe((category: Category[]) => {
+      return (this.$search = this.categoryService.searchBy(data).subscribe({
+        next: (category: Category[]) => {
           this.searchService.search = category;
           setTimeout(() => this.$search.unsubscribe(), 2000);
-        }));
+        },
+      }));
     }
   }
 
@@ -217,36 +218,19 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
     if (!this.category) {
       return;
     }
-    switch (search) {
-      case 'name':
-        this.category.sort((a, b) => a?.name < b?.name && -1);
-        break;
-      case 'createdAt':
-        this.category.sort((a, b) => a?.createdAt > b?.createdAt && -1);
-        break;
-      case 'updatedAt':
-        this.category.sort((a, b) => a?.updatedAt > b?.updatedAt && -1);
-        break;
-      case 'state':
-        this.category.sort((a, b) => a?.state > b?.state && -1);
-        break;
-      case 'position':
-        this.category.sort((a, b) => a?.position < b?.position && -1);
-        break;
-    }
   }
 
   private initSearchBy(): void {
-    this.$searchBy = this.searchService.getSearchCategoryBy.subscribe(
-      (filter: SearchCategory | 'name') => {
+    this.$searchBy = this.searchService.getSearchCategoryBy.subscribe({
+      next: (filter: SearchCategory | 'name') => {
         if (filter === 'name') {
           this.setSearchBy = filter;
         } else {
           this.setSearchBy = 'name';
           this.orderBy(filter);
         }
-      }
-    );
+      },
+    });
   }
 
   private setDataSearch(value: string): object {
@@ -310,14 +294,14 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
   }
 
   private update(): Subscription {
-    return (this.$category = this.categoryService.categoryObservable.subscribe(
-      (category: Category) => {
+    return (this.$category = this.categoryService.categoryObservable.subscribe({
+      next: (category: Category) => {
         if (category) {
           const i = this.getIndexCategoryCurrent(category);
           this.switchBetweenAddAndUpdate(category, i);
         }
-      }
-    ));
+      },
+    }));
   }
 
   private getIndexCategoryCurrent(category: Pick<Category, 'id'>): number {
@@ -343,10 +327,12 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
   }
 
   private drop(): void {
-    this.$drop = this.categoryService.drop.subscribe((category: Category) => {
-      if (category && this.toggleListCategory) {
-        this.category.splice(this.getIndexUserDropCurrent(category), 1);
-      }
+    this.$drop = this.categoryService.drop.subscribe({
+      next: (category: Category) => {
+        if (category && this.toggleListCategory) {
+          this.category.splice(this.getIndexUserDropCurrent(category), 1);
+        }
+      },
     });
   }
 
@@ -355,11 +341,11 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
     index: number
   ): Subscription {
     const loading = this.loadingService.show('Excluindo categoria...');
-    return (this.$delete = this.categoryService.dropd(category).subscribe(
-      (category_: Category) => this.messsage(category_, index, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.$delete)
-    ));
+    return (this.$delete = this.categoryService.dropd(category).subscribe({
+      next: (category_: Category) => this.messsage(category_, index, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.$delete),
+    }));
   }
 
   private restored(
@@ -367,11 +353,11 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
     index: number
   ): Subscription {
     const loading = this.loadingService.show('Restaurar categoria...');
-    return (this.$delete = this.categoryService.restore(data).subscribe(
-      (category_: Category) => this.messsage(category_, index, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.$delete)
-    ));
+    return (this.$delete = this.categoryService.restore(data).subscribe({
+      next: (category_: Category) => this.messsage(category_, index, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.$delete),
+    }));
   }
 
   private messsage(

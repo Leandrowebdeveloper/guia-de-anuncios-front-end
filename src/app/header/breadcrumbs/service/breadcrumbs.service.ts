@@ -60,7 +60,9 @@ export class BreadcrumbsService implements OnDestroy {
   private init(): void {
     this.$router = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((activeRoute: NavigationEnd) => this.start(activeRoute));
+      .subscribe({
+        next: (activeRoute: NavigationEnd) => this.start(activeRoute),
+      });
   }
 
   private start(activeRoute: NavigationEnd): void {

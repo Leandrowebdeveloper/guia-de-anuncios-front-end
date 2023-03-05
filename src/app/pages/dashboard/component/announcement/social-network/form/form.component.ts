@@ -116,12 +116,12 @@ export class AnnouncementFormSocialNetworkComponent implements OnInit {
   ): Subscription {
     return (this.write = this.socialNetworkService
       .socialNetwork(event.value)
-      .subscribe(
-        (socialNetwork: SocialNetwork) =>
+      .subscribe({
+        next: (socialNetwork: SocialNetwork) =>
           this.messsage(socialNetwork.message, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.write)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.write),
+      }));
   }
 
   private messsage(

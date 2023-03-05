@@ -57,17 +57,17 @@ export class FormUserEmailComponent implements OnInit {
     const loading = this.loadingService.show('Alterando email...');
     event.value.slug = this.user?.slug;
     if (this.isAuth) {
-      return (this.$email = this.authService.email(event.value).subscribe(
-        (user: User) => this.messsage(user, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$email)
-      ));
+      return (this.$email = this.authService.email(event.value).subscribe({
+        next: (user: User) => this.messsage(user, loading),
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$email),
+      }));
     }
-    return (this.$email = this.emailService.email(event.value).subscribe(
-      (user: User) => this.messsage(user, loading),
-      (error: HttpErrorResponse) =>
-        this.messageService.error(error, loading, this.$email)
-    ));
+    return (this.$email = this.emailService.email(event.value).subscribe({
+      next: (user: User) => this.messsage(user, loading),
+      error: (error: HttpErrorResponse) =>
+        this.messageService.error(error, loading, this.$email),
+    }));
   }
 
   private messsage(

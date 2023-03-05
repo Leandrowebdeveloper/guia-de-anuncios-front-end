@@ -89,15 +89,15 @@ export class AdminMaganementAddressComponent implements OnInit, OnDestroy {
   ): Subscription {
     if (this.announcement?.address) {
       const loading = this.loadingService.show('Excluindo endereço...');
-      return (this.$delete = this.addressService.delete(address).subscribe(
-        (address_: Pick<Address, 'message'>) => {
+      return (this.$delete = this.addressService.delete(address).subscribe({
+        next: (address_: Pick<Address, 'message'>) => {
           this.messsage(address_, loading);
           this.announcement.address = null;
           return (this.announcement.address = null);
         },
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$delete)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$delete),
+      }));
     }
   }
 
@@ -109,12 +109,12 @@ export class AdminMaganementAddressComponent implements OnInit, OnDestroy {
   }
 
   private update(): Subscription {
-    return (this.$update = this.addressService.getAddressEvent.subscribe(
-      (address: Address) => {
+    return (this.$update = this.addressService.getAddressEvent.subscribe({
+      next: (address: Address) => {
         if (this.announcement?.id === address?.announcementId) {
           this.announcement.address = address;
         }
-      }
-    ));
+      },
+    }));
   }
 }

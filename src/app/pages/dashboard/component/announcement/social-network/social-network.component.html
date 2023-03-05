@@ -1,5 +1,5 @@
 <ion-item
-  *ngIf="!isAdmin; else Else"
+  *ngIf="!(user?.level === '1'); else Else"
   [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="socialNetwork(announcement)"

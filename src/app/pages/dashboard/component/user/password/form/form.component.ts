@@ -62,16 +62,18 @@ export class FormUserPasswordComponent implements OnInit {
     const loading = this.loadingService.show('Armazenar senha...');
     event.value.slug = this.user?.slug;
     if (this.isAuth) {
-      return (this.$password = this.authService.password(event.value).subscribe(
-        (user: User) => this.messsage(user, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$password)
-      ));
+      return (this.$password = this.authService
+        .password(event.value)
+        .subscribe({
+          next: (user: User) => this.messsage(user, loading),
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, loading, this.$password),
+        }));
     }
     return (this.$password = this.adminPasswordService
       .password(event.value)
-      .subscribe(
-        (
+      .subscribe({
+        next: (
           user: Required<
             Pick<
               User & { passwordCurrent: string },
@@ -79,9 +81,9 @@ export class FormUserPasswordComponent implements OnInit {
             >
           >
         ) => this.messsage(user, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$password)
-      ));
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$password),
+      }));
   }
 
   private messsage(

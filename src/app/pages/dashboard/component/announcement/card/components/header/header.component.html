@@ -31,11 +31,18 @@
     [color]="(announcement | allowAd) ? 'danger' : 'success'"
     title="Cadastro incompleto"
     data-message="Cadastro incompleto"
-    >Cadastro {{ (announcement | allowAd) ? "incompleto" : "completo" }}
-    <ion-icon
-      [name]="(announcement | allowAd) ? 'thumbs-down' : 'thumbs-up'"
-    ></ion-icon
-  ></ion-card-subtitle>
+    >Cadastro
+    {{ (announcement | allowAd) ? "incompleto" : "completo" }}
+  </ion-card-subtitle>
+
+  <!-- Aviso de bloqueio -->
+  <ion-card-subtitle
+    *ngIf="announcement?.blockade"
+    color="danger"
+    title="Anúncio bloqueado"
+    data-message="Anúncio bloqueado"
+    >Anúncio bloqueado
+  </ion-card-subtitle>
 
   <!-- State -->
   <ion-card-subtitle>
@@ -57,6 +64,13 @@
         <ion-text>
           {{ announcement?.plan?.end | time : "plan" }}
         </ion-text>
+      </li>
+
+      <li
+        class="plan ion-margin-bottom"
+        [hidden]="announcement?.plan?.start && announcement?.plan?.end"
+      >
+        <ion-text> Recursos são limitado </ion-text>
       </li>
 
       <li

@@ -51,13 +51,13 @@ export class GaleryComponent {
       _csrf: this.announcement._csrf,
       announcementId: this.announcement?.id,
     };
-    this.$order = this.galeryAnnouncementService.order(data).subscribe(
-      (galery: Galery) => {
+    this.$order = this.galeryAnnouncementService.order(data).subscribe({
+      next: (galery: Galery) => {
         this.message(galery);
         setTimeout(() => this.$order.unsubscribe(), 2000);
       },
-      (error: HttpErrorResponse) => console.log(error)
-    );
+      error: (error: HttpErrorResponse) => console.log(error),
+    });
   }
 
   public plusSlides(i: number, operator: '-' | '+'): void {
@@ -89,13 +89,13 @@ export class GaleryComponent {
     galery._csrf = this.announcement?._csrf;
     return (this.destroy = this.galeryAnnouncementService
       .delete(galery)
-      .subscribe(
-        (galery_: Galery) => {
+      .subscribe({
+        next: (galery_: Galery) => {
           this.update(galery);
           this.message(galery_);
         },
-        (error) => this.messageService.error(error, null, this.destroy)
-      ));
+        error: (error) => this.messageService.error(error, null, this.destroy),
+      }));
   }
 
   private showLightbox(index: number) {

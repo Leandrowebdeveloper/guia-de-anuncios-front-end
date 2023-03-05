@@ -67,11 +67,11 @@ export class FormSendMessagesComponent implements OnInit {
 
     return (this.write = this.messagesService
       .send(event.value, action)
-      .subscribe(
-        (messages: Messages) => this.messsage(messages, loading),
-        (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.write)
-      ));
+      .subscribe({
+        next: (messages: Messages) => this.messsage(messages, loading),
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.write),
+      }));
   }
 
   private messsage(

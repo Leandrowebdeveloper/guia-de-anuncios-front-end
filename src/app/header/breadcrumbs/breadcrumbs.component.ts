@@ -35,12 +35,12 @@ export class BreadcrumpsComponent implements OnInit, OnDestroy {
   }
 
   private update() {
-    this.$breadcrumb = this.breadcrumbService
-      .getEvent()
-      .subscribe((url: string) => {
+    this.$breadcrumb = this.breadcrumbService.getEvent().subscribe({
+      next: (url: string) => {
         if (url) {
           this.breadcrumbService.update(url);
         }
-      });
+      },
+    });
   }
 }
