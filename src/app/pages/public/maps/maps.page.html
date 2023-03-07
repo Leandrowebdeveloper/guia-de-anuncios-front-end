@@ -1,0 +1,62 @@
+<app-header-component></app-header-component>
+
+<ion-content>
+  <div id="map" #map></div>
+  <div class="sidepanel" [ngClass]="{'show': toggleInfoMap }" #sidebar></div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="primary">
+    <ion-buttons class="footer">
+      <!-- Home -->
+      <span class="ion-text-center">
+        <ion-button
+          title="Pagína inicíal."
+          data-label="Pagína inicíal."
+          (click)="back()"
+        >
+          <ion-icon
+            size="large"
+            color="light"
+            slot="icon-only"
+            name="arrow-back"
+          ></ion-icon>
+        </ion-button>
+        <ion-title size="small">Voltar</ion-title>
+      </span>
+
+      <span class="ion-text-center" *ngIf="!mapId">
+        <ion-button
+          title="Traçar uma rota."
+          data-label="Traçar uma rota."
+          (click)="traceRoute()"
+        >
+          <ion-icon
+            size="large"
+            slot="icon-only"
+            color="light"
+            name="map"
+          ></ion-icon>
+        </ion-button>
+        <ion-title size="small">Traçar uma rota</ion-title>
+      </span>
+
+      <span class="ion-text-center" *ngIf="mapId">
+        <ion-button
+          title="Informações da rota."
+          data-label="Informações da rota."
+          (click)="showInfoMap()"
+        >
+          <ion-icon
+            size="large"
+            slot="icon-only"
+            color="light"
+            name="information"
+          ></ion-icon>
+        </ion-button>
+
+        <ion-title size="small">Informação</ion-title>
+      </span>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
