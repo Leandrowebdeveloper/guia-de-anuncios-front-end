@@ -1,0 +1,27 @@
+<ion-item
+  *ngIf="!isAdmin; else Else"
+  [disabled]="!announcement?.categoryAnnouncement"
+  detail="true"
+  (click)="cities(announcement)"
+  title="Gerenciar cidade."
+  aria-label="Gerenciar cidade."
+  [attr.aria-disabled]="
+    !announcement?.categoryAnnouncement &&
+    'Para gerenciar cidade cadastre uma categoria.'
+  "
+  button
+>
+  <ion-icon name="business" slot="start"></ion-icon>
+  <ion-label
+    >Cidade
+    <ion-text [color]="announcement?.citie ? 'success' : 'danger'">
+      *
+    </ion-text>
+  </ion-label>
+</ion-item>
+
+<ng-template #Else>
+  <app-citie-admin-management
+    [announcement]="announcement"
+  ></app-citie-admin-management>
+</ng-template>

@@ -1,0 +1,106 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import "~@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+.tox-notifications-container,
+.tox-statusbar__branding {
+  display: none;
+}
+
+[apikey="eltulb4tbmvkr9gu7025qd3j9otlnxlej0ybckmvguswoje5"] {
+  width: 100%;
+}
+
+@font-face {
+  font-family: Poppins-Light;
+  src: url("./theme/fonts/Poppins/Poppins-Light.ttf");
+}
+
+@font-face {
+  font-family: Poppins-Regular;
+  src: url("./theme/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+  font-family: Faustina-Medium;
+  src: url("./theme/fonts/faustina/static/Faustina-Regular.ttf");
+}
+
+ion-card-title {
+  font-family: Poppins-Regular !important;
+}
+
+ion-card-subtitle {
+  font-family: Faustina-Medium !important;
+  letter-spacing: 0.8px;
+}
+
+ion-breadcrumb {
+  font-family: Poppins-Regular;
+}
+
+small {
+  font-family: Poppins-Light !important;
+}
+
+ion-item-divider {
+  ion-label {
+    letter-spacing: 0.8px;
+    font-family: Faustina-Medium !important;
+    font-size: large !important;
+  }
+}
+
+ion-label {
+  font-family: Poppins-Regular !important;
+  --color: var(--ion-color-medium-shade) !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+ion-icon {
+  pointer-events: none !important;
+  &.ios {
+    color: #707070;
+  }
+}
+
+.content-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  flex-direction: column;
+}
+
+.inputFiles {
+  height: 0px;
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+}

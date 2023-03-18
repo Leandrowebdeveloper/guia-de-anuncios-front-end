@@ -1,0 +1,32 @@
+.skeleton {
+  div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    &.fab ion-skeleton-text {
+      flex: 1;
+      border-radius: 50px;
+      height: 24px;
+      margin: 6px 8px 6px 0px;
+      max-width: 90px;
+    }
+    ion-skeleton-text {
+      flex: 1;
+      height: 32px;
+      margin: 6px 8px 6px 0px;
+      width: 100%;
+    }
+  }
+  .title {
+    height: 24px;
+    max-width: 220px;
+    border-end-end-radius: 20px;
+    border-top-right-radius: 2px;
+  }
+  .category {
+    height: 12px;
+    max-width: 70px;
+    border-end-end-radius: 20px;
+    border-top-right-radius: 2px;
+  }
+}

@@ -1,0 +1,46 @@
+<app-header-component-modal [label]="label"></app-header-component-modal>
+
+<ion-content [fullscreen]="true">
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-content>
+            <ion-text>
+              <ul>
+                <li>Aumente o número de visitantes no facebook.</li>
+                <li>Multiplique o número de seguidores no instagram.</li>
+              </ul>
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <!-- <ion-col size="12">
+        <ion-item detail="true" (click)="facebook()" button>
+          <ion-icon
+            class="facebook"
+            size="large"
+            color="primary"
+            name="logo-facebook"
+            slot="start"
+          ></ion-icon>
+          <ion-label>Facebook</ion-label>
+        </ion-item>
+        <ion-item detail="true" (click)="instagram()" button>
+          <ion-icon
+            size="large"
+            src="./../../../../../../../assets/ion-icon/logo-instagram.svg"
+            slot="start"
+          ></ion-icon>
+          <ion-label>Instagram</ion-label>
+        </ion-item>
+      </ion-col> -->
+    </ion-row>
+    <app-form
+      (submitDataForm)="onSubmit($event)"
+      (exportForm)="importForm($event)"
+      [inputConfig]="config"
+      [attrButton]="attrButton"
+    ></app-form>
+  </ion-grid>
+</ion-content>

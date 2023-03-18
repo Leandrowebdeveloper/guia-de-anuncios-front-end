@@ -1,0 +1,18 @@
+<ng-container *ngIf="announcement && !day; else isForm">
+  <ion-col size="12">
+    <app-days-of-the-week
+      [announcement]="announcement"
+      (eventDay)="setDay($event)"
+      (route)="back($event)"
+    ></app-days-of-the-week>
+  </ion-col>
+</ng-container>
+<ng-template #isForm>
+  <ion-col size="12">
+    <app-form-component
+      [dayOfTheWeek]="day"
+      [announcement]="announcement"
+      (route)="back($event)"
+    ></app-form-component>
+  </ion-col>
+</ng-template>

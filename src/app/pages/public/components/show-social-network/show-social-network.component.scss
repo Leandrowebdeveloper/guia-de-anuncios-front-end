@@ -1,0 +1,31 @@
+a {
+  text-decoration: none;
+}
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+ion-fab-button {
+  &.instagram {
+    --background: radial-gradient(
+      circle at 30% 107%,
+      #fdf497 0%,
+      #fdf497 5%,
+      #fd5949 45%,
+      #d6249f 60%,
+      #285aeb 90%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .facebook {
+    --background: #3b5998;
+  }
+}
+
+ion-icon {
+  --background: #f3f3f3;
+  --color: #f3f3f3;
+}

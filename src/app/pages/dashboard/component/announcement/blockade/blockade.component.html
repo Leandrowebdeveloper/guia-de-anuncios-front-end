@@ -1,0 +1,16 @@
+<ion-item *ngIf="announcement && isAdmin">
+  <ion-label>{{
+    announcement?.blockade ? "Bloqueado" : "Desbloqueado"
+  }}</ion-label>
+  <ion-toggle
+    slot="end"
+    (ionChange)="blockade()"
+    [checked]="announcement?.blockade"
+    title="Alternar entre usuário bloquear e desbloquear."
+    aria-label="Clique para alternar entre usuário bloquear e desbloquear."
+  ></ion-toggle>
+  <ion-icon
+    slot="start"
+    [name]="announcement?.blockade ? 'stop' : 'play'"
+  ></ion-icon>
+</ion-item>

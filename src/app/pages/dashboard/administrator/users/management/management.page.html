@@ -1,0 +1,135 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="back()" defaultHref></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gerenciamento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid *ngIf="user$ | async;let user;" fixed>
+    <ion-segment value="user" (ionChange)="toggleSegment($event)">
+      <ion-segment-button value="user">
+        <ion-icon color="mediun" name="person"></ion-icon>
+        <ion-label>Usuário</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="announcement">
+        <ion-icon color="mediun" name="megaphone"></ion-icon>
+        <ion-label>Anúncio</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="statistic">
+        <ion-icon color="mediun" name="analytics"></ion-icon>
+        <ion-label>Estatística</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <div [ngSwitch]="toggleRoute">
+      <div *ngSwitchCase="'user'">
+        <!-- Messagem -->
+        <ion-row>
+          <ion-col size="12">
+            <app-card-message-component
+              [user]="user"
+            ></app-card-message-component>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-margin-top">
+          <ion-col size-xl="5" size-lg="5" size-md="6" size-sm="12" size="12">
+            <ion-card>
+              <app-avatar-component [user]="user"></app-avatar-component>
+
+              <app-card-user-component [user]="user"></app-card-user-component>
+            </ion-card>
+          </ion-col>
+          <ion-col
+            size-xl="6"
+            size-lg="6"
+            size-md="6"
+            size-sm="12"
+            size="12"
+            offset-xl="1"
+            offset-lg="1"
+          >
+            <!-- message -->
+            <app-messages-component [user]="user"></app-messages-component>
+            <!-- Blockade -->
+            <app-blockade-user-component
+              [user]="user"
+            ></app-blockade-user-component>
+
+            <!-- State -->
+            <app-state-user-component [user]="user"></app-state-user-component>
+
+            <!-- Level -->
+            <app-level-user-component [user]="user"></app-level-user-component>
+
+            <!-- Plan -->
+            <app-plan-user-component [user]="user"></app-plan-user-component>
+
+            <!-- Name -->
+            <app-name-user-component
+              [user]="user"
+              [isAuth]="false"
+            ></app-name-user-component>
+
+            <!-- Email -->
+            <app-email-user-component
+              [user]="user"
+              [isAuth]="false"
+            ></app-email-user-component>
+
+            <!-- Passwprd -->
+            <app-password-user-component
+              [user]="user"
+              [isAuth]="false"
+            ></app-password-user-component>
+
+            <!-- Destroy -->
+            <app-destroy-user-component
+              [user]="user"
+              [isAuth]="false"
+            ></app-destroy-user-component>
+          </ion-col>
+        </ion-row>
+      </div>
+
+      <!-- Anúncios -->
+      <div *ngSwitchCase="'announcement'">
+        <ion-row>
+          <ion-col size="12">
+            <!-- Navegação -->
+            <app-segment-announcement-component
+              [isAdmin]="true"
+              (togglePage)="togglePage($event)"
+            ></app-segment-announcement-component>
+            <!--  Abilitados -->
+            <ng-container *ngIf="toggleList;else ItemDeleted">
+              <app-enabled-item-announcement-page
+                [user]="user"
+                (isAnnouncement)="getIsAnnouncement($event)"
+              ></app-enabled-item-announcement-page>
+            </ng-container>
+
+            <!-- Deletados -->
+            <ng-template #ItemDeleted>
+              <app-deleted-item-announcement-page
+                [userId]="user?.id"
+              ></app-deleted-item-announcement-page>
+            </ng-template>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngSwitchCase="'statistic'">
+        <ion-row>
+          <ion-col size="12">
+            <ion-item-divider>
+              <ion-label>Extatísticas</ion-label>
+            </ion-item-divider>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,24 @@
+<ion-row class="ion-margin-top">
+  <ion-col
+    *ngFor="let item of sizeSkeleton"
+    size-xl="4"
+    size-lg="4"
+    size-md="6"
+    size-sm="6"
+    size="12"
+    class="ion-margin-bottom"
+  >
+    <div class="skeleton">
+      <ion-skeleton-text animated class="title"></ion-skeleton-text>
+      <ion-skeleton-text animated class="category"></ion-skeleton-text>
+      <div class="fab">
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </div>
+      <div>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </div>
+    </div>
+  </ion-col>
+</ion-row>

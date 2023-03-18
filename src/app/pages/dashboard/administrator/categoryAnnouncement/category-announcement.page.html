@@ -1,0 +1,96 @@
+<app-header-component></app-header-component>
+
+<ion-content
+  [scrollEvents]="true"
+  [scrollY]="true"
+  (ionScroll)="logScrolling($event)"
+>
+  <ion-grid fixed>
+    <ion-row>
+      <!-- Menu segmentento -->
+      <ion-col size="12">
+        <app-category-segment-component
+          (togglePage)="togglePage($event)"
+        ></app-category-segment-component>
+      </ion-col>
+
+      <ion-col size="12">
+        <!-- Abilitados -->
+        <ng-container *ngIf="toggleList;else ItemDeleted">
+          <app-category-announcement-enabled-item
+            [isOrder]="isOrder"
+            (sendOrder)="isSaveOrder($event)"
+            (setError)="setError($event)"
+            (isEmpty)="isEmpty($event)"
+          ></app-category-announcement-enabled-item>
+        </ng-container>
+
+        <!-- Lixeira -->
+        <ng-template #ItemDeleted>
+          <app-category-announcement-deleted-item></app-category-announcement-deleted-item>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Scroll top -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button
+      size="small"
+      color="primary"
+      class="fab"
+      [ngClass]="{show: fab}"
+      (click)="toTop()"
+    >
+      <ion-icon name="arrow-up-circle" color="light"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Salvar ordenação -->
+  <ion-fab
+    [hidden]="!toggleList"
+    vertical="bottom"
+    horizontal="center"
+    slot="fixed"
+    title="Salvar ordem da lista de categorias"
+    aria-message="Salvar ordem da lista de categorias"
+  >
+    <ion-fab-button [hidden]="!sendOrder" color="primary" (click)="saveOrder()"
+      ><ion-icon name="save" color="light"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Cadastrar e ordenar -->
+  <ion-fab
+    [hidden]="!toggleList || error || !empty"
+    vertical="center"
+    horizontal="end"
+    slot="fixed"
+    title="Cadastrar e ordenar categorias"
+    aria-message="Cadastrar e ordenar categoria"
+  >
+    <ion-fab-button size="small">
+      <ion-icon name="ellipsis-vertical"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button
+        color="primary"
+        title="Cadastrar categorias"
+        aria-message="Cadastrar categorias"
+        (click)="register()"
+      >
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button
+        color="primary"
+        title="Ordenar categorias"
+        aria-message="Ordenar categorias"
+        (click)="orderList()"
+      >
+        <ion-icon name="reorder-four"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>
+
+<app-footer></app-footer>

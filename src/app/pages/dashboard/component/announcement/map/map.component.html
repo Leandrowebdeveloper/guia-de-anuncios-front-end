@@ -1,0 +1,29 @@
+<ion-item
+  *ngIf="!(user?.level === '1'); else Else"
+  [disabled]="!announcement?.categoryAnnouncement"
+  detail="true"
+  (click)="coordinates()"
+  title="Gerenciar mapa."
+  aria-label="Gerenciar mapa."
+  [attr.aria-disabled]="
+    !announcement?.categoryAnnouncement &&
+    'Para gerenciar mapa cadastre uma categoria.'
+  "
+  button
+>
+  <ion-icon name="map" slot="start"></ion-icon>
+  <ion-label
+    >Mapa
+    <ion-text [color]="announcement?.coordinate ? 'success' : 'danger'">
+      *
+    </ion-text>
+  </ion-label>
+</ion-item>
+
+<ng-template #Else>
+  <!-- Mapa -->
+  <app-maps-admin-management
+    [announcement]="announcement"
+    [user]="user"
+  ></app-maps-admin-management>
+</ng-template>

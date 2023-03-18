@@ -1,0 +1,95 @@
+<app-header-component></app-header-component>
+
+<ion-content [fullscreen]="true">
+  <ion-grid
+    class="grid"
+    *ngIf="category$ | async; let category; else loading"
+    fixed
+  >
+    <!-- <ion-searchbar
+          class="ion-margin-top"
+          placeholder="Pesquizar"
+          animated
+        ></ion-searchbar> -->
+    <ion-row class="ion-justify-content-around ion-align-items-center">
+      <ion-col
+        class="ion-align-self-center ion-margin-vertical ion-no-margin-bottom"
+        size-xl="2"
+        size-lg="3"
+        size-md="3"
+        size-sm="4"
+        size="4"
+        *ngFor="let item of category"
+      >
+        <ion-card
+          [ngClass]="{'ion-no-margin': !isDesktop}"
+          button="true"
+          [title]="item?.name + ': ' + item?.description"
+          [attr.data-message]="item?.name + ': ' + item?.description"
+          [routerLink]="['/categoria', item?.slug]"
+        >
+          <ion-card-header class="no-padding-horizontal">
+            <ion-thumbnail>
+              <img
+                [src]="item?.image ? '/images/icons/' + item?.image?.filename : './../../../../assets/thumbnail.svg'"
+                [alt]="item?.name"
+                [title]="item?.name"
+                [attr.aria-labelledby]="item?.name"
+              />
+            </ion-thumbnail>
+          </ion-card-header>
+          <ion-card-content class="ion-text-center no-padding-horizontal">
+            <ion-text
+              [id]="item?.name"
+              [title]="item?.name"
+              class="ion-text-nowrap"
+            >
+              {{item?.name}}
+            </ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ng-template #loading>
+    <ion-grid>
+      <ion-row class="ion-justify-content-around ion-align-items-center">
+        <ion-col
+          *ngFor="let item of [0,1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18];"
+          class="ion-align-self-center ion-margin-vertical"
+          size-xl="3"
+          size-lg="2"
+          size-md="3"
+          size-sm="4"
+          size="4"
+        >
+          <ion-skeleton-text
+            class="ion-margin-bottom"
+            animated
+            style="
+              width: 70px;
+              min-height: 70px;
+              margin-left: auto;
+              margin-right: auto;
+            "
+          >
+          </ion-skeleton-text>
+          <ion-skeleton-text
+            animated
+            style="
+              width: 80%;
+              min-height: 10px;
+              border-radius: 2px;
+              display: block;
+              margin-left: auto;
+              margin-right: auto;
+            "
+          >
+          </ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+</ion-content>
+
+<app-footer></app-footer>

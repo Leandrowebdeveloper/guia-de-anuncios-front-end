@@ -1,0 +1,36 @@
+<app-header-component></app-header-component>
+
+<ion-content
+  [scrollEvents]="true"
+  [scrollY]="true"
+  (ionScroll)="logScrolling($event)"
+>
+  <ion-grid fixed>
+    <!-- Navegação -->
+    <app-segment-component
+      (togglePage)="togglePage($event)"
+    ></app-segment-component>
+
+    <ng-container *ngIf="toggleList;else ItemDeleted">
+      <app-enabled-item-user></app-enabled-item-user>
+    </ng-container>
+
+    <ng-template #ItemDeleted>
+      <app-deleted-item-user></app-deleted-item-user>
+    </ng-template>
+  </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button
+      size="small"
+      color="primary"
+      class="fab"
+      [ngClass]="{show: fab}"
+      (click)="toTop()"
+    >
+      <ion-icon name="arrow-up-circle" color="light"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<app-footer></app-footer>

@@ -1,0 +1,12 @@
+<app-header-component-modal [label]="label"></app-header-component-modal>
+
+<ion-content [fullscreen]="true">
+  <ion-grid fixed>
+    <app-form
+      (submitDataForm)="onSubmit($event)"
+      (exportForm)="importForm($event)"
+      [inputConfig]="config"
+      [attrButton]="attrButton"
+    ></app-form>
+  </ion-grid>
+</ion-content>

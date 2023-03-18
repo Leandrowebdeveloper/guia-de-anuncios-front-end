@@ -1,0 +1,60 @@
+<ion-item-sliding>
+  <ion-item lines="true">
+    <ion-icon
+      slot="start"
+      src="../../../../../../../../assets/ion-icon/contact.svg"
+    ></ion-icon>
+    <ion-icon
+      slot="end"
+      title="Pressione e arraste para a esquerda."
+      data-message="Pressione e arraste para a esquerda."
+      name="chevron-back"
+    ></ion-icon>
+    <ion-label>
+      Contato
+      <ion-text [color]="announcement?.contact ? 'success' : 'danger'">
+        *
+      </ion-text>
+    </ion-label>
+  </ion-item>
+
+  <ion-item-options>
+    <ion-item-option
+      *ngIf="contact"
+      slot="end"
+      size="small"
+      color="danger"
+      class="cursor-pointer"
+      title="Exclui contato"
+      data-message="Exclui contato"
+      (click)="destroy()"
+    >
+      <ion-icon color="light" name="trash" slot="start"></ion-icon>
+      delete
+    </ion-item-option>
+    <ion-item-option
+      *ngIf="contact"
+      slot="end"
+      size="small"
+      class="cursor-pointer"
+      title="Editar contato"
+      data-message="Editar contato"
+      (click)="send()"
+    >
+      <ion-icon color="light" name="create" slot="start"></ion-icon>
+      editar
+    </ion-item-option>
+    <ion-item-option
+      *ngIf="!contact"
+      slot="end"
+      size="small"
+      class="cursor-pointer"
+      title="Editar contato"
+      data-message="Editar contato"
+      (click)="send()"
+    >
+      <ion-icon color="light" name="create" slot="start"></ion-icon>
+      Cadastrar
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

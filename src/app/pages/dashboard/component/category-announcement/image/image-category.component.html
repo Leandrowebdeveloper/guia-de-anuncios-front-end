@@ -1,0 +1,52 @@
+<ion-card>
+  <!-- Avatar -->
+  <div class="container ion-margin-vertical">
+    <input
+      #files
+      type="file"
+      (change)="sendFile(files)"
+      class="inputFiles"
+      [disabled]="!!category?.image?.url"
+    />
+    <div
+      (click)="loadFile(files)"
+      title="Adicionar á icone da categoria."
+      aria-label="Clique para adicionar icone da categoria."
+      button
+    >
+      <ion-thumbnail>
+        <ion-img
+          [src]="
+            category?.image?.url || './../../../../../../assets/thumbnail.svg'
+          "
+          referrerpolicy="no-referrer"
+          alt="Avatar"
+          title="Imagem do usuário"
+        ></ion-img>
+      </ion-thumbnail>
+      <ion-icon color="medium" size="large" name="camera"> </ion-icon>
+    </div>
+  </div>
+
+  <!-- Label -->
+  <ion-card-content>
+    <ion-card-header>
+      <ion-card-title>{{ category?.name }}</ion-card-title>
+      <ion-card-subtitle>
+        Descrição: {{ category?.description }}<br />
+        {{ category?.updatedAt | time : "update" }}
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-fab
+      vertical="bottom"
+      (click)="deleteIcon(category?.image, category?._csrf)"
+      horizontal="end"
+      slot="fixed"
+      *ngIf="!!category?.image?.url"
+    >
+      <ion-fab-button color="none" size="small" title="Excluir icone">
+        <ion-icon name="trash"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ion-card-content>
+</ion-card>

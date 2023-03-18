@@ -1,0 +1,22 @@
+<!-- Plano -->
+<ion-item
+  *ngIf="user"
+  [disabled]="user?.blockade"
+  detail="true"
+  (click)="plan()"
+  title="Alterar plano."
+  aria-label="Clique para alterar plano"
+  [attr.aria-disabled]="
+    'Botão alterar plano do usuário ' + user?.blockade
+      ? 'abilitado.'
+      : 'desabilitado.'
+  "
+  button
+>
+  <ion-label >Plano</ion-label>
+  <ion-icon
+    slot="start"
+    name="trophy"
+  ></ion-icon>
+
+</ion-item>

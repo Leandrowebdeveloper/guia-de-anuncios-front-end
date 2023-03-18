@@ -1,0 +1,35 @@
+<div *ngIf="user" class="container ion-margin-vertical">
+  <div
+    (click)="action(user, files, file)"
+    title="Adicionar á imagem do usuário."
+    aria-label="Clique para adicionar á imagem do usuário."
+    [attr.aria-disabled]="'Botão adicionar imagem ' + user?.blockade ? 'abilitado.' : 'desabilitado'"
+    button
+  >
+    <ion-avatar>
+      <ion-img
+        [src]="user?.image?.filename ? '/images/avatar/' + user?.image?.filename : './../../../../../../assets/avatar.svg'"
+        referrerpolicy="no-referrer"
+        alt="Avatar"
+        title="Imagem do usuário"
+      ></ion-img>
+    </ion-avatar>
+    <ion-icon color="medium" size="large" name="camera"> </ion-icon>
+  </div>
+
+  <input
+    #files
+    type="file"
+    (change)="sendFile(files, user)"
+    accept="image/*"
+    class="inputFiles"
+  />
+  <input
+    #file
+    type="file"
+    (change)="sendFile(file, user)"
+    class="inputFiles"
+    accept="image/*"
+    capture="camera"
+  />
+</div>

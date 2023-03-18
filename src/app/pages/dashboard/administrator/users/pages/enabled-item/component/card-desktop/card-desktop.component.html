@@ -1,0 +1,77 @@
+<ion-list>
+  <ion-item
+    detail="true"
+    color="none"
+    button
+    *ngFor="let user of users"
+    [routerLink]="['/painel-de-controle', 'admin', 'usuario', user?.slug]"
+  >
+    <ion-avatar slot="start">
+      <img
+        [src]="user.image?.url || './../../../../assets/avatar.svg'"
+        referrerpolicy="no-referrer"
+        title="Imagem do usuário."
+        alt="Imagem do usuário."
+      />
+    </ion-avatar>
+
+    <ion-label
+      [title]="'Nome: ' + user?.name"
+      [attr.data-message]="'Nome: ' + user?.name"
+    >
+      {{ user?.name }} <br />
+      <ion-text>
+        <p class="no-margin" [hidden]="!user?.level">
+          <small>{{
+            user?.level === "1" ? "Administrador" : "Colaborador"
+          }}</small>
+        </p>
+        <p class="no-margin">
+          <small *ngIf="user?.plan?.type === 'free'">Plano grátis</small>
+          <small *ngIf="user?.plan?.type === 'basic'">Plano básico</small>
+          <small *ngIf="user?.plan?.type === 'special'">Plano especial</small>
+        </p>
+
+        <p class="no-margin" [hidden]="!user?.plan?.end">
+          <small>{{ user?.plan?.end | time : "plan" }}</small>
+        </p>
+      </ion-text>
+    </ion-label>
+
+    <ion-text class="flex">
+      <small
+        class="margin"
+        [attr.data-message]="
+          user?.blockade
+            ? 'Usuário está bloqueado'
+            : 'Usuário está desbloqueado'
+        "
+        [title]="
+          user?.blockade
+            ? 'Usuário está bloqueado'
+            : 'Usuário está desbloqueado'
+        "
+      >
+        <ion-icon
+          [color]="user?.blockade ? 'danger' : 'success'"
+          slot="end"
+          [name]="user?.blockade ? 'stop' : 'play'"
+        ></ion-icon>
+        {{ user?.blockade ? "bloqueado" : "desbloqueado" }}
+      </small>
+      <small
+        [attr.data-message]="
+          user?.state ? 'Usuário está online' : 'Usuário está offline'
+        "
+        [title]="user?.state ? 'Usuário está online' : 'Usuário está offline'"
+      >
+        <ion-icon
+          [color]="user?.state ? 'success' : 'danger'"
+          slot="end"
+          [name]="user?.state ? 'power' : 'radio-button-off'"
+        ></ion-icon>
+        {{ user?.state ? "online" : "offline" }}
+      </small>
+    </ion-text>
+  </ion-item>
+</ion-list>

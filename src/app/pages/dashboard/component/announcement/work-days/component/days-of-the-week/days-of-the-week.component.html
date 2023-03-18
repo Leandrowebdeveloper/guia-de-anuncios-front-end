@@ -1,0 +1,63 @@
+<ion-item-group>
+  <ion-item-divider>
+    <ion-label>Dias da semana</ion-label>
+    <ion-icon slot="start" name="calendar"></ion-icon>
+  </ion-item-divider>
+
+  <ion-item detail="true" (click)="setDay('domingo')" button>
+    <ion-label>Domingo</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="workDays?.sunday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="workDays?.sunday?.start ? 'success' : 'light'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('segunda')" button>
+    <ion-label>Segunda</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="workDays?.monday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="workDays?.monday?.start ? 'success' : 'light'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('terca')" button>
+    <ion-label>Terça</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="workDays?.tuesday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="workDays?.tuesday?.start ? 'success' : 'light'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('quarta')" button>
+    <ion-label>Quarta</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="workDays?.wednesday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="workDays?.wednesday?.start ? 'success' : 'light'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('quinta')" button>
+    <ion-label>Quinta</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="workDays?.thursday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="workDays?.thursday?.start ? 'success' : 'light'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('sexta')" button>
+    <ion-label>Sexta</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="workDays?.friday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="workDays?.friday?.start ? 'success' : 'light'"
+    ></ion-icon>
+  </ion-item>
+  <ion-item detail="true" (click)="setDay('sabado')" button>
+    <ion-label>Sábado</ion-label>
+    <ion-icon
+      slot="start"
+      [name]="workDays?.saturday?.start ? 'checkmark-done' : 'checkmark'"
+      [color]="workDays?.saturday?.start ? 'success' : 'light'"
+    ></ion-icon>
+  </ion-item>
+</ion-item-group>

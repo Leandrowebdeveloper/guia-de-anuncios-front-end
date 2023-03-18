@@ -1,0 +1,47 @@
+<ion-card *ngIf="user$ | async; let user">
+  <div>
+    <!-- header -->
+    <app-header-card [announcement]="announcement"></app-header-card>
+
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="ellipsis-vertical" color="light"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="top">
+        <!-- botão pagina do usuário -->
+        <ion-fab-button
+          *ngIf="user?.level === '1'"
+          size="small"
+          title="Painel do usuário"
+          data-message="Painel do usuário"
+          [routerLink]="[
+            '/painel-de-controle',
+            'admin',
+            'usuario',
+            announcement?.user?.slug
+          ]"
+        >
+          <ion-icon name="person"></ion-icon>
+        </ion-fab-button>
+
+        <!-- botão gerenciamento -->
+        <ion-fab-button
+          size="small"
+          title="Gerenciamento do anúncio"
+          data-message="Gerenciamento do anúncio"
+          [routerLink]="['/painel-de-controle', 'anuncio', announcement?.slug]"
+        >
+          <ion-icon name="construct"></ion-icon>
+        </ion-fab-button>
+        <!-- botão modal gerenciamento -->
+        <ion-fab-button
+          title="Visialisar anúncio"
+          data-message="Visialisar anúncio"
+          [routerLink]="['/pagina', announcement?.slug]"
+        >
+          <ion-icon name="eye"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
+  </div>
+</ion-card>
