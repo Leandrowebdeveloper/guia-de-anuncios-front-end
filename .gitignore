@@ -20,7 +20,7 @@ e2e
 ios
 android
 resources
-/.browserslistrc
+.browserslistrc
 /.angular
 /.idea
 /.ionic
