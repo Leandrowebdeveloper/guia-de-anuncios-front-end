@@ -25,13 +25,13 @@ export class MapsPage implements OnInit, OnDestroy, ViewDidEnter {
   public isMobile: boolean;
   public isDirections: boolean;
   public toggleInfoMap = false;
+  public mapId: number;
 
   private $route: Subscription;
   private params: { latitude: string; longitude: string; anuncio: string };
   private directionsRenderer: google.maps.DirectionsRenderer;
   private directionsService: google.maps.DirectionsService;
   private startPosition: google.maps.LatLng;
-  private mapId: number;
   private destinationPosition: google.maps.LatLng;
   private map: google.maps.Map;
   private loader = new Loader({

@@ -16,5 +16,6 @@ export class CardHeaderComponent {
     | 'title'
     | 'plan'
     | 'workDays'
+    | 'blockade'
   >;
 }

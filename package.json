@@ -11,10 +11,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "android": "ionic capacitor run android --livereload --external --consolelogs --verbose --open --ssl",
-    "serve": "ionic serve --consolelogs --verbose --external --port 8100 --ssl",
+    "serve": "ionic serve --consolelogs --verbose --external --port 8100",
     "splash": "pwa-asset-generator ./src/assets/icon.png ./src/assets/icons --icon-only --portrait-only true --quality 100 --opaque false --padding '10px' --type png --manifest ./src/manifest.webmanifest",
     "icons": "ngx-pwa-icons --icon ./src/assets/icon.png --output ./src/assets/icons",
-    "http-serve": "npx http-server ./www --port 8100 --ssl --proxy http://172.17.0.1:3001 --cert /home/souza/Documentos/ssl/ionic/ionic+4.pem --key /home/souza/Documentos/ssl/ionic/ionic+4-key.pem"
+    "http-serve": "npx http-server ./www --port 8100 --ssl --proxy http://localhost:3001 --cert /home/souza/Documentos/ssl/ionic/ionic+4.pem --key /home/souza/Documentos/ssl/ionic/ionic+4-key.pem"
   },
   "private": true,
   "dependencies": {

@@ -7,7 +7,10 @@ ion-card-header {
   padding-left: 0px;
   padding-right: 0px;
 }
-
+.ion-no-margin-bottom {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
 ion-text {
   font-size: 18px;
   // @media (min-width: 992px) and (max-width: 1199.98px) {
