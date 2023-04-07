@@ -6,12 +6,15 @@
   detail="true"
   button
 >
-  <ion-label [color]="user?.blockade ? 'danger' : 'success'">{{
-    user?.blockade ? "Bloqueado" : "Desbloqueado"
-  }}</ion-label>
+  <ion-label
+    [color]="(user | userValues : 'blockade') ? 'danger' : 'success'"
+    >{{
+      (user | userValues : "blockade") ? "Bloqueado" : "Desbloqueado"
+    }}</ion-label
+  >
   <ion-icon
     slot="start"
-    [color]="user?.blockade ? 'danger' : 'success'"
-    [name]="user?.blockade ? 'stop' : 'play'"
+    [color]="(user | userValues : 'blockade') ? 'danger' : 'success'"
+    [name]="(user | userValues : 'blockade') ? 'stop' : 'play'"
   ></ion-icon>
 </ion-item>

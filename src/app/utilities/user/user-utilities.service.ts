@@ -10,7 +10,7 @@ export class UserUtilities {
           route: '/destroy',
           icon: 'trash',
           label: 'Excluir usuário',
-          fill: false,
+
           aria: 'Excluir usuário.',
           title: 'Excluir usuário.',
         };
@@ -19,7 +19,7 @@ export class UserUtilities {
           route: '/restore',
           icon: 'refresh',
           label: 'Restaurar usuário',
-          fill: false,
+
           aria: 'Restaurar usuário.',
           title: 'Restaurar usuário.',
         };
@@ -28,7 +28,7 @@ export class UserUtilities {
           route: '/level',
           icon: 'cloud-upload',
           label: 'Alterar',
-          fill: false,
+
           aria: 'Alterar nivel do usuário.',
           title: 'Alterar nivel do usuário.',
         };

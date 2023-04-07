@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { CategoryPage } from './category-announcement.page';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
 import { FormPageModule } from './form/form.module';

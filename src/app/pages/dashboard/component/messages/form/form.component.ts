@@ -25,14 +25,14 @@ export class FormSendMessagesComponent implements OnInit {
     route: '/message',
     icon: 'cloud-upload',
     label: 'Salvar',
-    fill: false,
+
     aria: 'Salvar menssagem.',
     title: 'Salvar menssagem.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private write: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private write!: Subscription;
   constructor(
     private messagesService: MessagesService,
     private helpService: HelpsService,
@@ -77,9 +77,15 @@ export class FormSendMessagesComponent implements OnInit {
   private messsage(
     response: Messages,
     loading: Promise<HTMLIonLoadingElement>
-  ): Promise<number> {
-    this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(response?.message, loading, this.write);
+  ): Promise<number> | void {
+    if (response?.message) {
+      this.helpService.delay(() => this.modalController.dismiss(), 2500);
+      return this.messageService.success(
+        response?.message,
+        loading,
+        this.write
+      );
+    }
   }
 
   private getData(): void {

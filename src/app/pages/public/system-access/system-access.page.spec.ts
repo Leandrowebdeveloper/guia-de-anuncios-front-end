@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { SystemAccessPage } from './system-access.page';
 import { RecoverService } from './services/recover/service';
-import { LoginService } from './services/login/service';
+import { LoginService } from './services/login/login.service';
 import { SystemAccessService } from './services/system-access.service';
 import { SystemAccessResolver } from './guard/resolve.guard';
 import { ButtonsAccessComponent } from './components/buttons/buttons-sccess-component';
@@ -14,7 +14,7 @@ import { RegisterService } from './services/register/service';
 
 import { FormComponentModule } from 'src/app/components/form/form.module';
 import { SocialLoginComponent } from './components/social-login/social-login.component';
-import { SocialLoginService } from './services/social-login/service';
+import { SocialLoginService } from './services/social-login/social-login.service';
 
 describe('SystemAccessPage', () => {
   let component: SystemAccessPage;

@@ -1,12 +1,12 @@
 <ion-item
   *ngIf="user"
-  [disabled]="user?.blockade"
+  [disabled]="user | isUserValues : 'blockade'"
   detail="true"
   (click)="name()"
   title="Alterar nome e sobrenome"
   aria-label="Clique para alterar nome e sobrenome"
   [attr.aria-disabled]="
-    'Botão alterar nome e sobrenome ' + user?.blockade
+    'Botão alterar nome e sobrenome ' + (user | isUserValues : 'blockade')
       ? 'abilitado.'
       : 'desabilitado'
   "

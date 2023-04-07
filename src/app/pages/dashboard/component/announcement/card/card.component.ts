@@ -1,3 +1,4 @@
+import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 import { Observable, Subscription } from 'rxjs';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Announcement, User, CategoryAnnouncement } from 'src/app/interface';
@@ -11,30 +12,38 @@ import { CategoryAnnouncementService } from '../../category-announcement/categor
 })
 export class AnnouncementCardComponent implements OnInit, OnDestroy {
   @Input() announcement!: Announcement;
-  public user$: Observable<User>;
-  public hasHeader: boolean;
+  public auth$!: Observable<User | void>;
+  public hasHeader!: boolean;
 
-  private $update: Subscription;
+  private $updateCategory!: Subscription;
+  private $updateAnnouncement!: Subscription;
   constructor(
     private authService: AuthService,
-    private categoryAnnouncementService: CategoryAnnouncementService
+    private categoryAnnouncementService: CategoryAnnouncementService,
+    private managementAnnouncementService: ManagementAnnouncementService
   ) {}
 
   ngOnDestroy(): void {
-    this.$update.unsubscribe();
+    this.$updateCategory.unsubscribe();
+    this.$updateAnnouncement.unsubscribe();
   }
 
   ngOnInit(): void {
-    this.user$ = this.authService.userObservable;
+    this.loadUser();
     this.updateCategory();
+    this.updateAnnouncement();
+  }
+
+  private loadUser() {
+    this.auth$ = this.authService.userObservable;
   }
 
   public isHeader(e: boolean): void {
     this.hasHeader = e;
   }
 
-  private updateCategory() {
-    return (this.$update =
+  private updateCategory(): Subscription {
+    return (this.$updateCategory =
       this.categoryAnnouncementService.getCategoryEvent.subscribe({
         next: (categoryAnnouncement: CategoryAnnouncement) => {
           if (categoryAnnouncement) {
@@ -46,5 +55,26 @@ export class AnnouncementCardComponent implements OnInit, OnDestroy {
           }
         },
       }));
+  }
+
+  private updateAnnouncement(): void {
+    this.$updateAnnouncement =
+      this.managementAnnouncementService.announcementObservable.subscribe({
+        next: (announcement: Announcement | void) => {
+          if (announcement) {
+            if (this.announcement?.id === announcement.id) {
+              this.announcement.blockade = announcement.blockade;
+              this.announcement.slug = announcement.slug;
+              this.announcement.updatedAt = announcement.updatedAt;
+              this.announcement.state = announcement.state;
+              this.announcement.title = announcement.title;
+              this.announcement.workDays = announcement.workDays;
+              this.announcement.citie = announcement.citie;
+              this.announcement.address = announcement.address;
+              this.announcement.contact = announcement.contact;
+            }
+          }
+        },
+      });
   }
 }

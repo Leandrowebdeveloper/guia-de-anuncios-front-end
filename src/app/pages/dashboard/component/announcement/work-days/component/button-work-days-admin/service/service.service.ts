@@ -9,29 +9,24 @@ import { WorkDayAnnouncementService } from '../../../../work-days/service/work-d
 
 @Injectable()
 export class DeleteWorkDayService extends HttpService<
-  Pick<WorkDays & { password: string }, '_csrf' | 'id' | 'password' | 'message'>
+  WorkDays & { password: string }
 > {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private workDayService: WorkDayAnnouncementService
   ) {
     super(http, storageService);
     this.setApi = `workDays`;
   }
 
-  public delete(
-    workDays: Pick<WorkDays & { password: string }, '_csrf' | 'id' | 'password'>
-  ): Observable<
-    Pick<
-      WorkDays & {
-        password: string;
-      },
-      '_csrf' | 'id' | 'password' | 'message'
-    >
+  public delete(workDays: WorkDays & { password: string }): Observable<
+    WorkDays & {
+      password: string;
+    }
   > {
     return this.destroy(workDays).pipe(
-      tap(() => (this.workDayService.setworkDay = null))
+      tap((): null => (this.workDayService.setworkDay = null))
     );
   }
 }

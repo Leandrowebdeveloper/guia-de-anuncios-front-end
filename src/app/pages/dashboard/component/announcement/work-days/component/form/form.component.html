@@ -9,7 +9,7 @@
   <ion-item id="start" detail="true" button>
     <ion-label>Início </ion-label>
     <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
-      form?.value[day]?.start | date : "HH:mm"
+      form.value[day]?.start | date : "HH:mm"
     }}</ion-badge>
     <ion-icon slot="start" name="time"></ion-icon>
     <ion-popover
@@ -27,7 +27,7 @@
             [showDefaultButtons]="false"
             [minuteValues]="minuteValue"
             presentation="time"
-            [value]="form?.value[day]?.start"
+            [value]="form.value[day]?.start"
           >
             <ion-buttons slot="buttons">
               <ion-button color="primary" (click)="cancel(popoverStart)"
@@ -45,7 +45,7 @@
   <ion-item id="startInterval" detail="true" button>
     <ion-label>Intervalo início</ion-label>
     <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
-      form?.value[day]?.startInterval | date : "HH:mm"
+      form.value[day]?.startInterval | date : "HH:mm"
     }}</ion-badge>
     <ion-icon slot="start" name="stopwatch"></ion-icon>
 
@@ -64,7 +64,7 @@
             [showDefaultButtons]="false"
             [minuteValues]="minuteValue"
             presentation="time"
-            [value]="form?.value[day]?.startInterval"
+            [value]="form.value[day]?.startInterval"
           >
             <ion-buttons slot="buttons">
               <ion-button color="primary" (click)="cancel(popoverStartInterval)"
@@ -84,7 +84,7 @@
   <ion-item id="endInterval" detail="true" button>
     <ion-label>Intervalo fim</ion-label>
     <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
-      form?.value[day]?.endInterval | date : "HH:mm"
+      form.value[day]?.endInterval | date : "HH:mm"
     }}</ion-badge>
     <ion-icon slot="start" name="stopwatch-outline"></ion-icon>
 
@@ -103,7 +103,7 @@
             [showDefaultButtons]="false"
             [minuteValues]="minuteValue"
             presentation="time"
-            [value]="form?.value[day]?.endInterval"
+            [value]="form.value[day]?.endInterval"
           >
             <ion-buttons slot="buttons">
               <ion-button color="primary" (click)="cancel(popoverEndInterval)"
@@ -121,7 +121,7 @@
   <ion-item id="end" detail="true" button>
     <ion-label>Fim</ion-label>
     <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
-      form?.value[day]?.end | date : "HH:mm"
+      form.value[day]?.end | date : "HH:mm"
     }}</ion-badge>
     <ion-icon slot="start" name="timer"></ion-icon>
 
@@ -140,7 +140,7 @@
             [showDefaultButtons]="false"
             [minuteValues]="minuteValue"
             presentation="time"
-            [value]="form?.value[day]?.end"
+            [value]="form.value[day]?.end"
           >
             <ion-buttons slot="buttons">
               <ion-button color="primary" (click)="cancel(popoverEnd)"
@@ -160,7 +160,7 @@
   (click)="onSubmit()"
   expand="block"
   class="ion-margin-top"
-  [disabled]="!(form?.value[day]?.start && form?.value[day]?.end)"
+  [disabled]="!(form.value[day]?.start && form.value[day]?.end)"
 >
   <ion-icon name="cloud-upload" class="ion-margin-end"></ion-icon>
   Salvar
@@ -169,7 +169,7 @@
   (click)="reset()"
   expand="block"
   class="ion-margin-top"
-  [disabled]="!(form?.value[day]?.start && form?.value[day]?.end)"
+  [disabled]="!(form.value[day]?.start && form.value[day]?.end)"
 >
   <ion-icon name="trash" class="ion-margin-end"></ion-icon>
   Redefinir

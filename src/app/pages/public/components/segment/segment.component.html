@@ -1,8 +1,11 @@
 <ion-segment [scrollable]="true" mode="md" color="none">
+  <!-- LIKE GOSTEI -->
   <ion-segment-button layout="icon-top" title="Gostei" data-message="Gostei">
     <ion-icon name="thumbs-up"></ion-icon>
     <ion-label>123</ion-label>
   </ion-segment-button>
+
+  <!-- LIKE NÃO GOSTEI -->
   <ion-segment-button
     layout="icon-top"
     title="Não gostei"
@@ -11,6 +14,8 @@
     <ion-icon name="thumbs-down"></ion-icon>
     <ion-label>32</ion-label>
   </ion-segment-button>
+
+  <!-- COPY -->
   <ion-segment-button
     layout="icon-top"
     title="Copiar link da página"
@@ -20,6 +25,8 @@
     <ion-icon name="copy"></ion-icon>
     <ion-label>Link</ion-label>
   </ion-segment-button>
+
+  <!-- COMPARTILHAR PÁGINA -->
   <ion-segment-button
     [hidden]="!isSupportShare"
     layout="icon-top"

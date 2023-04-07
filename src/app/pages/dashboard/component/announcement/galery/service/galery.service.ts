@@ -12,11 +12,11 @@ export class GaleryAnnouncementService
   extends HttpService<Galery>
   implements OnDestroy
 {
-  private galery = new BehaviorSubject<Galery>(undefined);
+  private galery = new BehaviorSubject<Galery | void>(undefined);
 
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     public messageService: MessageService,
     private loadingService: LoadingService
   ) {
@@ -40,7 +40,7 @@ export class GaleryAnnouncementService
     this.galery.unsubscribe();
   }
 
-  public delete(galery: Galery): Observable<number | Galery> {
+  public delete(galery: Galery): Observable<Galery> {
     return this.destroy(galery, 'galery');
   }
 
@@ -48,22 +48,27 @@ export class GaleryAnnouncementService
     return this.patch(galery, 'management/galery/order');
   }
 
-  public sendFiles(file: File, data: Required<DataUpload>): Observable<any> {
-    return this.upload(this.build(file, data), 'upload');
+  public sendFiles(
+    dataFile: { file: Blob; fileName: string },
+    data: Required<DataUpload>
+  ): Observable<any> {
+    return this.upload(this.build(dataFile, data), 'upload');
   }
 
   public async showLoading(message: string): Promise<HTMLIonLoadingElement> {
     return await this.loadingService.show(message);
   }
 
-  private build(file: File, data: Required<DataUpload>): FormData {
-    // eslint-disable-next-line no-underscore-dangle
+  private build(
+    dataFile: { file: Blob; fileName: string },
+    data: Required<DataUpload>
+  ): FormData {
+    const { file, fileName } = dataFile;
     this.setCsrf = data?._csrf;
     const formData = new FormData();
     formData.append('announcementId', String(data?.id));
-    // eslint-disable-next-line no-underscore-dangle
     formData.append('_csrf', data?._csrf);
-    formData.append('filename', file, file?.name);
+    formData.append('filename', file, fileName);
     return formData;
   }
 }

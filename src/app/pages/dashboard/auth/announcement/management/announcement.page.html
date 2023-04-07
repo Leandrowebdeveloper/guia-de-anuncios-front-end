@@ -12,20 +12,21 @@
     <ion-row>
       <ng-container *ngIf="announcement$ | async;let announcement; else Error">
         <ion-col
-          [hidden]="!announcement?.title"
+          [hidden]="!announcement | announcementValues:'title'"
           size="12"
           class="ion-margin-vertical"
         >
-          <ion-text color="primary">
-            <h1 [title]="announcement?.title">
-              {{ announcement?.title | lnWords:52 }}
+          <ion-text>
+            <h1 [title]="announcement | announcementValues:'title'">
+              {{ announcement | announcementValues:'title' | lnWords:52 }}
             </h1>
           </ion-text>
         </ion-col>
         <ng-container *ngIf="isAnnouncement; else Association">
+          <!-- Messagem -->
           <ion-col
             size="12"
-            *ngIf="announcement?.citie && announcement?.address && announcement?.contact"
+            *ngIf="announcement && announcement?.citie && announcement?.address && announcement?.contact"
           >
             <app-card-message-component
               [announcement]="announcement"
@@ -35,7 +36,7 @@
           <!-- Messagem de boas vindas -->
           <ion-col
             size="12"
-            [hidden]="announcement?.citie && announcement?.address && announcement?.contact"
+            [hidden]="announcement && announcement?.citie && announcement?.address && announcement?.contact"
           >
             <ion-card>
               <ion-card-header>
@@ -69,7 +70,7 @@
 
           <!-- Galery -->
           <ion-col
-            *ngIf="announcement?.category"
+            *ngIf="announcement | isAnnouncementCategory"
             size="12"
             class="ion-margin-vertical"
           >
@@ -80,19 +81,20 @@
           </ion-col>
           <!-- List Item -->
           <ion-col
-            *ngIf="announcement?.category"
+            *ngIf="announcement | isAnnouncementCategory"
             size="12"
             class="ion-margin-vertical"
           >
             <ion-item-group>
               <!-- message -->
               <app-messages-component
+                [user]="user"
                 [announcement]="announcement"
               ></app-messages-component>
               <!-- Blockade -->
               <app-blockade-announcement-component
                 [announcement]="announcement"
-                [isAdmin]="user?.level === '1'"
+                [user]="user"
               ></app-blockade-announcement-component>
 
               <!-- State -->
@@ -108,31 +110,37 @@
 
               <!-- Cidade estado -->
               <app-city-announcement-component
+                [user]="user"
                 [announcement]="announcement"
               ></app-city-announcement-component>
 
               <!-- Endereço -->
               <app-address-announcement-component
+                [user]="user"
                 [announcement]="announcement"
               ></app-address-announcement-component>
 
               <!-- Contato -->
               <app-contant-announcement-component
+                [user]="user"
                 [announcement]="announcement"
               ></app-contant-announcement-component>
 
               <!-- Coordenadas -->
               <app-map-announcement-component
+                [user]="user"
                 [announcement]="announcement"
               ></app-map-announcement-component>
 
               <!-- Redes Sociais -->
               <app-social-network-component
+                [user]="user"
                 [announcement]="announcement"
               ></app-social-network-component>
 
               <!-- Horario de funcionamento -->
               <app-button-work-days
+                [user]="user"
                 [announcement]="announcement"
               ></app-button-work-days>
             </ion-item-group>
@@ -140,7 +148,10 @@
         </ng-container>
 
         <ng-template #Association>
-          <ion-col *ngIf="announcement?.category" size="12">
+          <ion-col
+            *ngIf="(announcement| isAnnouncement) && (announcement | isAnnouncementCategory)"
+            size="12"
+          >
             <app-work-days [announcement]="announcement"></app-work-days>
           </ion-col>
         </ng-template>

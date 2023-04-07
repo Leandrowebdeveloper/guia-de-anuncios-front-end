@@ -1,7 +1,7 @@
 import { NavController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { User } from 'src/app/interface';
 import { AdminUsersService } from '../services/admin-users.service';
 
@@ -10,10 +10,10 @@ import { AdminUsersService } from '../services/admin-users.service';
   styleUrls: ['./management.page.scss'],
 })
 export class ManagementPage implements OnInit {
-  public user$: Observable<User>;
-  public toggleRoute: 'announcement' | 'statistic' | 'user';
-  public toggleList: boolean;
-  public isAnnouncement: boolean;
+  public user$!: Observable<User | void>;
+  public toggleRoute!: 'announcement' | 'statistic' | 'user';
+  public toggleList!: boolean;
+  public isAnnouncement!: boolean;
   constructor(
     private navCtrl: NavController,
     private usersService: AdminUsersService,
@@ -45,8 +45,7 @@ export class ManagementPage implements OnInit {
   }
 
   private setUser(): void {
-    this.usersService.setUsers = this.activatedRoute.snapshot.data.user;
-    this.user$ = this.usersService.userObservable;
+    this.user$ = of(this.activatedRoute.snapshot.data['user']);
   }
 
   private init() {

@@ -1,12 +1,16 @@
 <ion-item
   *ngIf="user"
-  [disabled]="user?.blockade || !user?.isPassword"
+  [disabled]="
+    (user | isUserValues : 'blockade') || !user | isUserValues : 'isPassword'
+  "
   detail="true"
   (click)="email()"
   title="Alterar email"
   aria-label="Clique para alterar email"
   [attr.aria-disabled]="
-    'Botão alterar email ' + user?.blockade ? 'abilitado.' : 'desabilitado'
+    'Botão alterar email ' + (user | isUserValues : 'blockade')
+      ? 'abilitado.'
+      : 'desabilitado'
   "
   button
 >

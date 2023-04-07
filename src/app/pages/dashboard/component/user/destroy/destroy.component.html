@@ -1,12 +1,16 @@
 <ion-item
   *ngIf="user"
-  [disabled]="user?.blockade || !user?.isPassword"
+  [disabled]="
+    (user | isUserValues : 'blockade') || !(user | isUserValues : 'isPassword')
+  "
   detail="true"
   (click)="destroy()"
   title="Excluir usuário"
   aria-label="Clique para excluir usuário"
   [attr.aria-disabled]="
-    'Botão excluir usuário ' + user?.blockade ? 'abilitado.' : 'desabilitado'
+    'Botão excluir usuário ' + (user | isUserValues : 'blockade')
+      ? 'abilitado.'
+      : 'desabilitado'
   "
   button
 >

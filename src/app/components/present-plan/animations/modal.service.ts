@@ -7,8 +7,10 @@ import { AnimationController } from '@ionic/angular';
 export class ModalService {
   constructor(private animationCtrl: AnimationController) {}
 
-  enterAnimation = (baseEl: HTMLElement) => {
-    const root = baseEl.shadowRoot;
+  enterAnimation = (
+    baseEl: HTMLElement
+  ): import('@ionic/angular').Animation => {
+    const root = baseEl.shadowRoot as ShadowRoot;
 
     const backdropAnimation = this.animationCtrl
       .create()

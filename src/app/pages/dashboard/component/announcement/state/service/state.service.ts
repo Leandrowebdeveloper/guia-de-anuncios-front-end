@@ -12,8 +12,8 @@ import { Announcement } from 'src/app/interface';
 @Injectable()
 export class StateAnnouncementService extends HttpService<Announcement> {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     public messageService: MessageService,
     private managementAnnouncementService: ManagementAnnouncementService
   ) {
@@ -22,14 +22,16 @@ export class StateAnnouncementService extends HttpService<Announcement> {
   }
 
   public set setSate(value: Pick<Announcement, 'state'>) {
-    this.managementAnnouncementService.getAnnouncement.state = value.state;
-    this.managementAnnouncementService.setAnnouncement =
-      this.managementAnnouncementService.getAnnouncement;
+    if (this.managementAnnouncementService.getAnnouncement) {
+      this.managementAnnouncementService.getAnnouncement.state = value.state;
+      this.managementAnnouncementService.setAnnouncement =
+        this.managementAnnouncementService.getAnnouncement;
+    }
   }
 
   public state(
-    announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
-  ): Observable<Announcement | number[]> {
+    announcement: Pick<Announcement, '_csrf' | 'id'>
+  ): Observable<Announcement> {
     return this.patch(announcement).pipe(
       tap((announcement_: Announcement) => (this.setSate = announcement_))
     );

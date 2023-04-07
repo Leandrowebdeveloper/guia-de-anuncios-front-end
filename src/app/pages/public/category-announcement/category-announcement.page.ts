@@ -1,50 +1,61 @@
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Announcement, Category, User } from 'src/app/interface';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
-import { HomeService } from './../home/services/home.service';
-import { CategoryAnnouncementService } from './service/service.service';
-import { InfiniteScrollCustomEvent, IonReorderGroup } from '@ionic/angular';
+import {
+  InfiniteScrollCustomEvent,
+  IonReorderGroup,
+  NavController,
+} from '@ionic/angular';
+
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { HelpsService } from 'src/app/services/helps/helps.service';
-import { AllowAdPipe } from 'src/app/utilities/pipe/allow-ad/allow-ad.pipe';
+import { AllowAdPipe } from 'src/app/pipe/allow-ad/allow-ad.pipe';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { Announcement, Category, Plan, User } from 'src/app/interface';
+import { CategoryAnnouncementService } from './service/service.service';
+import { HomeService } from './../home/services/home.service';
+import { ModuleDarkService } from 'src/app/services/module-dark/module-dark.service';
 
 @Component({
   selector: 'app-announcement',
   templateUrl: './category-announcement.page.html',
   styleUrls: ['./category-announcement.page.scss'],
 })
-export class CategoryAnnouncementPage implements OnInit {
-  @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
-  public isOrder: boolean;
-  public sendOrder: boolean;
-  public categoryAnnouncement$: Observable<{
+export class CategoryAnnouncementPage implements OnInit, OnDestroy {
+  @ViewChild(IonReorderGroup) reorderGroup!: IonReorderGroup;
+  public isOrder!: boolean;
+  public sendOrder!: boolean;
+  public categoryAnnouncement$!: Observable<{
     category: Category;
     announcement: Announcement[];
-  }>;
-  public category: Category;
-  public announcement: Announcement[];
+  } | void>;
+  public category!: Category;
+  public announcement!: Announcement[];
   public error = new Subject<boolean>();
-  public isBtnOrder: boolean;
+  public isBtnOrder!: boolean;
   public endListCategory = true;
   public ln: number | undefined;
 
   public fab = false;
-  public menssage: boolean;
+  public menssage!: boolean;
 
   public sizeSkeleton = [1, 2, 3, 4, 5, 6];
+
+  public isAuth!: boolean;
+  public isModuleDark!: boolean;
 
   private limit = 12;
   private offset = 0;
   private page = 1;
 
-  private $categoryAnnouncement: Subscription;
-  private $order: Subscription;
+  private $categoryAnnouncement!: Subscription;
+  private $order!: Subscription;
+  private $isModuleDark!: Subscription;
   constructor(
+    private navCtrl: NavController,
     private authService: AuthService,
     private route: ActivatedRoute,
     private homeService: HomeService,
@@ -52,12 +63,24 @@ export class CategoryAnnouncementPage implements OnInit {
     private loadingService: LoadingService,
     private messageService: MessageService,
     private helpService: HelpsService,
-    private allowAdPipe: AllowAdPipe
+    private allowAdPipe: AllowAdPipe,
+    private moduleDarkService: ModuleDarkService
   ) {}
+
+  ngOnDestroy(): void {
+    this.$isModuleDark.unsubscribe();
+  }
 
   ngOnInit() {
     this.findCategory();
     this.getIsBtnOrder();
+    this.setAuth();
+    this.setDarkValue();
+    this.isDark();
+  }
+
+  public back() {
+    this.navCtrl.back();
   }
 
   /*********************************************************************************** */
@@ -103,13 +126,12 @@ export class CategoryAnnouncementPage implements OnInit {
 
   public saveOrder(): void {
     const loading = this.loadingService.show('Ordenar anúncios...');
-    const result: number[] = this.announcement.map(
+    const result: (number | undefined)[] = this.announcement.map(
       (item: Announcement) => item.id
     );
-    if (result.length > 0) {
+    if (result && result.length > 0 && this.authService.getCsrf) {
       const announcement: Announcement = {
         order: result,
-        // eslint-disable-next-line no-underscore-dangle
         _csrf: this.authService.getCsrf,
       };
       this.$order = this.categoryAnnouncementService
@@ -120,11 +142,12 @@ export class CategoryAnnouncementPage implements OnInit {
               this.sendOrder = false;
               this.isOrder = false;
             }, 3500);
-            this.messageService.success(
-              announcement_?.message,
-              loading,
-              this.$order
-            );
+            announcement_?.message &&
+              this.messageService.success(
+                announcement_?.message,
+                loading,
+                this.$order
+              );
           },
           error: (error: HttpErrorResponse) =>
             this.messageService.error(error, loading, this.$order),
@@ -132,7 +155,7 @@ export class CategoryAnnouncementPage implements OnInit {
     }
   }
 
-  public findMoreCategory(event: any): Subscription {
+  public findMoreCategory(event: any): Subscription | void {
     this.calculatePagination();
     const id = this.getId();
     if (id) {
@@ -140,20 +163,28 @@ export class CategoryAnnouncementPage implements OnInit {
         .findOne(`list`, { limit: this.limit, offset: this.offset, id })
         .subscribe({
           next: ({ category, announcement }) => {
-            const data = announcement
-              .map((value) => {
-                value.plan = {
-                  ...value?.announcement?.user?.plan,
-                };
-                value.user = { email: value?.announcement.user.email } as User;
-                delete value?.announcement;
-                delete value?.user?.plan;
-                return value;
+            const data: (Announcement | void)[] = announcement
+              .map((value): Announcement | void => {
+                if (
+                  value?.plan &&
+                  value?.user?.plan &&
+                  value?.announcement?.user?.email
+                ) {
+                  value.plan = {
+                    ...(value?.announcement?.user?.plan as Plan),
+                  };
+                  value.user = {
+                    email: value?.announcement.user.email,
+                  } as User;
+                  delete value?.announcement;
+                  return value;
+                }
               })
-              .filter((val) => {
-                if (!this.allowAdPipe.transform(val)) {
+              .filter((val): Announcement | null => {
+                if (val && !this.allowAdPipe.transform(val)) {
                   return val;
                 }
+                return null;
               });
             return this.success(event, data);
           },
@@ -167,23 +198,40 @@ export class CategoryAnnouncementPage implements OnInit {
     }
   }
 
+  private setDarkValue(): boolean {
+    const is = this.moduleDarkService.isDark();
+    if (is) return (this.isModuleDark = true);
+    return (this.isModuleDark = false);
+  }
+
+  private isDark(): void {
+    this.$isModuleDark = this.moduleDarkService
+      .toggleEvent()
+      .subscribe({ next: (isDark: boolean) => (this.isModuleDark = isDark) });
+  }
+
   private findCategory(): Observable<{
     category: Category;
     announcement: Announcement[];
-  }> {
+  }> | void {
     const id = this.getId();
     if (id) {
       return this.findOne(id);
     }
   }
 
-  private getId() {
-    const { slug } = this.route.snapshot.params;
-    const i = this.homeService.getCategories.findIndex(
-      (item: Category) => item?.slug === slug
-    );
-    const id = this.homeService.getCategories[i].id;
-    return id;
+  private getId(): number | void {
+    if (
+      this.homeService.getCategories &&
+      this.homeService.getCategories.length > 0
+    ) {
+      const { slug } = this.route.snapshot.params;
+      const i = this.homeService.getCategories.findIndex(
+        (item: Category) => item?.slug === slug
+      );
+      const id = this.homeService.getCategories[i].id;
+      return id;
+    }
   }
 
   private findOne(
@@ -193,23 +241,26 @@ export class CategoryAnnouncementPage implements OnInit {
       .findOne(`list`, { limit: this.limit, offset: this.offset, id })
       .pipe(
         tap(({ category, announcement }) => {
-          const data = announcement
-            .map((value) => {
-              value.plan = {
-                ...value?.announcement?.user?.plan,
-              };
-              value.user = { email: value?.announcement.user.email } as User;
-              delete value?.announcement;
-              delete value?.user?.plan;
-              return value;
+          const data: (Announcement | void)[] = announcement
+            .map((value): Announcement | void => {
+              if (value?.announcement) {
+                value.plan = {
+                  ...value?.announcement?.user?.plan,
+                } as Plan;
+                value.user = {
+                  email: value?.announcement.user.email,
+                } as User;
+                delete value?.announcement;
+                return value;
+              }
             })
-            .filter((val) => {
-              if (!this.allowAdPipe.transform(val)) {
+            .filter((val): Announcement | void => {
+              if (val && !this.allowAdPipe.transform(val)) {
                 return val;
               }
             });
           this.category = category;
-          this.announcement = data;
+          this.announcement = data as Announcement[];
         }),
         catchError((error: HttpErrorResponse) => {
           this.error.next(true);
@@ -226,7 +277,7 @@ export class CategoryAnnouncementPage implements OnInit {
 
   private success(
     event: InfiniteScrollCustomEvent,
-    announcement: Announcement[]
+    announcement: (Announcement | void)[]
   ): void {
     this.setMoreData(announcement);
     this.updateScrollEvent(event, announcement);
@@ -235,7 +286,7 @@ export class CategoryAnnouncementPage implements OnInit {
 
   private updateScrollEvent(
     event: InfiniteScrollCustomEvent,
-    announcement: Announcement[]
+    announcement: (Announcement | void)[]
   ): void {
     event.target.complete();
     if (announcement.length < 8) {
@@ -245,14 +296,26 @@ export class CategoryAnnouncementPage implements OnInit {
     return;
   }
 
-  private setMoreData(announcement: Announcement[]): void {
-    return announcement.forEach((item: Announcement) =>
-      this.announcement.push(item)
-    );
+  private setMoreData(announcement: (Announcement | void)[]): void {
+    if (Array.isArray(announcement)) {
+      return announcement.forEach((item: Announcement | void) => {
+        if (item && typeof item !== undefined) {
+          this.announcement && this.announcement.push(item);
+        }
+      });
+    }
   }
 
   private getIsBtnOrder() {
-    this.isBtnOrder = this.authService.getUser.level === '1';
+    if (this.authService.getUser) {
+      this.isBtnOrder = this.authService.getUser.level === '1';
+    }
+  }
+
+  private setAuth(): void {
+    if (this.authService.getUser) {
+      this.isAuth = this.authService.getUser.auth;
+    }
   }
 
   // private saveSorting(): Subscription {

@@ -10,7 +10,7 @@
       ></ion-icon>
       <ion-label
         >Horário de funcionamento
-        <ion-text [color]="announcement?.workDays ? 'success' : 'danger'">
+        <ion-text [color]="(announcement | isWorkDays) ? 'success' : 'danger'">
           *
         </ion-text>
       </ion-label>
@@ -18,7 +18,7 @@
 
     <ion-item-options>
       <ion-item-option
-        *ngIf="workDays"
+        *ngIf="announcement | isWorkDays"
         slot="end"
         size="small"
         color="danger"
@@ -34,9 +34,15 @@
         slot="end"
         size="small"
         class="cursor-pointer"
-        [title]="workDays ? 'Editar' : 'Cadastrar' + 'horário de funcionamento'"
+        [title]="
+          (announcement | isWorkDays)
+            ? 'Editar'
+            : 'Cadastrar' + 'horário de funcionamento'
+        "
         [attr.data-message]="
-          workDays ? 'Editar' : 'Cadastrar' + 'horário de funcionamento'
+          (announcement | isWorkDays)
+            ? 'Editar'
+            : 'Cadastrar' + 'horário de funcionamento'
         "
         [routerLink]="[
           '/painel-de-controle',
@@ -46,7 +52,7 @@
         ]"
       >
         <ion-icon color="light" name="create" slot="start"></ion-icon>
-        {{ workDays ? "Editar" : "Cadastrar" }}
+        {{ (announcement | isWorkDays) ? "Editar" : "Cadastrar" }}
       </ion-item-option>
     </ion-item-options>
   </ion-item-sliding>

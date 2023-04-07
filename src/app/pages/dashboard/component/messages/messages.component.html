@@ -1,5 +1,5 @@
 <ion-item
-  *ngIf="isButton"
+  *ngIf="user | isUserLevel : '1'"
   detail="true"
   (click)="open()"
   title="Enviar menssagem"

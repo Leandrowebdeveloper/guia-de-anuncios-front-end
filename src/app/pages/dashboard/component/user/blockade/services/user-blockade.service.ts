@@ -11,11 +11,11 @@ import { MessagesService } from '../../../messages/service/messages.service';
 
 @Injectable()
 export class UserBlockadeService extends HttpService<
-  Required<Pick<User, UserBlockade>>
+  Pick<User, UserBlockade | 'message'>
 > {
   constructor(
     http: HttpClient,
-    public storageService: StorageService,
+    public override storageService: StorageService,
     private usersService: AdminUsersService,
     private userMessageService: MessagesService
   ) {
@@ -24,16 +24,18 @@ export class UserBlockadeService extends HttpService<
   }
 
   public set setBlockade(value: boolean) {
-    this.usersService.getUsers.blockade = value;
-    this.usersService.setUsers = this.usersService.getUsers;
+    if (value && this.usersService.getUsers) {
+      this.usersService.getUsers.blockade = value;
+      this.usersService.setUsers = this.usersService.getUsers;
+    }
   }
 
   public blockade(
-    user: Required<Pick<User, UserBlockade | 'id'>>
-  ): Observable<Required<Pick<User, UserBlockade>> | number[]> {
-    if (user?.id) {
+    user: Pick<User, UserBlockade | 'id' | 'message'>
+  ): Observable<Pick<User, UserBlockade | 'message'>> {
+    if (user && user?.id) {
       return this.patch(user, 'management/blockade').pipe(
-        tap((data: Required<Pick<User, UserBlockade | 'message'>>) => {
+        tap((data: Pick<User, UserBlockade | 'message'>) => {
           this.setBlockade = data?.blockade;
           this.userMessageService.setUserMessage =
             data.messages as unknown as Messages;

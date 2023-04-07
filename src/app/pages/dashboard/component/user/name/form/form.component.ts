@@ -26,14 +26,14 @@ export class FormUserNameComponent implements OnInit {
     route: '/name',
     icon: 'cloud-upload',
     label: 'Salvar',
-    fill: false,
+
     aria: 'Salvar nome e sobrenome.',
     title: 'Salvar nome e sobrenome.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private $name: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private $name!: Subscription;
   constructor(
     private nameService: NameService,
     private helpService: HelpsService,
@@ -65,7 +65,7 @@ export class FormUserNameComponent implements OnInit {
       }));
     }
     return (this.$name = this.nameService.name(event.value).subscribe({
-      next: (user: Required<Pick<User, UserName | 'name' | 'message'>>) =>
+      next: (user: Pick<User, UserName | 'name' | 'message'>) =>
         this.messsage(user, loading),
       error: (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$name),

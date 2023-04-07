@@ -10,29 +10,46 @@ import { AdminUsersService } from 'src/app/pages/dashboard/administrator/users/s
 
 @Injectable()
 export class UserPlanService extends HttpService<
-  Pick<Plan, 'password' | 'period' | 'type' | 'userId' | '_csrf'>
+  Pick<Plan, 'password' | 'period' | 'type' | 'userId' | '_csrf' | 'message'>
 > {
   constructor(
     http: HttpClient,
-    public storageService: StorageService,
+    public override storageService: StorageService,
     private usersService: AdminUsersService
   ) {
     super(http, storageService);
     this.setApi = `admin`;
   }
 
-  public set setPlan(value: Plan) {
-    this.usersService.getUsers.plan = value;
-    this.usersService.setUsers = this.usersService.getUsers;
+  public set setPlan(
+    value: Pick<
+      Plan,
+      'password' | 'period' | 'type' | 'userId' | '_csrf' | 'message'
+    >
+  ) {
+    if (value && this.usersService.getUsers) {
+      this.usersService.getUsers.plan = value as Plan;
+      this.usersService.setUsers = this.usersService.getUsers;
+    }
   }
 
   public plan(
-    plan: Pick<Plan, 'password' | 'period' | 'type' | 'userId' | '_csrf'>
-  ): Observable<Plan | number[]> {
-    console.log(plan);
-
+    plan: Pick<
+      Plan,
+      'password' | 'period' | 'type' | 'userId' | '_csrf' | 'message'
+    >
+  ): Observable<
+    Pick<Plan, 'password' | 'period' | 'type' | 'userId' | '_csrf' | 'message'>
+  > {
     return this.patch(plan, 'management/plan').pipe(
-      tap((plan_: Required<Plan>) => (this.setPlan = plan_))
+      tap(
+        (
+          plan_: Pick<
+            Plan,
+            'password' | 'period' | 'type' | 'userId' | '_csrf' | 'message'
+          >
+        ) => (this.setPlan = plan_)
+      )
     );
   }
 }

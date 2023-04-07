@@ -10,8 +10,8 @@ import { SearchUserService } from '../service/search.service';
   styleUrls: ['filter-menu.component.scss'],
 })
 export class UserSearchMenuComponent implements OnInit, OnDestroy {
-  public isIcon: Search;
-  public $isIcon: Subscription;
+  public isIcon!: Search;
+  public $isIcon!: Subscription;
   constructor(
     private searchUserService: SearchUserService,
     private popoverController: PopoverController
@@ -35,7 +35,9 @@ export class UserSearchMenuComponent implements OnInit, OnDestroy {
 
   private filter(): void {
     this.$isIcon = this.searchUserService.getSearchBy.subscribe({
-      next: (filter: Search) => (this.isIcon = filter),
+      next: (filter: Search | void) => {
+        if (filter) this.isIcon = filter;
+      },
     });
   }
 }

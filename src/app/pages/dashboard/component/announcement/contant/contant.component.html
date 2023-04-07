@@ -1,32 +1,61 @@
-<ion-item
-  *ngIf="!isAdmin; else Else"
-  [disabled]="!announcement?.categoryAnnouncement"
-  detail="true"
-  (click)="contacts(announcement)"
-  title="Gerenciar contato."
-  aria-label="Gerenciar contato."
-  [attr.aria-disabled]="
-    !announcement?.categoryAnnouncement &&
-    'Para gerenciar contato cadastre uma categoria.'
-  "
-  button
->
-  <ion-icon
-    src="../../../../../../assets/ion-icon/contact.svg"
-    slot="start"
-  ></ion-icon>
-  <ion-label
-    >Contato
+<ion-item-sliding [disabled]="user?.level === '2'">
+  <ion-item
+    [title]="
+      user?.level === '2'
+        ? 'Abrir formulario de contato.'
+        : 'Pressione e arraste para a esquerda.'
+    "
+    [attr.data-message]="
+      user?.level === '2'
+        ? 'Abrir formulario de contato.'
+        : 'Pressione e arraste para a esquerda.'
+    "
+    lines="true"
+    (click)="openForm()"
+    [button]="user?.level === '2'"
+  >
+    <ion-icon
+      src="../../../../../../assets/ion-icon/contact.svg"
+      slot="start"
+    ></ion-icon>
+    <ion-icon
+      slot="end"
+      [name]="user?.level === '2' ? 'chevron-forward' : 'chevron-back'"
+    ></ion-icon>
+    <ion-label
+      >Contato
+      <ion-text [color]="announcement?.contact ? 'success' : 'danger'">
+        *
+      </ion-text>
+    </ion-label>
+  </ion-item>
 
-    <ion-text [color]="announcement?.contact ? 'success' : 'danger'">
-      *
-    </ion-text>
-  </ion-label>
-</ion-item>
-
-<ng-template #Else>
-  <!-- Contato -->
-  <app-contact-admin-management
-    [announcement]="announcement"
-  ></app-contact-admin-management>
-</ng-template>
+  <ion-item-options *ngIf="user?.level === '1'">
+    <ion-item-option
+      *ngIf="announcement?.contact"
+      slot="end"
+      color="danger"
+      size="small"
+      class="cursor-pointer"
+      title="Exclui contato"
+      data-message="Exclui contato"
+      (click)="destroy()"
+    >
+      <ion-icon name="trash" slot="start"></ion-icon>
+      delete
+    </ion-item-option>
+    <ion-item-option
+      slot="end"
+      size="small"
+      class="cursor-pointer"
+      [title]="announcement?.contact ? 'Editar contato' : 'Cadastrar contato'"
+      [attr.data-message]="
+        announcement?.contact ? 'Editar contato' : 'Cadastrar contato'
+      "
+      (click)="openFormAdmin()"
+    >
+      <ion-icon name="create" slot="start"></ion-icon>
+      {{ announcement?.contact ? "editar" : "Cadastrar" }}
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

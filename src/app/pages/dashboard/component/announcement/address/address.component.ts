@@ -1,9 +1,11 @@
-import { OnInit } from '@angular/core';
-/* eslint-disable @typescript-eslint/naming-convention */
+import { HttpErrorResponse } from '@angular/common/http';
+import { OnInit, OnDestroy } from '@angular/core';
 import { Component, Input } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { Address, Announcement, City } from 'src/app/interface';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AlertController, ModalController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { Address, Announcement, User } from 'src/app/interface';
+import { LoadingService } from 'src/app/utilities/loading/loading.service';
+import { MessageService } from 'src/app/utilities/message/message.service';
 import { AnnouncementFormAddressComponent } from './form/form.component';
 import { AddressService } from './service/address.service';
 
@@ -12,64 +14,101 @@ import { AddressService } from './service/address.service';
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss'],
 })
-export class AnnouncementAddressComponent implements OnInit {
+export class AnnouncementAddressComponent implements OnInit, OnDestroy {
   @Input() announcement!: Pick<
     Announcement,
-    '_csrf' | 'id' | 'address' | 'category' | 'categoryAnnouncement' | 'citie'
-  >;
+    | '_csrf'
+    | 'id'
+    | 'address'
+    | 'category'
+    | 'categoryAnnouncement'
+    | 'citie'
+    | 'title'
+  > | void;
 
-  public isAdmin: boolean;
+  @Input() user!: Pick<User, 'level'> | void;
+
+  private $delete!: Subscription;
+  private $update!: Subscription;
   constructor(
     private modalController: ModalController,
     private addressService: AddressService,
-    private authService: AuthService
+    private alertController: AlertController,
+    private loadingService: LoadingService,
+    private messageService: MessageService
   ) {}
+
   ngOnInit(): void {
-    this.isAdmin = this.authService.getLevel === '1';
+    this.update();
   }
 
-  public async address(
-    announcement: Pick<Announcement, '_csrf' | 'id' | 'address'>
-  ): Promise<void> {
-    let address: Address;
-    let label: string;
+  ngOnDestroy(): void {
+    this.$update.unsubscribe();
+  }
+
+  public async openForm(): Promise<void> {
+    if (this.user?.level === '2') {
+      await this.address();
+    }
+  }
+
+  public async openFormAdmin(): Promise<void> {
+    await this.address();
+  }
+
+  public async address(): Promise<void> {
+    if (this.announcement) {
+      let label = this.getLabel(this.announcement);
+      let address = this.getAddress(this.announcement);
+
+      const modal = await this.modalController.create({
+        component: AnnouncementFormAddressComponent,
+        componentProps: {
+          label,
+          address,
+        },
+      });
+      return await modal.present();
+    }
+  }
+
+  private getLabel(announcement: Pick<Announcement, 'address'>) {
     if (announcement?.address) {
-      address = announcement?.address;
-      // eslint-disable-next-line no-underscore-dangle
-      address._csrf = announcement?._csrf;
-      label = 'Editar endereço';
+      return 'Editar endereço';
+    } else {
+      return 'Cadastrar endereço';
+    }
+  }
+
+  private getAddress(
+    announcement: Pick<Announcement, '_csrf' | 'id' | 'address'>
+  ) {
+    let address: Address;
+    const _csrf = announcement?._csrf;
+    if (announcement?.address) {
+      address = { ...announcement?.address, _csrf };
     } else {
       address = {
-        // eslint-disable-next-line no-underscore-dangle
-        _csrf: announcement?._csrf,
+        _csrf,
         allotment: null,
         block: null,
         complement: null,
         district: null,
         street: null,
         numberr: null,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         zip_code: null,
-        announcementId: announcement?.id,
+        announcementId: announcement?.id ? announcement?.id : null,
       };
-      label = 'Cadastrar endereço';
     }
 
     address.zip_code = this.zipCode();
     address.zip_code = this.addressService.mask(address);
-
-    const modal = await this.modalController.create({
-      component: AnnouncementFormAddressComponent,
-      componentProps: {
-        label,
-        address,
-      },
-    });
-    return await modal.present();
+    return address;
   }
 
-  public zipCode(): number {
-    const city: City = {
+  private zipCode(): number {
+    const key = this.getCitie();
+    const city: any = {
       'São Luiz dos Montes Belos': 76100000,
       Firminópolis: 76105000,
       Aurilândia: 76120000,
@@ -77,6 +116,96 @@ export class AnnouncementAddressComponent implements OnInit {
       Turvânia: 76110000,
       'Córrego do Ouro': 76145000,
     };
-    return city[this.announcement?.citie?.city];
+    return city[`${key}`];
+  }
+
+  private getCitie(): string | void {
+    if (
+      this.announcement &&
+      this.announcement !== undefined &&
+      this.announcement !== null &&
+      this.announcement?.citie !== undefined &&
+      this.announcement?.citie !== null &&
+      this.announcement?.citie?.city !== undefined &&
+      this.announcement?.citie?.city !== null
+    ) {
+      return this.announcement.citie.city;
+    }
+  }
+
+  public async destroy(): Promise<void> {
+    if (this.announcement?.address) {
+      const alert = await this.alertController.create({
+        header: 'Excluir endereço',
+        subHeader: this.announcement?.title,
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => {},
+          },
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: (event) => {
+              const data: Address & { password: string } = {
+                ...event,
+                _csrf: this.announcement?._csrf,
+                id: this.announcement?.address?.id,
+              };
+              return this.delete(data);
+            },
+          },
+        ],
+        inputs: [
+          {
+            name: 'password',
+            type: 'password',
+            placeholder: 'Senha',
+            min: 8,
+            max: 16,
+          },
+        ],
+      });
+
+      await alert.present();
+    }
+  }
+
+  private delete(address: Address & { password: string }): Subscription | void {
+    if (this.announcement?.address) {
+      const loading = this.loadingService.show('Excluindo endereço...');
+      return (this.$delete = this.addressService.delete(address).subscribe({
+        next: (address_: Pick<Address, 'message'>) => {
+          this.messsage(address_, loading);
+          if (this.announcement) this.announcement.address = null;
+        },
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, loading, this.$delete),
+      }));
+    }
+  }
+
+  private messsage(
+    address: Pick<Address, 'message'>,
+    loading: Promise<HTMLIonLoadingElement>
+  ): Promise<number> | void {
+    if (address?.message) {
+      return this.messageService.success(
+        address?.message,
+        loading,
+        this.$delete
+      );
+    }
+  }
+
+  private update(): Subscription {
+    return (this.$update = this.addressService.getAddressEvent.subscribe({
+      next: (address: Address | null) => {
+        if (this.announcement?.id === address?.announcementId) {
+          if (this.announcement) this.announcement.address = address;
+        }
+      },
+    }));
   }
 }

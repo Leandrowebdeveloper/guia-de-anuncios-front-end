@@ -1,13 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, EMPTY } from 'rxjs';
 import { User } from 'src/app/interface';
-import { LoginAdminService } from '../services/login-admin/login-admin.service';
+import { LoginAdminService } from '../services/login-admin.service';
 
 @Injectable()
-export class SystemAccessAdminResolver implements Resolve<User> {
+export class LoginAdminResolver {
   constructor(
     private loginAdminService: LoginAdminService,
     private router: Router

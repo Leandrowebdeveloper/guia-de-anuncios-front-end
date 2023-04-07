@@ -8,9 +8,10 @@ import { RouterModule } from '@angular/router';
 import { PasswordStrengthComponent } from './password-strength/password-strength.component';
 import { FormServices } from './services/form.service';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { IsErrosPipe } from './pipe/is-errors/is-erros.pipe';
 
 @NgModule({
-  declarations: [FormComponent, PasswordStrengthComponent, MaskDirective],
+  declarations: [FormComponent, PasswordStrengthComponent, MaskDirective, IsErrosPipe],
   imports: [
     CommonModule,
     IonicModule,

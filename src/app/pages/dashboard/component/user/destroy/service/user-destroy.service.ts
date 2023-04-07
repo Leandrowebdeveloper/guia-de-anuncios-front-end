@@ -13,8 +13,8 @@ import { UserDestroy } from '../interface';
 @Injectable()
 export class UserDestroyService extends HttpService<User> {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private navCtrl: NavController,
     private adminUsersService: AdminUsersService
   ) {
@@ -22,7 +22,7 @@ export class UserDestroyService extends HttpService<User> {
     this.setApi = `admin`;
   }
 
-  public delete(user: Required<Pick<User, UserDestroy>>): Observable<User> {
+  public delete(user: Pick<User, UserDestroy>): Observable<User> {
     return this.destroy(user as User, `management/trash`).pipe(
       tap((user_: User) => {
         if (user_) {
@@ -37,6 +37,7 @@ export class UserDestroyService extends HttpService<User> {
             3600
           );
         }
+        return null;
       })
     );
   }

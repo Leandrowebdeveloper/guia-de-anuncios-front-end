@@ -5,12 +5,12 @@ import { Search } from 'src/app/interface';
 @Injectable()
 export class SearchUserService {
   public result = new EventEmitter<any[]>(undefined);
-  private search$ = new BehaviorSubject<Search>(undefined);
+  private search$ = new BehaviorSubject<Search | void>(undefined);
   constructor() {
     this.setSearchBy = 'firstName';
   }
 
-  public get getSearchBy(): Observable<Search> {
+  public get getSearchBy(): Observable<Search | void> {
     return this.search$.asObservable();
   }
 

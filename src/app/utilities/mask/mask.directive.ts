@@ -77,8 +77,8 @@ export class MaskDirective {
         }
       }
       e.target.value = applied.replace(this.regex, '');
-    } catch (ex) {
-      console.log(ex.message);
+    } catch (ex: any) {
+      ex && ex.message && console.log(ex?.message);
     }
   }
 }

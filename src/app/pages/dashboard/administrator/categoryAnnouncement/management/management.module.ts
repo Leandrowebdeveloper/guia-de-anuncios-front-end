@@ -8,7 +8,7 @@ import { MaintenancePageRoutingModule } from './management-routing.module';
 
 import { ManagementPage } from './management.page';
 import { HeaderModalModule } from 'src/app/components/header-modal/header-modal.module';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 
 import { FormPageModule } from '../form/form.module';
 import { CategoryAnnouncementComponentModule } from '../../../component/category-announcement/category-announcement.module';

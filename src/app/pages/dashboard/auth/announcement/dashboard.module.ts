@@ -10,10 +10,10 @@ import { DashboardPage } from './dashboard.page';
 
 import { FooterModule } from 'src/app/footer/footer.module';
 import { HeaderModule } from 'src/app/header/header.module';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
+import { AddressPipe } from 'src/app/pipe/address/address.pipe';
+import { WorkDaysPipe } from 'src/app/pipe/workDays/workDays.pipe';
 import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
-import { AddressPipe } from 'src/app/utilities/pipe/address/address.pipe';
-import { WorkDaysPipe } from 'src/app/utilities/pipe/workDays/workDays.pipe';
 
 @NgModule({
   imports: [

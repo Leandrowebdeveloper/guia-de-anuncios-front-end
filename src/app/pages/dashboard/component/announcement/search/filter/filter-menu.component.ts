@@ -10,8 +10,8 @@ import { SearchAnnouncementService } from '../service/search.service';
   styleUrls: ['filter-menu.component.scss'],
 })
 export class AnnouncementSearchMenuComponent implements OnInit, OnDestroy {
-  public isIcon: SearchAnnouncement;
-  public $isIcon: Subscription;
+  public isIcon!: SearchAnnouncement | void;
+  public $isIcon!: Subscription;
   constructor(
     private searchAnnouncementService: SearchAnnouncementService,
     private popoverController: PopoverController
@@ -35,7 +35,7 @@ export class AnnouncementSearchMenuComponent implements OnInit, OnDestroy {
 
   private filter(): void {
     this.$isIcon = this.searchAnnouncementService.getSearchBy.subscribe({
-      next: (filter: SearchAnnouncement) => (this.isIcon = filter),
+      next: (filter: void | SearchAnnouncement) => (this.isIcon = filter),
     });
   }
 }

@@ -6,7 +6,10 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Injectable()
 export class AnnouncementService extends HttpService<Announcement> {
-  constructor(http: HttpClient, public storageService: StorageService) {
+  constructor(
+    public override http: HttpClient,
+    public override storageService: StorageService
+  ) {
     super(http, storageService);
     this.setApi = `announcement`;
   }

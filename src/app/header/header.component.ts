@@ -12,10 +12,10 @@ import {
   Animation,
   Platform,
   IonPopover,
-  NavController,
 } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
+import { ModuleDarkService } from '../services/module-dark/module-dark.service';
 
 @Component({
   selector: 'app-header-component',
@@ -24,23 +24,31 @@ import { AuthService } from '../services/auth/auth.service';
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   @Input() hidden?: boolean;
-  @ViewChild('icons', { static: false }) figure: ElementRef;
-  @ViewChild('popover') popover: IonPopover;
+  @ViewChild('icons', { static: false }) figure!: ElementRef;
+  @ViewChild('popover') popover!: IonPopover;
 
   isOpen = false;
 
-  public user$: Observable<User>;
-  public hasIos: boolean;
+  public user$!: Observable<User | void>;
+  public hasIos!: boolean;
+  public isDark!: boolean;
 
   constructor(
     private animationCtrl: AnimationController,
     private plt: Platform,
-    private authService: AuthService
+    private authService: AuthService,
+    private moduleDarkService: ModuleDarkService
   ) {}
 
   ngOnInit() {
     this.isPlatformIos();
     this.getUser();
+    this.getDark();
+  }
+
+  getDark() {
+    const dark = this.moduleDarkService.isDark();
+    if (dark) this.isDark = dark;
   }
 
   ngAfterViewInit(): void {
@@ -68,5 +76,16 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   private isPlatformIos(): boolean {
     return (this.hasIos = this.plt.is('ios'));
+  }
+
+  public toggleTemplateLigthDark(): void {
+    this.moduleDarkService.toggleTemplateLigthDark();
+    const dark = this.moduleDarkService.isDark();
+    if (dark) {
+      this.isDark = true;
+      return this.moduleDarkService.setEvent(true);
+    }
+    this.isDark = false;
+    return this.moduleDarkService.setEvent(false);
   }
 }

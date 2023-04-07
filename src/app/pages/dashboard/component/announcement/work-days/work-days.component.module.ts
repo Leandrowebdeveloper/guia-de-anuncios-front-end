@@ -1,5 +1,5 @@
 import { RouterModule } from '@angular/router';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

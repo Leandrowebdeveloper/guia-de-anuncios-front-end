@@ -1,5 +1,12 @@
-import { EMPTY, Observable, Subject } from 'rxjs';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ModuleDarkService } from 'src/app/services/module-dark/module-dark.service';
+import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   SearchbarCustomEvent,
   NavController,
@@ -16,26 +23,47 @@ import { SearchAnnouncement } from 'src/app/interface';
   templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
 })
-export class AnnouncementSearchComponent implements OnInit {
+export class AnnouncementSearchComponent implements OnInit, OnDestroy {
   @Output() search = new EventEmitter<SearchbarCustomEvent>();
   public search$ = new Observable<any[]>();
-  public triggerSearch$ = new Observable<SearchAnnouncement>(undefined);
-  public show: boolean;
+  public triggerSearch$ = new Observable<SearchAnnouncement | void>(undefined);
+  public show!: boolean;
   public error$ = new Subject<boolean>();
 
   public placeholder = 'Digite nome';
-  public filterLabel: string;
+  public filterLabel!: string;
+
+  public isDark!: boolean;
+  public $isDark!: Subscription;
 
   constructor(
     private navCtrl: NavController,
     private router: Router,
     private searchAnnouncementService: SearchAnnouncementService,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private moduleDarkService: ModuleDarkService
   ) {}
+
+  ngOnDestroy(): void {
+    this.$isDark.unsubscribe();
+  }
 
   ngOnInit() {
     this.searchList();
     this.setFilterLabelAndPlaceholder();
+    this.getDark();
+    this.loadDark();
+  }
+
+  private getDark() {
+    const dark = this.moduleDarkService.isDark();
+    if (dark) this.isDark = dark;
+  }
+
+  private loadDark() {
+    this.$isDark = this.moduleDarkService
+      .toggleEvent()
+      .subscribe((dark: boolean) => (this.isDark = dark));
   }
 
   public research(search: any): void {
@@ -77,7 +105,7 @@ export class AnnouncementSearchComponent implements OnInit {
   private setFilterLabelAndPlaceholder(): void {
     let count = 0;
     this.triggerSearch$ = this.searchAnnouncementService.getSearchBy.pipe(
-      tap((filter: SearchAnnouncement) => {
+      tap((filter: SearchAnnouncement | void) => {
         this.placeholder = 'Digite título';
         this.filterLabel = 'Pesquizar por título';
 

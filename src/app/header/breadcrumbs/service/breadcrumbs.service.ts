@@ -8,10 +8,10 @@ import { Breadcrumb } from 'src/app/interface';
   providedIn: 'root',
 })
 export class BreadcrumbsService implements OnDestroy {
-  private breadcrumbEvent = new EventEmitter<string>(null);
+  private breadcrumbEvent = new EventEmitter<string | null>(undefined);
   private breadcrumb = new BehaviorSubject<Breadcrumb[]>([]);
   private readonly breadcrumb$ = this.breadcrumb.asObservable();
-  private $router: Subscription;
+  private $router!: Subscription;
 
   constructor(private router: Router) {
     this.init();
@@ -25,7 +25,7 @@ export class BreadcrumbsService implements OnDestroy {
     this.$router.unsubscribe();
   }
 
-  public getEvent(): Observable<string> {
+  public getEvent(): Observable<string | null> {
     return this.breadcrumbEvent.asObservable();
   }
 
@@ -50,16 +50,16 @@ export class BreadcrumbsService implements OnDestroy {
     this.breadcrumb.next(value);
   }
 
-  private convertUrlSlugToPhrase(url: string): string[] {
+  private convertUrlSlugToPhrase(url: string): void | (string | void)[] {
     const result = this.convertUrlToArray(url).map((item: string) =>
       item.replace(/[-]/g, ' ')
     );
-    return this.convertSlugEndTitle(result);
+    if (result) return this.convertSlugEndTitle(result);
   }
 
   private init(): void {
     this.$router = this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
+      .pipe(filter((event: any) => event instanceof NavigationEnd))
       .subscribe({
         next: (activeRoute: NavigationEnd) => this.start(activeRoute),
       });
@@ -71,15 +71,15 @@ export class BreadcrumbsService implements OnDestroy {
     }
   }
 
-  private convertSlugEndTitle(slug: string[]): string[] {
-    const result = slug
+  private convertSlugEndTitle(slug: string[]): (string | void)[] | void {
+    const result: (string | void)[] = slug
       .map(this.filterSlug())
       .filter((item) => item !== undefined);
-    return this.title(result);
+    if (result) return this.title(result);
   }
 
-  private title(result: string[]): string[] {
-    if (result.length > 0 && result.includes('')) {
+  private title(result: (string | void)[]): (string | void)[] {
+    if (result && result.length > 0 && result.includes('')) {
       result.pop();
     }
     return result;
@@ -89,12 +89,12 @@ export class BreadcrumbsService implements OnDestroy {
     value: string,
     index: number,
     array: string[]
-  ) => string {
-    return (item, i) => {
-      if (i > -1) {
+  ) => string | void {
+    return (item, i): string | void => {
+      if (item && i && i > -1) {
         if (/[0-9]/g.test(item)) {
           const rejected = item.split(' ').pop();
-          item = item.replace(rejected, '').trim();
+          if (rejected) item = item.replace(rejected, '').trim();
         }
         return item;
       }
@@ -103,12 +103,13 @@ export class BreadcrumbsService implements OnDestroy {
 
   private createBreadcrumbs(url: string): void {
     const breadcrumb: Breadcrumb[] = [];
-    this.convertUrlSlugToPhrase(url).forEach((item: string, index: number) =>
-      breadcrumb.push({
-        label: this.filterLabel(item),
-        link: this.buildLink(url, index),
-      })
-    );
+    this.convertUrlSlugToPhrase(url)?.forEach((item, i) => {
+      if (item)
+        breadcrumb.push({
+          label: this.filterLabel(item),
+          link: this.buildLink(url, i),
+        });
+    });
     breadcrumb.splice(3, 1);
     this.breadcrumbs(breadcrumb);
   }

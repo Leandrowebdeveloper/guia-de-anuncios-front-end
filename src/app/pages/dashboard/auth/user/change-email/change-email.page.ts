@@ -12,11 +12,11 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./change-email.page.scss'],
 })
 export class ChangeEmailPage implements OnInit {
-  public location: string[];
-  public error: string;
-  public user$: Observable<User>;
+  public location!: string[];
+  public error!: string;
+  public user$!: Observable<User>;
   public error$ = new Subject<boolean>();
-  private user: User;
+  private user!: User;
 
   constructor(
     private authService: AuthService,
@@ -30,13 +30,15 @@ export class ChangeEmailPage implements OnInit {
     this.filterUrl();
   }
 
-  public getLocation() {
-    return (this.location = [
-      '/painel-de-controle',
-      'admin',
-      'usuario',
-      this.authService.getSlug,
-    ]);
+  public getLocation(): void {
+    if (this.authService.getSlug) {
+      this.location = [
+        '/painel-de-controle',
+        'admin',
+        'usuario',
+        this.authService.getSlug,
+      ];
+    }
   }
 
   private filterUrl(): void {
@@ -46,10 +48,10 @@ export class ChangeEmailPage implements OnInit {
   }
 
   private getUser(): void {
-    this.user = this.activatedRoute.snapshot.data.changeEmail;
+    this.user = this.activatedRoute.snapshot.data['changeEmail'];
   }
 
-  private changeEmail(): Observable<User> {
+  private changeEmail(): Observable<User> | void {
     if (this.user) {
       const { token, slug } = this.user;
       return (this.user$ = this.authService

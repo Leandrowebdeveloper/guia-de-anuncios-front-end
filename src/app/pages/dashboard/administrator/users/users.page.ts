@@ -7,10 +7,10 @@ import { IonContent } from '@ionic/angular';
   styleUrls: ['users.page.scss'],
 })
 export class UsersPage {
-  @ViewChild(IonContent, { static: true }) content: IonContent;
-  public toggleList: boolean;
+  @ViewChild(IonContent, { static: true }) content!: IonContent;
+  public toggleList!: boolean;
   public fab = false;
-  public menssage: boolean;
+  public menssage!: boolean;
 
   constructor() {}
 

@@ -19,11 +19,11 @@ import { HttpService } from 'src/app/services/http/http.service';
   providedIn: 'root',
 })
 export class ManagementAnnouncementService extends HttpService<Announcement> {
-  private announcement = new BehaviorSubject<Announcement>(undefined);
+  private announcement = new BehaviorSubject<Announcement | void>(undefined);
 
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     public messageService: MessageService,
     private location: Location,
     private breadcrumbsService: BreadcrumbsService
@@ -32,15 +32,17 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
     this.setApi = `announcement`;
   }
 
-  public get galery(): Galery[] {
-    return this.announcement.value.galery;
+  public get galery(): Galery[] | void {
+    if (this.announcement.value) {
+      return this.announcement.value.galery;
+    }
   }
 
-  public get announcementObservable(): Observable<Announcement> {
+  public get announcementObservable(): Observable<Announcement | void> {
     return this.announcement.asObservable();
   }
 
-  public get getAnnouncement(): Announcement {
+  public get getAnnouncement(): Announcement | void {
     return this.announcement.value;
   }
 
@@ -49,51 +51,63 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
   }
 
   public set addItemGalery(value: Galery) {
-    this.announcement.value.galery.unshift(value);
-    this.setAnnouncement = this.announcement?.value;
+    if (this.announcement.value?.galery) {
+      this.announcement.value.galery.unshift(value);
+      this.setAnnouncement = this.announcement?.value;
+    }
   }
 
   public set removeItemGalery(galery: Galery) {
-    const i = this.announcement.value.galery.findIndex(
-      (item) => item?.id === galery?.id
-    );
-    this.announcement.value.galery.splice(i, 1);
-    this.setAnnouncement = this.announcement?.value;
+    if (this.announcement.value?.galery) {
+      const i = this.announcement.value.galery.findIndex(
+        (item) => item?.id === galery?.id
+      );
+      this.announcement.value.galery.splice(i, 1);
+      this.setAnnouncement = this.announcement?.value;
+    }
   }
 
   public set setGalery(value: Galery[]) {
-    this.announcement.value.galery = value;
-    this.setAnnouncement = this.announcement?.value;
+    if (this.announcement.value?.galery) {
+      this.announcement.value.galery = value;
+      this.setAnnouncement = this.announcement?.value;
+    }
   }
 
   public set setBlockade(value: Pick<Announcement, 'blockade'>) {
-    this.announcement.value.blockade = value?.blockade;
-    this.setAnnouncement = this.announcement?.value;
+    if (this.announcement.value?.galery) {
+      this.announcement.value.blockade = value?.blockade;
+      this.setAnnouncement = this.announcement?.value;
+    }
   }
 
   public set setCategoryAnnouncement(value: CategoryAnnouncement) {
-    this.announcement.value.category = value?.category;
-    this.announcement.value.categoryAnnouncement = {
-      id: value?.id,
-    } as CategoryAnnouncement;
-    this.setAnnouncement = this.announcement?.value;
+    if (this.announcement.value?.galery) {
+      this.announcement.value.category = value?.category;
+      this.announcement.value.categoryAnnouncement = {
+        id: value?.id,
+      } as CategoryAnnouncement;
+      this.setAnnouncement = this.announcement?.value;
+    }
   }
 
   public set setAnnouncementMessage(value: Messages) {
-    const count: number = this.getAnnouncement?.messages?.length;
-    const i = this.getAnnouncement.messages.findIndex(
-      (item) => item?.id === value?.id
-    );
-    if (i === -1) {
-      if (count > 0) {
-        this.getAnnouncement?.messages.unshift(value);
+    if (this.getAnnouncement?.messages?.length) {
+      const count: number = this.getAnnouncement?.messages?.length;
+      const i = this.getAnnouncement.messages.findIndex(
+        (item) => item?.id === value?.id
+      );
+      if (i === -1) {
+        if (count > 0) {
+          this.getAnnouncement?.messages.unshift(value);
+        } else {
+          this.getAnnouncement.messages = [value];
+        }
       } else {
-        this.getAnnouncement.messages = [value];
+        this.getAnnouncement?.messages.splice(i, 1, value);
       }
-    } else {
-      this.getAnnouncement?.messages.splice(i, 1, value);
+      this.setAnnouncement = this.getAnnouncement;
     }
-    this.setAnnouncement = this.getAnnouncement;
   }
 
   public set setTitleDescription(
@@ -102,13 +116,19 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
       'title' | 'slug' | 'blockade' | 'description' | 'messages'
     >
   ) {
-    this.announcement.value.title = value?.title;
-    this.announcement.value.blockade = value?.blockade;
-    this.announcement.value.description = value?.description;
-    this.announcement.value.slug = value?.slug;
-    this.getAnnouncement?.messages.unshift(value.messages[0]);
-    this.setAnnouncement = this.announcement?.value;
-    this.updateUrl(value);
+    if (
+      this.getAnnouncement?.messages &&
+      this.announcement.value &&
+      value.messages
+    ) {
+      this.announcement.value.title = value?.title;
+      this.announcement.value.blockade = value?.blockade;
+      this.announcement.value.description = value?.description;
+      this.announcement.value.slug = value?.slug;
+      this.getAnnouncement?.messages.unshift(value.messages[0]);
+      this.setAnnouncement = this.announcement?.value;
+      this.updateUrl(value);
+    }
   }
 
   public updateAnnouncement(

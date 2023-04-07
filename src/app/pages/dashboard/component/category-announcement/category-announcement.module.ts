@@ -10,7 +10,7 @@ import { SegmentComponent } from './segment/segment.component';
 import { CategoryAnnouncementStateComponent } from './state/state.component';
 import { CategoryAnnouncementCreateComponent } from './create/create.component';
 import { FormCategoryCreateComponent } from './create/form/form.component';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 import { FormComponentModule } from 'src/app/components/form/form.module';
 import { CreateCategoryAnnouncementService } from './create/service/create.service';
 import { IonicModule } from '@ionic/angular';

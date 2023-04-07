@@ -1,17 +1,17 @@
-import { LoadingService } from './../../../utilities/loading/loading.service';
-import { AuthAnnouncementService } from '../../dashboard/auth/announcement/service/auth-announcement.service';
-import { SystemAccessAdminService } from './services/system-access-admin.service';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, UrlTree } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
+
 import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 import { OnComponentDeactivate } from 'src/app/components/form/guard/deactivate.guard';
-import { RequisitionLimit, User, Announcement } from 'src/app/interface';
-import { Subscription } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { RequisitionLimit, User } from 'src/app/interface';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { LoadingService } from './../../../utilities/loading/loading.service';
+import { LoginAdminService } from './services/login-admin.service';
 
 @Component({
   selector: 'app-system-access',
@@ -22,21 +22,21 @@ import { MessageService } from 'src/app/utilities/message/message.service';
   ],
 })
 export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
-  public desable: boolean;
-  public time: string;
-  public config: User;
-  public attrButton: AttrButton;
-  public attrButtonPage: AttrButton;
-  private form: FormGroup;
-  private urlTree: boolean;
-  private systemAccess: Subscription;
-  private requiriment: RequisitionLimit;
+  public desable!: boolean;
+  public time!: string;
+  public route!: string;
+  public config!: User;
+  public attrButton!: AttrButton;
+  public attrButtonPage!: AttrButton;
+  private form!: FormGroup;
+  private urlTree!: boolean;
+  private systemAccess!: Subscription;
+  private requiriment!: RequisitionLimit;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private systemAccessService: SystemAccessAdminService,
     private helpsService: HelpsService,
-    private authAnnouncementService: AuthAnnouncementService,
+    private loginAdminService: LoginAdminService,
     private messageService: MessageService,
     private loadingService: LoadingService
   ) {}
@@ -46,10 +46,13 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
     this.setAttrButtonPage();
     this.hasDesable();
     this.initAttrButton();
+    this.activeRoute();
   }
 
-  public activeRoute(): string {
-    return this.activatedRoute.snapshot.parent?.routeConfig?.path;
+  public activeRoute(): void {
+    if (this.activatedRoute.snapshot.parent?.routeConfig?.path) {
+      this.route = this.activatedRoute.snapshot.parent?.routeConfig?.path;
+    }
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean | UrlTree {
@@ -78,11 +81,11 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
   }
 
   private initAttrButton(): void {
-    this.attrButton = this.systemAccessService.attrButton;
+    this.attrButton = this.loginAdminService.attrButton;
   }
 
   private setAttrButtonPage() {
-    this.attrButtonPage = this.systemAccessService.attrButton;
+    this.attrButtonPage = this.loginAdminService.attrButton;
   }
 
   private disableCanDeactivate(user: User): boolean {
@@ -103,7 +106,7 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
 
   private login(event: FormGroup): Subscription {
     const loading = this.loadingService.show('Acessar o sistema...');
-    return (this.systemAccess = this.systemAccessService
+    return (this.systemAccess = this.loginAdminService
       .sendLoginData(event.value)
       .subscribe({
         next: (login: User) => {
@@ -116,8 +119,8 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
   private success(user: User, loading: Promise<HTMLIonLoadingElement>) {
     this.disableCanDeactivate(user);
     this.formUpdate();
-    this.systemAccessService.isLogin(user);
-    this.systemAccessService.goToUserPage();
+    this.loginAdminService.isLogin(user);
+    this.loginAdminService.goToUserPage();
     return this.messageService.success(
       user?.message,
       loading,
@@ -130,7 +133,7 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
     loading: Promise<HTMLIonLoadingElement>
   ) {
     this.requisitionLimit(error);
-    return this.systemAccessService.error(error, loading, this.systemAccess);
+    return this.loginAdminService.error(error, loading, this.systemAccess);
   }
 
   private requisitionLimit(error: HttpErrorResponse): void {
@@ -166,7 +169,7 @@ export class SystemAccessAdminPage implements OnInit, OnComponentDeactivate {
   }
 
   private addConfig() {
-    this.config = this.activatedRoute.snapshot.data.systemAccess;
+    this.config = this.activatedRoute?.snapshot?.data?.['systemAccess'];
   }
 
   private hasDesable(): void {

@@ -2,47 +2,86 @@ import { CategoryService } from 'src/app/pages/dashboard/administrator/categoryA
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Category, Image } from 'src/app/interface';
+import { Image } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Injectable()
-export class ImageCategoryService extends HttpService<Category> {
+export class ImageCategoryService extends HttpService<
+  Required<
+    Pick<Image & { catAdId: number }, 'catAdId' | '_csrf' | 'filename' | 'url'>
+  >
+> {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private categoryService: CategoryService
   ) {
     super(http, storageService);
     this.setApi = `category`;
   }
 
-  public set setIcon(value: Image) {
-    this.categoryService.getCategory.image = value;
-    this.categoryService.setCategory = this.categoryService.getCategory;
+  public set setIcon(
+    value: Required<
+      Pick<
+        Image & { catAdId: number },
+        'catAdId' | '_csrf' | 'filename' | 'url'
+      >
+    >
+  ) {
+    if (this.categoryService.getCategory) {
+      this.categoryService.getCategory.image = value;
+      this.categoryService.setCategory = this.categoryService.getCategory;
+    }
   }
 
   public set setCsrf(csrf: string) {
     this.csrf = csrf;
   }
 
-  public deleteIcon(image: Image): Observable<Category> {
+  public deleteIcon(
+    image: Required<
+      Pick<
+        Image & { catAdId: number },
+        'catAdId' | '_csrf' | 'filename' | 'url'
+      >
+    >
+  ): Observable<
+    Required<
+      Pick<
+        Image & { catAdId: number },
+        'catAdId' | '_csrf' | 'filename' | 'url'
+      >
+    >
+  > {
     return this.destroy(image, `management/icon`);
   }
 
-  public uploadIcon(category: Category, file: File): Observable<any> {
-    const data = this.buildFileData(category, file);
-    // eslint-disable-next-line no-underscore-dangle
-    this.setCsrf = category._csrf;
-    return this.upload(data, 'upload');
+  public uploadIcon(
+    image: Required<Pick<Image & { catAdId: number }, 'catAdId' | '_csrf'>>,
+    file: File
+  ): Observable<any> | any {
+    const data = this.buildFileData(image, file);
+    if (data && image._csrf) {
+      this.loadCsrf(image);
+      return this.upload(data, 'upload');
+    }
   }
 
-  private buildFileData(category: Category, file: File): FormData {
-    if (category && file && file.type === 'image/svg+xml') {
+  private loadCsrf(
+    image: Required<Pick<Image & { catAdId: number }, 'catAdId' | '_csrf'>>
+  ) {
+    this.setCsrf = image._csrf;
+  }
+
+  private buildFileData(
+    image: Required<Pick<Image & { catAdId: number }, 'catAdId' | '_csrf'>>,
+    file: File
+  ): FormData | void {
+    if (image && file && file.type === 'image/svg+xml') {
       const formData = new FormData();
-      formData.append('catAdId', `${category.id}`);
-      // eslint-disable-next-line no-underscore-dangle
-      formData.append('_csrf', category._csrf);
+      formData.append('catAdId', `${image.catAdId}`);
+      image._csrf && formData.append('_csrf', image._csrf);
       formData.append('filename', file, file?.name);
       return formData;
     }

@@ -22,14 +22,14 @@ export class AnnouncementFormCityComponent implements OnInit {
     route: '/citie',
     icon: 'cloud-upload',
     label: 'Salvar',
-    fill: false,
+
     aria: 'Salvar cidade e estado.',
     title: 'Salvar cidade e estado.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private $citie: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private $citie!: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
@@ -46,7 +46,7 @@ export class AnnouncementFormCityComponent implements OnInit {
     return (this.form = event);
   }
 
-  public onSubmit(event: FormGroup): Subscription {
+  public onSubmit(event: FormGroup): Subscription | void {
     return this.cities(event);
   }
 
@@ -62,20 +62,20 @@ export class AnnouncementFormCityComponent implements OnInit {
     return !type.includes(value);
   }
 
-  private cities(event: FormGroup): Subscription {
-    let message: string;
-    if (this.isCity(event.value.city)) {
-      return;
+  private cities(event: FormGroup): Subscription | void {
+    if (!this.isCity(event.value.city)) {
+      let message: string;
+
+      if (this.citie?.id) {
+        event.value.id = this.citie?.id;
+        message = 'Editando cidade...';
+      } else {
+        event.value.announcementId = this.citie?.announcementId;
+        message = 'Cadastrando cidade...';
+      }
+      const loading = this.loadingService.show(message);
+      return this.send(event, loading);
     }
-    if (this.citie?.id) {
-      event.value.id = this.citie?.id;
-      message = 'Editando cidade...';
-    } else {
-      event.value.announcementId = this.citie?.announcementId;
-      message = 'Cadastrando cidade...';
-    }
-    const loading = this.loadingService.show(message);
-    return this.send(event, loading);
   }
 
   private send(
@@ -84,7 +84,7 @@ export class AnnouncementFormCityComponent implements OnInit {
   ): Subscription {
     return (this.$citie = this.cityService.citie(event.value).subscribe({
       next: (citie: Pick<Citie, 'message'>) =>
-        this.messsage(citie?.message, loading),
+        citie?.message && this.messsage(citie?.message, loading),
       error: (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$citie),
     }));

@@ -23,14 +23,14 @@ export class FormUserBlockadeComponent implements OnInit {
     route: '/blockade',
     icon: 'stop',
     label: 'Bloquear usuário',
-    fill: false,
+
     aria: 'Bloquear usuário.',
     title: 'Bloquear usuário.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private write: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private write!: Subscription;
   private id: number | undefined;
 
   constructor(

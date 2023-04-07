@@ -2,7 +2,7 @@
   <!-- Campo de pesquiza -->
   <ion-col size="12" class="ion-no-padding">
     <app-user-search-component
-      *ngIf="users?.length > 10"
+      *ngIf="users | isUsers"
       (search)="search($event)"
     ></app-user-search-component>
   </ion-col>
@@ -24,7 +24,7 @@
             [title]="'Nome: ' + user?.name"
             [attr.data-message]="'Nome: ' + user?.name"
           >
-            {{ user?.name }}</ion-label
+            {{ user.name }}</ion-label
           >
 
           <ion-button
@@ -53,15 +53,15 @@
       </ion-list>
     </ion-list>
 
-    <div class="content-center" [hidden]="users?.length > 0">
+    <div class="content-center" [hidden]="users | isUsers">
       <ion-icon color="medium" name="trash-outline"></ion-icon>
       <ion-text color="medium"> Não á item na lixeira. </ion-text>
     </div>
 
-    <ion-card *ngIf="!endListUser && users?.length > 0">
+    <ion-card *ngIf="!endListUser && (users | isUsers)">
       <ion-text color="primary" class="ion-text-center">
         <p>FIM</p>
-        <p *ngIf="users">{{ users?.length }} usuários</p>
+        <p *ngIf="users | isUsers">{{ users.length }} usuários</p>
       </ion-text>
     </ion-card>
 

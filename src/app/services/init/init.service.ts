@@ -13,7 +13,10 @@ export class InitService extends HttpService<{
   user: User;
   category: Category[];
 }> {
-  constructor(public http: HttpClient, public storageService: StorageService) {
+  constructor(
+    public override http: HttpClient,
+    public override storageService: StorageService
+  ) {
     super(http, storageService);
     this.setApi = `init`;
   }

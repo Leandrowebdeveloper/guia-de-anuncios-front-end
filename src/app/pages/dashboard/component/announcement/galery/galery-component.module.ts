@@ -11,9 +11,16 @@ import { GaleryComponent } from './galery-component';
 import { PresentPlanComponentModule } from 'src/app/components/present-plan/present-plan.module';
 import { GaleryAnnouncementService } from './service/galery.service';
 import { HorizontalScrollDirective } from './directive/horizontal-slide.directive';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, PresentPlanComponentModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    PresentPlanComponentModule,
+    PipeModule,
+  ],
   declarations: [
     GaleryComponent,
     GaleryButtonUploadComponent,

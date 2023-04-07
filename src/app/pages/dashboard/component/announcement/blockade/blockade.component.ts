@@ -12,10 +12,13 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
   styleUrls: ['./blockade.component.scss'],
 })
 export class AnnouncementBlockadeComponent {
-  @Input() announcement!: Pick<Announcement, '_csrf' | 'slug' | 'blockade'>;
-  @Input() isAdmin!: boolean;
-  private form: FormGroup;
-  private $blockade: Subscription;
+  @Input() announcement!: Pick<
+    Announcement,
+    '_csrf' | 'slug' | 'blockade'
+  > | void;
+  @Input() user!: Pick<User, 'level'> | void;
+  private form!: FormGroup;
+  private $blockade!: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -23,21 +26,24 @@ export class AnnouncementBlockadeComponent {
     private messageService: MessageService
   ) {}
 
-  public blockade(): Subscription {
-    const { slug, _csrf } = this.announcement;
-    this.form = this.fb.group({ slug, _csrf });
-    return (this.$blockade = this.managementAnnouncementService
-      .blockade(this.form.value)
-      .subscribe({
-        next: (user_: Pick<User, 'message'>) =>
-          this.messageService.success(
-            user_?.message,
-            null,
-            this.$blockade,
-            350
-          ),
-        error: (error: HttpErrorResponse) =>
-          this.messageService.error(error, null, this.$blockade),
-      }));
+  public blockade(): Subscription | void {
+    if (this.announcement) {
+      const { slug, _csrf } = this.announcement;
+      this.form = this.fb.group({ slug, _csrf });
+      return (this.$blockade = this.managementAnnouncementService
+        .blockade(this.form.value)
+        .subscribe({
+          next: (user_: Announcement) =>
+            user_?.message &&
+            this.messageService.success(
+              user_?.message,
+              undefined,
+              this.$blockade,
+              350
+            ),
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, undefined, this.$blockade),
+        }));
+    }
   }
 }

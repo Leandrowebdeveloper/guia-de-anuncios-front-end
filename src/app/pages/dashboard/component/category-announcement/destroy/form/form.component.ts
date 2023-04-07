@@ -6,7 +6,6 @@ import { FormGroup } from '@angular/forms';
 import { Category } from 'src/app/interface';
 import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 import { HelpsService } from 'src/app/services/helps/helps.service';
-import { CategoryService } from 'src/app/pages/dashboard/administrator/categoryAnnouncement/services/category.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { DestroyAnnouncementService } from '../service/destroy-announcement.service';
@@ -19,21 +18,21 @@ export class FormDestroyAnnouncementComponent implements OnInit {
   @Input() category!: Required<
     Pick<Category & { password: string }, '_csrf' | 'id' | 'password'>
   >;
-  @Input() action: string;
-  @Input() label: string;
+  @Input() action!: string;
+  @Input() label!: string;
 
   public attrButton: AttrButton = {
     route: '/destroy',
     icon: 'trash',
     label: 'Excluir categoria',
-    fill: false,
+
     aria: 'Excluir categoria.',
     title: 'Excluir categoria.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private write: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private write!: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
@@ -66,9 +65,15 @@ export class FormDestroyAnnouncementComponent implements OnInit {
   private messsage(
     category: Category,
     loading: Promise<HTMLIonLoadingElement>
-  ): Promise<number> {
-    this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(category?.message, loading, this.write);
+  ): Promise<number> | void {
+    if (category?.message) {
+      this.helpService.delay(() => this.modalController.dismiss(), 2500);
+      return this.messageService.success(
+        category?.message,
+        loading,
+        this.write
+      );
+    }
   }
 
   private getData(): void {

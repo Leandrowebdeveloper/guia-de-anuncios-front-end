@@ -9,7 +9,12 @@ import {
   AfterContentChecked,
   ChangeDetectorRef,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { FormServices } from './services/form.service';
 import { ConfigForm } from './config';
 import { Attributes } from './interface';
@@ -26,12 +31,12 @@ export class FormComponent implements OnInit, AfterContentChecked {
   @Output() submitDataForm = new EventEmitter<FormGroup>(undefined);
   @Output() exportForm = new EventEmitter<FormGroup>(undefined);
   public form!: FormGroup;
-  public buildInputs: Attributes[];
+  public buildInputs!: Attributes[];
   public submitted = false;
-  public visiblePassword: boolean;
-  public isPageTheLogin: boolean;
+  public visiblePassword!: boolean;
+  public isPageTheLogin!: boolean;
   public config: any;
-  public message: string;
+  public message!: string;
   constructor(
     private configForm: ConfigForm,
     private fb: FormBuilder,
@@ -41,7 +46,9 @@ export class FormComponent implements OnInit, AfterContentChecked {
     private changeDetector: ChangeDetectorRef
   ) {}
 
-  public get f() {
+  public get f(): {
+    [key: string]: AbstractControl<any, any>;
+  } {
     return this.form.controls;
   }
 
@@ -59,7 +66,6 @@ export class FormComponent implements OnInit, AfterContentChecked {
     this.isPageLogin();
     this.disableValidate();
     this.tinymce();
-    // ordenar inputs
     this.orderImputsBlockade();
     this.orderImputsMessages();
     this.orderImputsAddress();
@@ -72,11 +78,15 @@ export class FormComponent implements OnInit, AfterContentChecked {
   public onSubmit(): void {
     if (this.form.value?.type === 'free') {
       this.form.patchValue({ period: null });
-    } else {
-      if (this.form.value?.period === null) {
-        this.message = '* obrigatório';
-        return;
-      }
+    } else if (this.form.value?.period === null) {
+      this.message = '* obrigatório';
+      return;
+    } else if (
+      this.form.value?.facebook === null &&
+      this.form.value?.instagran === null
+    ) {
+      this.f['facebook'].setErrors({ required: true });
+      this.f['instagran'].setErrors({ required: true });
     }
 
     this.submitted = true;
@@ -102,8 +112,8 @@ export class FormComponent implements OnInit, AfterContentChecked {
 
   private disableValidate(): void {
     if (this.isPageTheLogin) {
-      this.form.get('password').clearValidators();
-      this.form.get('password').setValidators([Validators.required]);
+      this.form.get('password')?.clearValidators();
+      this.form.get('password')?.setValidators([Validators.required]);
     }
   }
 

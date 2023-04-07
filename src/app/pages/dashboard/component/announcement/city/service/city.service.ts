@@ -9,18 +9,14 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
 
 @Injectable()
 export class CityAnnouncementService extends HttpService<
-  | Citie
-  | Pick<
-      Citie & {
-        password: string;
-      },
-      '_csrf' | 'id' | 'password' | 'message'
-    >
+  Citie & {
+    password: string;
+  }
 > {
-  private citieEvent = new EventEmitter<Citie>(undefined);
+  private citieEvent = new EventEmitter<Citie | null>(undefined);
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private managementAnnouncementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
@@ -31,7 +27,13 @@ export class CityAnnouncementService extends HttpService<
     return this.citieEvent.asObservable();
   }
 
-  public set setCitie(citie: Required<Citie>) {
+  public set setCitie(
+    citie:
+      | (Citie & {
+          password: string;
+        })
+      | null
+  ) {
     if (this.managementAnnouncementService.getAnnouncement) {
       this.managementAnnouncementService.getAnnouncement.citie = citie;
       this.managementAnnouncementService.setAnnouncement =
@@ -40,39 +42,43 @@ export class CityAnnouncementService extends HttpService<
     this.citieEvent.emit(citie);
   }
 
-  public citie(citie: Required<Citie>): Observable<Citie> {
+  public citie(
+    citie: Citie & {
+      password: string;
+    }
+  ): Observable<Citie> {
     if (citie?.id) {
       return this.patch(citie).pipe(
-        tap((citie_: Required<Citie>) => (this.setCitie = citie_))
+        tap(
+          (
+            citie_: Citie & {
+              password: string;
+            }
+          ) => (this.setCitie = citie_)
+        )
       );
     } else {
       return this.create(citie).pipe(
-        tap((citie_: Required<Citie>) => (this.setCitie = citie_))
+        tap(
+          (
+            citie_: Citie & {
+              password: string;
+            }
+          ) => (this.setCitie = citie_)
+        )
       );
     }
   }
 
   public delete(
-    citie: Pick<Citie & { password: string }, '_csrf' | 'id' | 'password'>
+    citie: Citie & {
+      password: string;
+    }
   ): Observable<
-    Pick<
-      Citie & {
-        password: string;
-      },
-      '_csrf' | 'id' | 'password' | 'message'
-    >
+    Citie & {
+      password: string;
+    }
   > {
-    return this.destroy(citie).pipe(
-      tap(
-        (
-          c: Pick<
-            Citie & {
-              password: string;
-            },
-            '_csrf' | 'id' | 'password' | 'message'
-          >
-        ) => (this.setCitie = null)
-      )
-    );
+    return this.destroy(citie).pipe(tap((): null => (this.setCitie = null)));
   }
 }

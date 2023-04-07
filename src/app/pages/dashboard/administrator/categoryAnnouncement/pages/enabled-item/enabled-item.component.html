@@ -2,7 +2,7 @@
   <!-- Searsh -->
   <ion-col size="12" class="ion-no-padding">
     <app-search-category-component
-      *ngIf="category?.length > 10"
+      *ngIf="category | isCategory : 10"
       (search)="search($event)"
     ></app-search-category-component>
   </ion-col>
@@ -21,31 +21,35 @@
             '/painel-de-controle',
             'admin',
             'categoria',
-            category?.slug
+            category | categoryValues : 'slug'
           ]"
         >
           <ion-icon
             slot="start"
             size="large"
             title="Imagem do categorias."
-            [src]="
-              category?.image
-                ? '/images/icons/' + category?.image?.filename
-                : './../../../../assets/thumbnail.svg'
-            "
+            [src]="category | icon"
           ></ion-icon>
 
           <div class="item">
             <div>
               <ion-label
-                [title]="'Nome: ' + category?.name"
-                [attr.data-message]="'Nome: ' + category?.name"
+                [title]="category | categoryValues : 'name' : 'Nome:'"
+                [attr.data-message]="
+                  category | categoryValues : 'name' : 'Nome:'
+                "
               >
-                {{ category?.name | lnWords : ln }}</ion-label
+                {{
+                  category | categoryValues : "name" | lnWords : ln
+                }}</ion-label
               >
               <div class="time">
-                <small>{{ category?.createdAt | time : "create" }}</small>
-                <small>{{ category?.updatedAt | time : "update" }}</small>
+                <small>{{
+                  category | categoryValues : "createdAt" | time : "create"
+                }}</small>
+                <small>{{
+                  category | categoryValues : "updatedAt" | time : "update"
+                }}</small>
               </div>
             </div>
 
@@ -60,23 +64,31 @@
               </small>
               <small
                 [attr.data-message]="
-                  category?.state
+                  (category | categoryValues : 'state')
                     ? 'Categorias está online'
                     : 'Categorias está offline'
                 "
                 [title]="
-                  category?.state
+                  (category | categoryValues : 'state')
                     ? 'Categorias está online'
                     : 'Categorias está offline'
                 "
               >
                 <ion-icon
                   size="small"
-                  [color]="category?.state ? 'success' : 'danger'"
+                  [color]="
+                    (category | categoryValues : 'state') ? 'success' : 'danger'
+                  "
                   slot="end"
-                  [name]="category?.state ? 'power' : 'radio-button-off'"
+                  [name]="
+                    (category | categoryValues : 'state')
+                      ? 'power'
+                      : 'radio-button-off'
+                  "
                 ></ion-icon>
-                {{ category?.state ? "online" : "offline" }}
+                {{
+                  (category | categoryValues : "state") ? "online" : "offline"
+                }}
               </small>
             </div>
           </div>
@@ -90,9 +102,9 @@
   ></app-category-announcement-create-component>
 
   <ion-card *ngIf="!endListCategory">
-    <ion-text color="primary" class="ion-text-center">
+    <ion-text class="ion-text-center">
       <p>FIM</p>
-      <p *ngIf="category">{{ category?.length }} categorias</p>
+      <p *ngIf="category">{{ category.length }} categorias</p>
     </ion-text>
   </ion-card>
 

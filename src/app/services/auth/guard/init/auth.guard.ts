@@ -1,13 +1,7 @@
 import { catchError, tap } from 'rxjs/operators';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  CanLoad,
-  Resolve,
-  Router,
-  UrlTree,
-} from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 import { Observable, EMPTY } from 'rxjs';
 
 import { Category, User } from 'src/app/interface';
@@ -18,12 +12,7 @@ import { HomeService } from 'src/app/pages/public/home/services/home.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard
-  implements
-    CanLoad,
-    CanActivate,
-    Resolve<{ user: User; category: Category[] }>
-{
+export class AuthGuard {
   constructor(
     private storageService: StorageService,
     private authService: AuthService,
@@ -32,7 +21,7 @@ export class AuthGuard
     private homeService: HomeService
   ) {}
 
-  canActivate(): UrlTree {
+  canActivate(): void {
     return;
   }
 

@@ -1,22 +1,22 @@
 <ion-item
   *ngIf="user"
-  [disabled]="user?.blockade"
+  [disabled]="user | isUserValues : 'blockade'"
   detail="true"
   (click)="level()"
   title="Alterar senha"
   aria-label="Clique para alterar senha"
   [attr.aria-disabled]="
-    'Botão alterar nivel do usuário ' + user?.blockade
+    'Botão alterar nivel do usuário ' + (user | isUserValues : 'blockade')
       ? 'abilitado.'
       : 'desabilitado'
   "
   button
 >
   <ion-label>{{
-    user?.level === "1" ? "administrador" : "Colaborador"
+    (user | isUserLevel : "1") ? "administrador" : "Colaborador"
   }}</ion-label>
   <ion-icon
     slot="start"
-    [name]="user?.level === '1' ? 'trophy' : 'medal'"
+    [name]="(user | isUserLevel : '1') ? 'trophy' : 'medal'"
   ></ion-icon>
 </ion-item>

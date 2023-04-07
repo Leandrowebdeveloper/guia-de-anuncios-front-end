@@ -5,12 +5,12 @@ import { SearchCategory } from 'src/app/interface';
 @Injectable()
 export class SearchCategoryAnnouncementService {
   public result = new EventEmitter<any[]>(undefined);
-  private search$ = new BehaviorSubject<SearchCategory>(undefined);
+  private search$ = new BehaviorSubject<SearchCategory | void>(undefined);
   constructor() {
     this.setSearchCategoryBy = 'name';
   }
 
-  public get getSearchCategoryBy(): Observable<SearchCategory> {
+  public get getSearchCategoryBy(): Observable<SearchCategory | void> {
     return this.search$.asObservable();
   }
 

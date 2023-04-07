@@ -1,4 +1,3 @@
-import { StorageService } from 'src/app/services/storage/storage.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
@@ -10,7 +9,7 @@ describe('InitService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, IonicStorageModule.forRoot()],
+      imports: [HttpClientTestingModule, IonicStorageModule.forRoot()],
     });
     service = TestBed.inject(InitService);
   });

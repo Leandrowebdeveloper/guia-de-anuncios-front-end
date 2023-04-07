@@ -9,11 +9,11 @@ import { AdminAnnouncementService } from './service/admin-announcement.service';
   styleUrls: ['announcement.page.scss'],
 })
 export class AdminAnnouncementPage {
-  @ViewChild(IonContent, { static: true }) content: IonContent;
+  @ViewChild(IonContent, { static: true }) content!: IonContent;
   public isOrder = false;
-  public sendOrder: boolean;
-  public saveSorting: boolean;
-  public toggleList: boolean;
+  public sendOrder!: boolean;
+  public saveSorting!: boolean;
+  public toggleList!: boolean;
 
   public fab = false;
 

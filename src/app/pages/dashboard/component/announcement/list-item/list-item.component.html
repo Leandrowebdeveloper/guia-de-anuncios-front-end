@@ -1,8 +1,8 @@
 <ion-list>
   <ion-item-sliding [id]="index" (ionDrag)="drag($event)">
     <ion-item [color]="index === action && 'danger'">
-      <ion-label [title]="announcement?.title">{{
-        announcement?.title | lnWords
+      <ion-label [title]="announcement.title">{{
+        announcement.title | lnWords
       }}</ion-label>
       <ion-icon
         slot="end"
@@ -35,7 +35,7 @@
           '/painel-de-controle',
           'anuncio',
           'editar',
-          announcement?.slug
+          announcement.slug
         ]"
         color="secondary"
       >

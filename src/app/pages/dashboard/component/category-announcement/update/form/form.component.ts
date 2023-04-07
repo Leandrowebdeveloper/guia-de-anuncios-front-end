@@ -19,21 +19,21 @@ export class FormCategoryUpdateComponent implements OnInit {
   @Input() category!: Required<
     Pick<Category, '_csrf' | 'name' | 'description' | 'slug'>
   >;
-  @Input() action: string;
-  @Input() label: string;
+  @Input() action!: string;
+  @Input() label!: string;
 
   public attrButton: AttrButton = {
     route: '/category',
     icon: 'create',
     label: 'Editar',
-    fill: false,
+
     aria: 'Editar categoria.',
     title: 'Editar categoria.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private write: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private write!: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
@@ -59,7 +59,7 @@ export class FormCategoryUpdateComponent implements OnInit {
     return (this.write = this.categoryService
       .updateNameAndDescription(event.value)
       .subscribe({
-        next: (category: Required<Pick<Category, 'message'>>) =>
+        next: (category: Pick<Category, 'message'>) =>
           this.messsage(category, loading),
         error: (error: HttpErrorResponse) =>
           this.messageService.error(error, loading, this.write),
@@ -67,11 +67,17 @@ export class FormCategoryUpdateComponent implements OnInit {
   }
 
   private messsage(
-    category: Required<Pick<Category, 'message'>>,
+    category: Pick<Category, 'message'>,
     loading: Promise<HTMLIonLoadingElement>
-  ): Promise<number> {
-    this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(category?.message, loading, this.write);
+  ): Promise<number> | void {
+    if (category?.message) {
+      this.helpService.delay(() => this.modalController.dismiss(), 2500);
+      return this.messageService.success(
+        category?.message,
+        loading,
+        this.write
+      );
+    }
   }
 
   private getData(): void {

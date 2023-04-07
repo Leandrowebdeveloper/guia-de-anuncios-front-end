@@ -16,16 +16,16 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormComponent implements OnInit {
-  @Input() category: Category;
-  @Input() action: string;
-  @Input() label: string;
+  @Input() category!: Category;
+  @Input() action!: string;
+  @Input() label!: string;
 
-  public attrButtonPage: AttrButton[];
-  public attrButton: AttrButton;
+  public attrButtonPage!: AttrButton[];
+  public attrButton!: AttrButton;
 
-  public config: object;
-  private form: FormGroup;
-  private write: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private write!: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
@@ -44,7 +44,7 @@ export class FormComponent implements OnInit {
     return (this.form = event);
   }
 
-  public onSubmit(event: FormGroup): Subscription {
+  public onSubmit(event: FormGroup): Subscription | void {
     switch (this.action) {
       // case 'destroy':
       //   return this.destroy(event);
@@ -128,7 +128,8 @@ export class FormComponent implements OnInit {
   }
 
   private setButton(): void {
-    this.attrButton = this.categoryUtilities.setButton(this.action);
+    const btn = this.categoryUtilities.setButton(this.action);
+    if (btn) this.attrButton = btn;
   }
 
   private getData(): void {

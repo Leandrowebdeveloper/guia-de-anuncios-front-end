@@ -10,11 +10,11 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Injectable()
 export class UserLevelService extends HttpService<
-  Required<Pick<User, '_csrf' | 'slug' | 'password' | 'level'>>
+  Pick<User, '_csrf' | 'slug' | 'password' | 'level' | 'message'>
 > {
   constructor(
     http: HttpClient,
-    public storageService: StorageService,
+    public override storageService: StorageService,
     private usersService: AdminUsersService
   ) {
     super(http, storageService);
@@ -22,15 +22,23 @@ export class UserLevelService extends HttpService<
   }
 
   public set setLevel(value: '1' | '2') {
-    this.usersService.getUsers.level = value;
-    this.usersService.setUsers = this.usersService.getUsers;
+    if (this.usersService.getUsers) {
+      this.usersService.getUsers.level = value;
+      this.usersService.setUsers = this.usersService.getUsers;
+    }
   }
 
   public level(
-    user: Required<Pick<User, '_csrf' | 'slug' | 'password' | 'level'>>
-  ): Observable<Required<User>> {
+    user: Pick<User, '_csrf' | 'slug' | 'password' | 'level' | 'message'>
+  ): Observable<
+    Pick<User, '_csrf' | 'slug' | 'password' | 'level' | 'message'>
+  > {
     return this.patch(user, 'management/level').pipe(
-      tap((user_: Required<User>): '1' | '2' => (this.setLevel = user_?.level))
+      tap(
+        (
+          user_: Pick<User, '_csrf' | 'slug' | 'password' | 'level' | 'message'>
+        ): '1' | '2' => (this.setLevel = user_?.level)
+      )
     );
   }
 }

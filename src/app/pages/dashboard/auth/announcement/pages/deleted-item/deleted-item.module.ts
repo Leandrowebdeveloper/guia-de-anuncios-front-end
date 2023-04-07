@@ -9,6 +9,7 @@ import { DeletedItemAnnouncementPage } from './deleted-item.page';
 
 import { UserComponentsModule } from 'src/app/pages/dashboard/component/user/user-component.module';
 import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/
     DeletedItemAnnouncementPageRoutingModule,
     UserComponentsModule,
     AnnouncementComponentsModule,
+    PipeModule,
   ],
   declarations: [DeletedItemAnnouncementPage],
   exports: [DeletedItemAnnouncementPage],

@@ -17,7 +17,9 @@
       <ion-thumbnail>
         <ion-img
           [src]="
-            category?.image?.url || './../../../../../../assets/thumbnail.svg'
+            category?.image?.filename
+              ? '/images/icons/' + category?.image?.filename
+              : './../../../../assets/thumbnail.svg'
           "
           referrerpolicy="no-referrer"
           alt="Avatar"
@@ -39,7 +41,7 @@
     </ion-card-header>
     <ion-fab
       vertical="bottom"
-      (click)="deleteIcon(category?.image, category?._csrf)"
+      (click)="deleteIcon()"
       horizontal="end"
       slot="fixed"
       *ngIf="!!category?.image?.url"

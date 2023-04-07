@@ -1,28 +1,36 @@
 <ion-card-header>
   <!-- Categoria -->
   <ion-card-subtitle
-    [title]="'Categoria ' + announcement?.category?.name"
-    [attr.data-message]="'Categoria ' + announcement?.category?.name"
-    >{{ announcement?.category?.name }}</ion-card-subtitle
+    [title]="
+      announcement | isAnnouncementCategoryAttrValues : 'name' : 'Categoria'
+    "
+    [attr.data-message]="
+      announcement | isAnnouncementCategoryAttrValues : 'name' : 'Categoria'
+    "
+    >{{
+      announcement | isAnnouncementCategoryAttrValues : "name"
+    }}</ion-card-subtitle
   >
 
   <!-- Title -->
   <ion-card-title
-    [title]="announcement?.title"
-    [attr.data-message]="announcement?.title"
-    >{{ announcement?.title }}</ion-card-title
+    [title]="announcement | announcementValues : 'title'"
+    [attr.data-message]="announcement | announcementValues : 'title'"
+    >{{ announcement | announcementValues : "title" }}</ion-card-title
   >
 
   <!-- Horario de trabalho -->
-  <ion-card-subtitle [hidden]="!announcement?.workDays">
+  <ion-card-subtitle
+    [hidden]="!announcement | isAnnouncementAttrValues : 'workDays'"
+  >
     <ion-text
       [color]="
-        (announcement?.workDays | workDays) === 'Aberto' ? 'success' : 'danger'
+        (announcement.workDays | workDays) === 'Aberto' ? 'success' : 'danger'
       "
       [title]="announcement | attrTitle : 'workDays'"
       [attr.data-message]="announcement | attrTitle : 'workDays'"
     >
-      {{ announcement?.workDays | workDays }}
+      {{ announcement.workDays | workDays }}
     </ion-text>
   </ion-card-subtitle>
 
@@ -37,7 +45,7 @@
 
   <!-- Aviso de bloqueio -->
   <ion-card-subtitle
-    *ngIf="announcement?.blockade"
+    *ngIf="announcement | announcementValues : 'blockade'"
     color="danger"
     title="Anúncio bloqueado"
     data-message="Anúncio bloqueado"
@@ -55,47 +63,74 @@
           <span *ngIf="announcement?.plan?.type === 'special'">Especial</span>
         </ion-text>
       </li>
-      <li class="plan" [hidden]="!announcement?.plan?.start">
+      <li
+        class="plan"
+        [hidden]="!(announcement | announcementPlanValues : 'start')"
+      >
         <ion-text>
-          {{ announcement?.plan?.start | time : "create" }}
+          {{
+            announcement | announcementPlanValues : "start" | time : "create"
+          }}
         </ion-text>
       </li>
-      <li class="plan ion-margin-bottom" [hidden]="!announcement?.plan?.end">
+      <li
+        class="plan ion-margin-bottom"
+        [hidden]="!(announcement | announcementPlanValues : 'end')"
+      >
         <ion-text>
-          {{ announcement?.plan?.end | time : "plan" }}
+          {{ announcement | announcementPlanValues : "end" | time : "plan" }}
         </ion-text>
       </li>
 
       <li
         class="plan ion-margin-bottom"
-        [hidden]="announcement?.plan?.start && announcement?.plan?.end"
+        [hidden]="
+          (announcement | announcementPlanValues : 'start') &&
+          (announcement | announcementPlanValues : 'end')
+        "
       >
         <ion-text> Recursos são limitado </ion-text>
       </li>
 
       <li
-        [title]="'Status' + announcement?.state ? 'Online' : 'Offline'"
+        [title]="
+          'Status' + (announcement | announcementValues : 'state')
+            ? 'Online'
+            : 'Offline'
+        "
         [attr.data-message]="
-          'Status' + announcement?.state ? 'Online' : 'Offline'
+          'Status' + (announcement | announcementValues : 'state')
+            ? 'Online'
+            : 'Offline'
         "
       >
         <ion-icon
           size="small"
-          [color]="announcement?.state ? 'success' : 'danger'"
-          [name]="announcement?.state ? 'eye' : 'eye-off'"
+          [color]="
+            (announcement | announcementValues : 'state') ? 'success' : 'danger'
+          "
+          [name]="
+            (announcement | announcementValues : 'state') ? 'eye' : 'eye-off'
+          "
         ></ion-icon>
-        <ion-text [color]="announcement?.state ? 'success' : 'danger'">
-          {{ announcement?.state ? "Online" : "Offline" }}
+        <ion-text
+          [color]="
+            (announcement | announcementValues : 'state') ? 'success' : 'danger'
+          "
+        >
+          {{
+            (announcement | announcementValues : "state") ? "Online" : "Offline"
+          }}
         </ion-text>
       </li>
 
       <li>
         <ion-icon size="small" name="time"></ion-icon
-        >{{ announcement?.createdAt | time : "create" }}
+        >{{ announcement | announcementValues : "createdAt" | time : "create" }}
       </li>
       <li>
         <ion-icon size="small" name="timer"></ion-icon
-        >{{ announcement?.updatedAt | time : "update" }}
+        >{{ announcement | announcementValues : "updatedAt" | time : "update" }}
       </li>
     </ul>
   </ion-card-subtitle>

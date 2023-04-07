@@ -15,7 +15,7 @@ export class AnnouncementListItemComponent {
     index: number;
     announcement: Announcement;
   }>(undefined);
-  public toggleIcon: number;
+  public toggleIcon!: number;
   public drag(event: any) {
     const { id } = event.target;
     const data: { amount: number; ratio: number } = event.detail;

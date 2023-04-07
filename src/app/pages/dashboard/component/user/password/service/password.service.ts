@@ -1,7 +1,6 @@
 import { tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 
 import { User } from 'src/app/interface';
 import { StorageService } from 'src/app/services/storage/storage.service';
@@ -11,11 +10,16 @@ import { UserPassword } from '../interface';
 
 @Injectable()
 export class AdminPasswordService extends HttpService<
-  Required<Pick<User & { passwordCurrent: string }, UserPassword>>
+  Required<
+    Pick<
+      User & { passwordCurrent: string },
+      UserPassword | 'isPassword' | 'message'
+    >
+  >
 > {
   constructor(
     http: HttpClient,
-    public storageService: StorageService,
+    public override storageService: StorageService,
     private usersService: AdminUsersService
   ) {
     super(http, storageService);
@@ -23,12 +27,19 @@ export class AdminPasswordService extends HttpService<
   }
 
   private set setIsPassword(value: boolean) {
-    this.usersService.getUsers.isPassword = value;
-    this.usersService.setUsers = this.usersService.getUsers;
+    if (value && this.usersService.getUsers) {
+      this.usersService.getUsers.isPassword = value;
+      this.usersService.setUsers = this.usersService.getUsers;
+    }
   }
 
   public password(
-    user: Required<Pick<User & { passwordCurrent: string }, UserPassword>>
+    user: Required<
+      Pick<
+        User & { passwordCurrent: string },
+        UserPassword | 'isPassword' | 'message'
+      >
+    >
   ) {
     return this.patch(user, 'management/password').pipe(
       tap(
@@ -36,7 +47,7 @@ export class AdminPasswordService extends HttpService<
           user_: Required<
             Pick<
               User & { passwordCurrent: string },
-              UserPassword | 'isPassword'
+              UserPassword | 'isPassword' | 'message'
             >
           >
         ): boolean => (this.setIsPassword = user_?.isPassword)

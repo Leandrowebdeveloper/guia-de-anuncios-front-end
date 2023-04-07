@@ -1,5 +1,5 @@
 export interface InputName {
-  id: number;
+  id: number | null;
   firstName: Attributes;
   name: Attributes;
   title: Attributes;
@@ -7,7 +7,7 @@ export interface InputName {
   lastName: Attributes;
   email: Attributes;
   level: Attributes;
-  type: Attributes;
+  type: Attributes | undefined;
   period: Attributes;
   password: Attributes;
   passwordCurrent: Attributes;
@@ -29,9 +29,8 @@ export interface InputName {
   city: Attributes;
   response: Attributes;
   uf: Attributes;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   zip_code: Attributes;
-  _csrf: Attributes;
+  _csrf?: Attributes | null;
 }
 
 export interface Attributes {
@@ -45,9 +44,9 @@ export interface Attributes {
 }
 
 export interface Message {
-  invalid?: string;
-  empty?: string;
-  min?: string;
-  max?: string;
-  mustMatch?: string;
+  invalid?: string | null;
+  empty?: string | null;
+  min?: string | null;
+  max?: string | null;
+  mustMatch?: string | null;
 }

@@ -8,7 +8,7 @@ import { HelpsService } from 'src/app/services/helps/helps.service';
 import { ModalController } from '@ionic/angular';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
-import { MaskPipe } from 'src/app/utilities/pipe/mask/mask.pipe';
+import { MaskPipe } from 'src/app/pipe/mask/mask.pipe';
 import { ContactAnnouncementService } from './../service/contact.service';
 
 @Component({
@@ -23,14 +23,14 @@ export class AnnouncementFormContactComponent implements OnInit {
     route: '/contact',
     icon: 'cloud-upload',
     label: 'Salvar',
-    fill: false,
+
     aria: 'Salvar contatos.',
     title: 'Salvar contatos.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private $contact: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private $contact!: Subscription;
   constructor(
     private maskPipe: MaskPipe,
     private helpService: HelpsService,
@@ -71,9 +71,10 @@ export class AnnouncementFormContactComponent implements OnInit {
     event: FormGroup<any>,
     loading: Promise<HTMLIonLoadingElement>
   ): Subscription {
-    const data = this.contactService.filter(event.value) as Required<Contact>;
+    const data = this.contactService.filter(event.value);
     return (this.$contact = this.contactService.contact(data).subscribe({
-      next: (contact: Contact) => this.messsage(contact?.message, loading),
+      next: (contact: Contact) =>
+        contact?.message && this.messsage(contact?.message, loading),
       error: (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$contact),
     }));

@@ -12,8 +12,8 @@ export class CategoryAnnouncementService extends HttpService<{
   announcement: Announcement[];
 }> {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private adminAnnouncementService: AdminAnnouncementService
   ) {
     super(http, storageService);
@@ -22,7 +22,7 @@ export class CategoryAnnouncementService extends HttpService<{
 
   public order(
     announcement: Pick<Announcement, 'order' | '_csrf'>
-  ): Observable<Announcement | number[]> {
+  ): Observable<Announcement> {
     return this.adminAnnouncementService.order(announcement);
   }
 }

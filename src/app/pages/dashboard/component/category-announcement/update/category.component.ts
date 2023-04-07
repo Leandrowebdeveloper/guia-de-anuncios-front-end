@@ -10,20 +10,22 @@ import { Category } from 'src/app/interface';
   styleUrls: ['./category.component.scss'],
 })
 export class CategoryAnnouncementUpdateComponent {
-  @Input() category!: Category;
+  @Input() category!: Category | void;
 
   constructor(private modalController: ModalController) {}
 
   public async name(): Promise<void> {
-    const { _csrf, name, description, slug } = this.category;
-    const modal = await this.modalController.create({
-      component: FormCategoryUpdateComponent,
-      componentProps: {
-        action: 'name',
-        label: 'Editar',
-        category: { _csrf, name, description, slug },
-      },
-    });
-    return await modal.present();
+    if (this.category) {
+      const { _csrf, name, description, slug } = this.category;
+      const modal = await this.modalController.create({
+        component: FormCategoryUpdateComponent,
+        componentProps: {
+          action: 'name',
+          label: 'Editar',
+          category: { _csrf, name, description, slug },
+        },
+      });
+      return await modal.present();
+    }
   }
 }

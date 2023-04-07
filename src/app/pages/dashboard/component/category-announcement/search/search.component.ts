@@ -1,5 +1,11 @@
-import { EMPTY, Observable, Subject } from 'rxjs';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   SearchbarCustomEvent,
   NavController,
@@ -9,29 +15,51 @@ import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SearchCategoryAnnouncementService } from './service/search.service';
 import { FilterMenuCategoryComponent } from './filter/filter-menu.component';
+import { ModuleDarkService } from 'src/app/services/module-dark/module-dark.service';
 
 @Component({
   selector: 'app-search-category-component',
   templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
 })
-export class SearchCategoryComponent implements OnInit {
+export class SearchCategoryComponent implements OnInit, OnDestroy {
   @Output() search = new EventEmitter<SearchbarCustomEvent>();
   public search$ = new Observable<any[]>();
-  public show: boolean;
+  public show!: boolean;
   public error$ = new Subject<boolean>();
 
   public placeholder = 'Digite nome';
+
+  public isDark!: boolean;
+
+  private $isDark!: Subscription;
 
   constructor(
     private navCtrl: NavController,
     private router: Router,
     private searchCategoryAnnouncementService: SearchCategoryAnnouncementService,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private moduleDarkService: ModuleDarkService
   ) {}
+
+  ngOnDestroy(): void {
+    this.$isDark.unsubscribe();
+  }
 
   ngOnInit() {
     this.searchList();
+    this.getDark();
+    this.toggleDark();
+  }
+  private getDark() {
+    const dark = this.moduleDarkService.isDark();
+    if (dark) this.isDark = dark;
+  }
+
+  private toggleDark(): void {
+    this.$isDark = this.moduleDarkService
+      .toggleEvent()
+      .subscribe((dark: boolean) => (this.isDark = dark));
   }
 
   public research(search: any): void {
@@ -41,7 +69,7 @@ export class SearchCategoryComponent implements OnInit {
     return this.search.emit(search);
   }
 
-  public sendUrl(url: any): Promise<boolean> {
+  public sendUrl(url: any): Promise<boolean> | void {
     const URL = this.router.url.split('/');
     if (URL.includes('categorias')) {
       return this.navCtrl.navigateForward([

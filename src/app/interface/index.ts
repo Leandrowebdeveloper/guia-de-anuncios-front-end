@@ -8,7 +8,7 @@ export interface User {
   lastName: string;
   name: string;
   email: string;
-  plan: Plan;
+  plan?: Plan;
   password: string;
   isPassword: boolean;
   level: '1' | '2';
@@ -22,7 +22,7 @@ export interface User {
   blockade: boolean;
   passwordConfirmation?: string;
   stayConnected?: boolean;
-  image: Image;
+  image?: Image | null;
   activateAccount?: ActivateAccount;
   updatedAt: string;
   createdAt: string;
@@ -52,14 +52,12 @@ export interface RequisitionLimit {
 }
 
 export interface ActivateAccount {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   readonly userId: number;
   activation: boolean;
   message: string;
 }
 
 export interface Image {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   readonly userId: number;
   filename: string;
   url: string;
@@ -73,7 +71,7 @@ export interface Galery {
   url?: string;
   position?: number;
   message?: string;
-  order: number[];
+  order: (number | undefined)[];
   _csrf?: string;
 }
 
@@ -185,19 +183,21 @@ export interface Google {
   imageUrl: string;
 }
 export interface Category {
-  id?: number;
-  name?: string;
-  description?: string;
-  password?: string;
-  state?: boolean;
-  slug?: string;
-  position?: number;
-  updatedAt?: string;
-  createdAt?: string;
-  image?: Image;
-  message?: string;
-  _csrf?: string;
-  order?: number[];
+  id: number;
+  name: string;
+  description: string;
+  password: string;
+  state: boolean;
+  slug: string;
+  position: number;
+  updatedAt: string;
+  createdAt: string;
+  image: Required<
+    Pick<Image & { catAdId: number }, 'catAdId' | '_csrf' | 'filename' | 'url'>
+  >;
+  message: string;
+  _csrf: string;
+  order: (number | undefined)[];
   // announcement?: Announcement[];
   associationId?: number;
 }
@@ -205,22 +205,21 @@ export interface Category {
 
 export interface Address {
   id?: number;
-  announcementId: number;
-  allotment: string;
-  block: string;
-  complement: string;
-  district: string;
-  numberr: number;
-  street: string;
-  message?: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  zip_code: string | number;
-  _csrf?: string;
+  announcementId: number | null;
+  allotment: string | null;
+  block: string | null;
+  complement: string | null;
+  district: string | null;
+  numberr: number | null;
+  street: string | null;
+  message?: string | null;
+  zip_code: string | number | null;
+  _csrf?: string | null;
 }
 export interface Citie {
   id?: number;
   announcementId?: number;
-  city: string;
+  city: string | null;
   readonly uf: 'GO';
   message?: string;
   _csrf?: string;
@@ -229,9 +228,9 @@ export interface Citie {
 export interface Contact {
   id?: number;
   announcementId: number;
-  mobilePhone: number;
-  phone: number;
-  whatsapp: number;
+  mobilePhone: number | null;
+  phone: number | null;
+  whatsapp: number | null;
   message?: string;
   _csrf?: string;
 }
@@ -277,7 +276,7 @@ export interface Announcement {
   userId?: number;
   title?: string;
   description?: string;
-  order?: number[];
+  order?: (number | undefined)[];
   position?: number;
   blockade?: boolean;
   slug?: string;
@@ -288,13 +287,13 @@ export interface Announcement {
   deletedAt?: string;
   _csrf?: string;
   level?: '1' | '2' | '3';
-  coordinate?: Coordinate;
-  workDays?: WorkDays;
-  socialNetwork?: SocialNetwork;
+  coordinate?: Coordinate | null;
+  workDays?: WorkDays | null;
+  socialNetwork?: SocialNetwork | null;
   like?: Like;
-  contact?: Contact;
-  address?: Address;
-  citie?: Citie;
+  contact?: Contact | null;
+  address?: Address | null;
+  citie?: Citie | null;
   galery?: Galery[];
   categoryAnnouncement?: CategoryAnnouncement;
   announcement?: { user: User };
@@ -307,8 +306,8 @@ export interface Announcement {
 
 export interface CategoryAnnouncement {
   id: number;
-  announcementId: number;
-  catAdId: number;
+  announcementId?: number;
+  catAdId?: number;
   _csrf?: string;
   message?: string;
   category?: Category;
@@ -360,7 +359,7 @@ export interface Plan {
 }
 
 export interface Messages {
-  id: number;
+  id?: number;
   userId: number;
   announcementId: number;
   description: string;

@@ -13,8 +13,8 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
 export class CategoryAnnouncementService extends HttpService<CategoryAnnouncement> {
   private _categoryEvent = new EventEmitter<CategoryAnnouncement>();
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private managementAnnouncementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
@@ -22,12 +22,10 @@ export class CategoryAnnouncementService extends HttpService<CategoryAnnouncemen
   }
 
   public get getCategoryEvent(): Observable<CategoryAnnouncement> {
-    // eslint-disable-next-line no-underscore-dangle
     return this._categoryEvent.asObservable();
   }
 
   public set categoryEvent(value: CategoryAnnouncement) {
-    // eslint-disable-next-line no-underscore-dangle
     this._categoryEvent.emit(value);
   }
 
@@ -37,7 +35,7 @@ export class CategoryAnnouncementService extends HttpService<CategoryAnnouncemen
 
   public category(
     category: Required<CategoryAnnouncement>
-  ): Observable<CategoryAnnouncement | number[]> {
+  ): Observable<CategoryAnnouncement> {
     if (category.id) {
       return this.patch(category).pipe(
         tap((announcement_: CategoryAnnouncement) => {

@@ -6,8 +6,8 @@ const config: CapacitorConfig = {
   webDir: 'www',
   bundledWebRuntime: false,
   server: {
-    //url: 'https://localhost:8100',
-    url: 'http://192.168.1.15:8100',
+    // url: 'https://localhost:8100',
+    url: 'https://6def-2804-22b8-4015-500-5558-de4a-8ca0-342.sa.ngrok.io/',
     cleartext: true,
   },
   plugins: {

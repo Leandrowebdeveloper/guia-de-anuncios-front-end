@@ -34,34 +34,34 @@ import { SearchCategoryAnnouncementService } from 'src/app/pages/dashboard/compo
   ],
 })
 export class EnabledItemComponent implements OnInit, OnDestroy {
-  @ViewChild(IonReorderGroup) reorderGroup: IonReorderGroup;
+  @ViewChild(IonReorderGroup) reorderGroup!: IonReorderGroup;
   @Output() setError = new EventEmitter<boolean>(false);
   @Output() isEmpty = new EventEmitter<boolean>(false);
   @Output() sendOrder = new EventEmitter<boolean>(false);
   @Input() isOrder!: boolean;
-  public category$: Observable<Category[]>;
-  public category: Category[];
+  public category$!: Observable<Category[] | void>;
+  public category!: Category[];
   public error = new Subject<boolean>();
   public endListCategory = true;
   public ln: number | undefined;
 
   public fab = false;
-  public menssage: boolean;
+  public menssage!: boolean;
 
   public sizeSkeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   private limit = 12;
   private offset = 0;
   private page = 1;
-  private searchBy: object;
+  private searchBy!: { [key: string]: any };
 
-  private $category: Subscription;
-  private $saveSorting: Subscription;
-  private $update: Subscription;
-  private $delete: Subscription;
-  private $order: Subscription;
-  private $search: Subscription;
-  private $searchBy: Subscription;
+  private $category!: Subscription;
+  private $saveSorting!: Subscription;
+  private $update!: Subscription;
+  private $delete!: Subscription;
+  private $order!: Subscription;
+  private $search!: Subscription;
+  private $searchBy!: Subscription;
   constructor(
     private categoryService: CategoryService,
     private loadingService: LoadingService,
@@ -72,7 +72,7 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
     private plt: Platform
   ) {}
 
-  private get getSearchBy(): object {
+  private get getSearchBy(): { [key: string]: any } {
     return this.searchBy;
   }
 
@@ -127,20 +127,26 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
 
   public saveOrder(): void {
     const loading = this.loadingService.show('Ordenar categoria...');
-    const result: number[] = this.category.map((item: Category) => item.id);
-    if (result.length > 0) {
-      const category: Category = {
+    const result: (number | undefined)[] = this.category.map(
+      (item: Category) => item.id
+    );
+    if (result && result.length > 0) {
+      const category = {
         order: result,
-        // eslint-disable-next-line no-underscore-dangle
         _csrf: this.category[0]?._csrf,
-      };
+      } as Category;
       this.$order = this.categoryService.order(category).subscribe({
-        next: (category_: Category) => {
+        next: (category_: Category): void => {
           setTimeout(() => {
             this.isOrder = false;
             this.sendOrder.emit(false);
           }, 3500);
-          this.messageService.success(category_?.message, loading, this.$order);
+          if (category_?.message)
+            this.messageService.success(
+              category_?.message,
+              loading,
+              this.$order
+            );
         },
         error: (error: HttpErrorResponse) =>
           this.messageService.error(error, loading, this.$order),
@@ -163,9 +169,9 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public search(event: SearchbarCustomEvent): Subscription {
-    if (event?.target?.value.length >= 3) {
-      const data = this.setDataSearch(event?.target?.value);
+  public search(event: SearchbarCustomEvent): Subscription | void {
+    if (event?.target?.value && event?.target?.value.length >= 3) {
+      const data = this.setDataSearch(event.target.value);
       return (this.$search = this.categoryService.searchBy(data).subscribe({
         next: (category: Category[]) => {
           this.searchService.search = category;
@@ -176,36 +182,35 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
   }
 
   private orderBy(search: Search | 'position'): void {
-    if (!this.category) {
-      return;
-    }
-    switch (search) {
-      case 'name':
-        this.category.sort((a, b) => a?.name < b?.name && -1);
-        break;
-      case 'createdAt':
-        this.category.sort((a, b) => a?.createdAt > b?.createdAt && -1);
-        break;
-      case 'updatedAt':
-        this.category.sort((a, b) => a?.updatedAt > b?.updatedAt && -1);
-        break;
-      case 'state':
-        this.category.sort((a, b) => a?.state > b?.state && -1);
-        break;
-      case 'position':
-        this.category.sort((a, b) => a?.position < b?.position && -1);
-        break;
+    if (this.category && search) {
+      switch (search) {
+        case 'name':
+          this.category.sort((a, b): any => a?.name < b?.name && -1);
+          break;
+        case 'createdAt':
+          this.category.sort((a, b): any => a?.createdAt > b?.createdAt && -1);
+          break;
+        case 'updatedAt':
+          this.category.sort((a, b): any => a?.updatedAt > b?.updatedAt && -1);
+          break;
+        case 'state':
+          this.category.sort((a, b): any => a?.state > b?.state && -1);
+          break;
+        case 'position':
+          this.category.sort((a, b): any => a?.position < b?.position && -1);
+          break;
+      }
     }
   }
 
   private initSearchBy(): void {
     this.$searchBy = this.searchService.getSearchCategoryBy.subscribe({
-      next: (filter: SearchCategory | 'name') => {
+      next: (filter: void | SearchCategory) => {
         if (filter === 'name') {
           this.setSearchBy = filter;
         } else {
           this.setSearchBy = 'name';
-          this.orderBy(filter);
+          filter && this.orderBy(filter);
         }
       },
     });
@@ -277,26 +282,26 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
 
   private delete(): void {
     this.$delete = this.categoryService.deleted.subscribe({
-      next: (category: Category) => {
+      next: (category: Category): Promise<boolean> | void => {
         if (category && this.category) {
-          const result: Category[] = this.category.splice(
-            this.getIndexCategoryCurrent(category),
-            1
-          );
-          this.isEmpty.emit(this.category?.length > 0);
-          if (result.length > 0) {
-            return this.navCtrl.navigateBack([
-              '/painel-de-controle',
-              'admin',
-              'categorias',
-            ]);
+          const i = this.getIndexCategoryCurrent(category);
+          if (i) {
+            const result: Category[] = this.category.splice(i, 1);
+            this.isEmpty.emit(this.category?.length > 0);
+            if (result.length > 0) {
+              return this.navCtrl.navigateBack([
+                '/painel-de-controle',
+                'admin',
+                'categorias',
+              ]);
+            }
           }
         }
       },
     });
   }
 
-  private getIndexCategoryCurrent(category: Category): number {
+  private getIndexCategoryCurrent(category: Category): number | void {
     if (this.category) {
       const index = this.category.findIndex(
         (item: Category) => item?.id === category?.id
@@ -324,7 +329,7 @@ export class EnabledItemComponent implements OnInit, OnDestroy {
 
   private update(): Subscription {
     return (this.$update = this.categoryService.categoryObservable.subscribe({
-      next: (category: Required<Category>) => {
+      next: (category: Category | void) => {
         if (category && this.category) {
           const i = this.category.findIndex(
             (category_: Pick<Category, 'id'>) => category_?.id === category?.id

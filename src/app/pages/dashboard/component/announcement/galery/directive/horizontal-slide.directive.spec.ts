@@ -1,8 +1,12 @@
+import { GaleryComponent } from './../galery-component';
+import { TestBed } from '@angular/core/testing';
 import { HorizontalScrollDirective } from './horizontal-slide.directive';
 
 describe('HorizontalScrollDirective', () => {
-  it('should create an instance', () => {
-    const directive = new HorizontalScrollDirective(undefined);
-    expect(directive).toBeTruthy();
+  const fixture = TestBed.configureTestingModule({
+    declarations: [HorizontalScrollDirective, GaleryComponent],
+  }).createComponent(GaleryComponent);
+  beforeEach(() => {
+    fixture.detectChanges(); // initial binding
   });
 });

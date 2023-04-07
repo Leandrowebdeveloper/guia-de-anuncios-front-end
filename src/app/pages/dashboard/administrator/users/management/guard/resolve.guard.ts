@@ -7,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AdminUsersService } from '../../services/admin-users.service';
 
 @Injectable()
-export class UserManagementResolver implements Resolve<User> {
+export class UserManagementResolver {
   constructor(
     private router: Router,
     private usersService: AdminUsersService
@@ -16,7 +16,7 @@ export class UserManagementResolver implements Resolve<User> {
   resolve(route: ActivatedRouteSnapshot): Observable<User> {
     const { id } = route.params;
     return this.usersService.requirement(`management/${id}`).pipe(
-      tap((user: User) => delete user.password),
+      tap((user: User) => (user.password = '')),
       catchError((error: HttpErrorResponse): Observable<never> => {
         this.router.navigate(['/erro']);
         return EMPTY;

@@ -3,14 +3,13 @@ import { AttrButton } from 'src/app/pages/public/system-access/components/button
 
 @Injectable()
 export class CategoryUtilities {
-  public setButton(action: string): AttrButton {
+  public setButton(action: string): AttrButton | undefined {
     switch (action) {
       case 'register':
         return {
           route: '/category',
           icon: 'create',
           label: 'Cadastrar',
-          fill: false,
           aria: 'Cadastrar categoria.',
           title: 'Cadastrar categoria.',
         };
@@ -19,7 +18,6 @@ export class CategoryUtilities {
           route: '/name',
           icon: 'cloud-upload',
           label: 'Salvar',
-          fill: false,
           aria: 'Salvar nome e descrição.',
           title: 'Salvar nome e descrição.',
         };
@@ -28,7 +26,6 @@ export class CategoryUtilities {
           route: '/destroy',
           icon: 'trash',
           label: 'Excluir categoria',
-          fill: false,
           aria: 'Excluir categoria.',
           title: 'Excluir categoria.',
         };
@@ -37,7 +34,6 @@ export class CategoryUtilities {
           route: '/destroy',
           icon: 'trash',
           label: 'Excluir categoria',
-          fill: false,
           aria: 'Excluir categoria.',
           title: 'Excluir categoria.',
         };
@@ -46,10 +42,11 @@ export class CategoryUtilities {
           route: '/restore',
           icon: 'refresh',
           label: 'Restaurar categoria',
-          fill: false,
           aria: 'Restaurar categoria.',
           title: 'Restaurar categoria.',
         };
+      default:
+        return undefined;
     }
   }
 }

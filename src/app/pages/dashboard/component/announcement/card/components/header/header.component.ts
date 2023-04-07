@@ -17,5 +17,8 @@ export class CardHeaderComponent {
     | 'plan'
     | 'workDays'
     | 'blockade'
+    | 'address'
+    | 'contact'
+    | 'citie'
   >;
 }

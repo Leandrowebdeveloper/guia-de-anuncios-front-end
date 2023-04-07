@@ -24,33 +24,33 @@ import { SearchCategoryAnnouncementService } from 'src/app/pages/dashboard/compo
   ],
 })
 export class DeletedItemComponent implements OnInit, OnDestroy {
-  public category$: Observable<Category[]>;
-  public category: Category[];
+  public category$!: Observable<Category[]>;
+  public category!: Category[];
   public error = new Subject<boolean>();
   public endListCategory = true;
-  public toggleList: boolean;
+  public toggleList!: boolean;
 
   public fab = false;
 
   public sizeSkeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  public toggleListCategory: boolean;
+  public toggleListCategory!: boolean;
 
   public isOrder = false;
   public sendOrder = false;
-  public menssage: boolean;
+  public menssage!: boolean;
 
   private limit = 12;
   private offset = 0;
   private page = 1;
 
-  private searchBy: object;
+  private searchBy!: { [key: string]: any };
 
-  private $category: Subscription;
-  private $drop: Subscription;
-  private $delete: Subscription;
-  private $search: Subscription;
-  private $searchBy: Subscription;
+  private $category!: Subscription;
+  private $drop!: Subscription;
+  private $delete!: Subscription;
+  private $search!: Subscription;
+  private $searchBy!: Subscription;
 
   constructor(
     private route: Router,
@@ -62,7 +62,7 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
     private searchService: SearchCategoryAnnouncementService
   ) {}
 
-  private get getSearchBy(): object {
+  private get getSearchBy(): { [key: string]: any } {
     return this.searchBy;
   }
 
@@ -113,8 +113,8 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public search(event: SearchbarCustomEvent): Subscription {
-    if (event?.target?.value.length >= 3) {
+  public search(event: SearchbarCustomEvent): Subscription | void {
+    if (event?.target?.value && event?.target?.value.length >= 3) {
       const data = this.setDataSearch(event?.target?.value);
       return (this.$search = this.categoryService.searchBy(data).subscribe({
         next: (category: Category[]) => {
@@ -142,13 +142,11 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
           text: 'OK',
           role: 'confirm',
           handler: (event) => {
-            const data: Required<Pick<Category, 'password' | 'id' | '_csrf'>> =
-              {
-                ...event,
-                id: category?.id,
-                // eslint-disable-next-line no-underscore-dangle
-                _csrf: category?._csrf,
-              };
+            const data: Category = {
+              ...event,
+              id: category?.id,
+              _csrf: category?._csrf,
+            };
             return this.restored(data, index);
           },
         },
@@ -184,13 +182,11 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
           text: 'OK',
           role: 'confirm',
           handler: (event) => {
-            const data: Required<Pick<Category, 'password' | 'id' | '_csrf'>> =
-              {
-                ...event,
-                id: category?.id,
-                // eslint-disable-next-line no-underscore-dangle
-                _csrf: category?._csrf,
-              };
+            const data: Category = {
+              ...event,
+              id: category?.id,
+              _csrf: category?._csrf,
+            };
             return this.delete(data, index);
           },
         },
@@ -222,19 +218,19 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
 
   private initSearchBy(): void {
     this.$searchBy = this.searchService.getSearchCategoryBy.subscribe({
-      next: (filter: SearchCategory | 'name') => {
+      next: (filter: void | SearchCategory) => {
         if (filter === 'name') {
           this.setSearchBy = filter;
         } else {
           this.setSearchBy = 'name';
-          this.orderBy(filter);
+          if (filter) this.orderBy(filter);
         }
       },
     });
   }
 
-  private setDataSearch(value: string): object {
-    let data: object;
+  private setDataSearch(value: string): { [key: string]: any } {
+    let data: { [key: string]: any };
     if (this.getSearchBy) {
       this.searchBuild(value);
       data = this.getSearchBy;
@@ -295,16 +291,18 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
 
   private update(): Subscription {
     return (this.$category = this.categoryService.categoryObservable.subscribe({
-      next: (category: Category) => {
+      next: (category: Category | void) => {
         if (category) {
           const i = this.getIndexCategoryCurrent(category);
-          this.switchBetweenAddAndUpdate(category, i);
+          if (i) this.switchBetweenAddAndUpdate(category, i);
         }
       },
     }));
   }
 
-  private getIndexCategoryCurrent(category: Pick<Category, 'id'>): number {
+  private getIndexCategoryCurrent(
+    category: Pick<Category, 'id'>
+  ): number | void {
     if (this.category) {
       const index = this.category.findIndex(
         (item: Pick<Category, 'id'>) => item?.id === category?.id
@@ -336,10 +334,7 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
     });
   }
 
-  private delete(
-    category: Required<Pick<Category, '_csrf' | 'id' | 'password'>>,
-    index: number
-  ): Subscription {
+  private delete(category: Category, index: number): Subscription {
     const loading = this.loadingService.show('Excluindo categoria...');
     return (this.$delete = this.categoryService.dropd(category).subscribe({
       next: (category_: Category) => this.messsage(category_, index, loading),
@@ -348,10 +343,7 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private restored(
-    data: Required<Pick<Category, 'id' | '_csrf' | 'password'>>,
-    index: number
-  ): Subscription {
+  private restored(data: Category, index: number): Subscription {
     const loading = this.loadingService.show('Restaurar categoria...');
     return (this.$delete = this.categoryService.restore(data).subscribe({
       next: (category_: Category) => this.messsage(category_, index, loading),
@@ -365,7 +357,7 @@ export class DeletedItemComponent implements OnInit, OnDestroy {
     index: number,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
-    this.category.splice(index, 1);
+    setTimeout(() => this.category.splice(index, 1), 3500);
     return this.messageService.success(
       category?.message,
       loading,

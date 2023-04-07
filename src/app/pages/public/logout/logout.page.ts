@@ -9,7 +9,7 @@ import { LogoutService } from './service/logout.service';
   styleUrls: ['./logout.page.scss'],
 })
 export class LogoutPage {
-  private logout: Subscription;
+  private logout!: Subscription;
   constructor(
     private navCtrl: NavController,
     private logoutService: LogoutService

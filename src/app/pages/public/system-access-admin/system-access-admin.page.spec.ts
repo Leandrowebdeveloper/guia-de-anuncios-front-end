@@ -6,20 +6,18 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { SystemAccessAdminPage } from './system-access-admin.page';
-import { LoginAdminService } from './services/login-admin/login-admin.service';
-import { SystemAccessAdminService } from './services/system-access-admin.service';
+import { LoginAdminService } from './services/login-admin.service';
 
 import { FormComponentModule } from 'src/app/components/form/form.module';
-import { SystemAccessAdminResolver } from './guard/resolve.guard';
+import { LoginAdminResolver } from './guard/resolve.guard';
 
 describe('SystemAccessAdminPage', () => {
   let component: SystemAccessAdminPage;
   let fixture: ComponentFixture<SystemAccessAdminPage>;
 
-  let systemAccessService: SystemAccessAdminService;
   let loginService: LoginAdminService;
   let authAnnouncementService: AuthAnnouncementService;
-  let guard: SystemAccessAdminResolver;
+  let guard: LoginAdminResolver;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -32,9 +30,8 @@ describe('SystemAccessAdminPage', () => {
       ],
       providers: [
         Storage,
-        SystemAccessAdminResolver,
+        LoginAdminResolver,
         LoginAdminService,
-        SystemAccessAdminService,
         AuthAnnouncementService,
       ],
     }).compileComponents();
@@ -46,9 +43,8 @@ describe('SystemAccessAdminPage', () => {
 
   beforeEach(() => {
     loginService = TestBed.inject(LoginAdminService);
-    systemAccessService = TestBed.inject(SystemAccessAdminService);
     authAnnouncementService = TestBed.inject(AuthAnnouncementService);
-    guard = TestBed.inject(SystemAccessAdminResolver);
+    guard = TestBed.inject(LoginAdminResolver);
   });
 
   it('should create component', () => {
@@ -61,10 +57,6 @@ describe('SystemAccessAdminPage', () => {
 
   it('loginService', () => {
     expect(loginService).toBeTruthy();
-  });
-
-  it('systemAccessService', () => {
-    expect(SystemAccessAdminService).toBeTruthy();
   });
 
   it('guard', () => {

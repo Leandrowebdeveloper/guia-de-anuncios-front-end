@@ -1,5 +1,12 @@
-import { EMPTY, Observable, Subject } from 'rxjs';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ModuleDarkService } from 'src/app/services/module-dark/module-dark.service';
+import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   SearchbarCustomEvent,
   NavController,
@@ -16,26 +23,47 @@ import { Search } from 'src/app/interface';
   templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
 })
-export class SearchUserComponent implements OnInit {
+export class SearchUserComponent implements OnInit, OnDestroy {
   @Output() search = new EventEmitter<SearchbarCustomEvent>();
   public search$ = new Observable<any[]>();
-  public triggerSearch$ = new Observable<Search>(undefined);
-  public show: boolean;
+  public triggerSearch$ = new Observable<Search | void>(undefined);
+  public show!: boolean;
   public error$ = new Subject<boolean>();
 
   public placeholder = 'Digite nome';
-  public filterLabel: string;
+  public filterLabel!: string;
+
+  public isDark!: boolean;
+  private $isDark!: Subscription;
 
   constructor(
     private navCtrl: NavController,
     private router: Router,
     private searchUserService: SearchUserService,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private moduleDarkService: ModuleDarkService
   ) {}
+
+  ngOnDestroy(): void {
+    this.$isDark.unsubscribe();
+  }
 
   ngOnInit() {
     this.searchList();
     this.setFilterLabelAndPlaceholder();
+    this.getDark();
+    this.loadDark();
+  }
+
+  public getDark(): void {
+    const dark = this.moduleDarkService.isDark();
+    if (dark) this.isDark = dark;
+  }
+
+  public loadDark(): void {
+    this.$isDark = this.moduleDarkService
+      .toggleEvent()
+      .subscribe((dark: boolean) => (this.isDark = dark));
   }
 
   public research(search: any): void {
@@ -45,7 +73,7 @@ export class SearchUserComponent implements OnInit {
     return this.search.emit(search);
   }
 
-  public sendUrl(url: any): Promise<boolean> {
+  public sendUrl(url: any): Promise<boolean> | null {
     const URL = this.router.url.split('/');
     if (URL.includes('usuarios')) {
       return this.navCtrl.navigateForward([
@@ -55,6 +83,7 @@ export class SearchUserComponent implements OnInit {
         url?.slug,
       ]);
     }
+    return null;
   }
 
   public async menuShow(ev: any): Promise<void> {
@@ -84,7 +113,7 @@ export class SearchUserComponent implements OnInit {
   private setFilterLabelAndPlaceholder(): void {
     let count = 0;
     this.triggerSearch$ = this.searchUserService.getSearchBy.pipe(
-      tap((filter: Search) => {
+      tap((filter: Search | void) => {
         switch (filter) {
           case 'firstName':
             this.placeholder = 'Digite nome';

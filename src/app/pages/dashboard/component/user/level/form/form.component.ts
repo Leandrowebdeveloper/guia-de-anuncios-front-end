@@ -23,14 +23,14 @@ export class FormUserLevelComponent implements OnInit {
     route: '/level',
     icon: 'cloud-upload',
     label: 'Salvar',
-    fill: false,
+
     aria: 'Alterar nivel do usuário.',
     title: 'Alterar nivel do usuário.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private $level: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private $level!: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
@@ -56,15 +56,16 @@ export class FormUserLevelComponent implements OnInit {
     const loading = this.loadingService.show('Salvando nivel...');
     event.value.slug = this.user?.slug;
     return (this.$level = this.userLevelService.level(event.value).subscribe({
-      next: (user: Required<Pick<User, 'message' | 'level'>>) =>
-        this.messsage(user, loading),
+      next: (
+        user: Pick<User, '_csrf' | 'slug' | 'password' | 'level' | 'message'>
+      ) => this.messsage(user, loading),
       error: (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$level),
     }));
   }
 
   private messsage(
-    user: Required<Pick<User, 'message'>>,
+    user: Pick<User, 'message'>,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);

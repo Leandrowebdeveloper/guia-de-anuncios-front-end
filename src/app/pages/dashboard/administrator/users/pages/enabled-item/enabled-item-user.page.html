@@ -2,7 +2,7 @@
   <!-- Campo de pesquiza -->
   <ion-col size="12" class="ion-no-padding">
     <app-user-search-component
-      *ngIf="users?.length > 10"
+      *ngIf="users | isUsers:10"
       (search)="search($event)"
     ></app-user-search-component>
   </ion-col>
@@ -20,7 +20,7 @@
     <ion-card *ngIf="!endListUser">
       <ion-text color="primary" class="ion-text-center">
         <p>FIM</p>
-        <p *ngIf="users">{{ users?.length }} usuários</p>
+        <p *ngIf="users | isUsers">{{ users.length }} usuários</p>
       </ion-text>
     </ion-card>
 

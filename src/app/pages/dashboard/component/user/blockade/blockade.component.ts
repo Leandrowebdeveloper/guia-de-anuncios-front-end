@@ -10,26 +10,28 @@ import { UserBlockade } from './interface';
   styleUrls: ['./blockade.component.scss'],
 })
 export class UserBlockadeComponent {
-  @Input() user!: Required<Pick<User, UserBlockade>>;
+  @Input() user!: Pick<User, UserBlockade> | void;
   @Input() isAuth!: boolean;
   constructor(private modalController: ModalController) {}
 
   public async blockade(): Promise<void> {
-    const { _csrf, slug, blockade, messages } = this.user;
-    const modal = await this.modalController.create({
-      component: FormUserBlockadeComponent,
-      componentProps: {
-        isAuth: this.isAuth,
-        action: 'blockade',
-        label: 'Bloquear usuário',
-        user: {
-          _csrf,
-          slug,
-          blockade,
-          messages,
+    if (this.user) {
+      const { _csrf, slug, blockade, messages } = this.user;
+      const modal = await this.modalController.create({
+        component: FormUserBlockadeComponent,
+        componentProps: {
+          isAuth: this.isAuth,
+          action: 'blockade',
+          label: 'Bloquear usuário',
+          user: {
+            _csrf,
+            slug,
+            blockade,
+            messages,
+          },
         },
-      },
-    });
-    return await modal.present();
+      });
+      return await modal.present();
+    }
   }
 }

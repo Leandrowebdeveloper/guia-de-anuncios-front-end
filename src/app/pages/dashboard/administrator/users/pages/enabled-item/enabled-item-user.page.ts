@@ -31,26 +31,26 @@ export type EnabledItemUser =
   styleUrls: ['./enabled-item-user.page.scss', '../../users.page.scss'],
 })
 export class EnabledItemUserPage implements OnInit, OnDestroy {
-  public users$: Observable<Pick<User, EnabledItemUser>[]>;
-  public users: Pick<User, EnabledItemUser>[];
+  public users$!: Observable<Pick<User, EnabledItemUser>[]>;
+  public users!: Pick<User, EnabledItemUser>[];
   public error = new Subject<boolean>();
   public endListUser = true;
 
   public sizeSkeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  public menssage: boolean;
-  public isMobile: boolean;
+  public menssage!: boolean;
+  public isMobile!: boolean;
 
-  private $users: Subscription;
-  private $search: Subscription;
-  private $searchBy: Subscription;
-  private $update: Subscription;
-  private $delete: Subscription;
+  private $users!: Subscription;
+  private $search!: Subscription;
+  private $searchBy!: Subscription;
+  private $update!: Subscription;
+  private $delete!: Subscription;
 
   private limit = 12;
   private offset = 0;
   private page = 1;
-  private searchBy: object;
+  private searchBy!: { [key: string]: any };
 
   constructor(
     private adminUsersService: AdminUsersService,
@@ -59,7 +59,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
     private plt: Platform
   ) {}
 
-  private get getSearchBy(): object {
+  private get getSearchBy(): { [key: string]: any } {
     return this.searchBy;
   }
 
@@ -95,8 +95,8 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   }
 
   /************************************************************************************ */
-  public search(event: SearchbarCustomEvent): Subscription {
-    if (event?.target?.value.length >= 3) {
+  public search(event: SearchbarCustomEvent): Subscription | void {
+    if (event?.target?.value && event?.target?.value.length >= 3) {
       const data = this.setDataSearch(event?.target?.value);
       return (this.$search = this.adminUsersService.searchBy(data).subscribe({
         next: (user: Pick<User, EnabledItemUser>[]) => {
@@ -127,7 +127,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
 
   private initSearchBy(): void {
     this.$searchBy = this.searchUserService.getSearchBy.subscribe({
-      next: (filter: Search) => {
+      next: (filter: Search | void) => {
         if (
           filter === 'firstName' ||
           filter === 'lastName' ||
@@ -136,7 +136,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
           this.setSearchBy = filter;
         } else {
           this.setSearchBy = 'firstName';
-          this.orderBy(filter);
+          if (filter) this.orderBy(filter);
         }
       },
     });
@@ -203,7 +203,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   }
 
   private setMoreData(user: Pick<User, EnabledItemUser>[]): void {
-    return user.forEach((item: User) => this.users.push(item));
+    return user.forEach((item) => this.users.push(item));
   }
 
   private delete(): Subscription {
@@ -221,7 +221,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
 
   private update(): void {
     this.$update = this.adminUsersService.userObservable.subscribe({
-      next: (user: User) => {
+      next: (user: User | void) => {
         if (user && this.users?.length > 0) {
           this.setUser(user);
         }
@@ -230,7 +230,7 @@ export class EnabledItemUserPage implements OnInit, OnDestroy {
   }
 
   private setUser(user: User) {
-    const i = this.users.findIndex((item: User) => item?.id === user?.id);
+    const i = this.users.findIndex((item) => item?.id === user?.id);
     const response: Pick<User, EnabledItemUser> = this.filter(user);
     this.users.splice(i, 1, response);
   }

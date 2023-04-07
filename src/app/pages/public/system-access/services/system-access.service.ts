@@ -6,10 +6,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from 'src/app/interface';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { LoginService } from './login/service';
+import { LoginService } from './login/login.service';
 import { RecoverService } from './recover/service';
 import { RegisterService } from './register/service';
-import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 
 @Injectable()
@@ -37,7 +36,7 @@ export class SystemAccessService {
   }
 
   public sendLoginData(user: User): Observable<User> {
-    this.setStayConnected(user.stayConnected);
+    this.setStayConnected(user?.stayConnected);
     return this.loginService.create(user);
   }
 
@@ -45,8 +44,10 @@ export class SystemAccessService {
     return this.registerService.register(user);
   }
 
-  public setStayConnected(value: boolean) {
-    this.loginService.stayConnected = value;
+  public setStayConnected(value: boolean | undefined): void {
+    if (value) {
+      this.loginService.stayConnected = value;
+    }
   }
 
   /********************************************************
@@ -61,7 +62,7 @@ export class SystemAccessService {
     return this.messageService.error(error, loading, subscribe);
   }
 
-  public async goToUserPage(): Promise<number> {
+  public async goToUserPage(): Promise<number | undefined> {
     switch (this.activeRoute) {
       case 'login':
         return this.authRoute();
@@ -69,6 +70,8 @@ export class SystemAccessService {
         return this.recoverService.goToLoginPage();
       case 'register':
         return this.registerService.goToLoginPage();
+      default:
+        return undefined;
     }
   }
 

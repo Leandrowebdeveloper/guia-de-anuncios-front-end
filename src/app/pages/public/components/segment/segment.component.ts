@@ -11,7 +11,7 @@ import { ToastService } from 'src/app/utilities/toast/toast.service';
 })
 export class SegmentComponent implements OnInit {
   @Input() announcement!: Pick<Announcement, 'title'>;
-  public isSupportShare: boolean;
+  public isSupportShare!: boolean;
 
   constructor(private toastService: ToastService) {}
 
@@ -19,7 +19,9 @@ export class SegmentComponent implements OnInit {
     this.canShare();
   }
 
-  public async share(announcement: Announcement) {
+  public setLike() {}
+
+  public async share(announcement: Pick<Announcement, 'title'>) {
     try {
       if (this.isSupportShare) {
         await Share.share({

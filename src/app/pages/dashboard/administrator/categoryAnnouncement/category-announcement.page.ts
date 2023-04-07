@@ -9,13 +9,13 @@ import { CategoryService } from './services/category.service';
   styleUrls: ['category-announcement.page.scss', '../users/users.page.scss'],
 })
 export class CategoryPage {
-  @ViewChild(IonContent, { static: true }) content: IonContent;
+  @ViewChild(IonContent, { static: true }) content!: IonContent;
   public isOrder = false;
-  public sendOrder: boolean;
-  public saveSorting: boolean;
-  public toggleList: boolean;
-  public error: boolean;
-  public empty: boolean;
+  public sendOrder!: boolean;
+  public saveSorting!: boolean;
+  public toggleList!: boolean;
+  public error!: boolean;
+  public empty!: boolean;
 
   public fab = false;
 

@@ -6,10 +6,10 @@ import { Category } from 'src/app/interface';
   providedIn: 'root',
 })
 export class HomeService {
-  private category = new BehaviorSubject<Category[]>(undefined);
+  private category = new BehaviorSubject<Category[]>([]);
 
   public get getCategories(): Category[] {
-    return this.category.value;
+    return this.category?.value;
   }
 
   public set setCategories(value: Category[]) {

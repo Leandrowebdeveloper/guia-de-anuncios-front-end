@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   User,
   Category,
@@ -6,9 +6,9 @@ import {
   AnnouncementRoute,
   Galery,
 } from 'src/app/interface/index';
-import { NavController } from '@ionic/angular';
+import { NavController, IonContent } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ManagementAnnouncementService } from './service/management.service';
 import { GaleryAnnouncementService } from '../../../component/announcement/galery/service/galery.service';
@@ -19,17 +19,17 @@ import { GaleryAnnouncementService } from '../../../component/announcement/galer
   styleUrls: ['./announcement.page.scss'],
 })
 export class AnnouncementPage implements OnInit, OnDestroy {
-  public announcement$: Observable<Announcement>;
-  public user$: Observable<User>;
-  public category$: Observable<Category[]>;
+  @ViewChild(IonContent) content!: IonContent;
+  public announcement$!: Observable<Announcement | void>;
+  public user$!: Observable<User | void>;
+  public category$!: Observable<Category[]>;
   public isAnnouncement = true;
-  public isRoute: AnnouncementRoute;
-  public hasHeader: boolean;
-  public csrf: string;
+  public isRoute!: AnnouncementRoute | null;
+  public hasHeader!: boolean;
+  public csrf!: string;
 
-  private $updateGalery: Subscription;
+  private $updateGalery!: Subscription;
   constructor(
-    private activatedRoute: ActivatedRoute,
     private managementAnnouncementService: ManagementAnnouncementService,
     private authService: AuthService,
     private navCtrl: NavController,
@@ -44,8 +44,7 @@ export class AnnouncementPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.toggleRoute();
     this.getUser();
-    this.getAnnouncement();
-    this.startAnnouncement();
+    this.init();
     this.updateGalery();
   }
 
@@ -64,12 +63,7 @@ export class AnnouncementPage implements OnInit, OnDestroy {
     this.navCtrl.back();
   }
 
-  private getAnnouncement(): void {
-    const { announcement } = this.activatedRoute.snapshot.data;
-    this.managementAnnouncementService.setAnnouncement = announcement;
-  }
-
-  private startAnnouncement(): void {
+  private init(): void {
     this.announcement$ =
       this.managementAnnouncementService.announcementObservable;
   }
@@ -81,9 +75,12 @@ export class AnnouncementPage implements OnInit, OnDestroy {
   private updateGalery(): Subscription {
     return (this.$updateGalery =
       this.galeryAnnouncementService.galeryAsObservable.subscribe({
-        next: (galery: Galery) => {
+        next: (galery: void | Galery) => {
           if (galery) {
-            if (this.managementAnnouncementService.galery.length > 0) {
+            if (
+              this.managementAnnouncementService?.galery &&
+              this.managementAnnouncementService?.galery.length > 0
+            ) {
               this.managementAnnouncementService.addItemGalery = galery;
             } else {
               this.managementAnnouncementService.setGalery = [galery];

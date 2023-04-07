@@ -11,9 +11,9 @@ import { BreadcrumbsService } from './service/breadcrumbs.service';
 })
 export class BreadcrumpsComponent implements OnInit, OnDestroy {
   public breadcrumbs$: Observable<Breadcrumb[]>;
-  public hasIos: boolean;
+  public hasIos!: boolean;
 
-  private $breadcrumb: Subscription;
+  private $breadcrumb!: Subscription;
   constructor(
     private readonly breadcrumbService: BreadcrumbsService,
     private plt: Platform
@@ -36,7 +36,7 @@ export class BreadcrumpsComponent implements OnInit, OnDestroy {
 
   private update() {
     this.$breadcrumb = this.breadcrumbService.getEvent().subscribe({
-      next: (url: string) => {
+      next: (url: string | null) => {
         if (url) {
           this.breadcrumbService.update(url);
         }

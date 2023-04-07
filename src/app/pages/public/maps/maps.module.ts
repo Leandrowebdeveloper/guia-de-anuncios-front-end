@@ -8,7 +8,6 @@ import { IonicModule } from '@ionic/angular';
 import { MapsPage } from './maps.page';
 
 import { GoogleMapsModule } from '@angular/google-maps';
-import { MapsPageRoutingModule } from './maps-routing.module';
 import { CoordinateAnnouncementService } from '../../dashboard/component/announcement/map/service/map.service';
 
 @NgModule({
@@ -16,7 +15,6 @@ import { CoordinateAnnouncementService } from '../../dashboard/component/announc
     CommonModule,
     FormsModule,
     IonicModule,
-    MapsPageRoutingModule,
     HeaderModule,
     GoogleMapsModule,
   ],

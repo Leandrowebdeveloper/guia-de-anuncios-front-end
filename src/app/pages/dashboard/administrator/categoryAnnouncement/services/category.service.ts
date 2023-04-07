@@ -14,17 +14,20 @@ export class CategoryService extends HttpService<Category> {
   public deleted = new EventEmitter<Category>(undefined);
   public add = new EventEmitter<Category>(undefined);
   public saveSorting = new EventEmitter<boolean>(false);
-  private category = new BehaviorSubject<Category>(undefined);
-  constructor(http: HttpClient, public storageService: StorageService) {
+  private category = new BehaviorSubject<Category | void>(undefined);
+  constructor(
+    public override http: HttpClient,
+    public override storageService: StorageService
+  ) {
     super(http, storageService);
     this.setApi = `category`;
   }
 
-  public get categoryObservable(): Observable<Category> {
+  public get categoryObservable(): Observable<Category | void> {
     return this.category.asObservable();
   }
 
-  public get getCategory(): Category {
+  public get getCategory(): Category | void {
     return this.category.value;
   }
 
@@ -32,23 +35,24 @@ export class CategoryService extends HttpService<Category> {
     this.category.next(value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   public get getSlug() {
     return this.getCategory?.slug;
   }
 
   public set setSlug(category: Category) {
-    this.category.value.slug = category?.slug;
-    this.setCategory = this.category?.value;
+    if (this.category.value) {
+      this.category.value.slug = category?.slug;
+      this.setCategory = this.category?.value;
+    }
   }
 
   public register(category: Category): Observable<Category> {
     return this.create(category, 'management/register').pipe(
-      tap((category_: Category) => this.add.emit(category_))
+      tap((category_) => category_ && this.add.emit(category_))
     );
   }
 
-  public restore(category: Category): Observable<Category | number[]> {
+  public restore(category: Category): Observable<Category> {
     return this.patch(category, 'management/restore');
   }
 
@@ -56,9 +60,7 @@ export class CategoryService extends HttpService<Category> {
     return this.search(`management/search`, searchBy);
   }
 
-  public dropd(
-    category: Required<Pick<Category, '_csrf' | 'id' | 'password'>>
-  ): Observable<Category> {
+  public dropd(category: Category): Observable<Category> {
     return this.destroy(category, `management/drop`).pipe(
       tap((category_: Category) =>
         setTimeout(() => this.drop.emit(category_), 3600)
@@ -66,7 +68,7 @@ export class CategoryService extends HttpService<Category> {
     );
   }
 
-  public order(category: Category): Observable<Category | number[]> {
+  public order(category: Category): Observable<Category> {
     return this.patch(category, 'management/order');
   }
 }

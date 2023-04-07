@@ -1,5 +1,18 @@
-<ion-button *ngFor="let data of attrButton" [routerLink]="data?.route" expand="block" fill="solid" color="primary"
-    [attr.aria-label]="data?.aria" [title]="data?.title" [hidden]="'/'+route === data?.route">
-    <ion-icon slot="start" [name]="data?.icon"></ion-icon>
-    {{ data?.label }}
+<ion-button
+  *ngFor="let data of attrButton"
+  [routerLink]="data?.route"
+  expand="block"
+  fill="solid"
+  color="primary"
+  [attr.aria-label]="data?.aria"
+  [title]="data?.title"
+  [hidden]="'/'+route === data?.route"
+>
+  <ion-icon
+    slot="start"
+    color="light"
+    [name]="data?.icon"
+    class="ion-margin-end"
+  ></ion-icon>
+  {{ data?.label }}
 </ion-button>

@@ -14,8 +14,8 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
 @Injectable()
 export class LogoutService extends HttpService<User> {
   constructor(
-    public http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private authService: AuthService,
     private navCtrl: NavController,
     private loadingService: LoadingService,
@@ -91,7 +91,7 @@ export class LogoutService extends HttpService<User> {
     return sessionStorage.removeItem('token');
   }
 
-  private removeTokenStorageDatabase(): Promise<void> {
+  private removeTokenStorageDatabase(): void {
     return this.storageService.clean();
   }
 

@@ -36,11 +36,6 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'mapa/localizacao',
-    loadChildren: () =>
-      import('../pages/public/maps/maps.module').then((m) => m.MapsPageModule),
-  },
-  {
     path: 'sair',
     canActivate: [PrivateAutorizationGuard],
     canLoad: [PrivateAutorizationGuard],
@@ -126,13 +121,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('../pages/public/service-terms/service-terms.module').then(
         (m) => m.ServiceTermsPageModule
-      ),
-  },
-  {
-    path: 'oauth/instagram',
-    loadChildren: () =>
-      import('../pages/public/popup-instagram/popup-instagram.module').then(
-        (m) => m.PopupInstagramPageModule
       ),
   },
   {

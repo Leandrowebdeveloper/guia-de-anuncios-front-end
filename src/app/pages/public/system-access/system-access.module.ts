@@ -9,12 +9,12 @@ import { SystemAccessPage } from './system-access.page';
 import { FormComponentModule } from 'src/app/components/form/form.module';
 import { RegisterService } from './services/register/service';
 import { RecoverService } from './services/recover/service';
-import { LoginService } from './services/login/service';
+import { LoginService } from './services/login/login.service';
 import { SystemAccessService } from './services/system-access.service';
 import { ButtonsAccessComponent } from './components/buttons/buttons-sccess-component';
 import { RequisitionLimitComponentModule } from 'src/app/components/requisitionLimit/requisition-limit.module';
 import { SocialLoginComponent } from './components/social-login/social-login.component';
-import { SocialLoginService } from './services/social-login/service';
+import { SocialLoginService } from './services/social-login/social-login.service';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
 

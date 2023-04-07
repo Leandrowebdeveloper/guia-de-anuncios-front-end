@@ -1,16 +1,16 @@
-<ion-card *ngIf="user$ | async; let user">
+<ion-card *ngIf="auth$ | async; let auth">
   <div>
     <!-- header -->
     <app-header-card [announcement]="announcement"></app-header-card>
 
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-      <ion-fab-button>
+      <ion-fab-button size="small">
         <ion-icon name="ellipsis-vertical" color="light"></ion-icon>
       </ion-fab-button>
       <ion-fab-list side="top">
         <!-- botão pagina do usuário -->
         <ion-fab-button
-          *ngIf="user?.level === '1'"
+          *ngIf="auth | isUserLevel : '1'"
           size="small"
           title="Painel do usuário"
           data-message="Painel do usuário"
@@ -18,10 +18,11 @@
             '/painel-de-controle',
             'admin',
             'usuario',
-            announcement?.user?.slug
+            announcement | announcementUserValues : 'slug'
           ]"
+          color="primary"
         >
-          <ion-icon name="person"></ion-icon>
+          <ion-icon name="person" color="light"></ion-icon>
         </ion-fab-button>
 
         <!-- botão gerenciamento -->
@@ -29,17 +30,24 @@
           size="small"
           title="Gerenciamento do anúncio"
           data-message="Gerenciamento do anúncio"
-          [routerLink]="['/painel-de-controle', 'anuncio', announcement?.slug]"
+          [routerLink]="[
+            '/painel-de-controle',
+            'anuncio',
+            announcement | announcementValues : 'slug'
+          ]"
+          color="primary"
         >
-          <ion-icon name="construct"></ion-icon>
+          <ion-icon name="construct" color="light"></ion-icon>
         </ion-fab-button>
+
         <!-- botão modal gerenciamento -->
         <ion-fab-button
           title="Visialisar anúncio"
           data-message="Visialisar anúncio"
-          [routerLink]="['/pagina', announcement?.slug]"
+          [routerLink]="['/pagina', announcement | announcementValues : 'slug']"
+          color="primary"
         >
-          <ion-icon name="eye"></ion-icon>
+          <ion-icon name="eye" color="light"></ion-icon>
         </ion-fab-button>
       </ion-fab-list>
     </ion-fab>

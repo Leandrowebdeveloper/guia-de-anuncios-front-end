@@ -32,25 +32,25 @@ export type DeletedItemUser =
   styleUrls: ['./deleted-item-user.page.scss', '../../users.page.scss'],
 })
 export class DeletedItemUserPage implements OnInit, OnDestroy {
-  public users$: Observable<Pick<User, DeletedItemUser>[]>;
-  public toggleList: boolean;
-  public users: Pick<User, DeletedItemUser>[];
+  public users$!: Observable<Pick<User, DeletedItemUser>[]>;
+  public toggleList!: boolean;
+  public users!: Pick<User, DeletedItemUser>[];
   public error = new Subject<boolean>();
   public endListUser = true;
 
   public sizeSkeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  public menssage: boolean;
+  public menssage!: boolean;
 
-  private $users: Subscription;
-  private $search: Subscription;
-  private $searchBy: Subscription;
-  private $delete: Subscription;
+  private $users!: Subscription;
+  private $search!: Subscription;
+  private $searchBy!: Subscription;
+  private $delete!: Subscription;
 
   private limit = 12;
   private offset = 0;
   private page = 1;
-  private searchBy: object;
+  private searchBy!: { [key: string]: string };
 
   constructor(
     private usersService: AdminUsersService,
@@ -60,10 +60,6 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private messageService: MessageService
   ) {}
-
-  private get getSearchBy(): object {
-    return this.searchBy;
-  }
 
   private set setSearchBy(value: Search) {
     const build = JSON.parse(`{ "${value}":"null" }`);
@@ -88,8 +84,12 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
     this.menssage = true;
   }
 
-  public search(event: SearchbarCustomEvent): Subscription {
-    if (event?.target?.value.length >= 3) {
+  public search(event: SearchbarCustomEvent): Subscription | void {
+    if (
+      event?.target &&
+      event?.target?.value &&
+      event?.target?.value.length >= 3
+    ) {
       const data = this.setDataSearch(event?.target?.value);
       return (this.$search = this.usersService.searchBy(data).subscribe({
         next: (user: Pick<User, DeletedItemUser>[]) => {
@@ -197,31 +197,30 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
   }
 
   private orderBy(search: Search): void {
-    if (!this.users) {
-      return;
-    }
-    switch (search) {
-      case 'name':
-        this.users.sort((a, b) => a?.name < b?.name && -1);
-        break;
-      case 'createdAt':
-        this.users.sort((a, b) => a?.createdAt > b?.createdAt && -1);
-        break;
-      case 'updatedAt':
-        this.users.sort((a, b) => a?.updatedAt > b?.updatedAt && -1);
-        break;
-      case 'blockade':
-        this.users.sort((a, b) => a?.blockade > b?.blockade && -1);
-        break;
-      case 'state':
-        this.users.sort((a, b) => a?.state > b?.state && -1);
-        break;
+    if (this.users) {
+      switch (search) {
+        case 'name':
+          this.users.sort((a, b): any => a?.name < b?.name && -1);
+          break;
+        case 'createdAt':
+          this.users.sort((a, b): any => a?.createdAt > b?.createdAt && -1);
+          break;
+        case 'updatedAt':
+          this.users.sort((a, b): any => a?.updatedAt > b?.updatedAt && -1);
+          break;
+        case 'blockade':
+          this.users.sort((a, b): any => a?.blockade > b?.blockade && -1);
+          break;
+        case 'state':
+          this.users.sort((a, b): any => a?.state > b?.state && -1);
+          break;
+      }
     }
   }
 
   private initSearchBy(): void {
     this.$searchBy = this.searchUserService.getSearchBy.subscribe({
-      next: (filter: Search) => {
+      next: (filter: Search | void) => {
         if (
           filter === 'firstName' ||
           filter === 'lastName' ||
@@ -230,7 +229,7 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
           this.setSearchBy = filter;
         } else {
           this.setSearchBy = 'firstName';
-          this.orderBy(filter);
+          if (filter) this.orderBy(filter);
         }
       },
     });
@@ -238,9 +237,9 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
 
   private setDataSearch(value: string): object {
     let data: object;
-    if (this.getSearchBy) {
+    if (this.searchBy) {
       this.searchBuild(value);
-      data = this.getSearchBy;
+      data = this.searchBy;
     } else {
       data = { firstName: value };
     }
@@ -248,8 +247,9 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
   }
 
   private searchBuild(value: string) {
-    const key = Object.keys(this.getSearchBy)[0];
-    this.getSearchBy[key] = value;
+    const key: string = Object.keys(this.searchBy)[0];
+
+    this.searchBy[key] = value;
   }
 
   private findUsers(): Observable<Pick<User, DeletedItemUser>[]> {
@@ -293,14 +293,12 @@ export class DeletedItemUserPage implements OnInit, OnDestroy {
       this.endListUser = false;
       event.target.disabled = true;
     }
-    return;
   }
 
   private setMoreData(user: Pick<User, DeletedItemUser>[]): void {
-    return user.forEach((item: User) => this.users.push(item));
+    user.forEach((item) => this.users.push(item));
   }
 
-  // Destroy
   private delete(user: User, index: number): Subscription {
     const loading = this.loadingService.show('Excluindo usuário...');
     return (this.$delete = this.usersService.dropd(user).subscribe({

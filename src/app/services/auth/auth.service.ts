@@ -16,11 +16,11 @@ import { tap } from 'rxjs/operators';
 })
 export class AuthService extends HttpService<User> {
   private $isLoggedIn = new BehaviorSubject<boolean>(false);
-  private user = new BehaviorSubject<User>(undefined);
+  private user = new BehaviorSubject<User | void>(undefined);
 
   constructor(
     http: HttpClient,
-    public storageService: StorageService,
+    public override storageService: StorageService,
     private helpsService: HelpsService,
     private router: Router,
     private navCtrl: NavController
@@ -33,70 +33,81 @@ export class AuthService extends HttpService<User> {
     return this.getUser?.plan;
   }
 
-  public get getCsrf(): string {
-    // eslint-disable-next-line no-underscore-dangle
-    return this.user.value._csrf;
+  public get getCsrf(): string | void {
+    if (this.user?.value?._csrf) {
+      return this.user?.value?._csrf;
+    }
   }
 
-  public get userObservable(): Observable<User> {
-    return this.user.asObservable();
+  public get userObservable(): Observable<User | void> {
+    return this.user && this.user.asObservable();
   }
 
-  public get getUser(): User {
-    return this.user.value;
+  public get getUser(): User | void {
+    return this.user?.value;
   }
 
   public set setUser(user: User) {
-    this.user.next(user);
+    if (user) {
+      this.user.next(user);
+    }
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   public get getSlug() {
     return this.getUser?.slug;
   }
 
   public set setSlug(user: User) {
-    this.user.value.slug = user?.slug;
-    this.setUser = this.user?.value;
+    if (user && this.user.value) {
+      this.user.value.slug = user?.slug;
+      this.setUser = this.user?.value;
+    }
   }
 
   public set setBlockade(value: boolean) {
-    this.user.value.blockade = value;
-    this.setUser = this.user?.value;
+    if (value && this.user.value) {
+      this.user.value.blockade = value;
+      this.setUser = this.user?.value;
+    }
   }
 
   public set setCsrf(csrf: string) {
     this.csrf = csrf;
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  public get avatar(): Image {
-    return this.getUser.image;
+  public get avatar(): any {
+    if (this.getUser && this.getUser?.image) {
+      return this.getUser.image;
+    }
   }
 
   public set avatar(image: Image) {
-    this.user.value.image = image;
-    this.setUser = this.user.value;
+    if (image && this.user.value) {
+      this.user.value.image = image;
+      this.setUser = this.user.value;
+    }
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   public get getLevel() {
     return this.getUser?.level;
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   public get getEmail() {
     return this.getUser?.email;
   }
 
   public set setEmail(user: User) {
-    this.user.value.email = user?.email;
-    this.setUser = this.user.value;
+    if (user && this.user.value) {
+      this.user.value.email = user?.email;
+      this.setUser = this.user.value;
+    }
   }
 
   public set setIsPassword(value: boolean) {
-    this.user.value.isPassword = value;
-    this.setUser = this.user.value;
+    if (value && this.user.value) {
+      this.user.value.isPassword = value;
+      this.setUser = this.user.value;
+    }
   }
 
   public setUrlApi() {
@@ -106,16 +117,18 @@ export class AuthService extends HttpService<User> {
   public name(user: User): Observable<User> {
     return this.patch(user, 'name').pipe(
       tap((user_: User) => {
-        this.user.value.firstName = user_?.firstName;
-        this.user.value.lastName = user_?.lastName;
-        this.user.value.slug = user_?.slug;
-        this.user.value.name = user_?.name;
-        this.setUser = this.user.value;
+        if (this.user.value) {
+          this.user.value.firstName = user_?.firstName;
+          this.user.value.lastName = user_?.lastName;
+          this.user.value.slug = user_?.slug;
+          this.user.value.name = user_?.name;
+          this.setUser = this.user.value;
+        }
       })
     );
   }
 
-  public email(user: User): Observable<User | number[]> {
+  public email(user: User): Observable<User> {
     return this.patch(user, 'email');
   }
 
@@ -129,7 +142,7 @@ export class AuthService extends HttpService<User> {
     );
   }
 
-  public password(user: User): Observable<User | number[]> {
+  public password(user: User): Observable<User> {
     return this.patch(user, 'password').pipe(
       tap((user_: User) => (this.setIsPassword = user_?.isPassword))
     );
@@ -155,7 +168,7 @@ export class AuthService extends HttpService<User> {
     return sessionStorage.removeItem('token');
   }
 
-  private removeTokenStorageDatabase(): Promise<void> {
+  private removeTokenStorageDatabase(): void {
     return this.storageService.clean();
   }
 

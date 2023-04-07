@@ -1,3 +1,4 @@
+import { ModuleDarkService } from './services/module-dark/module-dark.service';
 import { Platform } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { SplashScreen } from '@capacitor/splash-screen';
@@ -11,11 +12,15 @@ moment.locale('pt-br');
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private plt: Platform) {}
+  constructor(
+    private plt: Platform,
+    private moduleDarkService: ModuleDarkService
+  ) {}
 
   ngOnInit() {
     this.plt.ready().then(async () => {
       await this.init();
+      this.moduleDarkService.init();
     });
   }
 

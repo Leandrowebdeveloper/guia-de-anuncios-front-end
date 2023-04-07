@@ -1,12 +1,13 @@
-import { MessagesService } from '../service/messages.service';
 import { ModalController } from '@ionic/angular';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { Component, Input, OnInit } from '@angular/core';
+
 import { User, Messages, Announcement } from 'src/app/interface';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { FormSendMessagesComponent } from '../form/form.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { MessagesService } from '../service/messages.service';
 
 @Component({
   selector: 'app-card-message-component',
@@ -14,14 +15,15 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./message.component.scss'],
 })
 export class UserCardMessageComponent implements OnInit {
-  @Input() user!: Pick<User, 'name' | '_csrf' | 'id' | 'messages'>;
-  @Input() announcement!: Pick<
+  @Input() user?: Pick<User, 'name' | '_csrf' | 'id' | 'messages'> | void;
+  @Input() announcement?: Pick<
     Announcement,
     'title' | '_csrf' | 'id' | 'messages'
-  >;
-  public messages: Messages[];
-  public isButton: boolean;
-  private $close: Subscription;
+  > | void;
+
+  public isAdmin!: boolean;
+  public messages!: Messages[];
+  private $close!: Subscription;
   constructor(
     private userMessageService: MessagesService,
     private messageService: MessageService,
@@ -31,7 +33,12 @@ export class UserCardMessageComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
-    this.isButton = this.authService.getLevel === '1';
+    this.hasAdmin();
+  }
+
+  private hasAdmin() {
+    const is = this.authService.getLevel === '1' ? true : false;
+    if (is) this.isAdmin = is;
   }
 
   public close(index: number, message: Pick<Messages, 'id'>): Subscription {
@@ -42,7 +49,7 @@ export class UserCardMessageComponent implements OnInit {
     return (this.$close = this.userMessageService.close(dataDel).subscribe({
       next: (messages: Messages) => this.success(index),
       error: (error: HttpErrorResponse) =>
-        this.messageService.error(error, null, this.$close),
+        this.messageService.error(error, undefined, this.$close),
     }));
   }
 
@@ -51,29 +58,30 @@ export class UserCardMessageComponent implements OnInit {
       component: FormSendMessagesComponent,
       componentProps: {
         label: 'Editar menssagem',
-        data: this.buildDataForm(index),
+        data: this.buildDataForm(),
       },
     });
     return await modal.present();
   }
 
-  private buildDataForm(index: number): {
+  private buildDataForm(): {
     messages: Messages[];
     _csrf: string;
     id: number;
-  } {
+  } | void {
     if (this.user) {
       const { _csrf, id, messages } = this.user;
       return { _csrf, id, messages };
-    } else {
+    } else if (this.announcement) {
       const { _csrf, id, messages } = this.announcement;
-      return { _csrf, id, messages };
+      if (_csrf && id && messages) {
+        return { _csrf, id, messages };
+      }
     }
   }
 
   private setCsrf() {
-    // eslint-disable-next-line no-underscore-dangle
-    return this.user?._csrf || this.announcement._csrf;
+    return this.user?._csrf || this.announcement?._csrf;
   }
 
   private success(index: number) {
@@ -87,7 +95,9 @@ export class UserCardMessageComponent implements OnInit {
     if (this.user) {
       this.messages = this.user?.messages;
     } else {
-      this.messages = this.announcement.messages;
+      if (this.announcement?.messages) {
+        this.messages = this.announcement.messages;
+      }
     }
   }
 }

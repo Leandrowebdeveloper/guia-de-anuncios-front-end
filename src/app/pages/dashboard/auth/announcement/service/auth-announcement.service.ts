@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { Announcement, Messages } from 'src/app/interface';
+import { Announcement } from 'src/app/interface';
 import { HttpService } from 'src/app/services/http/http.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
@@ -15,8 +15,8 @@ import { MessageService } from 'src/app/utilities/message/message.service';
 export class AuthAnnouncementService extends HttpService<Announcement> {
   private announcement = new BehaviorSubject<Announcement[]>([]);
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     public messageService: MessageService,
     private navCtrl: NavController
   ) {
@@ -94,7 +94,7 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
 
   public toRestore(
     announcement: Pick<Announcement, '_csrf' | 'id'>
-  ): Observable<Announcement | number[]> {
+  ): Observable<Announcement> {
     const { id, _csrf } = announcement;
     return this.patch({ id, _csrf }, `management/to-restore`);
   }
@@ -106,9 +106,9 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
     return this.index(`management/${url}`, { ...query });
   }
 
-  public getAnnouncementFindOne(
-    userId: Required<{ userId: number }>
-  ): Observable<Announcement[]> {
+  public getAnnouncementFindOne(userId: {
+    userId: number;
+  }): Observable<Announcement[]> {
     return this.index(`management/get`, userId);
   }
 }

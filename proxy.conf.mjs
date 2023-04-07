@@ -9,7 +9,7 @@ export default [
       "/api/contact",
       "/api/citie",
       "/api/announcement",
-      "/api/socialNetWork",
+      "/api/social-network",
       "/api/messages",
       "/api/avatar",
       "/api/activate-account",

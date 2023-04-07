@@ -18,29 +18,31 @@ export class ShowContactComponent implements OnInit {
     contacts: 'whatsapp' | 'phone' | 'mobilePhone' | 'email'
   ) {
     e.preventDefault();
-    const { whatsapp, phone, mobilePhone } = this.announcement?.contact;
-    const { email } = this.announcement?.user;
-    switch (contacts) {
-      case 'whatsapp':
-        return await Browser.open({
-          url: `https://api.whatsapp.com/send?phone=55${whatsapp}`,
-          windowName: '_blank',
-        });
-      case 'phone':
-        return await Browser.open({
-          url: `tel:+${phone}`,
-          windowName: '_top',
-        });
-      case 'mobilePhone':
-        return await Browser.open({
-          url: `tel:+${mobilePhone}`,
-          windowName: '_top',
-        });
-      case 'email':
-        return await Browser.open({
-          url: `mailto:${email}`,
-          windowName: '_top',
-        });
+    if (this.announcement?.user && this.announcement?.contact) {
+      const { whatsapp, phone, mobilePhone } = this.announcement?.contact;
+      const { email } = this.announcement?.user;
+      switch (contacts) {
+        case 'whatsapp':
+          return await Browser.open({
+            url: `https://api.whatsapp.com/send?phone=55${whatsapp}`,
+            windowName: '_blank',
+          });
+        case 'phone':
+          return await Browser.open({
+            url: `tel:+${phone}`,
+            windowName: '_top',
+          });
+        case 'mobilePhone':
+          return await Browser.open({
+            url: `tel:+${mobilePhone}`,
+            windowName: '_top',
+          });
+        case 'email':
+          return await Browser.open({
+            url: `mailto:${email}`,
+            windowName: '_top',
+          });
+      }
     }
   }
 }

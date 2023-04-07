@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import {
@@ -21,10 +21,10 @@ export class CategoryComponent implements OnInit {
   @Input() announcement!: Pick<
     Announcement,
     'category' | '_csrf' | 'id' | 'categoryAnnouncement'
-  >;
-  public category$: Observable<Category[]>;
-  private form: FormGroup;
-  private $category: Subscription;
+  > | void;
+  public category$!: Observable<Category[]>;
+  private form!: FormGroup;
+  private $category!: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -55,8 +55,8 @@ export class CategoryComponent implements OnInit {
     return (this.$category = this.categoryAnnouncementService
       .category(this.form.value)
       .subscribe({
-        next: (categoryAnnouncement_: CategoryAnnouncement) =>
-          this.success(categoryAnnouncement_, loading),
+        next: (categoryAnnouncement_) =>
+          categoryAnnouncement_ && this.success(categoryAnnouncement_, loading),
         error: (error: HttpErrorResponse) =>
           this.messageService.error(error, loading, this.$category),
       }));
@@ -65,14 +65,16 @@ export class CategoryComponent implements OnInit {
   private success(
     categoryAnnouncement_: CategoryAnnouncement,
     loading: Promise<HTMLIonLoadingElement>
-  ): Promise<number> {
-    this.announcement.category = categoryAnnouncement_?.category;
-    return this.messageService.success(
-      categoryAnnouncement_?.message,
-      loading,
-      this.$category,
-      2000
-    );
+  ): Promise<number> | void {
+    if (this.announcement?.category && categoryAnnouncement_?.message) {
+      this.announcement.category = categoryAnnouncement_?.category;
+      return this.messageService.success(
+        categoryAnnouncement_?.message,
+        loading,
+        this.$category,
+        2000
+      );
+    }
   }
 
   private getCategory(): void {

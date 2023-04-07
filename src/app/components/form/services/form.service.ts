@@ -7,7 +7,7 @@ import { AbstractControl, FormGroup, Validators } from '@angular/forms';
  * @class FormServices
  */
 export class FormServices {
-  private config: object;
+  private config!: object;
 
   private passwordConfirmation = {
     validator: this.mustMatch('password', 'passwordConfirmation'),
@@ -22,7 +22,7 @@ export class FormServices {
   private regexInstagran =
     /(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/im;
 
-  private controls = {
+  private controls: { [key: string]: any } = {
     id: ['', [Validators.required]],
     name: [
       '',
@@ -40,7 +40,6 @@ export class FormServices {
     blockade: ['', [Validators.required]],
     response: ['', [Validators.required]],
     period: [''],
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     zip_code: ['', [Validators.required]],
     district: ['', [Validators.required]],
     numberr: ['', [Validators.required]],
@@ -48,14 +47,8 @@ export class FormServices {
     mobilePhone: ['', [Validators.required]],
     phone: [''],
     whatsapp: ['', [Validators.required]],
-    facebook: [
-      '',
-      [Validators.required, Validators.pattern(this.regexFacebook)],
-    ],
-    instagran: [
-      '',
-      [Validators.required, Validators.pattern(this.regexInstagran)],
-    ],
+    facebook: ['', [Validators.pattern(this.regexFacebook)]],
+    instagran: ['', [Validators.pattern(this.regexInstagran)]],
     city: ['', [Validators.required]],
     uf: ['GO', [Validators.required]],
     description: ['', [Validators.required]],
@@ -99,27 +92,30 @@ export class FormServices {
     slug: ['', [Validators.required]],
   };
 
-  private get configs(): object {
+  private get configs(): { [key: string]: any } {
     return this.config;
   }
 
-  private set configs(configs: object) {
+  private set configs(configs: { [key: string]: any }) {
     this.config = configs;
   }
 
-  public controlsConfig(configs: object) {
+  public controlsConfig(configs: { [key: string]: any }) {
     this.configs = configs;
     return this.buildTheControllers();
   }
 
-  public isPasswordConfirmation(configs: object) {
+  public isPasswordConfirmation(configs: { [key: string]: any }) {
     const data = configs || {};
     return this.getObjectKeys(data).includes('passwordConfirmation')
       ? this.passwordConfirmation
       : {};
   }
 
-  public buildInput(configs: object, inputName: InputName): Attributes[] {
+  public buildInput(
+    configs: { [key: string]: any },
+    inputName: { [key: string]: any }
+  ): Attributes[] {
     const KEYS = this.getObjectKeys(configs);
     const inputs = [];
     for (const key in inputName) {
@@ -133,7 +129,6 @@ export class FormServices {
   private buildTheControllers() {
     const controls: any = {};
     let count = 0;
-    // eslint-disable-next-line guard-for-in
     for (const key in this.configs) {
       if (this.makeSureTheSettingsMatchTheControls(key)) {
         controls[key] = this.getKeyControls(key);
@@ -146,7 +141,6 @@ export class FormServices {
 
   private cleanValue(controls: any) {
     if (Object.keys(controls).includes('email')) {
-      // eslint-disable-next-line @typescript-eslint/dot-notation
       controls['email'][0] = null;
     }
     return controls;
@@ -180,11 +174,11 @@ export class FormServices {
     return this.getObjectValues(this.configs).includes(this.configs[key]);
   }
 
-  private getObjectKeys(object: object): string[] {
+  private getObjectKeys(object: { [key: string]: any }): string[] {
     return object && Object.keys(object);
   }
 
-  private getObjectValues(object: object): string[] {
+  private getObjectValues(object: { [key: string]: any }): string[] {
     return object && Object.values(object);
   }
 
@@ -203,7 +197,7 @@ export class FormServices {
     control: AbstractControl,
     matchingControl: AbstractControl
   ): void {
-    if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+    if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
       return;
     }
     if (control.value !== matchingControl.value) {

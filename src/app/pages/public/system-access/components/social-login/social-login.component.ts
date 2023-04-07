@@ -13,7 +13,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Platform } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
 import { FacebookLogin } from '@capacitor-community/facebook-login';
-import { SocialLoginService } from '../../services/social-login/service';
+import { SocialLoginService } from '../../services/social-login/social-login.service';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { MessageService } from 'src/app/utilities/message/message.service';
 
@@ -23,10 +23,10 @@ import { MessageService } from 'src/app/utilities/message/message.service';
   styleUrls: ['./social-login.component.scss'],
 })
 export class SocialLoginComponent implements OnInit {
-  @Input() csrf: string;
+  @Input() csrf!: string;
   private fbLogin = FacebookLogin;
-  private token = null;
-  private systemAccess: Subscription;
+  private token!: any;
+  private systemAccess!: Subscription;
 
   constructor(
     private systemAccessService: SystemAccessService,
@@ -58,8 +58,8 @@ export class SocialLoginComponent implements OnInit {
       permissions: FACEBOOK_PERMISSIONS,
     });
 
-    if (result.accessToken && result.accessToken.userId) {
-      this.token = result.accessToken;
+    if (result?.accessToken && result?.accessToken?.userId) {
+      this.getToken(result);
       this.loadUserData();
     } else if (result.accessToken && !result.accessToken.userId) {
       this.getCurrentToken();
@@ -67,41 +67,53 @@ export class SocialLoginComponent implements OnInit {
     }
   }
 
-  public async google() {
+  private getToken(result: any): void {
+    this.token = result?.accessToken;
+  }
+
+  public async google(): Promise<void | Subscription> {
     const googleUser = await GoogleAuth.signIn();
-    return this.login(googleUser);
+    const data: SocialLogin = { ...this.build(googleUser) };
+    return this.login(data);
   }
 
   private async getCurrentToken(): Promise<void> {
     const result = await this.fbLogin.getCurrentAccessToken();
-    if (result.accessToken) {
-      this.token = result.accessToken;
+    if (result?.accessToken) {
+      this.getToken(result);
       this.loadUserData();
     } else {
       console.log('Login failed');
     }
   }
 
-  private async loadUserData(): Promise<void> {
-    // eslint-disable-next-line max-len
-    const url = `https://graph.facebook.com/${this.token.userId}?fields=id,name,picture.width(720),birthday,email&access_token=${this.token.token}`;
-    this.http
-      .get(url)
-      .subscribe({ next: (facebook: Facebook) => this.login(facebook) });
+  private loadUserData() {
+    if (this.token?.userId) {
+      const url = `https://graph.facebook.com/${this.token?.userId}?fields=id,name,picture.width(720),birthday,email&access_token=${this.token.token}`;
+      this.http.get(url).subscribe({
+        next: (facebook) => {
+          const data: SocialLogin = { ...this.build(facebook) };
+          this.login(data);
+        },
+      });
+    }
   }
 
-  private login(social: Facebook | Google): Subscription {
+  private login(social: SocialLogin): Subscription | void {
     if (social) {
       this.setRouter();
       this.systemAccessService.setStayConnected(true);
       const loading = this.loadingService.show('Acessar o sistema...');
-      const data = { ...this.build(social) };
-      return (this.systemAccess = this.socialLoginService
-        .create(data)
-        .subscribe({
-          next: (user_: User) => this.success(user_, loading),
-          error: (error: HttpErrorResponse) => this.error(error, loading),
-        }));
+      const data: SocialLogin = { ...this.build(social) };
+      if (data) {
+        return (this.systemAccess = this.socialLoginService
+          .login(data)
+          .subscribe({
+            next: (user_: User | SocialLogin) =>
+              this.success(user_ as User, loading),
+            error: (error: HttpErrorResponse) => this.error(error, loading),
+          }));
+      }
     }
   }
 

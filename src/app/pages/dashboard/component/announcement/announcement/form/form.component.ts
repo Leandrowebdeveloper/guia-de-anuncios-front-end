@@ -27,14 +27,14 @@ export class AnnouncementFormComponent implements OnInit {
     route: '/announcement',
     icon: 'cloud-upload',
     label: 'Salvar',
-    fill: false,
+
     aria: 'Salvar anúncio.',
     title: 'Salvar anúncio.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private $announcement: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private $announcement!: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
@@ -74,6 +74,7 @@ export class AnnouncementFormComponent implements OnInit {
         .updateAnnouncement(event.value)
         .subscribe({
           next: (announcement: Pick<Announcement, 'message'>) =>
+            announcement?.message &&
             this.messsage(announcement?.message, loading),
           error: (error: HttpErrorResponse) =>
             this.messageService.error(error, loading, this.$announcement),
@@ -83,6 +84,7 @@ export class AnnouncementFormComponent implements OnInit {
       .createAnnouncement(event.value)
       .subscribe({
         next: (announcement: Pick<Announcement, 'message'>) =>
+          announcement?.message &&
           this.messsage(announcement?.message, loading),
         error: (error: HttpErrorResponse) =>
           this.messageService.error(error, loading, this.$announcement),

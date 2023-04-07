@@ -1,4 +1,4 @@
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,8 +11,9 @@ import { CategoryAnnouncementPageRoutingModule } from './category-announcement-r
 import { CategoryAnnouncementPage } from './category-announcement.page';
 import { CategoryAnnouncementService } from './service/service.service';
 import { AdminAnnouncementService } from '../../dashboard/administrator/announcement/service/admin-announcement.service';
-import { AddressPipe } from 'src/app/utilities/pipe/address/address.pipe';
-import { WorkDaysPipe } from 'src/app/utilities/pipe/workDays/workDays.pipe';
+import { AddressPipe } from 'src/app/pipe/address/address.pipe';
+import { WorkDaysPipe } from 'src/app/pipe/workDays/workDays.pipe';
+import { ModuleDarkService } from 'src/app/services/module-dark/module-dark.service';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { WorkDaysPipe } from 'src/app/utilities/pipe/workDays/workDays.pipe';
     AdminAnnouncementService,
     AddressPipe,
     WorkDaysPipe,
+    ModuleDarkService,
   ],
 })
 export class CategoryAnnouncementPageModule {}

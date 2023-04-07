@@ -1,27 +1,58 @@
-<ion-item
-  *ngIf="!isAdmin; else Else"
-  [disabled]="!announcement?.categoryAnnouncement"
-  detail="true"
-  (click)="cities(announcement)"
-  title="Gerenciar cidade."
-  aria-label="Gerenciar cidade."
-  [attr.aria-disabled]="
-    !announcement?.categoryAnnouncement &&
-    'Para gerenciar cidade cadastre uma categoria.'
-  "
-  button
->
-  <ion-icon name="business" slot="start"></ion-icon>
-  <ion-label
-    >Cidade
-    <ion-text [color]="announcement?.citie ? 'success' : 'danger'">
-      *
-    </ion-text>
-  </ion-label>
-</ion-item>
+<ion-item-sliding [disabled]="user?.level === '2'">
+  <ion-item
+    [title]="
+      user?.level === '2'
+        ? 'Abrir formulario de cidades.'
+        : 'Pressione e arraste para a esquerda.'
+    "
+    [attr.data-message]="
+      user?.level === '2'
+        ? 'Abrir formulario de cidades.'
+        : 'Pressione e arraste para a esquerda.'
+    "
+    lines="true"
+    (click)="openForm()"
+    [button]="user?.level === '2'"
+  >
+    <ion-icon slot="start" name="business"></ion-icon>
+    <ion-icon
+      slot="end"
+      [name]="user?.level === '2' ? 'chevron-forward' : 'chevron-back'"
+    ></ion-icon>
+    <ion-label>
+      Cidade
+      <ion-text [color]="announcement?.citie ? 'success' : 'danger'">
+        *
+      </ion-text>
+    </ion-label>
+  </ion-item>
 
-<ng-template #Else>
-  <app-citie-admin-management
-    [announcement]="announcement"
-  ></app-citie-admin-management>
-</ng-template>
+  <ion-item-options *ngIf="user?.level === '1'">
+    <ion-item-option
+      *ngIf="announcement?.citie"
+      slot="end"
+      color="danger"
+      size="small"
+      class="cursor-pointer"
+      title="Exclui cidade"
+      data-message="Exclui cidade"
+      (click)="destroy()"
+    >
+      <ion-icon name="trash" slot="start"></ion-icon>
+      delete
+    </ion-item-option>
+    <ion-item-option
+      slot="end"
+      size="small"
+      class="cursor-pointer"
+      [title]="announcement?.citie ? 'Editar cidade' : 'Cadastrar cidade'"
+      [attr.data-message]="
+        announcement?.citie ? 'Editar cidade' : 'Cadastrar cidade'
+      "
+      (click)="openFormAdmin()"
+    >
+      <ion-icon name="create" slot="start"></ion-icon>
+      {{ announcement?.citie ? "editar" : "Cadastrar" }}
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

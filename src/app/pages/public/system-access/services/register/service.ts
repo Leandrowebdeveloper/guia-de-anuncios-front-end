@@ -11,8 +11,8 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 @Injectable()
 export class RegisterService extends HttpService<User> {
   constructor(
-    public http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private navCtrl: NavController,
     private helpsService: HelpsService
   ) {

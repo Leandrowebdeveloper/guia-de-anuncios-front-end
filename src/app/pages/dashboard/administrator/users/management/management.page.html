@@ -28,7 +28,7 @@
       <div *ngSwitchCase="'user'">
         <!-- Messagem -->
         <ion-row>
-          <ion-col size="12">
+          <ion-col size="12" *ngIf="user">
             <app-card-message-component
               [user]="user"
             ></app-card-message-component>
@@ -115,7 +115,7 @@
             <!-- Deletados -->
             <ng-template #ItemDeleted>
               <app-deleted-item-announcement-page
-                [userId]="user?.id"
+                [user]="user"
               ></app-deleted-item-announcement-page>
             </ng-template>
           </ion-col>

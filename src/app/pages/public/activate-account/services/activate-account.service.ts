@@ -8,7 +8,10 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Injectable()
 export class ActivateAccountService extends HttpService<ActivateAccount> {
-  constructor(public http: HttpClient, public storageService: StorageService) {
+  constructor(
+    public override http: HttpClient,
+    public override storageService: StorageService
+  ) {
     super(http, storageService);
     this.setApi = `activate-account`;
   }

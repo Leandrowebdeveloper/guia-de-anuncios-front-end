@@ -1,14 +1,13 @@
-import { ModalController } from '@ionic/angular';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Announcement, User } from 'src/app/interface';
+import { Announcement, AuthSocial, User } from 'src/app/interface';
 import { AnnouncementService } from './service/service.service';
 
 import * as moment from 'moment';
-import { MapsPage } from '../maps/maps.page';
+import { GoogleMapsDirectionService } from 'src/app/services/google-maps/google-maps-direction.service';
 
 @Component({
   selector: 'app-announcement',
@@ -16,10 +15,11 @@ import { MapsPage } from '../maps/maps.page';
   styleUrls: ['./announcement.page.scss'],
 })
 export class AnnouncementPage implements OnInit {
-  public announcement$: Observable<Announcement>;
+  public announcement$!: Observable<Announcement>;
   public error = new Subject<boolean>();
 
   public datetimes = moment().format();
+  public openTraceRoute!: boolean;
 
   public slideOpts = {
     initialSlide: 0,
@@ -30,38 +30,33 @@ export class AnnouncementPage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private announcementService: AnnouncementService,
-    private modalController: ModalController
+    private googleMapsDirectionService: GoogleMapsDirectionService
   ) {}
 
   ngOnInit() {
     this.init();
   }
 
-  public async showMaps(announcement: Announcement) {
-    const modal = await this.modalController.create({
-      component: MapsPage,
-      componentProps: {
-        announcement,
-      },
-    });
-    return await modal.present();
+  public traceRoute() {
+    this.googleMapsDirectionService.traceRoute();
   }
 
-  private init(): Observable<Announcement> {
+  private init(): Observable<Announcement> | void {
     const { slug } = this.activatedRoute.snapshot?.params;
     if (slug) {
       return (this.announcement$ = this.announcementService
         .findOne('show', { slug })
         .pipe(
           tap((item) => {
+            this.googleMapsDirectionService.announcement = item;
             item.user = {
               email: item?.announcement?.user?.email,
               plan: item?.announcement?.user?.plan,
             } as User;
-            item.authSocial = { ...item?.announcement?.user?.authSocial };
-
+            item.authSocial = {
+              ...item?.announcement?.user?.authSocial,
+            } as AuthSocial;
             delete item?.announcement;
-            delete item?.announcement?.user?.plan;
             delete item?.categoryAnnouncement;
             return item;
           }),

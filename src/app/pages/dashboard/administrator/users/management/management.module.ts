@@ -7,9 +7,9 @@ import { UserComponentsModule } from 'src/app/pages/dashboard/component/user/use
 import { AnnouncementComponentsModule } from 'src/app/pages/dashboard/component/announcement/announcement-component.module';
 import { EnabledItemAnnouncementPageModule } from 'src/app/pages/dashboard/auth/announcement/pages/enabled-item/enabled-item.module';
 import { DeletedItemAnnouncememtPageModule } from 'src/app/pages/dashboard/auth/announcement/pages/deleted-item/deleted-item.module';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
-import { AddressPipe } from 'src/app/utilities/pipe/address/address.pipe';
-import { WorkDaysPipe } from 'src/app/utilities/pipe/workDays/workDays.pipe';
+import { PipeModule } from 'src/app/pipe/pipe.module';
+import { AddressPipe } from 'src/app/pipe/address/address.pipe';
+import { WorkDaysPipe } from 'src/app/pipe/workDays/workDays.pipe';
 
 @NgModule({
   imports: [

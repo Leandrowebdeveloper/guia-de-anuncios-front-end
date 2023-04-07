@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { FormComponentModule } from 'src/app/components/form/form.module';
 import { HeaderModalModule } from 'src/app/components/header-modal/header-modal.module';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 import { AvatarComponent } from './avatar/avatar-component';
 import { UserBlockadeComponent } from './blockade/blockade.component';
 import { UserCardComponent } from './card/card.component';

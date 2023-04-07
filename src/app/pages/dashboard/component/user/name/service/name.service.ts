@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { BreadcrumbsService } from 'src/app/header/breadcrumbs/service/breadcrumbs.service';
 import { User } from 'src/app/interface';
@@ -11,10 +10,12 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { UserName } from '../interface';
 
 @Injectable()
-export class NameService extends HttpService<Required<Pick<User, UserName>>> {
+export class NameService extends HttpService<
+  Pick<User, UserName | 'name' | 'message'>
+> {
   constructor(
     http: HttpClient,
-    public storageService: StorageService,
+    public override storageService: StorageService,
     private location: Location,
     private breadcrumbsService: BreadcrumbsService,
     private usersService: AdminUsersService
@@ -24,16 +25,18 @@ export class NameService extends HttpService<Required<Pick<User, UserName>>> {
   }
 
   public set setName(user: Required<Pick<User, UserName | 'name'>>) {
-    this.usersService.getUsers.firstName = user?.firstName;
-    this.usersService.getUsers.lastName = user?.lastName;
-    this.usersService.getUsers.slug = user?.slug;
-    this.usersService.getUsers.name = user?.name;
-    this.usersService.setUsers = this.usersService.getUsers;
+    if (user && this.usersService.getUsers) {
+      this.usersService.getUsers.firstName = user?.firstName;
+      this.usersService.getUsers.lastName = user?.lastName;
+      this.usersService.getUsers.slug = user?.slug;
+      this.usersService.getUsers.name = user?.name;
+      this.usersService.setUsers = this.usersService.getUsers;
+    }
   }
 
-  public name(user: Required<Pick<User, UserName>>) {
+  public name(user: Pick<User, UserName | 'name' | 'message'>) {
     return this.patch(user, 'management/name').pipe(
-      tap((user_: Required<Pick<User, UserName | 'name'>>) => {
+      tap((user_: Pick<User, UserName | 'name' | 'message'>) => {
         this.setName = user_;
         this.updateUsersUrl(user_);
       })

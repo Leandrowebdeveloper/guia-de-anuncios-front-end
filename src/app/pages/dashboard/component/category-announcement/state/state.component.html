@@ -1,9 +1,8 @@
-<!-- State -->
 <ion-item>
-  <ion-label>{{ category?.state ? "Online" : "Offline" }}</ion-label>
+  <ion-label>{{ category | categoryState }}</ion-label>
   <ion-toggle
     slot="end"
-    (ionChange)="state(category)"
+    (ionChange)="state()"
     [checked]="category?.state"
     title="Alternar entre usuário conectado ou desligado."
     aria-label="Clique para alternar entre usuário conectado ou desligado."

@@ -16,22 +16,22 @@ import { CreateCategoryAnnouncementService } from '../service/create.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormCategoryCreateComponent implements OnInit {
-  @Input() category: Category;
-  @Input() action: string;
-  @Input() label: string;
+  @Input() category!: Category;
+  @Input() action!: string;
+  @Input() label!: string;
 
   public attrButton: AttrButton = {
     route: '/category',
     icon: 'create',
     label: 'Cadastrar',
-    fill: false,
+
     aria: 'Cadastrar categoria.',
     title: 'Cadastrar categoria.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private write: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private write!: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
@@ -65,9 +65,15 @@ export class FormCategoryCreateComponent implements OnInit {
   private messsage(
     category: Category,
     loading: Promise<HTMLIonLoadingElement>
-  ): Promise<number> {
-    this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(category?.message, loading, this.write);
+  ): Promise<number> | void {
+    if (category?.message) {
+      this.helpService.delay(() => this.modalController.dismiss(), 2500);
+      return this.messageService.success(
+        category?.message,
+        loading,
+        this.write
+      );
+    }
   }
 
   private getData(): void {

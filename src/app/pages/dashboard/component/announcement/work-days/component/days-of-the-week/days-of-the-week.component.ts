@@ -16,7 +16,7 @@ export class DaysOfTheWeekComponent implements OnInit {
   @Input() announcement!: Pick<Announcement, 'workDays' | 'id'>;
   @Output() eventDay = new EventEmitter<DayOfTheWeekPT>(undefined);
   @Output() route = new EventEmitter<AnnouncementRoute>(undefined);
-  public workDays: WorkDays;
+  public workDays!: WorkDays;
   constructor(private workDayService: WorkDayAnnouncementService) {}
 
   ngOnInit() {
@@ -44,10 +44,13 @@ export class DaysOfTheWeekComponent implements OnInit {
     };
   }
 
-  private init(): WorkDays {
+  private init() {
     if (this.announcement?.workDays === null) {
-      return (this.workDays = this.setOperningHour());
+      this.workDays = this.setOperningHour();
+    } else {
+      if (this.announcement?.workDays) {
+        this.workDays = this.announcement?.workDays;
+      }
     }
-    return (this.workDays = this.announcement?.workDays);
   }
 }

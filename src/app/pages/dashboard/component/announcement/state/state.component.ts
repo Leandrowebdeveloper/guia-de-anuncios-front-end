@@ -22,9 +22,9 @@ export class AnnouncementStateComponent {
     | 'address'
     | 'citie'
     | 'contact'
-  >;
-  private form: FormGroup;
-  private $state: Subscription;
+  > | void;
+  private form!: FormGroup;
+  private $state!: Subscription;
   constructor(
     private fb: FormBuilder,
     private stateService: StateAnnouncementService,
@@ -32,25 +32,29 @@ export class AnnouncementStateComponent {
   ) {}
 
   // State
-  public toggle(): Subscription {
-    const { id, _csrf } = this.announcement;
-    this.form = this.fb.group({ id, _csrf });
-    return (this.$state = this.stateService.state(this.form.value).subscribe({
-      next: (announcement_: Pick<Announcement, 'message'>) =>
-        this.success(announcement_),
-      error: (error: HttpErrorResponse) =>
-        this.messageService.error(error, null, this.$state),
-    }));
+  public toggle(): Subscription | void {
+    if (this.announcement) {
+      const { id, _csrf } = this.announcement;
+      this.form = this.fb.group({ id, _csrf });
+      return (this.$state = this.stateService.state(this.form.value).subscribe({
+        next: (announcement_: Pick<Announcement, 'message'>) =>
+          announcement_ && this.success(announcement_),
+        error: (error: HttpErrorResponse) =>
+          this.messageService.error(error, undefined, this.$state),
+      }));
+    }
   }
 
   private success(
     announcement_: Pick<Announcement, 'message'>
-  ): Promise<number> {
-    return this.messageService.success(
-      announcement_?.message,
-      null,
-      this.$state,
-      350
-    );
+  ): Promise<number> | void {
+    if (announcement_?.message) {
+      return this.messageService.success(
+        announcement_?.message,
+        undefined,
+        this.$state,
+        350
+      );
+    }
   }
 }

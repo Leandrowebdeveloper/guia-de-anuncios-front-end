@@ -9,7 +9,7 @@
         size-md="12"
         size-sm="12"
         size="12"
-        *ngIf="announcement?.user?.plan?.type !== 'free' && announcement?.galery.length > 0"
+        *ngIf="announcement| typePlan"
       >
         <!-- Slide -->
         <ion-card>
@@ -25,22 +25,22 @@
               <picture>
                 <source
                   media="(max-width: 575.98px)"
-                  [srcset]="'/images/galery/small/' + image?.filename"
+                  [srcset]="image | galeryValues:'filename':'/images/galery/small/'"
                 />
                 <source
                   media="(max-width: 767.98px) and (min-width: 576px)"
-                  [srcset]="'/images/galery/small/' + image?.filename"
+                  [srcset]="image | galeryValues:'filename':'/images/galery/small/'"
                 />
                 <source
                   media="(max-width: 991.98px) and (min-width: 768px)"
-                  [srcset]="'/images/galery/medium/' + image?.filename"
+                  [srcset]="image | galeryValues:'filename':'/images/galery/medium/'"
                 />
                 <source
                   media="(min-width: 992px)"
-                  [srcset]="'/images/galery/medium/' + image?.filename"
+                  [srcset]="image | galeryValues:'filename':'/images/galery/medium/'"
                 />
                 <img
-                  [src]="'/images/galery/large/' + image?.filename"
+                  [src]="image | galeryValues:'filename':'/images/galery/large/'"
                   [alt]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
                   [title]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
                   [attr.data-message]="(announcement | attrTitle:'galery') +' '+ (i + 1)"
@@ -61,7 +61,7 @@
         size-md="12"
         size-sm="12"
         size="12"
-        *ngIf="announcement?.user?.plan?.type !== 'free' && announcement?.galery.length > 0"
+        *ngIf="announcement | typePlan"
       >
         <ion-card [hidden]="!announcement?.workDays">
           <ion-card-header>
@@ -86,13 +86,13 @@
           <!-- Titulo e descrição -->
           <ion-card-header>
             <ion-card-title
-              [title]="announcement?.title"
-              [attr.data-message]="announcement?.title"
-              >{{ announcement?.title }}</ion-card-title
+              [title]="announcement | announcementValues:'title'"
+              [attr.data-message]="announcement | announcementValues:'title'"
+              >{{ announcement | announcementValues:'title' }}</ion-card-title
             >
 
             <ion-card-subtitle
-              [innerHtml]="announcement?.description"
+              [innerHtml]="announcement | announcementValues:'description'"
             ></ion-card-subtitle>
           </ion-card-header>
 
@@ -110,7 +110,7 @@
                 [title]="announcement | attrTitle:'citie'"
                 [attr.data-message]="announcement | attrTitle:'citie'"
               >
-                {{ announcement?.citie | citie }}
+                {{ announcement | citie }}
               </address>
             </ion-card-subtitle>
           </ion-card-content>
@@ -140,7 +140,7 @@
           >
             <ion-card-title color="medium">
               <ion-icon
-                src="../../../../../../assets/ion-icon/contact.svg"
+                src="../../../../../../assets/ion-icon/contact-2.svg"
               ></ion-icon>
               Contato</ion-card-title
             >
@@ -148,6 +148,7 @@
               [announcement]="announcement"
             ></app-show-contact-announcement-component>
           </ion-card-content>
+
           <!-- Rede Social -->
           <ion-card-content
             [hidden]="!announcement?.socialNetwork"
@@ -155,46 +156,19 @@
           >
             <ion-card-title color="medium">
               <ion-icon
-                src="../../../../../../assets/ion-icon/socialNetwork.svg"
+                src="../../../../../../assets/ion-icon/socialNetwork-2.svg"
               ></ion-icon>
               Rede Social</ion-card-title
             >
             <app-show-social-network-announcement-component
-              [socialNetwork]="announcement?.socialNetwork"
+              [announcement]="announcement"
             ></app-show-social-network-announcement-component>
-          </ion-card-content>
-
-          <!-- Mapa -->
-          <ion-card-content
-            [hidden]="!announcement?.coordinate"
-            class="ion-margin-top"
-          >
-            <ion-card-title color="medium" class="ion-margin-bottom">
-              <ion-icon name="map"></ion-icon>
-              Mapa</ion-card-title
-            >
-            <ion-button
-              expand="block"
-              [routerLink]="['/localizacao']"
-              [queryParams]="{ anuncio: announcement?.title, latitude: announcement?.coordinate?.latitude, longitude: announcement?.coordinate?.longitude }"
-              [fragment]="announcement?.title"
-            >
-              <ion-icon
-                slot="icon-only"
-                name="map"
-                class="ion-margin-end"
-              ></ion-icon>
-              Ver localização
-            </ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>
 
       <!-- Plano free -->
-      <ion-col
-        size="12"
-        *ngIf="announcement?.user?.plan?.type === 'free' || announcement?.galery.length === 0"
-      >
+      <ion-col size="12" *ngIf="announcement | typePlanFree">
         <ion-card [hidden]="!announcement?.workDays">
           <ion-card-header>
             <ion-card-subtitle>
@@ -218,13 +192,13 @@
           <!-- Titulo e descrição -->
           <ion-card-header>
             <ion-card-title
-              [title]="announcement?.title"
-              [attr.data-message]="announcement?.title"
-              >{{ announcement?.title }}</ion-card-title
+              [title]="announcement | announcementValues:'title'"
+              [attr.data-message]="announcement | announcementValues:'title'"
+              >{{ announcement | announcementValues:'title' }}</ion-card-title
             >
 
             <ion-card-subtitle
-              [innerHtml]="announcement?.description"
+              [innerHtml]="announcement | announcementValues:'description'"
             ></ion-card-subtitle>
           </ion-card-header>
 
@@ -265,6 +239,7 @@
               </address>
             </ion-card-subtitle>
           </ion-card-content>
+
           <!-- Contato -->
           <ion-card-content
             [hidden]="!announcement?.contact"
@@ -272,7 +247,7 @@
           >
             <ion-card-title color="medium">
               <ion-icon
-                src="../../../../../../assets/ion-icon/contact.svg"
+                src="../../../../../../assets/ion-icon/contact-2.svg"
               ></ion-icon>
               Contato</ion-card-title
             >
@@ -281,31 +256,72 @@
             ></app-show-contact-announcement-component>
           </ion-card-content>
 
-          <!-- Mapa -->
+          <!-- Rede Social -->
           <ion-card-content
-            [hidden]="!announcement?.coordinate"
+            [hidden]="!announcement?.socialNetwork"
             class="ion-margin-top"
           >
-            <ion-card-title color="medium" class="ion-margin-bottom">
-              <ion-icon name="map"></ion-icon>
-              Mapa</ion-card-title
-            >
-            <ion-button
-              expand="block"
-              [routerLink]="['/mapa/localizacao']"
-              [queryParams]="{ anuncio: announcement?.title, latitude: announcement?.coordinate?.latitude, longitude: announcement?.coordinate?.longitude  }"
-            >
+            <ion-card-title color="medium">
               <ion-icon
-                slot="icon-only"
-                name="map"
-                class="ion-margin-end"
+                src="../../../../../../assets/ion-icon/socialNetwork-2.svg"
               ></ion-icon>
-              Ver localização
-            </ion-button>
+              Rede Social</ion-card-title
+            >
+            <app-show-social-network-announcement-component
+              [announcement]="announcement"
+            ></app-show-social-network-announcement-component>
           </ion-card-content>
+
+          <!-- Mapa -->
+          <ion-col size="12" *ngIf="announcement?.coordinate">
+            <ion-card-header class="ion-margin-top">
+              <ion-card-title color="medium" class="ion-margin-bottom">
+                <ion-icon name="map"></ion-icon>
+                Mapa</ion-card-title
+              >
+            </ion-card-header>
+            <ion-card-content>
+              <app-maps-component
+                [announcement]="announcement"
+              ></app-maps-component>
+            </ion-card-content>
+          </ion-col>
         </ion-card>
       </ion-col>
 
+      <!-- Mapa -->
+      <ion-col size="12" *ngIf="announcement?.coordinate">
+        <ion-card-header
+          class="ion-margin-top"
+          style="display: flex; justify-content: space-between"
+        >
+          <ion-card-title color="medium">
+            <ion-icon name="map"></ion-icon>
+            Mapa</ion-card-title
+          >
+          <ion-button
+            size="small"
+            title="Traçar uma rota."
+            data-label="Traçar uma rota."
+            (click)="traceRoute()"
+          >
+            <ion-icon
+              slot="icon-only"
+              color="light"
+              class="ion-margin-end"
+              name="map"
+            ></ion-icon>
+            Traçar uma rota
+          </ion-button>
+        </ion-card-header>
+        <ion-card-content>
+          <app-maps-component
+            [announcement]="announcement"
+          ></app-maps-component>
+        </ion-card-content>
+      </ion-col>
+
+      <!-- Card botão likes copy  -->
       <ion-col size="12" *ngIf="announcement?.user?.plan?.type === 'free'">
         <ion-card class="no-margin-top">
           <app-segment-component

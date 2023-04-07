@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { DeleteWorkDayService } from './service/service.service';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Announcement, DaysOfTheWeek, WorkDays, User } from 'src/app/interface';
@@ -14,12 +14,8 @@ import { WorkDayAnnouncementService } from '../../../work-days/service/work-days
   styleUrls: ['./work-days.component.scss'],
 })
 export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
-  @Input() announcement!: Pick<
-    Announcement,
-    'slug' | 'title' | '_csrf' | 'id' | 'workDays'
-  >;
-  @Input() user!: Pick<User, 'level'>;
-  public workDays: WorkDays;
+  @Input() announcement!: Announcement | void;
+  @Input() user!: User | void;
   public readonly daysOfTheWeekPT = [
     'Domingo',
     'Segunda feira',
@@ -40,8 +36,8 @@ export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
     'saturday',
   ];
 
-  private $delete: Subscription;
-  private $update: Subscription;
+  private $delete!: Subscription;
+  private $update!: Subscription;
 
   constructor(
     private deleteworkDayService: DeleteWorkDayService,
@@ -52,7 +48,6 @@ export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.workDays = this.announcement?.workDays;
     this.update();
   }
 
@@ -61,7 +56,7 @@ export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
   }
 
   public async destroy(): Promise<void> {
-    if (this.user?.level === '1' && this.workDays) {
+    if (this.user?.level === '1' && this.announcement?.workDays) {
       const alert = await this.alertController.create({
         header: 'Excluir horário de funcionamento',
         subHeader: this.announcement?.title,
@@ -75,14 +70,10 @@ export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
             text: 'OK',
             role: 'confirm',
             handler: (event) => {
-              const data: Pick<
-                WorkDays & { password: string },
-                '_csrf' | 'id' | 'password'
-              > = {
+              const data: WorkDays & { password: string } = {
                 ...event,
-                // eslint-disable-next-line no-underscore-dangle
-                _csrf: this.announcement._csrf,
-                id: this.workDays?.id,
+                _csrf: this.announcement?._csrf,
+                id: this.announcement?.workDays?.id,
               };
               return this.delete(data);
             },
@@ -104,9 +95,9 @@ export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
   }
 
   private delete(
-    workDays: Pick<WorkDays & { password: string }, '_csrf' | 'id' | 'password'>
-  ): Subscription {
-    if (this.user?.level === '1' && this.workDays) {
+    workDays: WorkDays & { password: string }
+  ): Subscription | void {
+    if (this.user?.level === '1' && this.announcement?.workDays) {
       const loading = this.loadingService.show(
         'Excluindo horário de funcionamento...'
       );
@@ -115,8 +106,7 @@ export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (workDay_: Pick<WorkDays, 'message'>) => {
             this.messsage(workDay_, loading);
-            this.announcement.workDays = null;
-            return (this.workDays = null);
+            if (this.announcement) this.announcement.workDays = null;
           },
           error: (error: HttpErrorResponse) =>
             this.messageService.error(error, loading, this.$delete),
@@ -127,21 +117,22 @@ export class AdminManagementWorkDayComponent implements OnInit, OnDestroy {
   private messsage(
     workDays: Pick<WorkDays, 'message'>,
     loading: Promise<HTMLIonLoadingElement>
-  ): Promise<number> {
-    return this.messageService.success(
-      workDays?.message,
-      loading,
-      this.$delete
-    );
+  ): Promise<number> | void {
+    if (workDays?.message) {
+      return this.messageService.success(
+        workDays?.message,
+        loading,
+        this.$delete
+      );
+    }
   }
 
   private update(): Subscription {
     return (this.$update =
       this.workDayAnnouncementService.getworkDayEvent.subscribe({
-        next: (workDays: WorkDays) => {
+        next: (workDays: WorkDays | null) => {
           if (this.announcement?.id === workDays?.announcementId) {
-            this.announcement.workDays = workDays;
-            this.workDays = workDays;
+            if (this.announcement) this.announcement.workDays = workDays;
           }
         },
       }));

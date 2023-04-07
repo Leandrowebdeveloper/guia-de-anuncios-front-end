@@ -10,15 +10,11 @@ import { AlertService } from 'src/app/utilities/alert/alert.service';
 
 @Injectable()
 export class CoordinateAnnouncementService extends HttpService<
-  | Coordinate
-  | Pick<
-      Coordinate & { password: string },
-      '_csrf' | 'id' | 'password' | 'message'
-    >
+  Coordinate & { password: string }
 > {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     public messageService: MessageService,
     private managementService: ManagementAnnouncementService,
     private alertService: AlertService
@@ -27,22 +23,17 @@ export class CoordinateAnnouncementService extends HttpService<
     this.setApi = `coordinate`;
   }
 
-  public set setCoordinate(coordinate: Required<Coordinate>) {
-    this.managementService.getAnnouncement.coordinate = coordinate;
-    this.managementService.setAnnouncement =
-      this.managementService.getAnnouncement;
+  public set setCoordinate(coordinate: Coordinate) {
+    if (this.managementService.getAnnouncement) {
+      this.managementService.getAnnouncement.coordinate = coordinate;
+      this.managementService.setAnnouncement =
+        this.managementService.getAnnouncement;
+    }
   }
 
   public coordinate(
-    coordinate: Required<Coordinate>
-  ): Observable<
-    | Coordinate
-    | Pick<
-        Coordinate & { password: string },
-        '_csrf' | 'id' | 'password' | 'message'
-      >
-    | number[]
-  > {
+    coordinate: Coordinate & { password: string }
+  ): Observable<Coordinate & { password: string }> {
     if (coordinate?.id) {
       return this.patch(coordinate);
     }
@@ -92,19 +83,10 @@ export class CoordinateAnnouncementService extends HttpService<
     }
   }
 
-  public delete(
-    coordinate: Pick<
-      Coordinate & { password: string },
-      '_csrf' | 'id' | 'password'
-    >
-  ): Observable<
-    | Coordinate
-    | Pick<
-        Coordinate & {
-          password: string;
-        },
-        '_csrf' | 'id' | 'password' | 'message'
-      >
+  public delete(coordinate: Coordinate & { password: string }): Observable<
+    Coordinate & {
+      password: string;
+    }
   > {
     return this.destroy(coordinate);
   }

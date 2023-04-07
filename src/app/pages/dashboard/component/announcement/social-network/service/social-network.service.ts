@@ -9,50 +9,46 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
 
 @Injectable()
 export class SocialNetworkAnnouncementService extends HttpService<
-  | SocialNetwork
-  | Pick<
-      SocialNetwork & { password: string },
-      '_csrf' | 'id' | 'password' | 'message'
-    >
+  SocialNetwork & { password: string }
 > {
-  private socialNetworkEvent = new EventEmitter<SocialNetwork>(undefined);
+  private socialNetworkEvent = new EventEmitter<SocialNetwork | null>(
+    undefined
+  );
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private managementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
-    this.setApi = `socialNetwork`;
+    this.setApi = `social-network`;
   }
 
   public get getSocialNetworkEvent() {
     return this.socialNetworkEvent.asObservable();
   }
 
-  public set setSocialNetwork(socialNetwork: SocialNetwork) {
-    this.managementService.getAnnouncement.socialNetwork = socialNetwork;
-    this.managementService.setAnnouncement =
-      this.managementService.getAnnouncement;
+  public set setSocialNetwork(
+    socialNetwork: (SocialNetwork & { password: string }) | null
+  ) {
+    if (this.managementService.getAnnouncement) {
+      this.managementService.getAnnouncement.socialNetwork = socialNetwork;
+      this.managementService.setAnnouncement =
+        this.managementService.getAnnouncement;
+    }
   }
 
-  // public createSocialNetwork(key: string): Observable<SocialNetwork> {
-  //   return this.findOne('', { key });
-  // }
-
-  public socialNetwork(
-    socialNetwork: SocialNetwork
-  ): Observable<SocialNetwork | number[]> {
+  public socialNetwork(socialNetwork: SocialNetwork & { password: string }) {
     if (socialNetwork?.id) {
       return this.patch(socialNetwork).pipe(
         tap(
-          (socialNetwork_: SocialNetwork) =>
+          (socialNetwork_: SocialNetwork & { password: string }) =>
             (this.setSocialNetwork = socialNetwork_)
         )
       );
     } else {
       return this.create(socialNetwork).pipe(
         tap(
-          (socialNetwork_: SocialNetwork) =>
+          (socialNetwork_: SocialNetwork & { password: string }) =>
             (this.setSocialNetwork = socialNetwork_)
         )
       );
@@ -60,10 +56,7 @@ export class SocialNetworkAnnouncementService extends HttpService<
   }
 
   public delete(
-    socialNetWork: Pick<
-      SocialNetwork & { password: string },
-      '_csrf' | 'id' | 'password'
-    >
+    socialNetWork: SocialNetwork & { password: string }
   ): Observable<
     Pick<
       SocialNetwork & {
@@ -73,16 +66,7 @@ export class SocialNetworkAnnouncementService extends HttpService<
     >
   > {
     return this.destroy(socialNetWork).pipe(
-      tap(
-        (
-          c: Pick<
-            SocialNetwork & {
-              password: string;
-            },
-            '_csrf' | 'id' | 'password' | 'message'
-          >
-        ) => (this.setSocialNetwork = null)
-      )
+      tap((): null => (this.setSocialNetwork = null))
     );
   }
 }

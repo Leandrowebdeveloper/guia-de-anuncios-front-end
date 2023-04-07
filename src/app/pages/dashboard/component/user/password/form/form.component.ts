@@ -23,20 +23,20 @@ export class FormUserPasswordComponent implements OnInit {
   >;
   @Input() action!: string;
   @Input() label!: string;
-  @Input() isAuth: boolean;
+  @Input() isAuth!: boolean;
 
   public attrButton: AttrButton = {
     route: '/new-password',
     icon: 'key',
     label: 'Salvar',
-    fill: false,
+
     aria: 'Salvar senha.',
     title: 'Salvar senha.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private $password: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private $password!: Subscription;
   constructor(
     private adminPasswordService: AdminPasswordService,
     private helpService: HelpsService,

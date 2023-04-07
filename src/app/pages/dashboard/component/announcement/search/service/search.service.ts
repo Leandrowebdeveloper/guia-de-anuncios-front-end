@@ -5,13 +5,13 @@ import { SearchAnnouncement } from 'src/app/interface';
 @Injectable()
 export class SearchAnnouncementService {
   public result = new EventEmitter<any[]>(undefined);
-  private search$ = new BehaviorSubject<SearchAnnouncement>(undefined);
+  private search$ = new BehaviorSubject<SearchAnnouncement | void>(undefined);
 
   constructor() {
     this.setSearchBy = 'title';
   }
 
-  public get getSearchBy(): Observable<SearchAnnouncement> {
+  public get getSearchBy(): Observable<SearchAnnouncement | void> {
     return this.search$.asObservable();
   }
 

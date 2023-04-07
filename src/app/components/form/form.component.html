@@ -25,50 +25,51 @@
             <!-- Label -->
             <ion-label
               position="floating"
-              [color]="f[input?.name].valid && 'success'"
+              [color]="f[input.name].valid && 'success'"
             >
               {{ input?.label }}
 
               <!-- Message error -->
               <ion-text
                 color="danger"
-                *ngIf="submitted && f[input?.name].errors"
+                *ngIf="submitted && f[input.name].errors"
               >
+                <!-- f[input.name].errors.pattern -->
                 <span
-                  *ngIf="f[input?.name].errors.pattern"
-                  [attr.aria-errormessage]="input.msg?.invalid"
+                  *ngIf="f | isErros : input : 'pattern'"
+                  [attr.aria-errormessage]="input.msg.invalid"
                 >
-                  * {{ input.msg?.invalid }}&nbsp;</span
-                >
-                <span
-                  *ngIf="f[input?.name].errors.email"
-                  [attr.aria-errormessage]="input.msg?.invalid"
-                >
-                  * {{ input.msg?.invalid }}&nbsp;</span
+                  * {{ input.msg.invalid }}&nbsp;</span
                 >
                 <span
-                  *ngIf="f[input?.name].errors.required"
-                  [attr.aria-errormessage]="input.msg?.empty"
+                  *ngIf="f | isErros : input : 'email'"
+                  [attr.aria-errormessage]="input.msg.invalid"
                 >
-                  * {{ input.msg?.empty }}&nbsp;</span
-                >
-                <span
-                  *ngIf="f[input?.name].errors.maxlength"
-                  [attr.aria-errormessage]="input?.msg?.max"
-                >
-                  * {{ input?.msg?.max }}&nbsp;</span
+                  * {{ input.msg.invalid }}&nbsp;</span
                 >
                 <span
-                  *ngIf="f[input?.name].errors.minlength"
-                  [attr.aria-errormessage]="input?.msg?.min"
+                  *ngIf="f | isErros : input : 'required'"
+                  [attr.aria-errormessage]="input.msg.empty"
                 >
-                  * {{ input?.msg?.min }}&nbsp;</span
+                  * {{ input.msg.empty }}&nbsp;</span
                 >
                 <span
-                  *ngIf="f[input?.name].errors?.mustMatch"
-                  [attr.aria-errormessage]="input?.msg?.mustMatch"
+                  *ngIf="f | isErros : input : 'maxlength'"
+                  [attr.aria-errormessage]="input.msg.max"
                 >
-                  * {{ input?.msg?.mustMatch }}&nbsp;</span
+                  * {{ input.msg.max }}&nbsp;</span
+                >
+                <span
+                  *ngIf="f | isErros : input : 'minlength'"
+                  [attr.aria-errormessage]="input.msg.min"
+                >
+                  * {{ input.msg.min }}&nbsp;</span
+                >
+                <span
+                  *ngIf="f | isErros : input : 'mustMatch'"
+                  [attr.aria-errormessage]="input.msg.mustMatch"
+                >
+                  * {{ input.msg.mustMatch }}&nbsp;</span
                 >
               </ion-text>
             </ion-label>
@@ -85,7 +86,7 @@
                 input?.name !== 'type'
               "
               [type]="visiblePassword ? 'text' : input?.type"
-              [formControlName]="input?.name"
+              [formControlName]="input.name"
               [inputmode]="input?.type"
               [placeholder]="input?.placeholder"
               [attr.aria-invalid]="submitted"
@@ -99,7 +100,7 @@
             <ion-input
               *ngIf="input?.type === 'tel' && input?.name === 'phone'"
               [type]="input?.type"
-              [formControlName]="input?.name"
+              [formControlName]="input.name"
               [inputmode]="input?.type"
               [placeholder]="input?.placeholder"
               [attr.aria-invalid]="submitted"
@@ -113,7 +114,7 @@
             <ion-input
               *ngIf="input?.type === 'tel' && input?.name !== 'phone'"
               [type]="input?.type"
-              [formControlName]="input?.name"
+              [formControlName]="input.name"
               [inputmode]="input?.type"
               [placeholder]="input?.placeholder"
               [attr.aria-invalid]="submitted"
@@ -127,7 +128,7 @@
             <ion-input
               *ngIf="input?.name === 'zip_code'"
               [type]="visiblePassword ? 'text' : input?.type"
-              [formControlName]="input?.name"
+              [formControlName]="input.name"
               [inputmode]="input?.type"
               [placeholder]="input?.placeholder"
               [readonly]="input?.readonly"
@@ -142,7 +143,7 @@
                 (input?.name === 'description' &&
                   attrButton?.route === '/category')
               "
-              [formControlName]="input?.name"
+              [formControlName]="input.name"
               [inputmode]="input?.type"
               [placeholder]="input?.placeholder"
               [attr.aria-placeholder]="input?.actionLabel"
@@ -163,7 +164,7 @@
                 attrButton?.route !== '/category'
               "
               apiKey="eltulb4tbmvkr9gu7025qd3j9otlnxlej0ybckmvguswoje5"
-              [formControlName]="input?.name"
+              [formControlName]="input.name"
               [init]="config"
             ></editor>
 
@@ -179,7 +180,7 @@
               class="ion-margin-top"
               [title]="visiblePassword ? 'Ocultar senha' : 'Ver senha'"
               [attr.aria-pressed]="visiblePassword"
-              [attr.aria-label]="attrButton?.aria"
+              [attr.aria-label]="attrButton.aria"
             >
               <ion-icon
                 [name]="visiblePassword ? 'eye-off-outline' : 'eye-outline'"
@@ -194,7 +195,7 @@
               input?.name === 'passwordConfirmation' ||
               (input?.name === 'password' && attrButton?.route === 'login')
             "
-            [passwordToCheck]="form?.value?.password"
+            [passwordToCheck]="form.value.password"
             [hidden]="isPageTheLogin"
           ></app-password-strength>
         </div>
@@ -206,7 +207,7 @@
         >
           <ion-checkbox
             slot="end"
-            [formControlName]="input?.name"
+            [formControlName]="input.name"
           ></ion-checkbox>
           <ion-label>{{ input?.label }}</ion-label>
         </ion-item>
@@ -218,7 +219,7 @@
         >
           <ion-checkbox
             slot="end"
-            [formControlName]="input?.name"
+            [formControlName]="input.name"
           ></ion-checkbox>
           <ion-label>{{ input?.label }}</ion-label>
         </ion-item>
@@ -231,7 +232,7 @@
             input?.name === 'type'
           "
         >
-          <ion-radio-group [formControlName]="input?.name">
+          <ion-radio-group [formControlName]="input.name">
             <!-- Nivel -->
             <span *ngIf="input?.name === 'level'">
               <ion-item>
@@ -296,7 +297,7 @@
               </ion-item>
 
               <ion-row
-                [hidden]="form?.value?.type === 'free'"
+                [hidden]="form.value.type === 'free'"
                 class="ion-margin-vertical ion-justify-content-center"
               >
                 <ion-col size="12">
@@ -310,9 +311,7 @@
                   </ion-text>
                 </ion-col>
                 <ion-button
-                  [color]="
-                    form?.value?.period === '03' ? 'success' : 'secondary'
-                  "
+                  [color]="form.value.period === '03' ? 'success' : 'secondary'"
                   (click)="setPediod('03')"
                   size="small"
                   shape="round"
@@ -321,9 +320,7 @@
                 </ion-button>
 
                 <ion-button
-                  [color]="
-                    form?.value?.period === '06' ? 'success' : 'secondary'
-                  "
+                  [color]="form.value.period === '06' ? 'success' : 'secondary'"
                   (click)="setPediod('06')"
                   class="ion-margin-horizontal"
                   size="small"
@@ -333,9 +330,7 @@
                 </ion-button>
 
                 <ion-button
-                  [color]="
-                    form?.value?.period === '12' ? 'success' : 'secondary'
-                  "
+                  [color]="form.value.period === '12' ? 'success' : 'secondary'"
                   (click)="setPediod('12')"
                   size="small"
                   shape="round"
@@ -365,7 +360,7 @@
                 <ion-label>Aviso</ion-label>
                 <ion-radio
                   value="warning"
-                  [disabled]="form?.value?.blockade"
+                  [disabled]="form.value.blockade"
                 ></ion-radio>
               </ion-item>
 
@@ -373,7 +368,7 @@
                 <ion-label>Informação</ion-label>
                 <ion-radio
                   value="info"
-                  [disabled]="form?.value?.blockade"
+                  [disabled]="form.value.blockade"
                 ></ion-radio>
               </ion-item>
 
@@ -381,7 +376,7 @@
                 <ion-label>Parabéns</ion-label>
                 <ion-radio
                   value="success"
-                  [disabled]="form?.value?.blockade"
+                  [disabled]="form.value.blockade"
                 ></ion-radio>
               </ion-item>
 
@@ -389,7 +384,7 @@
                 <ion-label>Atenção</ion-label>
                 <ion-radio
                   value="danger"
-                  [disabled]="!form?.value?.blockade"
+                  [disabled]="!form.value.blockade"
                 ></ion-radio>
               </ion-item>
             </span>
@@ -417,8 +412,8 @@
           [hidden]="!isPageTheLogin"
         >
           <ion-checkbox
-            [formControlName]="input?.name"
-            [attr.aria-label]="input?.label"
+            [formControlName]="input.name"
+            [attr.aria-label]="input.label"
           >
           </ion-checkbox>
           <ion-text class="ion-margin-start">{{ input?.label }}</ion-text>
@@ -427,17 +422,14 @@
         <div *ngIf="input?.name === 'terms'">
           <ion-item lines="none">
             <ion-checkbox
-              [formControlName]="input?.name"
-              [attr.aria-label]="input?.label"
+              [formControlName]="input.name"
+              [attr.aria-label]="input.label"
             >
             </ion-checkbox>
             <ion-text class="ion-margin-start">{{ input?.label }}</ion-text>
           </ion-item>
 
-          <div
-            class="ion-text-start"
-            *ngIf="submitted && f[input?.name].errors"
-          >
+          <div class="ion-text-start" *ngIf="submitted && f[input.name].errors">
             <ion-text color="danger" *ngIf="!form.controls['terms'].valid">
               <small [attr.aria-errormessage]="input?.msg?.invalid">{{
                 input?.msg?.invalid
@@ -445,7 +437,7 @@
             </ion-text>
           </div>
 
-          <ion-text class="cursor" color="secondary">
+          <ion-text class="cursor">
             <small
               class="cursor-pointer ion-margin-start"
               title="Ver termos de uso do jussara.app."
@@ -466,16 +458,15 @@
           type="submit"
           expand="block"
           class="ion-margin-vertical"
-          [fill]="attrButton?.fill ? 'outline' : 'solid'"
-          [attr.aria-label]="attrButton?.aria"
-          [title]="attrButton?.title"
+          [attr.aria-label]="attrButton && attrButton.aria"
+          [title]="attrButton && attrButton.title"
         >
           <ion-icon
             class="ion-margin-end"
             color="light"
-            [name]="attrButton?.icon"
+            [name]="attrButton.icon"
           ></ion-icon>
-          {{ attrButton?.label }}
+          {{ attrButton.label }}
         </ion-button>
       </ion-col>
     </ion-row>

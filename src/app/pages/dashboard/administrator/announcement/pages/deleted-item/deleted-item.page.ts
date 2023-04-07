@@ -14,18 +14,18 @@ import { AdminAnnouncementService } from '../../service/admin-announcement.servi
   styleUrls: ['./deleted-item.page.scss'],
 })
 export class DeletedItemAdminAnnouncementPage implements OnInit {
-  public announcement$: Observable<Announcement[]>;
-  public announcement: Announcement[];
-  public isToRestore: number;
-  public isDeleted: number;
-  public isAnnouncement: boolean;
-  public delete: boolean;
+  public announcement$!: Observable<Announcement[]>;
+  public announcement!: Announcement[];
+  public isToRestore!: number;
+  public isDeleted!: number;
+  public isAnnouncement!: boolean;
+  public delete!: boolean;
   public error = new Subject<boolean>();
-  public menssage: boolean;
+  public menssage!: boolean;
 
-  public toggleListAnnouncement: boolean;
+  public toggleListAnnouncement!: boolean;
 
-  private destroyAnnouncement: Subscription;
+  private destroyAnnouncement!: Subscription;
 
   private limit = 12;
   private offset = 0;
@@ -185,11 +185,12 @@ export class DeletedItemAdminAnnouncementPage implements OnInit {
     loading: Promise<HTMLIonLoadingElement>
   ) {
     this.removeItem(index);
-    this.messageService.success(
-      announcement_?.message,
-      loading,
-      this.destroyAnnouncement,
-      2000
-    );
+    if (announcement_?.message)
+      this.messageService.success(
+        announcement_?.message,
+        loading,
+        this.destroyAnnouncement,
+        2000
+      );
   }
 }

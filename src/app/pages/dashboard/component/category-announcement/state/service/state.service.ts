@@ -8,37 +8,27 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 import { CategoryService } from 'src/app/pages/dashboard/administrator/categoryAnnouncement/services/category.service';
 
 @Injectable()
-export class StateService extends HttpService<
-  Pick<Category, 'slug' | 'updatedAt'>
-> {
+export class StateService extends HttpService<Category> {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private categoryService: CategoryService
   ) {
     super(http, storageService);
     this.setApi = `category`;
   }
 
-  public set setState(
-    category: Required<Pick<Category, 'updatedAt' | 'state'>>
-  ) {
-    this.categoryService.getCategory.state = category?.state;
-    this.categoryService.getCategory.updatedAt = category?.updatedAt;
-    this.categoryService.setCategory = this.categoryService.getCategory;
+  public set setState(category: Category) {
+    if (this.categoryService.getCategory) {
+      this.categoryService.getCategory.state = category?.state;
+      this.categoryService.getCategory.updatedAt = category?.updatedAt;
+      this.categoryService.setCategory = this.categoryService.getCategory;
+    }
   }
 
-  public state(
-    category: Required<Pick<Category, 'slug' | '_csrf'>>
-  ): Observable<Category | number[]> {
+  public state(category: Category): Observable<Category> {
     return this.patch(category, 'management/state').pipe(
-      tap(
-        (
-          category_: Required<Pick<Category, 'state' | 'updatedAt' | 'message'>>
-        ) => {
-          this.setState = category_;
-        }
-      )
+      tap((category_: Category) => (this.setState = category_))
     );
   }
 }

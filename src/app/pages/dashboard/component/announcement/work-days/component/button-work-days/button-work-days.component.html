@@ -1,5 +1,5 @@
 <ion-item
-  *ngIf="!isAdmin; else Else"
+  *ngIf="user | isUserLevel : '2'; else Else"
   [disabled]="!announcement?.categoryAnnouncement"
   detail="true"
   (click)="route()"

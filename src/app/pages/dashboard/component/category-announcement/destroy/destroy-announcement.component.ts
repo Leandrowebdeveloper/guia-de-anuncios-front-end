@@ -9,24 +9,26 @@ import { FormDestroyAnnouncementComponent } from './form/form.component';
   styleUrls: ['./destroy-announcement.component.scss'],
 })
 export class DestroyAnnouncementComponent {
-  @Input() category!: Category;
+  @Input() category!: Category | void;
 
   constructor(private modalController: ModalController) {}
 
   public async destroy(): Promise<void> {
-    const { _csrf, id } = this.category;
-    const modal = await this.modalController.create({
-      component: FormDestroyAnnouncementComponent,
-      componentProps: {
-        action: 'destroy',
-        label: 'Excluir categoria',
-        category: {
-          _csrf,
-          password: '',
-          id,
+    if (this.category) {
+      const { _csrf, id } = this.category;
+      const modal = await this.modalController.create({
+        component: FormDestroyAnnouncementComponent,
+        componentProps: {
+          action: 'destroy',
+          label: 'Excluir categoria',
+          category: {
+            _csrf,
+            password: '',
+            id,
+          },
         },
-      },
-    });
-    return await modal.present();
+      });
+      return await modal.present();
+    }
   }
 }

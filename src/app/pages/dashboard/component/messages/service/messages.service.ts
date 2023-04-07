@@ -12,8 +12,8 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
 @Injectable()
 export class MessagesService extends HttpService<Messages> {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private usersService: AdminUsersService,
     private managementAnnouncementService: ManagementAnnouncementService
   ) {
@@ -22,29 +22,31 @@ export class MessagesService extends HttpService<Messages> {
   }
 
   public set setUserMessage(value: Messages) {
-    const count: number = this.usersService.getUsers.messages.length;
-    const i = this.usersService.getUsers.messages.findIndex(
-      (item) => item?.id === value?.id
-    );
-    if (i === -1) {
-      if (count > 0) {
-        this.usersService.getUsers.messages.unshift(value);
+    if (this.usersService.getUsers) {
+      const count: number = this.usersService.getUsers.messages.length;
+      const i = this.usersService.getUsers.messages.findIndex(
+        (item) => item?.id === value?.id
+      );
+      if (i === -1) {
+        if (count > 0) {
+          this.usersService.getUsers.messages.unshift(value);
+        } else {
+          this.usersService.getUsers.messages = [value];
+        }
       } else {
-        this.usersService.getUsers.messages = [value];
+        this.usersService.getUsers.messages.splice(i, 1, value);
       }
-    } else {
-      this.usersService.getUsers.messages.splice(i, 1, value);
+      this.usersService.setUsers = this.usersService.getUsers;
     }
-    this.usersService.setUsers = this.usersService.getUsers;
   }
 
   public send(
-    message: Required<Messages>,
+    message: Messages,
     action: 'users' | 'announcement'
-  ): Observable<Messages | number[]> {
+  ): Observable<Messages> {
     if (message?.id) {
       return this.patch(message, 'management').pipe(
-        tap((message_: Messages) => {
+        tap((message_: Messages): Messages | void => {
           if (action === 'users') {
             return (this.setUserMessage = message_);
           }
@@ -57,7 +59,7 @@ export class MessagesService extends HttpService<Messages> {
     }
     delete message.id;
     return this.create(message, 'management').pipe(
-      tap((message_: Messages) => {
+      tap((message_: Messages): Messages | void => {
         if (action === 'users') {
           return (this.setUserMessage = message_);
         }

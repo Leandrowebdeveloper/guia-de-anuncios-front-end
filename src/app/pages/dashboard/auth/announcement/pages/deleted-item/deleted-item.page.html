@@ -22,7 +22,7 @@
       ></app-list-item-announcement-component>
     </ng-template>
   </ion-col>
-  <ion-col size="12" [hidden]="announcement?.length > 0">
+  <ion-col size="12" [hidden]="announcement | isAnnouncement:0">
     <div class="content-center">
       <ion-icon color="medium" name="trash-outline"></ion-icon>
       <ion-text color="medium"> Não á item na lixeira. </ion-text>

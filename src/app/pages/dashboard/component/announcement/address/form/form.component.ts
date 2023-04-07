@@ -22,14 +22,14 @@ export class AnnouncementFormAddressComponent implements OnInit {
     route: '/address',
     icon: 'cloud-upload',
     label: 'Salvar',
-    fill: false,
+
     aria: 'Salvar endereço.',
     title: 'Salvar endereço.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private $address: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private $address!: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
@@ -69,7 +69,7 @@ export class AnnouncementFormAddressComponent implements OnInit {
   ): Subscription {
     return (this.$address = this.addressService.address(event.value).subscribe({
       next: (address: Pick<Address, 'message'>) =>
-        this.messsage(address?.message, loading),
+        address?.message && this.messsage(address?.message, loading),
       error: (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$address),
     }));

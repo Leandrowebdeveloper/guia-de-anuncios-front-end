@@ -7,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
 import { Observable, Subject, Subscription, EMPTY } from 'rxjs';
 import { Component, Input, OnInit } from '@angular/core';
-import { Announcement } from 'src/app/interface';
+import { Announcement, User } from 'src/app/interface';
 
 @Component({
   selector: 'app-deleted-item-announcement-page',
@@ -15,26 +15,26 @@ import { Announcement } from 'src/app/interface';
   styleUrls: ['./deleted-item.page.scss', '../../dashboard.page.scss'],
 })
 export class DeletedItemAnnouncementPage implements OnInit {
-  @Input() userId: number;
-  public announcement$: Observable<Announcement[]>;
-  public announcement: Announcement[];
-  public isToRestore: number;
-  public isDeleted: number;
-  public isAnnouncement: boolean;
-  public delete: boolean;
+  @Input() user!: User | void;
+  public announcement$!: Observable<Announcement[]>;
+  public announcement!: Announcement[];
+  public isToRestore!: number;
+  public isDeleted!: number;
+  public isAnnouncement!: boolean;
+  public delete!: boolean;
   public error = new Subject<boolean>();
-  public menssage: boolean;
+  public menssage!: boolean;
 
-  public isDesktop: boolean;
+  public isDesktop!: boolean;
 
-  public toggleListAnnouncement: boolean;
+  public toggleListAnnouncement!: boolean;
 
-  private destroyAnnouncement: Subscription;
+  private destroyAnnouncement!: Subscription;
 
   private limit = 12;
   private offset = 0;
   private page = 1;
-  private searchBy: object;
+  private searchBy!: { [key: string]: any };
 
   constructor(
     private plt: Platform,
@@ -157,13 +157,13 @@ export class DeletedItemAnnouncementPage implements OnInit {
     }, 6000);
   }
 
-  private getAnnouncement(): Observable<Announcement[]> {
-    if (this.userId) {
+  private getAnnouncement(): Observable<Announcement[]> | void {
+    if (this.user && this.user?.id) {
       return (this.announcement$ = this.authAnnouncementService
         .getAnnouncementAll('deleted', {
           limit: this.limit,
           offset: this.offset,
-          userId: this.userId,
+          userId: Number(this.user.id),
         })
         .pipe(
           tap((announcement: Announcement[]) => {
@@ -199,13 +199,15 @@ export class DeletedItemAnnouncementPage implements OnInit {
     announcement_: Announcement,
     loading: Promise<HTMLIonLoadingElement>
   ) {
-    this.removeItem(index);
-    this.messageService.success(
-      announcement_?.message,
-      loading,
-      this.destroyAnnouncement,
-      2000
-    );
+    if (announcement_?.message) {
+      this.removeItem(index);
+      this.messageService.success(
+        announcement_?.message,
+        loading,
+        this.destroyAnnouncement,
+        2000
+      );
+    }
   }
 
   private isPlatform(): boolean {

@@ -20,7 +20,6 @@ import {
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { WorkDayAnnouncementService } from '../../service/work-days.service';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-form-component',
@@ -28,35 +27,34 @@ import { Location } from '@angular/common';
   styleUrls: ['./form.component.scss'],
 })
 export class FormComponent implements OnInit {
-  @ViewChild('popoverStart', { static: false }) popoverStart: IonPopover;
+  @ViewChild('popoverStart', { static: false }) popoverStart!: IonPopover;
   @ViewChild('popoverStartInterval', { static: false })
-  popoverStartInterval: IonPopover;
+  popoverStartInterval!: IonPopover;
   @ViewChild('popoverEndInterval', { static: false })
-  popoverEndInterval: IonPopover;
+  popoverEndInterval!: IonPopover;
   @ViewChild('popoverEnd', { static: false })
-  popoverEnd: IonPopover;
-  @ViewChild(IonDatetime, { static: false }) datetime: IonDatetime;
+  popoverEnd!: IonPopover;
+  @ViewChild(IonDatetime, { static: false }) datetime!: IonDatetime;
 
   @Input() announcement!: Announcement;
-  @Input() dayOfTheWeek!: DayOfTheWeekPT;
+  @Input() dayOfTheWeek!: DayOfTheWeekPT | null;
 
   @Output() route = new EventEmitter<AnnouncementRoute>(undefined);
 
-  public workDays: WorkDays;
-  public start: string;
-  public startInterval: string;
-  public endInterval: string;
-  public end: string;
-  public day: DaysOfTheWeek;
+  public workDays!: WorkDays | null;
+  public start!: string;
+  public startInterval!: string;
+  public endInterval!: string;
+  public end!: string;
+  public day!: DaysOfTheWeek;
 
   public minuteValue = '0,5,10,15,20,25,30,35,40,45,50,55';
 
-  public form: FormGroup;
-  private $workDays: Subscription;
+  public form!: FormGroup;
+  private $workDays!: Subscription;
 
   constructor(
     private fb: FormBuilder,
-    private location: Location,
     private workDayService: WorkDayAnnouncementService,
     private messageService: MessageService,
     private loadingService: LoadingService
@@ -75,7 +73,6 @@ export class FormComponent implements OnInit {
     this.init();
     this.formInit();
     this.changeToEnglish();
-    console.log(this.location.path(true));
   }
 
   public changeToEnglish() {
@@ -110,34 +107,33 @@ export class FormComponent implements OnInit {
 
   public setTime(
     setTime: 'start' | 'startInterval' | 'endInterval' | 'end',
-    dayOfTheWeek: DayOfTheWeekPT
+    dayOfTheWeek: DayOfTheWeekPT | null
   ): void {
-    if (!this.workDayService.days.includes(dayOfTheWeek)) {
-      return;
-    }
-    const { value } = this.datetime;
-    switch (dayOfTheWeek) {
-      case 'domingo':
-        this.setDataTime(setTime, value, 'sunday');
-        break;
-      case 'segunda':
-        this.setDataTime(setTime, value, 'monday');
-        break;
-      case 'terca':
-        this.setDataTime(setTime, value, 'tuesday');
-        break;
-      case 'quarta':
-        this.setDataTime(setTime, value, 'wednesday');
-        break;
-      case 'quinta':
-        this.setDataTime(setTime, value, 'thursday');
-        break;
-      case 'sexta':
-        this.setDataTime(setTime, value, 'friday');
-        break;
-      case 'sabado':
-        this.setDataTime(setTime, value, 'saturday');
-        break;
+    if (dayOfTheWeek && this.workDayService.days.includes(dayOfTheWeek)) {
+      const { value } = this.datetime;
+      switch (dayOfTheWeek) {
+        case 'domingo':
+          this.setDataTime(setTime, value, 'sunday');
+          break;
+        case 'segunda':
+          this.setDataTime(setTime, value, 'monday');
+          break;
+        case 'terca':
+          this.setDataTime(setTime, value, 'tuesday');
+          break;
+        case 'quarta':
+          this.setDataTime(setTime, value, 'wednesday');
+          break;
+        case 'quinta':
+          this.setDataTime(setTime, value, 'thursday');
+          break;
+        case 'sexta':
+          this.setDataTime(setTime, value, 'friday');
+          break;
+        case 'sabado':
+          this.setDataTime(setTime, value, 'saturday');
+          break;
+      }
     }
   }
 
@@ -151,26 +147,25 @@ export class FormComponent implements OnInit {
     return event.dismiss();
   }
 
-  public reset(): Subscription {
+  public reset(): Subscription | void {
     this.cleanFields();
     return this.onSubmit();
   }
 
-  public onSubmit(): Subscription {
-    if (!this.workDayService.valid(this.form.value)) {
-      return;
-    }
-    const loading = this.loadingService.show('Salvando horário...');
-    // eslint-disable-next-line no-underscore-dangle
-    this.form.value._csrf = this.announcement?._csrf;
+  public onSubmit(): Subscription | void {
+    if (this.workDayService.valid(this.form.value)) {
+      const loading = this.loadingService.show('Salvando horário...');
+      this.form.value._csrf = this.announcement?._csrf;
 
-    return (this.$workDays = this.workDayService
-      .workDays(this.form.value)
-      .subscribe({
-        next: (workDays: WorkDays) => this.messsage(workDays?.message, loading),
-        error: (error: HttpErrorResponse) =>
-          this.messageService.error(error, loading, this.$workDays),
-      }));
+      return (this.$workDays = this.workDayService
+        .workDays(this.form.value)
+        .subscribe({
+          next: (workDays: WorkDays) =>
+            workDays?.message && this.messsage(workDays?.message, loading),
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, loading, this.$workDays),
+        }));
+    }
   }
 
   private cleanFields() {
@@ -181,19 +176,29 @@ export class FormComponent implements OnInit {
     switch (setTime) {
       case 'start':
         this.start = value;
-        this.form.get(day).value.start = value;
+        const start = JSON.parse('{"' + day + '":{"start":"' + value + '"}}');
+        this.form.patchValue({ ...start });
         break;
       case 'startInterval':
         this.startInterval = value;
-        this.form.get(day).value.startInterval = value;
+        const startInterval = JSON.parse(
+          '{"' + day + '":{"startInterval":"' + value + '"}}'
+        );
+        this.form.patchValue({ ...startInterval });
         break;
       case 'endInterval':
         this.endInterval = value;
-        this.form.get(day).value.endInterval = value;
+        const endInterval = JSON.parse(
+          '{"' + day + '":{"endInterval":"' + value + '"}}'
+        );
+        this.form.patchValue({ ...endInterval });
         break;
       case 'end':
         this.end = value;
-        this.form.get(day).value.end = value;
+        const end = JSON.parse(
+          '{"' + day + '":{"endInterval":"' + value + '"}}'
+        );
+        this.form.patchValue({ ...end });
         break;
     }
   }
@@ -222,7 +227,7 @@ export class FormComponent implements OnInit {
     return this.messageService.success(message, loading, this.$workDays);
   }
 
-  private init(): WorkDays {
-    return (this.workDays = this.announcement?.workDays);
+  private init(): void {
+    this.workDays = this.announcement?.workDays || null;
   }
 }

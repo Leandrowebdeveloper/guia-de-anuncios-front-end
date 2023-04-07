@@ -1,4 +1,3 @@
-import { AdminManagementCitieComponent } from './city/component/citie.component';
 import { IonicModule } from '@ionic/angular';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -37,17 +36,13 @@ import { SocialNetworkAnnouncementService } from './social-network/service/socia
 import { ContactAnnouncementService } from './contant/service/contact.service';
 import { CityAnnouncementService } from './city/service/city.service';
 import { CardHeaderComponent } from './card/components/header/header.component';
-import { MaskPipe } from 'src/app/utilities/pipe/mask/mask.pipe';
+import { MaskPipe } from 'src/app/pipe/mask/mask.pipe';
 import { AnnouncementFormComponent } from 'src/app/pages/dashboard/component/announcement/announcement/form/form.component';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 import { AdminAnnouncementService } from '../../administrator/announcement/service/admin-announcement.service';
 import { WorkDayAnnouncementComponent } from './work-days/work-days.component';
 import { ShowAnnouncementComponentModule } from 'src/app/pages/public/components/announcement-component.module';
 import { GaleryComponentModule } from './galery/galery-component.module';
-import { AdminMaganementAddressComponent } from './address/component/address.component';
-import { AdminManagementContactComponent } from './contant/component/contact.component';
-import { AdminManagementSocialNetworkComponent } from './social-network/component/social-network.component';
-import { AdminManagementMapsComponent } from './map/form/maps.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -87,11 +82,6 @@ import { AdminManagementMapsComponent } from './map/form/maps.component';
     AnnouncementFormComponent,
     AnnouncementComponent,
     CardHeaderComponent,
-    AdminManagementCitieComponent,
-    AdminManagementContactComponent,
-    AdminMaganementAddressComponent,
-    AdminManagementSocialNetworkComponent,
-    AdminManagementMapsComponent,
   ],
   exports: [
     AnnouncementStateComponent,
@@ -111,12 +101,7 @@ import { AdminManagementMapsComponent } from './map/form/maps.component';
     AnnouncementSearchComponent,
     AnnouncementFormComponent,
     AnnouncementComponent,
-    AdminManagementMapsComponent,
-    AdminManagementSocialNetworkComponent,
     CardHeaderComponent,
-    AdminManagementCitieComponent,
-    AdminManagementContactComponent,
-    AdminMaganementAddressComponent,
   ],
   providers: [
     AdminAnnouncementService,
@@ -135,7 +120,6 @@ import { AdminManagementMapsComponent } from './map/form/maps.component';
     WorkDayAnnouncementComponent,
     AnnouncementMapComponent,
     AnnouncementSocialNetworkComponent,
-    AdminManagementMapsComponent,
   ],
 })
 export class AnnouncementComponentsModule {}

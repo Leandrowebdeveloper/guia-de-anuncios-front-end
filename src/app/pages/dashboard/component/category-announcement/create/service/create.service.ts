@@ -11,17 +11,15 @@ import { CategoryService } from 'src/app/pages/dashboard/administrator/categoryA
 @Injectable()
 export class CreateCategoryAnnouncementService extends HttpService<Category> {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private categoryService: CategoryService
   ) {
     super(http, storageService);
     this.setApi = `category`;
   }
 
-  public register(
-    category: Required<Pick<Category, 'name' | 'description' | '_csrf'>>
-  ): Observable<Category> {
+  public register(category: Category): Observable<Category> {
     return this.create(category, 'management/register').pipe(
       tap((category_: Category) => this.categoryService.add.emit(category_))
     );

@@ -3,7 +3,6 @@ import { MessageService } from 'src/app/utilities/message/message.service';
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import {
-  Announcement,
   DayOfTheWeekPT,
   DaysOfTheWeek,
   WorkDaysFields,
@@ -17,7 +16,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class WorkDayAnnouncementService extends HttpService<Announcement> {
+export class WorkDayAnnouncementService extends HttpService<WorkDays> {
   public fields: WorkDaysFields = {
     start: '',
     startInterval: '',
@@ -43,11 +42,11 @@ export class WorkDayAnnouncementService extends HttpService<Announcement> {
     'friday',
     'saturday',
   ];
-  private workDayEvent = new EventEmitter<WorkDays>(undefined);
+  private workDayEvent = new EventEmitter<WorkDays | null>(undefined);
 
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     public messageService: MessageService,
     private managementService: ManagementAnnouncementService
   ) {
@@ -59,7 +58,7 @@ export class WorkDayAnnouncementService extends HttpService<Announcement> {
     return this.workDayEvent.asObservable();
   }
 
-  public set setworkDay(value: WorkDays) {
+  public set setworkDay(value: WorkDays | null) {
     if (this.managementService.getAnnouncement) {
       this.managementService.getAnnouncement.workDays = value;
       this.managementService.setAnnouncement =

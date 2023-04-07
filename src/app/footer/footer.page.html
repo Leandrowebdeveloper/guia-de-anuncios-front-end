@@ -38,9 +38,9 @@
       </span>
 
       <!-- Anúncio -->
-      <span class="ion-text-center" *ngIf="user?.auth">
+      <span class="ion-text-center" *ngIf="(user | userValues:'auth')">
         <ion-button
-          [class]="user?.level === '2' ? 'ion-margin-horizontal cursor-pointer' : 'ion-margin-end cursor-pointer'"
+          [class]="(user | isUserLevel: '2') ? 'ion-margin-horizontal cursor-pointer' : 'ion-margin-end cursor-pointer'"
           [routerLink]="['/painel-de-controle', 'anuncio']"
           title="Gerenciamento de anúncio"
           data-label="Gerenciamento de anúncio"
@@ -56,17 +56,17 @@
       </span>
 
       <!-- Usuário -->
-      <span class="ion-text-center" *ngIf="user?.auth">
+      <span class="ion-text-center" *ngIf="user | userValues:'auth'">
         <ion-button
           class="button-avatar"
-          [routerLink]="user.level === '1' ? '/painel-de-controle/admin/usuario' : '/painel-de-controle/usuario'"
+          [routerLink]="(user | isUserLevel:'1') ? '/painel-de-controle/admin/usuario' : '/painel-de-controle/usuario'"
         >
           <ion-avatar class="cursor-pointer" title="Imágem do usuário.">
             <ion-img
-              [src]="user?.image?.filename ? '/images/avatar/' + user?.image?.filename : './../../assets/avatar.svg'"
+              [src]="user | userValuesImgAvatar"
               referrerpolicy="no-referrer"
-              [title]="'Usuário ' + user?.name"
-              alt="Usuário"
+              [title]="user | userValues:'name':'Usuário'"
+              alt="user | userValues:'name':'Usuário'"
             ></ion-img>
           </ion-avatar>
         </ion-button>
@@ -74,9 +74,9 @@
       </span>
 
       <!-- Cadastrar -->
-      <span class="ion-text-center" *ngIf="!user?.auth">
+      <span class="ion-text-center" *ngIf="!(user | userValues:'auth')">
         <ion-button
-          *ngIf="!user?.auth"
+          *ngIf="!(user | userValues:'auth')"
           routerLink="/cadastrar"
           routerLinkActive="router-link-active"
           title="Cadastrar de usuários."
@@ -92,9 +92,9 @@
       </span>
 
       <!-- Login -->
-      <span class="ion-text-center" *ngIf="!user?.auth">
+      <span class="ion-text-center" *ngIf="!(user | userValues:'auth')">
         <ion-button
-          *ngIf="!user?.auth"
+          *ngIf="!(user | userValues:'auth')"
           routerLink="/entrar"
           routerLinkActive="router-link-active"
           title="Acesso ao sistema."

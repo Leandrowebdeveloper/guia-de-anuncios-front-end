@@ -8,7 +8,7 @@
   </ion-col>
 </ng-container>
 <ng-template #isForm>
-  <ion-col size="12">
+  <ion-col size="12" *ngIf="announcement">
     <app-form-component
       [dayOfTheWeek]="day"
       [announcement]="announcement"

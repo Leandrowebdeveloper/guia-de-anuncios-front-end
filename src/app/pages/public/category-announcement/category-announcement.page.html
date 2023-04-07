@@ -9,22 +9,21 @@
           <ion-icon
             class="ion-margin-end"
             size="large"
-            [src]="category?.image
-            ? '/images/icons/black/' + category?.image?.filename : './../../../../assets/thumbnail.svg'"
+            [src]="category | announcementCategoryToggleIcon:isModuleDark"
           ></ion-icon>
           <h1
             [title]="category | attrTitle:'name'"
             [attr.data-message]="category | attrTitle:'name'"
             class="align-items"
           >
-            {{ category?.name }}
+            {{ category.name }}
           </h1>
         </ion-text>
       </ion-col>
 
-      <ion-col size="12">
+      <ion-col size="12" *ngIf="announcement | isInfiniteScroll:0;else Empty">
         <!-- List item -->
-        <ion-list>
+        <ion-list class="ion-no-padding">
           <ion-reorder-group
             (ionItemReorder)="doReorder($event)"
             [disabled]="!isOrder"
@@ -212,15 +211,57 @@
         </ion-list>
       </ion-col>
 
+      <ng-template #Empty>
+        <ion-col size="12">
+          <div class="content-center" *ngIf="!isAuth">
+            <ion-text class="ion-text-center">
+              <p>Não á anúncios no momento.</p>
+            </ion-text>
+            <ion-button
+              [routerLink]="['/cadastrar']"
+              title="Cadastrar anúncio"
+              expand="block"
+              shape="round"
+            >
+              <ion-icon slot="icon-only" color="light" name="create"></ion-icon>
+              Crie uma conta grátis.
+            </ion-button>
+          </div>
+
+          <div class="content-center" *ngIf="isAuth">
+            <ion-text class="ion-text-center">
+              <p>Não á anúncios no momento.</p>
+            </ion-text>
+            <ion-button
+              (click)="back()"
+              title="Voltar"
+              expand="block"
+              shape="round"
+            >
+              <ion-icon
+                slot="icon-only"
+                color="light"
+                name="arrow-back-circle"
+              ></ion-icon>
+              Voltar
+            </ion-button>
+          </div>
+        </ion-col>
+      </ng-template>
+
       <ion-card *ngIf="!endListCategory">
         <ion-text color="primary" class="ion-text-center">
           <p>FIM</p>
-          <p>{{ announcement?.length }} Anúncios</p>
+          <p>
+            {{ (announcement | isAnnouncement) && announcement.length }}
+            Anúncios
+          </p>
         </ion-text>
       </ion-card>
+
       <ion-infinite-scroll
+        *ngIf="announcement | isInfiniteScroll:11"
         (ionInfinite)="findMoreCategory($event)"
-        *ngIf="endListCategory"
       >
         <ion-infinite-scroll-content
           loadingSpinner="bubbles"

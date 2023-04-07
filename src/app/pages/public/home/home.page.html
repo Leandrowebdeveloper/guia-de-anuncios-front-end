@@ -6,12 +6,16 @@
     *ngIf="category$ | async; let category; else loading"
     fixed
   >
-    <!-- <ion-searchbar
+    <ion-row class="ion-justify-content-around ion-align-items-center">
+      <ion-col size="12">
+        <ion-searchbar
+          [color]="isDark ? 'medium' : 'none'"
           class="ion-margin-top"
           placeholder="Pesquizar"
           animated
-        ></ion-searchbar> -->
-    <ion-row class="ion-justify-content-around ion-align-items-center">
+        ></ion-searchbar>
+      </ion-col>
+
       <ion-col
         class="ion-align-self-center ion-margin-vertical ion-no-margin-bottom"
         size-xl="2"
@@ -24,27 +28,27 @@
         <ion-card
           [ngClass]="{'ion-no-margin': !isDesktop}"
           button="true"
-          [title]="item?.name + ': ' + item?.description"
-          [attr.data-message]="item?.name + ': ' + item?.description"
-          [routerLink]="['/categoria', item?.slug]"
+          [title]="(item | categoryValues:'name') + ': ' + (item | categoryValues:'description')"
+          [attr.data-message]="(item | categoryValues:'name') + ': ' + (item | categoryValues:'description')"
+          [routerLink]="['/categoria', item | categoryValues:'slug']"
         >
           <ion-card-header class="no-padding-horizontal">
             <ion-thumbnail>
               <img
-                [src]="item?.image ? '/images/icons/' + item?.image?.filename : './../../../../assets/thumbnail.svg'"
-                [alt]="item?.name"
-                [title]="item?.name"
-                [attr.aria-labelledby]="item?.name"
+                [src]="item | categoryIcons"
+                [alt]="item | categoryValues:'name'"
+                [title]="item | categoryValues:'name'"
+                [attr.aria-labelledby]="item | categoryValues:'name'"
               />
             </ion-thumbnail>
           </ion-card-header>
           <ion-card-content class="ion-text-center no-padding-horizontal">
             <ion-text
-              [id]="item?.name"
-              [title]="item?.name"
+              [id]="item | categoryValues:'name'"
+              [title]="item | categoryValues:'name'"
               class="ion-text-nowrap"
             >
-              {{item?.name}}
+              {{ item | categoryValues:'name' }}
             </ion-text>
           </ion-card-content>
         </ion-card>

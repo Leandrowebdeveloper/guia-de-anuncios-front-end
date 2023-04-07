@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { FooterModule } from 'src/app/footer/footer.module';
     HomePageRoutingModule,
     HeaderModule,
     FooterModule,
+    PipeModule,
   ],
   declarations: [HomePage],
 })

@@ -8,17 +8,20 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 
 @Injectable()
 export class EmailService extends HttpService<
-  Required<Pick<User, '_csrf' | 'email' | 'slug' | 'password'>>
+  Pick<User, '_csrf' | 'email' | 'slug' | 'password' | 'message'>
 > {
-  constructor(http: HttpClient, public storageService: StorageService) {
+  constructor(
+    http: HttpClient,
+    public override storageService: StorageService
+  ) {
     super(http, storageService);
     this.setApi = `admin`;
   }
 
   public email(
-    user: Required<Pick<User, '_csrf' | 'email' | 'slug' | 'password'>>
+    user: Pick<User, '_csrf' | 'email' | 'slug' | 'password' | 'message'>
   ): Observable<
-    Required<Pick<User, '_csrf' | 'email' | 'slug' | 'password'>> | number[]
+    Pick<User, '_csrf' | 'email' | 'slug' | 'password' | 'message'>
   > {
     return this.patch(user, 'management/email');
   }

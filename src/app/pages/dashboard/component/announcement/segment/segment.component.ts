@@ -16,10 +16,10 @@ import {
   styleUrls: ['./segment.component.scss'],
 })
 export class AnnouncementSegmentComponent implements OnInit, OnDestroy {
-  @Input() isAdmin: boolean;
-  @ViewChild(IonSegment, { static: true }) segment: IonSegment;
+  @Input() isAdmin!: boolean;
+  @ViewChild(IonSegment, { static: true }) segment!: IonSegment;
   @Output() togglePage = new EventEmitter<boolean>(true);
-  private segmentIonChange: Subscription;
+  private segmentIonChange!: Subscription;
   constructor() {}
 
   ngOnDestroy(): void {

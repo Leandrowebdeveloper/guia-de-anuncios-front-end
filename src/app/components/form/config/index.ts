@@ -344,7 +344,7 @@ export class ConfigForm {
       name: 'period',
       label: 'Período',
       placeholder: 'Selecione um período',
-      type: undefined,
+      type: '',
       actionLabel: '',
       readonly: false,
       msg: {
@@ -402,7 +402,7 @@ export class ConfigForm {
       label: 'Permanecer conectado?',
       placeholder: 'Permanecer conectado?',
       type: 'checkbox',
-      actionLabel: null,
+      actionLabel: '',
       readonly: false,
       msg: {
         invalid: null,

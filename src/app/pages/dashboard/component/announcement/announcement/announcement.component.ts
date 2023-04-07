@@ -9,47 +9,16 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./announcement.component.scss'],
 })
 export class AnnouncementComponent implements OnInit {
-  @Input() announcement!: Announcement;
-  @Input() user!: Required<Pick<User, '_csrf' | 'id'>>;
+  @Input() announcement!: Announcement | void;
+  @Input() user!: Required<Pick<User, '_csrf' | 'id'>> | void;
 
   constructor(private modalController: ModalController) {}
 
   ngOnInit() {}
 
   public async open(): Promise<void> {
-    let announcement: Pick<
-      Announcement,
-      | '_csrf'
-      | 'title'
-      | 'description'
-      | 'slug'
-      | 'id'
-      | 'userId'
-      | 'categoryAnnouncement'
-    >;
-    let label: string;
-
-    if (this.announcement?.id) {
-      announcement = {
-        // eslint-disable-next-line no-underscore-dangle
-        _csrf: this.announcement?._csrf,
-        title: this.announcement?.title,
-        description: this.announcement?.description,
-        slug: this.announcement?.slug,
-        id: this.announcement?.id,
-      };
-      label = 'Editar anúcio';
-    } else {
-      announcement = {
-        // eslint-disable-next-line no-underscore-dangle
-        _csrf: this.user?._csrf,
-        title: null,
-        description: null,
-        slug: null,
-        userId: this.user?.id,
-      };
-      label = 'Cadastrar anúncio';
-    }
+    const label = this.getLabel();
+    const announcement = this.getAnnouncement();
 
     const modal = await this.modalController.create({
       component: AnnouncementFormComponent,
@@ -60,5 +29,34 @@ export class AnnouncementComponent implements OnInit {
       },
     });
     return await modal.present();
+  }
+
+  private getLabel() {
+    if (this.announcement?.id) {
+      return 'Editar anúcio';
+    } else {
+      return 'Cadastrar anúncio';
+    }
+  }
+
+  private getAnnouncement() {
+    const _csrf = this.announcement?._csrf;
+    if (this.announcement?.id) {
+      return {
+        _csrf,
+        title: this.announcement?.title,
+        description: this.announcement?.description,
+        slug: this.announcement?.slug,
+        id: this.announcement?.id,
+      };
+    } else {
+      return {
+        _csrf,
+        title: null,
+        description: null,
+        slug: null,
+        userId: this.user?.id,
+      };
+    }
   }
 }

@@ -7,7 +7,7 @@
       (item?.type === 'danger' && 'danger') ||
       (item?.type === 'success' && 'success')
     "
-    [ngClass]="{ 'flex-header': item?.type !== 'danger' }"
+    [ngClass]="{ 'flex-header': isAdmin || item?.type !== 'danger' }"
   >
     <ion-card-title>
       <span [ngSwitch]="item?.type">
@@ -20,7 +20,7 @@
 
     <!-- Botão fechar -->
     <ion-fab-button
-      *ngIf="item?.type !== 'danger'"
+      *ngIf="isAdmin || item?.type !== 'danger'"
       (click)="close(i, item)"
       size="small"
       [color]="
@@ -33,15 +33,15 @@
       <ion-icon name="close"></ion-icon>
     </ion-fab-button>
   </ion-card-header>
+
   <ion-card-content>
     <p>
-      <em>{{ user?.name }}</em>
+      <em>{{ user | userValues : "name" }}</em>
     </p>
     <div class="ion-margin-top" [innerHtml]="item?.description"></div>
     <!-- Buttons -->
-
     <div class="d-flex">
-      <div *ngIf="isButton">
+      <div *ngIf="isAdmin">
         <ion-button size="small" (click)="update(i)">
           <ion-icon slot="start" name="create"></ion-icon>
           editar
@@ -55,7 +55,7 @@
       </div>
     </div>
   </ion-card-content>
-  <ion-card-content *ngIf="isButton && item?.userSender">
+  <ion-card-content *ngIf="item?.userSender">
     <ion-item-divider>
       <ion-label>Remetente</ion-label>
     </ion-item-divider>
@@ -72,8 +72,9 @@
       <ion-avatar slot="start">
         <img
           [src]="
-            item?.userSender?.image?.url ||
-            './../../../../../../assets/avatar.svg'
+            item?.userSender?.image
+              ? '/images/avatar/' + item?.userSender?.image?.filename
+              : './../../../../../../assets/avatar.svg'
           "
         />
       </ion-avatar>

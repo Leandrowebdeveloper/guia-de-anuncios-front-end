@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { UsersPageRoutingModule } from './users-routing.module';
 
 import { UsersPage } from './users.page';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
 import { UserComponentsModule } from 'src/app/pages/dashboard/component/user/user-component.module';

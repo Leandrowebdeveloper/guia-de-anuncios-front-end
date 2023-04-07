@@ -9,16 +9,12 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
 
 @Injectable()
 export class ContactAnnouncementService extends HttpService<
-  | Contact
-  | Pick<
-      Contact & { password: string },
-      '_csrf' | 'id' | 'password' | 'message'
-    >
+  Contact & { password: string }
 > {
-  private contactEvent = new EventEmitter<Contact>(undefined);
+  private contactEvent = new EventEmitter<Contact | null>(undefined);
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private managementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
@@ -29,7 +25,7 @@ export class ContactAnnouncementService extends HttpService<
     return this.contactEvent.asObservable();
   }
 
-  public set setContact(contact: Required<Contact>) {
+  public set setContact(contact: (Contact & { password: string }) | null) {
     if (this.managementService.getAnnouncement) {
       this.managementService.getAnnouncement.contact = contact;
       this.managementService.setAnnouncement =
@@ -38,71 +34,56 @@ export class ContactAnnouncementService extends HttpService<
     this.contactEvent.emit(contact);
   }
 
-  public contact(contact: Required<Contact>): Observable<Contact | number[]> {
+  public contact(contact: Contact & { password: string }): Observable<Contact> {
     if (contact?.id) {
       return this.patch(contact).pipe(
         tap(
-          (contact_: Required<Contact>) =>
+          (contact_: Contact & { password: string }) =>
             (this.setContact = this.filter(contact_))
         )
       );
     } else {
       return this.create(contact).pipe(
-        tap((contact_: Required<Contact>) => (this.setContact = contact_))
+        tap(
+          (contact_: Contact & { password: string }) =>
+            (this.setContact = contact_)
+        )
       );
     }
   }
 
-  public filter(contact: Required<Contact>): Required<Contact> {
+  public filter(
+    contact: Contact & { password: string }
+  ): Contact & { password: string } {
     const result: Contact = {
       phone: null,
       whatsapp: null,
       mobilePhone: null,
-      // eslint-disable-next-line no-underscore-dangle
       _csrf: contact?._csrf,
       announcementId: contact?.announcementId,
       id: contact?.id,
     };
     if (contact.phone) {
-      // eslint-disable-next-line no-param-reassign
       result.phone = Number(String(contact.phone).replace(/[\(\)\-]/g, ''));
     }
     if (contact.whatsapp) {
-      // eslint-disable-next-line no-param-reassign
       result.whatsapp = Number(
         String(contact.whatsapp).replace(/[\(\)\-]/g, '')
       );
     }
     if (contact.mobilePhone) {
-      // eslint-disable-next-line no-param-reassign
       result.mobilePhone = Number(
         String(contact.mobilePhone).replace(/[\(\)\-]/g, '')
       );
     }
-    return result as Required<Contact>;
+    return result as Contact & { password: string };
   }
 
   public delete(
-    contact: Pick<Contact & { password: string }, '_csrf' | 'id' | 'password'>
-  ): Observable<
-    Pick<
-      Contact & {
-        password: string;
-      },
-      '_csrf' | 'id' | 'password' | 'message'
-    >
-  > {
+    contact: Contact & { password: string }
+  ): Observable<Contact & { password: string }> {
     return this.destroy(contact).pipe(
-      tap(
-        (
-          c: Pick<
-            Contact & {
-              password: string;
-            },
-            '_csrf' | 'id' | 'password' | 'message'
-          >
-        ) => (this.setContact = null)
-      )
+      tap((): null => (this.setContact = null))
     );
   }
 }

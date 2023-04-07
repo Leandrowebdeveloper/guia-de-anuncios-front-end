@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./management.page.scss'],
 })
 export class UserManagementPage implements OnInit {
-  public user$: Observable<User>;
+  public user$!: Observable<User | void>;
   constructor(
     private authService: AuthService,
     private navCtrl: NavController

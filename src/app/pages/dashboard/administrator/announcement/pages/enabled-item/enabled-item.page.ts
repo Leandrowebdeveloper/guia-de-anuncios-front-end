@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { AlertService } from 'src/app//utilities/alert/alert.service';
-import { Announcement, SearchAnnouncement } from 'src/app/interface';
+import { Announcement, Category, SearchAnnouncement } from 'src/app/interface';
 import { Observable, Subject, Subscription, EMPTY } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -18,19 +18,19 @@ import { SearchAnnouncementService } from 'src/app/pages/dashboard/component/ann
   styleUrls: ['./enabled-item.page.scss'],
 })
 export class EnabledItemAdminAnnouncementPage implements OnInit, OnDestroy {
-  public announcement$: Observable<Announcement[]>;
-  public announcement: Announcement[];
-  public isAdmin: boolean;
+  public announcement$!: Observable<Announcement[]>;
+  public announcement!: Announcement[];
+  public isAdmin!: boolean;
 
-  public isDeleted: number;
+  public isDeleted!: number;
   public error = new Subject<boolean>();
-  public menssage: boolean;
+  public menssage!: boolean;
 
-  private destroyAnnouncement: Subscription;
-  private searchBy: object;
+  private destroyAnnouncement!: Subscription;
+  private searchBy!: { [key: string]: any };
 
-  private $search: Subscription;
-  private $searchBy: Subscription;
+  private $search!: Subscription;
+  private $searchBy!: Subscription;
 
   private limit = 12;
   private offset = 0;
@@ -44,7 +44,7 @@ export class EnabledItemAdminAnnouncementPage implements OnInit, OnDestroy {
     private loadingService: LoadingService
   ) {}
 
-  private get getSearchBy(): object {
+  private get getSearchBy(): { [key: string]: any } {
     return this.searchBy;
   }
 
@@ -76,15 +76,15 @@ export class EnabledItemAdminAnnouncementPage implements OnInit, OnDestroy {
     action: 'destroy' | 'restore' | 'drop';
     index: number;
     announcement: Required<Pick<Announcement, '_csrf' | 'id'>>;
-  }): Promise<void> {
+  }): Promise<void> | void {
     const { action, index, announcement } = event;
     if (action === 'destroy') {
       return this.destroy(index, announcement);
     }
   }
 
-  public search(event: SearchbarCustomEvent): Subscription {
-    if (event?.target?.value.length >= 3) {
+  public search(event: SearchbarCustomEvent): Subscription | void {
+    if (event?.target?.value && event?.target?.value.length >= 3) {
       const data = this.setDataSearch(event?.target?.value);
       return (this.$search = this.adminAnnouncementService
         .searchBy(data)
@@ -143,7 +143,9 @@ export class EnabledItemAdminAnnouncementPage implements OnInit, OnDestroy {
         }),
         map((item) =>
           item.map((data) => {
-            data.category = { ...data?.categoryAnnouncement?.category };
+            data.category = {
+              ...data?.categoryAnnouncement?.category,
+            } as Category;
             delete data?.categoryAnnouncement;
             return data;
           })
@@ -184,12 +186,13 @@ export class EnabledItemAdminAnnouncementPage implements OnInit, OnDestroy {
     announcement_: Announcement,
     loading: Promise<HTMLIonLoadingElement>
   ) {
-    this.messageService.success(
-      announcement_.message,
-      loading,
-      this.destroyAnnouncement,
-      2000
-    );
+    if (announcement_?.message)
+      this.messageService.success(
+        announcement_.message,
+        loading,
+        this.destroyAnnouncement,
+        2000
+      );
   }
 
   private setButtonCreate() {
@@ -202,32 +205,45 @@ export class EnabledItemAdminAnnouncementPage implements OnInit, OnDestroy {
     }
     switch (search) {
       case 'title':
-        this.announcement.sort((a, b) => a?.title < b?.title && -1);
+        this.announcement.sort((a, b): any => {
+          if (a?.title && b?.title) return a?.title < b?.title && -1;
+        });
         break;
       case 'createdAt':
-        this.announcement.sort((a, b) => a?.createdAt > b?.createdAt && -1);
+        this.announcement.sort((a, b): any => {
+          if (a?.createdAt && b?.createdAt)
+            return a?.createdAt > b?.createdAt && -1;
+        });
         break;
       case 'updatedAt':
-        this.announcement.sort((a, b) => a?.updatedAt > b?.updatedAt && -1);
+        this.announcement.sort((a, b): any => {
+          if (a?.updatedAt && b?.updatedAt)
+            return a?.updatedAt > b?.updatedAt && -1;
+        });
         break;
       case 'state':
-        this.announcement.sort((a, b) => a?.state > b?.state && -1);
+        this.announcement.sort((a, b): any => {
+          if (a?.state && b?.state) return a?.state > b?.state && -1;
+        });
         break;
       case 'blockade':
-        this.announcement.sort((a, b) => a?.blockade > b?.blockade && -1);
+        this.announcement.sort((a, b): any => {
+          if (a?.blockade && b?.blockade)
+            return a?.blockade > b?.blockade && -1;
+        });
         break;
     }
   }
 
   private initSearchBy(): void {
     this.$searchBy = this.searchAnnouncementService.getSearchBy.subscribe({
-      next: (filter: SearchAnnouncement) => {
+      next: (filter: SearchAnnouncement | void) => {
         if (filter === 'title') {
           this.setSearchBy = filter;
 
           this.setSearchBy = 'title';
         }
-        this.orderBy(filter);
+        if (filter) this.orderBy(filter);
       },
     });
   }

@@ -1,6 +1,5 @@
-import { Platform } from '@ionic/angular';
-import { Component, Input, OnInit } from '@angular/core';
-import { SocialNetwork } from 'src/app/interface';
+import { Component, Input } from '@angular/core';
+import { Announcement } from 'src/app/interface';
 import { Browser } from '@capacitor/browser';
 
 @Component({
@@ -8,32 +7,26 @@ import { Browser } from '@capacitor/browser';
   templateUrl: './show-social-network.component.html',
   styleUrls: ['./show-social-network.component.scss'],
 })
-export class ShowSocialNetWorkComponent implements OnInit {
-  @Input() socialNetwork!: SocialNetwork;
-  constructor(private plt: Platform) {}
+export class ShowSocialNetWorkComponent {
+  @Input() announcement!: Pick<Announcement, 'socialNetwork'> | void;
 
-  ngOnInit() {}
-
-  public async send(e: Event, socialNetwork: 'facebook' | 'instagram') {
+  public async send(
+    e: Event,
+    socialNetwork: 'facebook' | 'instagram'
+  ): Promise<void> {
     e.preventDefault();
-    const { facebook, instagran } = this.socialNetwork;
-    if (socialNetwork === 'facebook') {
-      if (this.plt.is('mobile')) {
-        return console.log('mobile');
+    if (this.announcement && this.announcement?.socialNetwork) {
+      const { facebook, instagran } = this.announcement?.socialNetwork;
+      if (socialNetwork === 'facebook') {
+        return await Browser.open({
+          url: facebook,
+        });
       }
-      return await Browser.open({
-        url: facebook,
-        windowName: '_top',
-      });
-    }
-    if (socialNetwork === 'instagram') {
-      if (this.plt.is('mobile')) {
-        return console.log('mobile');
+      if (socialNetwork === 'instagram') {
+        return await Browser.open({
+          url: instagran,
+        });
       }
-      return await Browser.open({
-        url: instagran,
-        windowName: '_top',
-      });
     }
   }
 }

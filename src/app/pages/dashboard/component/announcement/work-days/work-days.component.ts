@@ -2,7 +2,7 @@ import {
   Announcement,
   AnnouncementRoute,
   DayOfTheWeekPT,
-} from 'src/app/interface/index';
+} from 'src/app/interface';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
@@ -11,9 +11,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./work-days.component.scss'],
 })
 export class WorkDayAnnouncementComponent {
-  @Input() announcement!: Announcement;
+  @Input() announcement!: Announcement | void;
   @Output() route = new EventEmitter<AnnouncementRoute>(undefined);
-  public day: DayOfTheWeekPT;
+  public day!: DayOfTheWeekPT | null;
 
   public setDay(day: DayOfTheWeekPT): void {
     this.day = day;

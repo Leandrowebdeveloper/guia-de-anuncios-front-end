@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ShowContactComponent } from './show-contact/show-contact.component';
 import { ShowSocialNetWorkComponent } from './show-social-network/show-social-network.component';
 import { IonicModule } from '@ionic/angular';
-import { PipeModule } from 'src/app/utilities/pipe/pipe.module';
+import { PipeModule } from 'src/app/pipe/pipe.module';
 import { SegmentComponent } from './segment/segment.component';
 
 @NgModule({

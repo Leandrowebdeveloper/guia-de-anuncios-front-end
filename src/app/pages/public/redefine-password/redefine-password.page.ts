@@ -19,12 +19,12 @@ import { HelpsService } from 'src/app/services/helps/helps.service';
 })
 export class RedefinePasswordPage implements OnInit {
   public user!: User;
-  public active: boolean;
+  public active!: boolean;
   public attrButton!: AttrButton;
-  public message: string;
-  private form: FormGroup;
-  private urlTree: boolean;
-  private redefine: Subscription;
+  public message!: string;
+  private form!: FormGroup;
+  private urlTree!: boolean;
+  private redefine!: Subscription;
   constructor(
     private activatedRoute: ActivatedRoute,
     private helpsService: HelpsService,
@@ -112,7 +112,7 @@ export class RedefinePasswordPage implements OnInit {
   }
 
   private setConfig(): void {
-    this.user = this.activatedRoute.snapshot.data.redefinePassword;
+    this.user = this.activatedRoute.snapshot.data['redefinePassword'];
   }
 
   private setAttrButton(): void {
@@ -120,7 +120,7 @@ export class RedefinePasswordPage implements OnInit {
       route: 'redefinir-senha',
       icon: 'arrow-up-circle',
       label: 'Redefinir senha',
-      fill: false,
+
       aria: 'Redefinir senha.',
       title: 'Redefinir senha.',
     };

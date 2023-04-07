@@ -1,21 +1,14 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { Http } from 'src/app/interface';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
-/**
- * @class HttpService
- * @implements Http
- */
 export class HttpService<T> implements Http<T> {
-  private api: string;
+  private api!: string;
 
   private httpOptions = {
     headers: new HttpHeaders({
@@ -46,81 +39,75 @@ export class HttpService<T> implements Http<T> {
 
   public requirement(token?: string): Observable<T> {
     this.getToken();
-    return this.http
-      .get<T>(`${this.api}/requirement/${token || ''}`, this.httpOptions)
-      .pipe(tap((e: T) => console.log('requirement', e)));
+    return this.http.get<T>(
+      `${this.api}/requirement/${token || ''}`,
+      this.httpOptions
+    );
   }
 
   public get<J>(token?: string): Observable<J> {
     this.getToken();
-    return this.http
-      .get<J>(`${this.api}/requirement/${token || ''}`, this.httpOptions)
-      .pipe(tap((e: J) => console.log('get', e)));
+    return this.http.get<J>(
+      `${this.api}/requirement/${token || ''}`,
+      this.httpOptions
+    );
   }
 
   public search(url: string, searchBy: object): Observable<T[]> {
     this.getToken();
-    return this.http
-      .get<T[]>(`${this.api}/${url}`, {
-        headers: this.httpOptions.headers,
-        params: { ...searchBy },
-      })
-      .pipe(tap((e: T[]) => console.log('search', e)));
+    return this.http.get<T[]>(`${this.api}/${url}`, {
+      headers: this.httpOptions.headers,
+      params: { ...searchBy },
+    });
   }
 
   public findOne(url: string, searchBy: object): Observable<T> {
     this.getToken();
-    return this.http
-      .get<T>(`${this.api}/${url}`, {
-        headers: this.httpOptions.headers,
-        params: { ...searchBy },
-      })
-      .pipe(tap((e: T) => console.log('findOne', e)));
+    return this.http.get<T>(`${this.api}/${url}`, {
+      headers: this.httpOptions.headers,
+      params: { ...searchBy },
+    });
   }
 
   public index(url?: string, search?: object): Observable<T[]> {
     this.getToken();
-    return this.http
-      .get<T[]>(`${this.api}/${url || ''}`, {
-        headers: this.httpOptions.headers,
-        params: { ...search },
-      })
-      .pipe(tap((e: T[]) => console.log('index', e)));
+    return this.http.get<T[]>(`${this.api}/${url || ''}`, {
+      headers: this.httpOptions.headers,
+      params: { ...search },
+    });
   }
 
   public findAll(url?: string): Observable<T> {
     this.getToken();
-    return this.http
-      .get<T>(`${this.api}/${url || ''}`, this.httpOptions)
-      .pipe(tap((e: T) => console.log('findAll', e)));
+    return this.http.get<T>(`${this.api}/${url || ''}`, this.httpOptions);
   }
 
   public create(data: T, url?: string): Observable<T> {
     this.getToken();
-    return this.http
-      .post<T>(`${this.api}/${url || ''}`, data, this.httpOptions)
-      .pipe(tap((e: T) => console.log('create', e)));
+    return this.http.post<T>(
+      `${this.api}/${url || ''}`,
+      data,
+      this.httpOptions
+    );
   }
 
   public find(id: string | number): Observable<T> {
     this.getToken();
-    return this.http
-      .get<T>(`${this.api}/${id}`, this.httpOptions)
-      .pipe(tap((e: T) => console.log('find', e)));
+    return this.http.get<T>(`${this.api}/${id}`, this.httpOptions);
   }
 
-  public update(data: T): Observable<T | number[]> {
+  public update(data: T): Observable<T> {
     this.getToken();
-    return this.http
-      .put<T | []>(`${this.api}/`, data, this.httpOptions)
-      .pipe(tap((e: T | number[]) => console.log('update', e)));
+    return this.http.put<T>(`${this.api}/`, data, this.httpOptions);
   }
 
-  public patch(data: T, url?: string): Observable<T | number[]> {
+  public patch(data: T, url?: string): Observable<T> {
     this.getToken();
-    return this.http
-      .patch<T>(`${this.api}/${url || ''}`, data, this.httpOptions)
-      .pipe(tap((e: T | number[]) => console.log('patch', e)));
+    return this.http.patch<T>(
+      `${this.api}/${url || ''}`,
+      data,
+      this.httpOptions
+    );
   }
 
   public destroy(data: T, url?: string): Observable<T> {
@@ -140,11 +127,11 @@ export class HttpService<T> implements Http<T> {
       formData,
       {
         headers: new HttpHeaders({
-          'CSRF-Token': this.httpOptions.headers.get('CSRF-Token'),
-          Authorization: this.httpOptions.headers.get('Authorization'),
+          'CSRF-Token': this.httpOptions.headers.get('CSRF-Token') || '',
+          Authorization: this.httpOptions.headers.get('Authorization') || '',
         }),
         reportProgress: true,
-        responseType: /*'arraybuffer'  'blob'  'text' */ 'json',
+        responseType: 'json',
       }
     );
     return this.http.request<T[]>(request);

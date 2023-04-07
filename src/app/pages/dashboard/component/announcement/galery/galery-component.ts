@@ -1,3 +1,4 @@
+import { IonPopover } from '@ionic/angular';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { Announcement, Galery } from 'src/app/interface';
@@ -17,20 +18,20 @@ import { MessageService } from 'src/app/utilities/message/message.service';
   styleUrls: ['galery-component.scss'],
 })
 export class GaleryComponent {
-  @ViewChild('popover') popover;
+  @ViewChild('popover') popover!: IonPopover;
   @Output() isHeader = new EventEmitter<boolean>(false);
   @Input() announcement!: Pick<
     Announcement,
     '_csrf' | 'galery' | 'id' | 'plan'
-  >;
-  public image: number;
-  public isLightbox: boolean;
-  public isLightboxButton: boolean;
-  public endNext: number;
+  > | void;
+  public image!: number;
+  public isLightbox!: boolean | null;
+  public isLightboxButton!: boolean | null;
+  public endNext!: number | null;
   public isOpen = false;
 
-  private destroy: Subscription;
-  private $order: Subscription;
+  private destroy!: Subscription;
+  private $order!: Subscription;
   constructor(
     private galeryAnnouncementService: GaleryAnnouncementService,
     private messageService: MessageService
@@ -42,29 +43,35 @@ export class GaleryComponent {
   }
 
   public order(i: number): void {
-    const img = this.announcement?.galery.splice(i, 1)[0];
-    this.announcement?.galery.unshift(img);
-    const result = this.announcement?.galery.map((item) => item?.id);
-    const data: Galery = {
-      order: result,
-      // eslint-disable-next-line no-underscore-dangle
-      _csrf: this.announcement._csrf,
-      announcementId: this.announcement?.id,
-    };
-    this.$order = this.galeryAnnouncementService.order(data).subscribe({
-      next: (galery: Galery) => {
-        this.message(galery);
-        setTimeout(() => this.$order.unsubscribe(), 2000);
-      },
-      error: (error: HttpErrorResponse) => console.log(error),
-    });
+    if (this.announcement?.galery) {
+      const img = this.announcement?.galery.splice(i, 1)[0];
+      this.announcement?.galery.unshift(img);
+      const result: (number | undefined)[] = this.announcement?.galery.map(
+        (item) => item?.id
+      );
+      if (result && result.length > 0) {
+        const data: Galery = {
+          order: result,
+          _csrf: this.announcement._csrf,
+          announcementId: this.announcement?.id,
+        };
+        this.$order = this.galeryAnnouncementService.order(data).subscribe({
+          next: (galery: Galery) => {
+            this.message(galery);
+            setTimeout(() => this.$order.unsubscribe(), 2000);
+          },
+          error: (error: HttpErrorResponse) => console.log(error),
+        });
+      }
+    }
   }
 
   public plusSlides(i: number, operator: '-' | '+'): void {
-    const keys: number[] = this.getAllKeysGalery();
-    this.getLastKeyGalery(keys);
-    this.setKeyGalery(operator, i, keys);
-    return;
+    const keys: number[] | void = this.getAllKeysGalery();
+    if (keys && keys.length > 0) {
+      this.getLastKeyGalery(keys);
+      this.setKeyGalery(operator, i, keys);
+    }
   }
 
   public close(): void {
@@ -75,54 +82,69 @@ export class GaleryComponent {
   }
 
   public show(index: number): void {
-    const keys: number[] = this.getAllKeysGalery();
-    this.getLastKeyGalery(keys);
-    this.isHeader.emit(true);
-    this.showLightbox(index);
-    this.enableOrDisableButton();
-    this.image = index;
+    const keys: number[] | void = this.getAllKeysGalery();
+    if (keys && keys.length > 0) {
+      this.getLastKeyGalery(keys);
+      this.isHeader.emit(true);
+      this.showLightbox(index);
+      this.enableOrDisableButton();
+      this.image = index;
+    }
   }
 
-  public delete(index: number): Subscription {
-    const galery: Galery = this.announcement.galery[index];
-    // eslint-disable-next-line no-underscore-dangle
-    galery._csrf = this.announcement?._csrf;
-    return (this.destroy = this.galeryAnnouncementService
-      .delete(galery)
-      .subscribe({
-        next: (galery_: Galery) => {
-          this.update(galery);
-          this.message(galery_);
-        },
-        error: (error) => this.messageService.error(error, null, this.destroy),
-      }));
+  public delete(index: number): Subscription | void {
+    if (this.announcement?.galery && this.announcement.galery.length > 0) {
+      const galery: Galery = this.announcement.galery[index];
+      galery._csrf = this.announcement?._csrf;
+      return (this.destroy = this.galeryAnnouncementService
+        .delete(galery)
+        .subscribe({
+          next: (galery_): void => {
+            this.update(galery);
+            this.message(galery_);
+          },
+          error: (error) =>
+            this.messageService.error(error, undefined, this.destroy),
+        }));
+    }
   }
 
   private showLightbox(index: number) {
     this.isLightbox = index > -1;
   }
 
-  private getAllKeysGalery() {
-    const keys: number[] = [...this.announcement.galery.keys()];
-    return keys;
+  private getAllKeysGalery(): number[] | void {
+    if (this.announcement?.galery) {
+      const keys: number[] = [...this.announcement.galery.keys()];
+      return keys;
+    }
   }
 
   private getLastKeyGalery(keys: number[]) {
     if (!this.endNext) {
-      this.endNext = keys.pop();
+      this.endNext = keys.pop() as number;
     }
   }
 
-  private message(galery_: Galery) {
-    this.messageService.success(galery_?.message, null, this.destroy, 350);
+  private message(galery_: Galery): void {
+    if (galery_?.message) {
+      this.messageService.success(
+        galery_?.message,
+        undefined,
+        this.destroy,
+        350
+      );
+    }
   }
 
   private update(galery: Galery): void {
     const i = this.removeItem(galery);
-    this.enableOrDisableButton();
-    this.closeLightbox();
-    this.updateLightbox(i);
-    this.endNext = null;
+    if (i) {
+      this.enableOrDisableButton();
+      this.closeLightbox();
+      this.updateLightbox(i);
+      this.endNext = null;
+    }
   }
 
   private updateLightbox(i: number) {
@@ -140,20 +162,26 @@ export class GaleryComponent {
     }
   }
 
-  private removeItem(galery: Galery): number {
+  private removeItem(galery: Galery): number | void {
     const i = this.getKeyGalery(galery);
-    this.remove(i);
-    return i;
+    if (i) {
+      this.remove(i);
+      return i;
+    }
   }
 
-  private getKeyGalery(galery: Galery): number {
-    return this.announcement.galery.findIndex(
-      (item) => item?.id === galery?.id
-    );
+  private getKeyGalery(galery: Galery): number | void {
+    if (this.announcement?.galery) {
+      return this.announcement.galery.findIndex(
+        (item) => item?.id === galery?.id
+      );
+    }
   }
 
   private remove(i: number): void {
-    this.announcement.galery.splice(i, 1);
+    if (this.announcement?.galery) {
+      this.announcement.galery.splice(i, 1);
+    }
   }
 
   private closeLightbox(): void {
@@ -161,6 +189,8 @@ export class GaleryComponent {
   }
 
   private enableOrDisableButton(): void {
-    this.isLightboxButton = this.announcement?.galery?.length > 1;
+    if (this.announcement?.galery) {
+      this.isLightboxButton = this.announcement?.galery?.length > 1;
+    }
   }
 }

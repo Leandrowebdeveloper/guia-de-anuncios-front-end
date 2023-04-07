@@ -11,8 +11,8 @@ export class AdminAnnouncementService extends HttpService<Announcement> {
   public saveSorting = new EventEmitter<boolean>(false);
   private announcement = new EventEmitter<Announcement>(undefined);
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     public messageService: MessageService
   ) {
     super(http, storageService);
@@ -47,7 +47,7 @@ export class AdminAnnouncementService extends HttpService<Announcement> {
 
   public toRestore(
     announcement: Required<Pick<Announcement, '_csrf' | 'id'>>
-  ): Observable<Announcement | number[]> {
+  ): Observable<Announcement> {
     const { id, _csrf } = announcement;
     return this.patch({ id, _csrf }, `management/to-restore`);
   }
@@ -65,7 +65,7 @@ export class AdminAnnouncementService extends HttpService<Announcement> {
 
   public order(
     announcement: Pick<Announcement, 'order' | '_csrf'>
-  ): Observable<Announcement | number[]> {
+  ): Observable<Announcement> {
     return this.patch(announcement, 'management/order');
   }
 }

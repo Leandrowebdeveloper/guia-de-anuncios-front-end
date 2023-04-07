@@ -4,11 +4,16 @@
     color="none"
     button
     *ngFor="let user of users"
-    [routerLink]="['/painel-de-controle', 'admin', 'usuario', user?.slug]"
+    [routerLink]="[
+      '/painel-de-controle',
+      'admin',
+      'usuario',
+      user | userValues : 'slug'
+    ]"
   >
     <ion-avatar slot="start">
       <img
-        [src]="user.image?.url || './../../../../assets/avatar.svg'"
+        [src]="user | imgAvatar"
         referrerpolicy="no-referrer"
         title="Imagem do usuário."
         alt="Imagem do usuário."
@@ -16,14 +21,14 @@
     </ion-avatar>
 
     <ion-label
-      [title]="'Nome: ' + user?.name"
-      [attr.data-message]="'Nome: ' + user?.name"
+      [title]="user | userValues : 'name' : 'Nome:'"
+      [attr.data-message]="user | userValues : 'name' : 'Nome:'"
     >
-      {{ user?.name }} <br />
+      {{ user | userValues : "name" }} <br />
       <ion-text>
-        <p class="no-margin" [hidden]="!user?.level">
+        <p class="no-margin" [hidden]="!user | userValues : 'level'">
           <small>{{
-            user?.level === "1" ? "Administrador" : "Colaborador"
+            (user | isUserLevel : "1") ? "Administrador" : "Colaborador"
           }}</small>
         </p>
         <p class="no-margin">
@@ -32,8 +37,8 @@
           <small *ngIf="user?.plan?.type === 'special'">Plano especial</small>
         </p>
 
-        <p class="no-margin" [hidden]="!user?.plan?.end">
-          <small>{{ user?.plan?.end | time : "plan" }}</small>
+        <p class="no-margin" [hidden]="!user | userValuesPlan : 'end'">
+          <small>{{ user | userValuesPlan : "end" | time : "plan" }}</small>
         </p>
       </ion-text>
     </ion-label>
@@ -42,35 +47,41 @@
       <small
         class="margin"
         [attr.data-message]="
-          user?.blockade
+          (user | userValues : 'blockade')
             ? 'Usuário está bloqueado'
             : 'Usuário está desbloqueado'
         "
         [title]="
-          user?.blockade
+          (user | userValues : 'blockade')
             ? 'Usuário está bloqueado'
             : 'Usuário está desbloqueado'
         "
       >
         <ion-icon
-          [color]="user?.blockade ? 'danger' : 'success'"
+          [color]="(user | userValues : 'blockade') ? 'danger' : 'success'"
           slot="end"
-          [name]="user?.blockade ? 'stop' : 'play'"
+          [name]="(user | userValues : 'blockade') ? 'stop' : 'play'"
         ></ion-icon>
-        {{ user?.blockade ? "bloqueado" : "desbloqueado" }}
+        {{ (user | userValues : "blockade") ? "bloqueado" : "desbloqueado" }}
       </small>
       <small
         [attr.data-message]="
-          user?.state ? 'Usuário está online' : 'Usuário está offline'
+          (user | userValues : 'state')
+            ? 'Usuário está online'
+            : 'Usuário está offline'
         "
-        [title]="user?.state ? 'Usuário está online' : 'Usuário está offline'"
+        [title]="
+          (user | userValues : 'state')
+            ? 'Usuário está online'
+            : 'Usuário está offline'
+        "
       >
         <ion-icon
-          [color]="user?.state ? 'success' : 'danger'"
+          [color]="(user | userValues : 'state') ? 'success' : 'danger'"
           slot="end"
-          [name]="user?.state ? 'power' : 'radio-button-off'"
+          [name]="(user | userValues : 'state') ? 'power' : 'radio-button-off'"
         ></ion-icon>
-        {{ user?.state ? "online" : "offline" }}
+        {{ (user | userValues : "state") ? "online" : "offline" }}
       </small>
     </ion-text>
   </ion-item>

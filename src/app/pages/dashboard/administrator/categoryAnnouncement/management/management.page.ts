@@ -13,7 +13,7 @@ import { CategoryService } from '../services/category.service';
   ],
 })
 export class ManagementPage implements OnInit {
-  public category$: Observable<Category>;
+  public category$!: Observable<Category | void>;
   constructor(
     private categoryService: CategoryService,
     private activatedRoute: ActivatedRoute,
@@ -30,7 +30,7 @@ export class ManagementPage implements OnInit {
 
   private setCategory(): void {
     this.categoryService.setCategory =
-      this.activatedRoute.snapshot.data?.category;
+      this.activatedRoute.snapshot.data?.['category'];
     this.category$ = this.categoryService.categoryObservable;
   }
 }

@@ -9,16 +9,12 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
 
 @Injectable()
 export class AddressService extends HttpService<
-  | Address
-  | Pick<
-      Address & { password: string },
-      '_csrf' | 'id' | 'password' | 'message'
-    >
+  Address & { password: string }
 > {
-  private addressEvent = new EventEmitter<Address>(undefined);
+  private addressEvent = new EventEmitter<Address | null>(undefined);
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     private managementAnnouncementService: ManagementAnnouncementService
   ) {
     super(http, storageService);
@@ -29,7 +25,7 @@ export class AddressService extends HttpService<
     return this.addressEvent.asObservable();
   }
 
-  public set setAddress(address: Required<Address>) {
+  public set setAddress(address: Address | null) {
     if (this.managementAnnouncementService.getAnnouncement) {
       this.managementAnnouncementService.getAnnouncement.address = address;
       this.managementAnnouncementService.setAnnouncement =
@@ -38,50 +34,39 @@ export class AddressService extends HttpService<
     this.addressEvent.emit(address);
   }
 
-  public mask(address: Required<Pick<Address, 'zip_code'>>): string {
+  public mask(address: Pick<Address, 'zip_code'>): string | null {
     if (typeof address.zip_code === 'number') {
       return String(address.zip_code).replace(
         /^(\d\d)(\d\d\d)(\d\d\d)/,
         '$1.$2-$3'
       );
     }
-    return address.zip_code.replace(/^(\d\d)(\d\d\d)(\d\d\d)/, '$1.$2-$3');
+    return (
+      address?.zip_code &&
+      address.zip_code.replace(/^(\d\d)(\d\d\d)(\d\d\d)/, '$1.$2-$3')
+    );
   }
 
-  public address(address: Required<Address>): Observable<Address> {
+  public address(address: Address & { password: string }): Observable<Address> {
     address.zip_code = Number(String(address?.zip_code).replace(/[\.\-]/g, ''));
     if (address?.id) {
       return this.patch(address).pipe(
-        tap((address_: Required<Address>) => (this.setAddress = address_))
+        tap((address_: Address) => (this.setAddress = address_))
       );
     } else {
       return this.create(address).pipe(
-        tap((address_: Required<Address>) => (this.setAddress = address_))
+        tap((address_: Address) => (this.setAddress = address_))
       );
     }
   }
 
-  public delete(
-    address: Pick<Address & { password: string }, '_csrf' | 'id' | 'password'>
-  ): Observable<
-    Pick<
-      Address & {
-        password: string;
-      },
-      '_csrf' | 'id' | 'password' | 'message'
-    >
+  public delete(address: Address & { password: string }): Observable<
+    Address & {
+      password: string;
+    }
   > {
     return this.destroy(address).pipe(
-      tap(
-        (
-          c: Pick<
-            Address & {
-              password: string;
-            },
-            '_csrf' | 'id' | 'password' | 'message'
-          >
-        ) => (this.setAddress = null)
-      )
+      tap((): null => (this.setAddress = null))
     );
   }
 }

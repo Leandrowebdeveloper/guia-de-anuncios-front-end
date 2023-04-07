@@ -12,8 +12,8 @@ import { CategoryService } from 'src/app/pages/dashboard/administrator/categoryA
 })
 export class DestroyAnnouncementService extends HttpService<Category> {
   constructor(
-    http: HttpClient,
-    public storageService: StorageService,
+    public override http: HttpClient,
+    public override storageService: StorageService,
     public categoryService: CategoryService
   ) {
     super(http, storageService);

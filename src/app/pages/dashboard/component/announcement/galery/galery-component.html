@@ -1,19 +1,18 @@
-<ion-item-group>
+<ion-item-group *ngIf="announcement">
   <ion-item-divider>
     <ion-icon color="mediun" name="images" slot="start"></ion-icon>
     <ion-label>Galeria</ion-label>
   </ion-item-divider>
   <div class="row">
     <app-galery-button-upload
-      [data]="{ id: announcement?.id, _csrf: announcement?._csrf}"
-      [plan]="announcement?.plan"
+      [announcement]="announcement"
     ></app-galery-button-upload>
 
     <div appHorizontalScroll>
       <section *ngFor="let item of announcement?.galery; let i = index">
         <ion-img
           class="cursor-pointer"
-          [src]="'/images/galery/x-small/' + item?.filename"
+          [src]="item | galeryValues:'filename':'/images/galery/x-small/'"
           alt="Image da galeria"
           title="Clique para ampliar"
           aria-message="Clique para ampliar"
@@ -29,23 +28,23 @@
   <!-- The Close Button -->
   <span class="close" (click)="close()">&times;</span>
 
-  <div class="modal-content" *ngIf="announcement?.galery[image]?.filename">
+  <div class="modal-content" *ngIf="announcement | isGalery:image">
     <div class="numbertext">
       {{ announcement?.galery?.length }} / {{ image + 1}}
     </div>
     <picture>
       <source
         media="(max-width: 575.98px)"
-        [srcset]="'/images/galery/small/' + announcement?.galery[image]?.filename"
+        [srcset]="announcement | typeImageGalery:['small', image]"
         alt="Galeria de anúncios"
       />
       <source
         media="(max-width: 1399.98px) and (min-width: 576px)"
-        [srcset]="'/images/galery/medium/' + announcement?.galery[image]?.filename"
+        [srcset]="announcement | typeImageGalery:['medium', image]"
         alt="Galeria de anúncios"
       />
       <img
-        [src]="'/images/galery/large/' + announcement?.galery[image]?.filename"
+        [src]="announcement | typeImageGalery:['large', image]"
         alt="Galeria de anúncios"
       />
     </picture>

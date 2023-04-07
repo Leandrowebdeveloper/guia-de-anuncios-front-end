@@ -1,29 +1,64 @@
-<ion-item
-  *ngIf="!(user?.level === '1'); else Else"
-  [disabled]="!announcement?.categoryAnnouncement"
-  detail="true"
-  (click)="coordinates()"
-  title="Gerenciar mapa."
-  aria-label="Gerenciar mapa."
-  [attr.aria-disabled]="
-    !announcement?.categoryAnnouncement &&
-    'Para gerenciar mapa cadastre uma categoria.'
-  "
-  button
->
-  <ion-icon name="map" slot="start"></ion-icon>
-  <ion-label
-    >Mapa
-    <ion-text [color]="announcement?.coordinate ? 'success' : 'danger'">
-      *
-    </ion-text>
-  </ion-label>
-</ion-item>
+<ion-item-sliding [disabled]="user?.level === '2'">
+  <ion-item
+    [title]="
+      user?.level === '2'
+        ? 'Cadastrar sua localização.'
+        : 'Pressione e arraste para a esquerda.'
+    "
+    [attr.data-message]="
+      user?.level === '2'
+        ? 'Cadastrar sua localização.'
+        : 'Pressione e arraste para a esquerda.'
+    "
+    lines="true"
+    (click)="openForm()"
+    [button]="user?.level === '2'"
+  >
+    <ion-icon name="map" slot="start"></ion-icon>
+    <ion-icon
+      slot="end"
+      [name]="user?.level === '2' ? 'chevron-forward' : 'chevron-back'"
+    ></ion-icon>
+    <ion-label
+      >Mapa
+      <ion-text [color]="announcement?.coordinate ? 'success' : 'danger'">
+        *
+      </ion-text>
+    </ion-label>
+  </ion-item>
 
-<ng-template #Else>
-  <!-- Mapa -->
-  <app-maps-admin-management
-    [announcement]="announcement"
-    [user]="user"
-  ></app-maps-admin-management>
-</ng-template>
+  <ion-item-options *ngIf="user?.level === '1'">
+    <ion-item-option
+      *ngIf="announcement?.coordinate"
+      slot="end"
+      color="danger"
+      size="small"
+      class="cursor-pointer"
+      title="Exclui localização"
+      data-message="Exclui localização"
+      (click)="destroy()"
+    >
+      <ion-icon name="trash" slot="start"></ion-icon>
+      delete
+    </ion-item-option>
+    <ion-item-option
+      slot="end"
+      size="small"
+      class="cursor-pointer"
+      [title]="
+        announcement?.coordinate
+          ? 'Editar localização'
+          : 'Cadastrar localização'
+      "
+      [attr.data-message]="
+        announcement?.coordinate
+          ? 'Editar localização'
+          : 'Cadastrar localização'
+      "
+      (click)="openFormAdmin()"
+    >
+      <ion-icon name="create" slot="start"></ion-icon>
+      {{ announcement?.coordinate ? "editar" : "Cadastrar" }}
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

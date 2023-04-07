@@ -8,7 +8,7 @@ import { ModalController, Platform } from '@ionic/angular';
 })
 export class HeaderModalComponent implements OnInit {
   @Input() label!: string;
-  public isPlt: boolean;
+  public isPlt!: boolean;
   constructor(
     private plt: Platform,
     private modalController: ModalController

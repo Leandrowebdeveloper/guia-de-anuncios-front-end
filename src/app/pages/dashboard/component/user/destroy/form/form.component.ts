@@ -24,14 +24,14 @@ export class FormUserDestroyComponent implements OnInit {
     route: '/destroy',
     icon: 'trash',
     label: 'Excluir usuário',
-    fill: false,
+
     aria: 'Excluir usuário.',
     title: 'Excluir usuário.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private write: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private write!: Subscription;
   constructor(
     private userDestroyService: UserDestroyService,
     private helpService: HelpsService,

@@ -1,27 +1,19 @@
 import { NavController } from '@ionic/angular';
-import { Component, Input, OnInit } from '@angular/core';
-import { Announcement } from 'src/app/interface';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { Component, Input } from '@angular/core';
+import { Announcement, User } from 'src/app/interface';
 
 @Component({
   selector: 'app-button-work-days',
   templateUrl: './button-work-days.component.html',
   styleUrls: ['./button-work-days.component.scss'],
 })
-export class ButtonWorkDayComponent implements OnInit {
+export class ButtonWorkDayComponent {
   @Input() announcement!: Pick<
     Announcement,
     'workDays' | 'categoryAnnouncement' | 'slug'
-  >;
-  public isAdmin: boolean;
-  constructor(
-    private navCtrl: NavController,
-    private authService: AuthService
-  ) {}
-
-  ngOnInit() {
-    this.isAdmin = this.authService.getLevel === '1';
-  }
+  > | void;
+  @Input() user!: Pick<User, 'level'> | void;
+  constructor(private navCtrl: NavController) {}
 
   public route(): Promise<boolean> {
     return this.navCtrl.navigateForward([

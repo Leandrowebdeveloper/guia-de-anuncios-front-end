@@ -2,7 +2,7 @@
   <!-- Searsh -->
   <ion-col size="12" class="ion-no-padding">
     <app-search-category-component
-      *ngIf="category?.length > 10"
+      *ngIf="category | isCategory : 10"
       (search)="search($event)"
     ></app-search-category-component>
   </ion-col>
@@ -55,7 +55,7 @@
     </div>
   </ion-item>
 
-  <div class="content-center" [hidden]="category?.length > 0">
+  <div class="content-center" [hidden]="category | isCategory">
     <ion-icon size="large" color="medium" name="trash-outline"></ion-icon>
     <ion-text color="medium"> Não á itens na lixeira. </ion-text>
   </div>
@@ -63,7 +63,7 @@
   <ion-card *ngIf="!endListCategory">
     <ion-text color="primary" class="ion-text-center">
       <p>FIM</p>
-      <p *ngIf="category">{{ category?.length }} categorias</p>
+      <p *ngIf="category">{{ category.length }} categorias</p>
     </ion-text>
   </ion-card>
 

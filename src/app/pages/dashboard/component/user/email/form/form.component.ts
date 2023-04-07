@@ -16,7 +16,7 @@ import { EmailService } from '../service/email.service';
   styleUrls: ['./form.component.scss'],
 })
 export class FormUserEmailComponent implements OnInit {
-  @Input() user!: Required<Pick<User, '_csrf' | 'email' | 'slug' | 'password'>>;
+  @Input() user!: Pick<User, '_csrf' | 'email' | 'slug' | 'password'>;
   @Input() label!: string;
   @Input() isAuth!: boolean;
 
@@ -24,14 +24,14 @@ export class FormUserEmailComponent implements OnInit {
     route: '/email',
     icon: 'mail',
     label: 'Enviar',
-    fill: false,
+
     aria: 'Enviar novo email.',
     title: 'Enviar novo email.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private $email: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private $email!: Subscription;
   constructor(
     private helpService: HelpsService,
     private modalController: ModalController,
@@ -64,14 +64,16 @@ export class FormUserEmailComponent implements OnInit {
       }));
     }
     return (this.$email = this.emailService.email(event.value).subscribe({
-      next: (user: User) => this.messsage(user, loading),
+      next: (
+        user: Pick<User, '_csrf' | 'email' | 'slug' | 'password' | 'message'>
+      ) => this.messsage(user, loading),
       error: (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.$email),
     }));
   }
 
   private messsage(
-    user: Required<Pick<User, 'message'>>,
+    user: Pick<User, 'message'>,
     loading: Promise<HTMLIonLoadingElement>
   ): Promise<number> {
     this.helpService.delay(() => this.modalController.dismiss(), 2500);

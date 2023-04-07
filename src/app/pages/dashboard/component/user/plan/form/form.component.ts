@@ -24,14 +24,14 @@ export class FormUserPlanComponent implements OnInit {
     route: '/plan',
     icon: 'cloud-upload',
     label: 'Salvar',
-    fill: false,
+
     aria: 'Alterar plano do usuário.',
     title: 'Alterar plano do usuário.',
   };
 
-  public config: object;
-  private form: FormGroup;
-  private write: Subscription;
+  public config!: object;
+  private form!: FormGroup;
+  private write!: Subscription;
 
   constructor(
     private helpService: HelpsService,
@@ -57,7 +57,7 @@ export class FormUserPlanComponent implements OnInit {
     const loading = this.loadingService.show('Alterando plano...');
     event.value.userId = this.user?.id;
     return (this.write = this.userPlanService.plan(event.value).subscribe({
-      next: (plan: Plan) => this.messsage(plan, loading),
+      next: (plan: Pick<Plan, 'message'>) => this.messsage(plan, loading),
       error: (error: HttpErrorResponse) =>
         this.messageService.error(error, loading, this.write),
     }));
@@ -66,9 +66,12 @@ export class FormUserPlanComponent implements OnInit {
   private messsage(
     plan: Pick<Plan, 'message'>,
     loading: Promise<HTMLIonLoadingElement>
-  ): Promise<number> {
-    this.helpService.delay(() => this.modalController.dismiss(), 2500);
-    return this.messageService.success(plan?.message, loading, this.write);
+  ): Promise<number> | undefined {
+    if (plan && plan?.message) {
+      this.helpService.delay(() => this.modalController.dismiss(), 2500);
+      return this.messageService.success(plan?.message, loading, this.write);
+    }
+    return undefined;
   }
 
   private getData(): void {

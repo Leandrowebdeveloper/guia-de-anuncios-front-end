@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 import { animationRouter } from './utilities/animations/animation-router';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ModuleDarkService } from './services/module-dark/module-dark.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,7 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
       name: 'guia_de_anuncios',
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
     }),
-    ServiceWorkerModule.register('./ngsw-worker.js', {
+    ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
@@ -39,6 +40,7 @@ import { HttpClientModule } from '@angular/common/http';
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy,
     },
+    ModuleDarkService,
   ],
   bootstrap: [AppComponent],
 })

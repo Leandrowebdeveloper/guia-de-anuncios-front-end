@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalService } from './animations/modal.service';
 
 @Component({
   selector: 'app-present-plan',

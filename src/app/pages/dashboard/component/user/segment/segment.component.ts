@@ -15,9 +15,9 @@ import {
   styleUrls: ['./segment.component.scss'],
 })
 export class SegmentComponent implements OnInit, OnDestroy {
-  @ViewChild(IonSegment, { static: true }) segment: IonSegment;
+  @ViewChild(IonSegment, { static: true }) segment!: IonSegment;
   @Output() togglePage = new EventEmitter<boolean>(true);
-  private segmentIonChange: Subscription;
+  private segmentIonChange!: Subscription;
   constructor() {}
 
   ngOnDestroy(): void {

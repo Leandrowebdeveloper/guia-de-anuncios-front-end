@@ -11,19 +11,21 @@ import { User } from 'src/app/interface';
 export class UserLevelComponent {
   @Input() user!: Required<
     Pick<User, '_csrf' | 'slug' | 'password' | 'level' | 'blockade'>
-  >;
+  > | void;
   constructor(private modalController: ModalController) {}
 
   public async level(): Promise<void> {
-    const { _csrf, level, slug, password } = this.user;
-    const modal = await this.modalController.create({
-      component: FormUserLevelComponent,
-      componentProps: {
-        action: 'level',
-        label: 'Editar nível',
-        user: { _csrf, slug, password, level },
-      },
-    });
-    return await modal.present();
+    if (this.user) {
+      const { _csrf, level, slug, password } = this.user;
+      const modal = await this.modalController.create({
+        component: FormUserLevelComponent,
+        componentProps: {
+          action: 'level',
+          label: 'Editar nível',
+          user: { _csrf, slug, password, level },
+        },
+      });
+      return await modal.present();
+    }
   }
 }

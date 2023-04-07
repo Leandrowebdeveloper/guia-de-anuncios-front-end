@@ -2,7 +2,7 @@
   <!-- Searsh -->
   <ion-col size="12" class="ion-no-padding">
     <app-announcement-search-component
-      *ngIf="announcement?.length > 1"
+      *ngIf="announcement | isAnnouncement: 1"
       (search)="search($event)"
     ></app-announcement-search-component>
   </ion-col>
@@ -19,7 +19,7 @@
       [announcement]="item"
     ></app-card-announcement-component>
   </ion-col>
-  <ion-col size="12" [hidden]="announcement?.length > 0 || !isAdmin">
+  <ion-col size="12" [hidden]="(announcement | isAnnouncement) || !isAdmin">
     <div class="content-center">
       <ion-icon color="medium" name="megaphone"></ion-icon>
       <ion-text color="medium"> Não á anúncio cadastrado. </ion-text>

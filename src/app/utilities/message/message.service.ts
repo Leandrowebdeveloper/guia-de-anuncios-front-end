@@ -25,11 +25,16 @@ export class MessageService {
     subscribe?: Subscription,
     time: any = 3000
   ): Promise<number> {
-    this.disableLoadingUnsubscribeVariable(loading, subscribe);
-    return this.helpsService.delay(
-      async () =>
-        await this.toastService.show(message, 'bottom', 'thumbs-up', 2500),
-      time
+    loading &&
+      subscribe &&
+      this.disableLoadingUnsubscribeVariable(loading, subscribe);
+    return (
+      message &&
+      this.helpsService.delay(
+        async () =>
+          await this.toastService.show(message, 'bottom', 'thumbs-up', 2500),
+        time
+      )
     );
   }
 
@@ -55,7 +60,9 @@ export class MessageService {
     loading?: Promise<HTMLIonLoadingElement>,
     subscribe?: Subscription
   ) {
-    this.disableLoadingUnsubscribeVariable(loading, subscribe).then();
+    loading &&
+      subscribe &&
+      this.disableLoadingUnsubscribeVariable(loading, subscribe).then();
     return this.alert(error);
   }
 

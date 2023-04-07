@@ -1,5 +1,3 @@
-import { LoadingService } from './../../../utilities/loading/loading.service';
-import { AuthAnnouncementService } from '../../dashboard/auth/announcement/service/auth-announcement.service';
 import { SystemAccessService } from './services/system-access.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -7,12 +5,13 @@ import { ActivatedRoute, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AttrButton } from 'src/app/pages/public/system-access/components/buttons/interface';
 import { OnComponentDeactivate } from 'src/app/components/form/guard/deactivate.guard';
-import { Announcement, RequisitionLimit, User } from 'src/app/interface';
+import { RequisitionLimit, User } from 'src/app/interface';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HelpsService } from 'src/app/services/helps/helps.service';
 import attrButton from 'src/app/utilities/functions';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { LoadingService } from 'src/app/utilities/loading/loading.service';
 
 @Component({
   selector: 'app-system-access',
@@ -23,34 +22,35 @@ import { MessageService } from 'src/app/utilities/message/message.service';
   ],
 })
 export class SystemAccessPage implements OnInit, OnComponentDeactivate {
-  public desable: boolean;
-  public time: string;
-  public config: User;
-  public attrButton: AttrButton;
-  public attrButtonPage: AttrButton[];
-  private form: FormGroup;
-  private urlTree: boolean;
-  private systemAccess: Subscription;
-  private requiriment: RequisitionLimit;
+  public desable!: boolean;
+  public time!: string;
+  public config!: User;
+  public attrButton!: AttrButton;
+  public route!: string;
+  private form!: FormGroup;
+  private urlTree!: boolean;
+  private systemAccess!: Subscription;
+  private requiriment!: RequisitionLimit;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private systemAccessService: SystemAccessService,
-    private authAnnouncementService: AuthAnnouncementService,
     private helpsService: HelpsService,
     private messageService: MessageService,
     private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
+    this.activeRoute();
     this.setConfig();
-    this.setAttrButtonPage();
     this.hasDesable();
     this.initAttrButton();
   }
 
-  public activeRoute(): string {
-    return this.activatedRoute.snapshot.parent?.routeConfig?.path;
+  public activeRoute(): void {
+    if (this.activatedRoute.snapshot.parent?.routeConfig?.path) {
+      this.route = this.activatedRoute.snapshot.parent?.routeConfig?.path;
+    }
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean | UrlTree {
@@ -62,8 +62,8 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     return true;
   }
 
-  public onSubmit(event: FormGroup): Subscription {
-    switch (this.activeRoute()) {
+  public onSubmit(event: FormGroup): Subscription | void {
+    switch (this.route) {
       case 'entrar':
         return this.login(event);
       case 'recuperar-senha':
@@ -85,10 +85,11 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     this.time = this.requiriment?.delay;
   }
 
-  public disableCanDeactivate(user: User): boolean {
+  public disableCanDeactivate(user: User): boolean | null {
     if (user.auth) {
       return (this.urlTree = user.auth);
     }
+    return null;
   }
 
   public formUpdate(): void {
@@ -101,7 +102,7 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
   }
 
   private initAttrButton(): void {
-    switch (this.activeRoute()) {
+    switch (this.route) {
       case 'entrar':
         this.attrButton = attrButton[0];
         break;
@@ -112,10 +113,6 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
         this.attrButton = attrButton[2];
         break;
     }
-  }
-
-  private setAttrButtonPage() {
-    this.attrButtonPage = attrButton;
   }
 
   private authorizeRoute(): boolean {
@@ -136,9 +133,7 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     return (this.systemAccess = this.systemAccessService
       .sendLoginData(event.value)
       .subscribe({
-        next: (auth: User) => {
-          this.success(auth, loading);
-        },
+        next: (auth: User) => this.success(auth, loading),
         error: (error: HttpErrorResponse) => this.error(error, loading),
       }));
   }
@@ -213,7 +208,7 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
   }
 
   private addConfig() {
-    this.config = this.activatedRoute.snapshot.data.systemAccess;
+    this.config = this.activatedRoute.snapshot.data['systemAccess'];
   }
 
   private hasDesable(): void {

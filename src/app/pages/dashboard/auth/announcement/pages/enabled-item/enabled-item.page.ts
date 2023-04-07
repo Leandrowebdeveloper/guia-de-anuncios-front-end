@@ -5,7 +5,7 @@ import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { AlertService } from 'src/app//utilities/alert/alert.service';
 import { AuthAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/service/auth-announcement.service';
-import { Announcement, User } from 'src/app/interface';
+import { Announcement, User, Category } from 'src/app/interface';
 import { Observable, Subject, Subscription, EMPTY } from 'rxjs';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -16,19 +16,19 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./enabled-item.page.scss', '../../dashboard.page.scss'],
 })
 export class EnabledItemAnnouncementPage implements OnInit {
-  @Input() user!: Required<Pick<User, 'id' | '_csrf' | 'plan'>>;
+  @Input() user!: Pick<User, 'id' | '_csrf' | 'plan'> | void;
   @Output() isAnnouncement = new EventEmitter<boolean>(undefined);
-  public announcement$: Observable<Announcement[]>;
-  public announcement: Announcement[];
-  public isAdmin: boolean;
+  public announcement$!: Observable<Announcement[]>;
+  public announcement!: Announcement[];
+  public isAdmin!: boolean;
 
-  public isDeleted: number;
+  public isDeleted!: number;
   public error = new Subject<boolean>();
-  public menssage: boolean;
+  public menssage!: boolean;
 
-  public isDesktop: boolean;
+  public isDesktop!: boolean;
 
-  private destroyAnnouncement: Subscription;
+  private destroyAnnouncement!: Subscription;
 
   private limit = 12;
   private offset = 0;
@@ -53,7 +53,7 @@ export class EnabledItemAnnouncementPage implements OnInit {
     event.target.complete();
   }
 
-  public hideMenssage() {
+  public hideMenssage(): void {
     this.menssage = true;
   }
 
@@ -61,7 +61,7 @@ export class EnabledItemAnnouncementPage implements OnInit {
     action: 'destroy' | 'restore' | 'drop';
     index: number;
     announcement: Required<Pick<Announcement, '_csrf' | 'id'>>;
-  }): Promise<void> {
+  }): Promise<void> | void {
     const { action, index, announcement } = event;
     if (action === 'destroy') {
       return this.destroy(index, announcement);
@@ -102,7 +102,7 @@ export class EnabledItemAnnouncementPage implements OnInit {
     }, 6000);
   }
 
-  private getAnnouncement(): Observable<Announcement[]> {
+  private getAnnouncement(): Observable<Announcement[]> | void {
     if (this.user?.id) {
       return (this.announcement$ = this.authAnnouncementService
         .getAnnouncementAll('get', {
@@ -116,7 +116,7 @@ export class EnabledItemAnnouncementPage implements OnInit {
             this.announcement = announcement.map((announcement_) => {
               announcement_.category = {
                 ...announcement_?.categoryAnnouncement?.category,
-              };
+              } as Category;
 
               delete announcement_?.announcement;
               delete announcement_?.categoryAnnouncement?.catAdId;
@@ -164,12 +164,14 @@ export class EnabledItemAnnouncementPage implements OnInit {
     announcement_: Announcement,
     loading: Promise<HTMLIonLoadingElement>
   ) {
-    this.messageService.success(
-      announcement_.message,
-      loading,
-      this.destroyAnnouncement,
-      2000
-    );
+    if (announcement_?.message) {
+      this.messageService.success(
+        announcement_?.message,
+        loading,
+        this.destroyAnnouncement,
+        2000
+      );
+    }
   }
 
   private async isPlatform(): Promise<boolean> {

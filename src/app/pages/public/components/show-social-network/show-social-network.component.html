@@ -1,7 +1,14 @@
-<ion-row class="ion-justify-content-evenly">
-  <ion-col size="auto" class="center" [hidden]="!socialNetwork?.facebook">
+<ion-row
+  class="ion-justify-content-evenly"
+  *ngIf="announcement | isSocialNetworks"
+>
+  <ion-col
+    size="auto"
+    class="center"
+    [hidden]="!announcement | announcementSocialNetworkValues : 'facebook'"
+  >
     <a
-      [href]="socialNetwork?.facebook"
+      [href]="announcement | announcementSocialNetworkValues : 'facebook'"
       rel="noopener noreferrer"
       title="Clique para acessar a página do facebook."
       data-message="Clique para acessar a página do facebook."
@@ -12,9 +19,13 @@
       </ion-fab-button>
     </a>
   </ion-col>
-  <ion-col size="auto" class="center" [hidden]="!socialNetwork?.instagran">
+  <ion-col
+    size="auto"
+    class="center"
+    [hidden]="!announcement | announcementSocialNetworkValues : 'instagran'"
+  >
     <a
-      [href]="socialNetwork?.instagran"
+      [href]="announcement | announcementSocialNetworkValues : 'instagran'"
       title="Clique para acessar a página do instagram."
       data-message="Clique para acessar a página do instagram."
       (click)="send($event, 'instagram')"
