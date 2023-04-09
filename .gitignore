@@ -18,8 +18,8 @@ log.txt
 npm-debug.log*
 e2e
 ios
-android
-resources
+# android
+# resources
 .browserslistrc
 /.angular
 /.idea

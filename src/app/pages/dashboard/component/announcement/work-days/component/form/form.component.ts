@@ -75,7 +75,7 @@ export class FormComponent implements OnInit {
     this.changeToEnglish();
   }
 
-  public changeToEnglish() {
+  public changeToEnglish(): void {
     switch (this.dayOfTheWeek) {
       case 'domingo':
         this.day = 'sunday';
@@ -168,39 +168,30 @@ export class FormComponent implements OnInit {
     }
   }
 
-  private cleanFields() {
+  private cleanFields(): void {
     this.form.value[this.day] = this.workDayService?.fields;
   }
 
-  private setDataTime(setTime: string, value: any, day: DaysOfTheWeek) {
+  private setDataTime(setTime: string, value: any, day: DaysOfTheWeek): void {
     switch (setTime) {
       case 'start':
         this.start = value;
-        const start = JSON.parse('{"' + day + '":{"start":"' + value + '"}}');
-        this.form.patchValue({ ...start });
+        this.form.value[day]['start'] = value;
         break;
       case 'startInterval':
         this.startInterval = value;
-        const startInterval = JSON.parse(
-          '{"' + day + '":{"startInterval":"' + value + '"}}'
-        );
-        this.form.patchValue({ ...startInterval });
+        this.form.value[day]['startInterval'] = value;
         break;
       case 'endInterval':
         this.endInterval = value;
-        const endInterval = JSON.parse(
-          '{"' + day + '":{"endInterval":"' + value + '"}}'
-        );
-        this.form.patchValue({ ...endInterval });
+        this.form.value[day]['endInterval'] = value;
         break;
       case 'end':
         this.end = value;
-        const end = JSON.parse(
-          '{"' + day + '":{"endInterval":"' + value + '"}}'
-        );
-        this.form.patchValue({ ...end });
+        this.form.value[day]['end'] = value;
         break;
     }
+    console.log(this.form.value);
   }
 
   private formInit() {
@@ -228,6 +219,8 @@ export class FormComponent implements OnInit {
   }
 
   private init(): void {
+    console.log(this.announcement?.workDays);
+
     this.workDays = this.announcement?.workDays || null;
   }
 }

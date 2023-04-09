@@ -116,16 +116,13 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
       'title' | 'slug' | 'blockade' | 'description' | 'messages'
     >
   ) {
-    if (
-      this.getAnnouncement?.messages &&
-      this.announcement.value &&
-      value.messages
-    ) {
+    if (this.getAnnouncement?.messages && this.announcement.value) {
       this.announcement.value.title = value?.title;
       this.announcement.value.blockade = value?.blockade;
       this.announcement.value.description = value?.description;
       this.announcement.value.slug = value?.slug;
-      this.getAnnouncement?.messages.unshift(value.messages[0]);
+      value?.messages &&
+        this.getAnnouncement?.messages.unshift(value.messages[0]);
       this.setAnnouncement = this.announcement?.value;
       this.updateUrl(value);
     }

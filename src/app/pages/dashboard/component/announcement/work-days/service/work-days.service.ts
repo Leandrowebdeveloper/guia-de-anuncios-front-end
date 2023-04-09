@@ -69,11 +69,11 @@ export class WorkDayAnnouncementService extends HttpService<WorkDays> {
 
   public workDays(workDays: WorkDays): Observable<WorkDays> {
     if (workDays?.id) {
-      return this.patch(workDays, 'workDays').pipe(
+      return this.patch(workDays).pipe(
         tap((workDay_: WorkDays) => (this.setworkDay = workDay_))
       );
     } else {
-      return this.create(workDays, 'workDays').pipe(
+      return this.create(workDays).pipe(
         tap((workDay_: WorkDays) => (this.setworkDay = workDay_))
       );
     }

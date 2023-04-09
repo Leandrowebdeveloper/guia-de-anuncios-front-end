@@ -14,12 +14,8 @@ export class ImageService {
     try {
       return await Camera.getPhoto({
         resultType: CameraResultType.Uri,
-        source: CameraSource.Prompt,
-        allowEditing: true, 
-        promptLabelHeader: 'Foto',
-        promptLabelCancel: 'Cacelar',
-        promptLabelPhoto: 'Tire uma foto',
-        promptLabelPicture	: 'Galeria de fotos',
+        source: CameraSource.Camera,
+        correctOrientation: false,
         quality: 100,
         saveToGallery: true,
       });
@@ -35,7 +31,7 @@ export class ImageService {
     const blob = await response.blob();
 
     const data = (await this.convertBlobToBase64(blob)) as string;
-    
+
     const _response = await fetch(data!);
     const _blob = await _response.blob();
 

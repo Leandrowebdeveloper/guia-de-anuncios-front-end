@@ -11,6 +11,7 @@
   <ion-grid *ngIf="user$ | async;let user;" fixed>
     <ion-row>
       <ng-container *ngIf="announcement$ | async;let announcement; else Error">
+        <!-- Titulo -->
         <ion-col
           [hidden]="!announcement | announcementValues:'title'"
           size="12"
@@ -22,22 +23,16 @@
             </h1>
           </ion-text>
         </ion-col>
+        <!-- Messagem -->
         <ng-container *ngIf="isAnnouncement; else Association">
-          <!-- Messagem -->
-          <ion-col
-            size="12"
-            *ngIf="announcement && announcement?.citie && announcement?.address && announcement?.contact"
-          >
+          <ion-col size="12" *ngIf="announcement | adBlocked">
             <app-card-message-component
               [announcement]="announcement"
             ></app-card-message-component>
           </ion-col>
 
           <!-- Messagem de boas vindas -->
-          <ion-col
-            size="12"
-            [hidden]="announcement && announcement?.citie && announcement?.address && announcement?.contact"
-          >
+          <ion-col size="12" [hidden]="announcement | adBlocked">
             <ion-card>
               <ion-card-header>
                 <ion-card-title>Bem-vindo!</ion-card-title>
@@ -91,6 +86,7 @@
                 [user]="user"
                 [announcement]="announcement"
               ></app-messages-component>
+
               <!-- Blockade -->
               <app-blockade-announcement-component
                 [announcement]="announcement"
@@ -149,7 +145,7 @@
 
         <ng-template #Association>
           <ion-col
-            *ngIf="(announcement| isAnnouncement) && (announcement | isAnnouncementCategory)"
+            *ngIf="announcement && (announcement | isAnnouncementCategory)"
             size="12"
           >
             <app-work-days [announcement]="announcement"></app-work-days>

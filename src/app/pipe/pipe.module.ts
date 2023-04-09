@@ -46,6 +46,7 @@ import { AnnouncementSocialNetworkValuesPipe } from './announcement/social-netwo
 import { IsAnnouncementCategoryPipe } from './announcement/category/is-category/is-category.pipe';
 import { GaleryValuesPipe } from './announcement/galery/galery-values/galery-values.pipe';
 import { TypePlanFreePipe } from './announcement/plan/type-plan-free/type-plan.pipe';
+import { AdBlockedPipe } from './ad-blocked/ad-blocked.pipe';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { TypePlanFreePipe } from './announcement/plan/type-plan-free/type-plan.p
     CategoryIconPipe,
     AnnouncementSocialNetworkValuesPipe,
     GaleryValuesPipe,
+    AdBlockedPipe,
   ],
   exports: [
     TimePipe,
@@ -145,6 +147,7 @@ import { TypePlanFreePipe } from './announcement/plan/type-plan-free/type-plan.p
     CategoryIconPipe,
     AnnouncementSocialNetworkValuesPipe,
     GaleryValuesPipe,
+    AdBlockedPipe,
   ],
   providers: [AddressService, AllowAdPipe, TimePipe],
 })

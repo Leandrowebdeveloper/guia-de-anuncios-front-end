@@ -6,6 +6,7 @@
       Dias da semana
     </ion-button>
   </ion-item-divider>
+  <!-- Inicio -->
   <ion-item id="start" detail="true" button>
     <ion-label>Início </ion-label>
     <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
@@ -42,6 +43,7 @@
       </ng-template>
     </ion-popover>
   </ion-item>
+  <!-- Inicio do intervalo -->
   <ion-item id="startInterval" detail="true" button>
     <ion-label>Intervalo início</ion-label>
     <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
@@ -81,6 +83,7 @@
       </ng-template>
     </ion-popover>
   </ion-item>
+  <!-- Fim do intervalo -->
   <ion-item id="endInterval" detail="true" button>
     <ion-label>Intervalo fim</ion-label>
     <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
@@ -118,6 +121,7 @@
       </ng-template>
     </ion-popover>
   </ion-item>
+  <!-- Fim do espediente -->
   <ion-item id="end" detail="true" button>
     <ion-label>Fim</ion-label>
     <ion-badge slot="end" color="primary" class="ion-margin-end" mode="ios">{{
@@ -156,21 +160,23 @@
     </ion-popover>
   </ion-item>
 </ion-item-group>
+<!-- Botão salvar -->
 <ion-button
   (click)="onSubmit()"
   expand="block"
   class="ion-margin-top"
   [disabled]="!(form.value[day]?.start && form.value[day]?.end)"
 >
-  <ion-icon name="cloud-upload" class="ion-margin-end"></ion-icon>
+  <ion-icon name="cloud-upload" color="light" class="ion-margin-end"></ion-icon>
   Salvar
 </ion-button>
+<!-- Botão limpar -->
 <ion-button
   (click)="reset()"
   expand="block"
   class="ion-margin-top"
   [disabled]="!(form.value[day]?.start && form.value[day]?.end)"
 >
-  <ion-icon name="trash" class="ion-margin-end"></ion-icon>
+  <ion-icon name="trash" color="light" class="ion-margin-end"></ion-icon>
   Redefinir
 </ion-button>
