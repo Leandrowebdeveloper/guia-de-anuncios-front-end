@@ -15,7 +15,8 @@ export class ImageService {
       return await Camera.getPhoto({
         resultType: CameraResultType.Uri,
         source: CameraSource.Camera,
-        correctOrientation: false,
+        correctOrientation: true,
+        allowEditing: true,
         quality: 100,
         saveToGallery: true,
       });
