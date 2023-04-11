@@ -24,7 +24,7 @@ export class GaleryComponent {
     Announcement,
     '_csrf' | 'galery' | 'id' | 'plan'
   > | void;
-  public image!: number;
+  public index!: number;
   public isLightbox!: boolean | null;
   public isLightboxButton!: boolean | null;
   public endNext!: number | null;
@@ -44,6 +44,7 @@ export class GaleryComponent {
 
   public order(i: number): void {
     if (this.announcement?.galery) {
+      this.isOpen = false;
       const img = this.announcement?.galery.splice(i, 1)[0];
       this.announcement?.galery.unshift(img);
       const result: (number | undefined)[] = this.announcement?.galery.map(
@@ -60,7 +61,8 @@ export class GaleryComponent {
             this.message(galery);
             setTimeout(() => this.$order.unsubscribe(), 2000);
           },
-          error: (error: HttpErrorResponse) => console.log(error),
+          error: (error: HttpErrorResponse) =>
+            this.messageService.error(error, undefined, this.$order),
         });
       }
     }
@@ -88,12 +90,13 @@ export class GaleryComponent {
       this.isHeader.emit(true);
       this.showLightbox(index);
       this.enableOrDisableButton();
-      this.image = index;
+      this.index = index;
     }
   }
 
   public delete(index: number): Subscription | void {
     if (this.announcement?.galery && this.announcement.galery.length > 0) {
+      this.isOpen = false;
       const galery: Galery = this.announcement.galery[index];
       galery._csrf = this.announcement?._csrf;
       return (this.destroy = this.galeryAnnouncementService
@@ -114,7 +117,7 @@ export class GaleryComponent {
   }
 
   private getAllKeysGalery(): number[] | void {
-    if (this.announcement?.galery) {
+    if (this.announcement?.galery && this.announcement?.galery.length > 0) {
       const keys: number[] = [...this.announcement.galery.keys()];
       return keys;
     }
@@ -139,39 +142,36 @@ export class GaleryComponent {
 
   private update(galery: Galery): void {
     const i = this.removeItem(galery);
-    if (i) {
-      this.enableOrDisableButton();
-      this.closeLightbox();
-      this.updateLightbox(i);
-      this.endNext = null;
-    }
+    this.closeLightbox();
+    i && this.updateLightbox(i);
+    i && this.show(i);
   }
 
   private updateLightbox(i: number) {
     if (this.announcement?.galery?.length === 1) {
-      this.image = 0;
+      this.index = 0;
     } else {
-      this.image = i - 1;
+      this.index = i - 1;
     }
   }
 
   private setKeyGalery(operator: string, i: number, keys: number[]): void {
     const index = operator === '+' ? i + 1 : i - 1;
     if (keys.includes(index)) {
-      this.image = index;
+      this.index = index;
     }
   }
 
   private removeItem(galery: Galery): number | void {
     const i = this.getKeyGalery(galery);
-    if (i) {
+    if (i || i === 0) {
       this.remove(i);
       return i;
     }
   }
 
   private getKeyGalery(galery: Galery): number | void {
-    if (this.announcement?.galery) {
+    if (this.announcement?.galery && this.announcement?.galery?.length > 0) {
       return this.announcement.galery.findIndex(
         (item) => item?.id === galery?.id
       );
@@ -179,7 +179,7 @@ export class GaleryComponent {
   }
 
   private remove(i: number): void {
-    if (this.announcement?.galery) {
+    if (this.announcement?.galery && this.announcement?.galery.length > 0) {
       this.announcement.galery.splice(i, 1);
     }
   }
