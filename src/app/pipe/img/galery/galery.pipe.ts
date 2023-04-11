@@ -3,26 +3,18 @@ import { Announcement } from 'src/app/interface';
 
 @Pipe({
   name: 'typeImageGalery',
-  pure: false,
+  pure: true,
 })
 export class TypeImageGaleryPipe implements PipeTransform {
-  transform(value: unknown, args: unknown[]): string | void {
+  transform(value: unknown, index: number, text: string): string | void {
     const announcement = value as Pick<Announcement, 'galery'>;
-    const type = args[0] as 'small' | 'medium' | 'large';
-    const i = args[1] as number;
+
     if (
       announcement &&
       announcement?.galery &&
-      announcement?.galery[i]?.filename
+      announcement?.galery[index]?.filename
     ) {
-      switch (type) {
-        case 'small':
-          return `/images/galery/small/${announcement?.galery[i]?.filename}`;
-        case 'medium':
-          return `/images/galery/medium/${announcement?.galery[i]?.filename}`;
-        case 'large':
-          return `/images/galery/large/${announcement?.galery[i]?.filename}`;
-      }
+      return `${text}${announcement?.galery[index]?.filename}`;
     }
   }
 }

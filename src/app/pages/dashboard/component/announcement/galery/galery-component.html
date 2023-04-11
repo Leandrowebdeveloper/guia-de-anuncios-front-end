@@ -34,16 +34,16 @@
     <picture>
       <source
         media="(max-width: 575.98px)"
-        [srcset]="announcement | typeImageGalery:['small', index]"
+        [srcset]="announcement | typeImageGalery:index:'/images/galery/small/'"
         alt="Galeria de anúncios"
       />
       <source
         media="(max-width: 1399.98px) and (min-width: 576px)"
-        [srcset]="announcement | typeImageGalery:['medium', index]"
+        [srcset]="announcement | typeImageGalery:index:'/images/galery/medium/'"
         alt="Galeria de anúncios"
       />
       <img
-        [src]="announcement | typeImageGalery:['large', index]"
+        [src]="announcement | typeImageGalery:index:'/images/galery/large/'"
         alt="Galeria de anúncios"
       />
     </picture>

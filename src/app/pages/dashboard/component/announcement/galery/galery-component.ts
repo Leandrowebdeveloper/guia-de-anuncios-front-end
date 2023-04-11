@@ -84,6 +84,9 @@ export class GaleryComponent {
   }
 
   public show(index: number): void {
+    if (index === this.announcement?.galery?.length) {
+      index = this.announcement?.galery?.length - 1;
+    }
     const keys: number[] | void = this.getAllKeysGalery();
     if (keys && keys.length > 0) {
       this.getLastKeyGalery(keys);
@@ -112,7 +115,7 @@ export class GaleryComponent {
     }
   }
 
-  private showLightbox(index: number) {
+  private showLightbox(index: number): void {
     this.isLightbox = index > -1;
   }
 
@@ -143,15 +146,13 @@ export class GaleryComponent {
   private update(galery: Galery): void {
     const i = this.removeItem(galery);
     this.closeLightbox();
-    i && this.updateLightbox(i);
-    i && this.show(i);
+    (i || i === 0) && this.show(i);
+    this.updateLightbox();
   }
 
-  private updateLightbox(i: number) {
+  private updateLightbox(): void {
     if (this.announcement?.galery?.length === 1) {
       this.index = 0;
-    } else {
-      this.index = i - 1;
     }
   }
 
