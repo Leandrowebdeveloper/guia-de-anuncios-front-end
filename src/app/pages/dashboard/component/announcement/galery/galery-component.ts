@@ -84,9 +84,6 @@ export class GaleryComponent {
   }
 
   public show(index: number): void {
-    if (index === this.announcement?.galery?.length) {
-      index = this.announcement?.galery?.length - 1;
-    }
     const keys: number[] | void = this.getAllKeysGalery();
     if (keys && keys.length > 0) {
       this.getLastKeyGalery(keys);
@@ -115,7 +112,7 @@ export class GaleryComponent {
     }
   }
 
-  private showLightbox(index: number): void {
+  private showLightbox(index: number) {
     this.isLightbox = index > -1;
   }
 
@@ -146,13 +143,14 @@ export class GaleryComponent {
   private update(galery: Galery): void {
     const i = this.removeItem(galery);
     this.closeLightbox();
-    (i || i === 0) && this.show(i);
-    this.updateLightbox();
+    if (i || i === 0) this.updateLightbox(i);
   }
 
-  private updateLightbox(): void {
-    if (this.announcement?.galery?.length === 1) {
+  private updateLightbox(i: number) {
+    if (this.announcement?.galery && this.announcement?.galery?.length >= 1) {
       this.index = 0;
+    } else {
+      this.index = i - 1;
     }
   }
 
@@ -186,7 +184,7 @@ export class GaleryComponent {
   }
 
   private closeLightbox(): void {
-    this.isLightbox = this.announcement?.galery?.length !== 0;
+    if (this.announcement?.galery?.length === 0) this.close();
   }
 
   private enableOrDisableButton(): void {

@@ -3,7 +3,7 @@ import { Galery } from 'src/app/interface';
 
 @Pipe({
   name: 'galeryValues',
-  pure: false,
+  pure: true,
 })
 export class GaleryValuesPipe implements PipeTransform {
   transform(value: unknown, attr: keyof Galery, text?: string): any {

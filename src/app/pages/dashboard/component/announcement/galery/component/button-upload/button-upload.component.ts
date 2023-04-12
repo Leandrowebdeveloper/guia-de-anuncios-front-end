@@ -73,8 +73,10 @@ export class GaleryButtonUploadComponent {
       .sendFiles(dataFile, data)
       .subscribe({
         next: (response: any) => this.success(response, response, loading),
-        error: (error: HttpErrorResponse) =>
-          this.messageService.error(error, undefined, undefined),
+        error: (error: HttpErrorResponse) => {
+          loading.dismiss();
+          this.messageService.error(error, undefined, this.$upload);
+        },
       });
   }
 
