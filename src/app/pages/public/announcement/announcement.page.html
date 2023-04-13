@@ -216,7 +216,7 @@
                 [title]="announcement | attrTitle:'citie'"
                 [attr.data-message]="announcement | attrTitle:'citie'"
               >
-                {{ announcement?.citie | citie }}
+                {{ announcement | citie }}
               </address>
             </ion-card-subtitle>
           </ion-card-content>
@@ -274,11 +274,28 @@
 
           <!-- Mapa -->
           <ion-col size="12" *ngIf="announcement?.coordinate">
-            <ion-card-header class="ion-margin-top">
-              <ion-card-title color="medium" class="ion-margin-bottom">
+            <ion-card-header
+              class="ion-margin-top"
+              style="display: flex; justify-content: space-between"
+            >
+              <ion-card-title color="medium">
                 <ion-icon name="map"></ion-icon>
                 Mapa</ion-card-title
               >
+              <ion-button
+                size="small"
+                title="Traçar uma rota."
+                data-label="Traçar uma rota."
+                (click)="traceRoute()"
+              >
+                <ion-icon
+                  slot="icon-only"
+                  color="light"
+                  class="ion-margin-end"
+                  name="map"
+                ></ion-icon>
+                Traçar uma rota
+              </ion-button>
             </ion-card-header>
             <ion-card-content>
               <app-maps-component

@@ -20,5 +20,6 @@ export class CardHeaderComponent {
     | 'address'
     | 'contact'
     | 'citie'
+    | 'like'
   >;
 }

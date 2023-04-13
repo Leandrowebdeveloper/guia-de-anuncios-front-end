@@ -53,7 +53,10 @@ export class HttpService<T> implements Http<T> {
     );
   }
 
-  public search(url: string, searchBy: object): Observable<T[]> {
+  public search(
+    url: string,
+    searchBy: { [key: string]: any }
+  ): Observable<T[]> {
     this.getToken();
     return this.http.get<T[]>(`${this.api}/${url}`, {
       headers: this.httpOptions.headers,
@@ -61,7 +64,7 @@ export class HttpService<T> implements Http<T> {
     });
   }
 
-  public findOne(url: string, searchBy: object): Observable<T> {
+  public findOne(url: string, searchBy: { [key: string]: any }): Observable<T> {
     this.getToken();
     return this.http.get<T>(`${this.api}/${url}`, {
       headers: this.httpOptions.headers,
@@ -69,7 +72,7 @@ export class HttpService<T> implements Http<T> {
     });
   }
 
-  public index(url?: string, search?: object): Observable<T[]> {
+  public index(url?: string, search?: { [key: string]: any }): Observable<T[]> {
     this.getToken();
     return this.http.get<T[]>(`${this.api}/${url || ''}`, {
       headers: this.httpOptions.headers,

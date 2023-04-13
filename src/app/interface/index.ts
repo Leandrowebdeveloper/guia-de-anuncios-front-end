@@ -245,9 +245,10 @@ export interface Coordinate {
 export interface Like {
   id?: number;
   announcementId?: number;
-  not?: number;
-  yes?: number;
+  not: number;
+  yes: number;
   message?: string;
+  _csrf?: string;
 }
 
 export interface WorkDays {
@@ -290,7 +291,7 @@ export interface Announcement {
   coordinate?: Coordinate | null;
   workDays?: WorkDays | null;
   socialNetwork?: SocialNetwork | null;
-  like?: Like;
+  like?: Like | null;
   contact?: Contact | null;
   address?: Address | null;
   citie?: Citie | null;

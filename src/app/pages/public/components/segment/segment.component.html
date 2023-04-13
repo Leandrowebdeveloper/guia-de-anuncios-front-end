@@ -1,18 +1,31 @@
 <ion-segment [scrollable]="true" mode="md" color="none">
   <!-- LIKE GOSTEI -->
-  <ion-segment-button layout="icon-top" title="Gostei" data-message="Gostei">
-    <ion-icon name="thumbs-up"></ion-icon>
-    <ion-label>123</ion-label>
+  <ion-segment-button
+    (click)="yesLike()"
+    layout="icon-top"
+    title="Gostei"
+    data-message="Gostei"
+  >
+    <ion-icon [color]="like === 'yes' && 'medium'" name="thumbs-up"></ion-icon>
+    <ion-label [color]="like === 'yes' && 'medium'">{{
+      announcement.like ? announcement.like.yes : 0
+    }}</ion-label>
   </ion-segment-button>
 
   <!-- LIKE NÃO GOSTEI -->
   <ion-segment-button
+    (click)="notLike()"
     layout="icon-top"
     title="Não gostei"
     data-message="Não gostei"
   >
-    <ion-icon name="thumbs-down"></ion-icon>
-    <ion-label>32</ion-label>
+    <ion-icon
+      [color]="like === 'not' && 'medium'"
+      name="thumbs-down"
+    ></ion-icon>
+    <ion-label [color]="like === 'yes' && 'medium'">{{
+      announcement.like ? announcement.like.not : 0
+    }}</ion-label>
   </ion-segment-button>
 
   <!-- COPY -->
