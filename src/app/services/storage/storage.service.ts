@@ -31,7 +31,7 @@ export class StorageService {
 
   public create(
     key: string,
-    value: string | object
+    value: string | { [key: string]: any }
   ): Promise<any> | null | undefined {
     if (key && value) {
       if (typeof value === 'string') {
@@ -42,7 +42,7 @@ export class StorageService {
     return null;
   }
 
-  public update(key: string, value: string | object) {
+  public update(key: string, value: string | { [key: string]: any }) {
     if (key && value) {
       if (typeof value === 'string') {
         return this.$storage?.set(key, value);

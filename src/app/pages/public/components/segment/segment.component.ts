@@ -1,3 +1,4 @@
+import { StorageService } from 'src/app/services/storage/storage.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Announcement, Like } from 'src/app/interface';
 import { Share } from '@capacitor/share';
@@ -7,14 +8,20 @@ import { LikeService } from '../like-service/like.service';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from 'src/app/utilities/message/message.service';
-
+export interface Likes {
+  id: string;
+  like: string;
+}
 @Component({
   selector: 'app-segment-component',
   templateUrl: './segment.component.html',
   styleUrls: ['./segment.component.scss'],
 })
 export class SegmentComponent implements OnInit {
-  @Input() announcement!: Pick<Announcement, '_csrf' | 'id' | 'title' | 'like'>;
+  @Input() announcement!: Pick<
+    Announcement,
+    '_csrf' | 'id' | 'title' | 'like' | 'slug'
+  >;
   public isSupportShare!: boolean;
 
   public like!: string | null;
@@ -23,15 +30,40 @@ export class SegmentComponent implements OnInit {
   constructor(
     private toastService: ToastService,
     private likeService: LikeService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private storageService: StorageService
   ) {}
 
   ngOnInit() {
     this.canShare();
-    this.like = localStorage.getItem('like');
+    this.initLikes();
+  }
+
+  private async initLikes(): Promise<string | null> {
+    const res = await this.getFindLikes();
+    if (res) return (this.like = res.like);
+    return (this.like = null);
+  }
+
+  private async getFindLikes(): Promise<Likes | void> {
+    const likes: Likes[] = await this.storageService.find('likes');
+    if (likes && likes.length > 0) {
+      const res = likes.filter((item) => item.id === this.announcement.slug)[0];
+      return res;
+    }
+  }
+
+  private async getFindAllLikes(): Promise<Likes[] | void> {
+    const likes: Likes[] = await this.storageService.find('likes');
+    if (likes && likes.length > 0) {
+      const res = likes.filter((item) => item.id === this.announcement.slug);
+      return res;
+    }
   }
 
   public yesLike(): void {
+    console.log(this.like);
+
     if (this.like === null || this.like === 'not') return this.setLike('+');
   }
 
@@ -98,12 +130,34 @@ export class SegmentComponent implements OnInit {
     });
   }
 
-  private set(like: Like, action: '-' | '+'): void {
-    if (like) {
+  private async set(like: Like, action: '-' | '+'): Promise<void> {
+    if (like && this.announcement?.slug) {
       this.like = action === '+' ? 'yes' : 'not';
-      localStorage.setItem('like', this.like);
+      const likes: Likes[] | void = await this.getFindAllLikes();
+      if (likes && likes.length > 0) {
+        this.updateLikes(likes);
+      } else {
+        this.createLikes();
+      }
       this.announcement.like = like;
     }
+  }
+
+  private createLikes(): void {
+    this.storageService.create('likes', [
+      {
+        id: this.announcement.slug,
+        like: this.like,
+      },
+    ]);
+  }
+
+  private updateLikes(likes: Likes[]): void {
+    likes.forEach((item) => {
+      if (item.id === this.announcement?.slug && this.like)
+        item.like = this.like;
+    });
+    this.storageService.create('likes', likes);
   }
 
   public async share(announcement: Pick<Announcement, 'title'>) {
