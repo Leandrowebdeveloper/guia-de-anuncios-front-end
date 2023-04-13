@@ -48,6 +48,7 @@ import { GaleryValuesPipe } from './announcement/galery/galery-values/galery-val
 import { TypePlanFreePipe } from './announcement/plan/type-plan-free/type-plan.pipe';
 import { AdBlockedPipe } from './ad-blocked/ad-blocked.pipe';
 import { IsFeaturedImagePipe } from './announcement/galery/is-featured-image/is-featured-image.pipe';
+import { GaleryFindValuesPipe } from './announcement/galery/galery-find-values/galery-find-values.pipe';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { IsFeaturedImagePipe } from './announcement/galery/is-featured-image/is-
     GaleryValuesPipe,
     AdBlockedPipe,
     IsFeaturedImagePipe,
+    GaleryFindValuesPipe,
   ],
   exports: [
     TimePipe,
@@ -151,6 +153,7 @@ import { IsFeaturedImagePipe } from './announcement/galery/is-featured-image/is-
     GaleryValuesPipe,
     AdBlockedPipe,
     IsFeaturedImagePipe,
+    GaleryFindValuesPipe,
   ],
   providers: [AddressService, AllowAdPipe, TimePipe],
 })

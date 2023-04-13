@@ -6,16 +6,11 @@
     *ngIf="category$ | async; let category; else loading"
     fixed
   >
-    <ion-row class="ion-justify-content-around ion-align-items-center">
-      <ion-col size="12">
-        <ion-searchbar
-          [color]="isDark ? 'medium' : 'none'"
-          class="ion-margin-top"
-          placeholder="Pesquizar"
-          animated
-        ></ion-searchbar>
-      </ion-col>
+    <!-- Search  -->
+    <app-announcement-search-home-component>
+    </app-announcement-search-home-component>
 
+    <ion-row class="ion-justify-content-around ion-align-items-center">
       <ion-col
         class="ion-align-self-center ion-margin-vertical ion-no-margin-bottom"
         size-xl="2"

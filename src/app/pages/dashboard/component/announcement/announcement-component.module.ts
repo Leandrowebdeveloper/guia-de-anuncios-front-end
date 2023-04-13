@@ -43,6 +43,8 @@ import { AdminAnnouncementService } from '../../administrator/announcement/servi
 import { WorkDayAnnouncementComponent } from './work-days/work-days.component';
 import { ShowAnnouncementComponentModule } from 'src/app/pages/public/components/announcement-component.module';
 import { GaleryComponentModule } from './galery/galery-component.module';
+import { AnnouncementSearchHomeComponent } from './search-home/search.component';
+import { SearchHomeAnnouncementService } from './search-home/service/search-home.service';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -82,6 +84,7 @@ import { GaleryComponentModule } from './galery/galery-component.module';
     AnnouncementFormComponent,
     AnnouncementComponent,
     CardHeaderComponent,
+    AnnouncementSearchHomeComponent,
   ],
   exports: [
     AnnouncementStateComponent,
@@ -102,6 +105,7 @@ import { GaleryComponentModule } from './galery/galery-component.module';
     AnnouncementFormComponent,
     AnnouncementComponent,
     CardHeaderComponent,
+    AnnouncementSearchHomeComponent,
   ],
   providers: [
     AdminAnnouncementService,
@@ -113,6 +117,7 @@ import { GaleryComponentModule } from './galery/galery-component.module';
     SocialNetworkAnnouncementService,
     CityAnnouncementService,
     ContactAnnouncementService,
+    SearchHomeAnnouncementService,
     //
     AnnouncementAddressComponent,
     AnnouncementCityComponent,
