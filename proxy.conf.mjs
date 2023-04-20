@@ -22,6 +22,7 @@ export default [
       "/api/redefine-password",
       "/api/recover",
       "/api/logout",
+      "/api/ckeckout",
       "/images",
       "manifest.webmanifest",
     ],

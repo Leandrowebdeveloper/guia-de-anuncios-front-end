@@ -169,7 +169,7 @@
 
       <!-- Plano free -->
       <ion-col size="12" *ngIf="announcement | typePlanFree">
-        <ion-card [hidden]="!announcement?.workDays">
+        <ion-card class="no-margin-top" [hidden]="!announcement?.workDays">
           <ion-card-header>
             <ion-card-subtitle>
               <time>{{ datetimes | time:'workDays' }}</time>
@@ -188,14 +188,21 @@
             </ion-card-subtitle>
           </ion-card-header>
         </ion-card>
+
         <ion-card>
           <!-- Titulo e descrição -->
           <ion-card-header>
             <ion-card-title
               [title]="announcement | announcementValues:'title'"
               [attr.data-message]="announcement | announcementValues:'title'"
-              >{{ announcement | announcementValues:'title' }}</ion-card-title
-            >
+              >{{ announcement | announcementValues:'title' }}
+              <span
+                *ngIf="announcement | isAnnouncementValuePrice"
+                class="ion-float-right"
+              >
+                {{ announcement | isAnnouncementValuePrice }}</span
+              >
+            </ion-card-title>
 
             <ion-card-subtitle
               [innerHtml]="announcement | announcementValues:'description'"
@@ -258,6 +265,7 @@
 
           <!-- Rede Social -->
           <ion-card-content
+            *ngIf="announcement | typePlan"
             [hidden]="!announcement?.socialNetwork"
             class="ion-margin-top"
           >
@@ -273,7 +281,10 @@
           </ion-card-content>
 
           <!-- Mapa -->
-          <ion-col size="12" *ngIf="announcement?.coordinate">
+          <ion-col
+            size="12"
+            *ngIf="announcement?.coordinate && (announcement | typePlan)"
+          >
             <ion-card-header
               class="ion-margin-top"
               style="display: flex; justify-content: space-between"
@@ -307,7 +318,10 @@
       </ion-col>
 
       <!-- Mapa -->
-      <ion-col size="12" *ngIf="announcement?.coordinate">
+      <ion-col
+        size="12"
+        *ngIf="announcement?.coordinate && (announcement | typePlan)"
+      >
         <ion-card-header
           class="ion-margin-top"
           style="display: flex; justify-content: space-between"
@@ -339,7 +353,7 @@
       </ion-col>
 
       <!-- Card botão likes copy  -->
-      <ion-col size="12" *ngIf="announcement?.user?.plan?.type === 'free'">
+      <ion-col size="12" *ngIf="announcement | typePlanFree">
         <ion-card class="no-margin-top">
           <app-segment-component
             [announcement]="announcement"

@@ -54,22 +54,22 @@
                       >
                         <source
                           media="(max-width: 575.98px)"
-                          [srcset]="'/images/galery/small/' + image?.filename"
+                          [srcset]="image | galeryValues:'filename':'/images/galery/small/'"
                         />
                         <source
                           media="(max-width: 767.98px) and (min-width: 576px)"
-                          [srcset]="'/images/galery/small/' + image?.filename"
+                          [srcset]="image | galeryValues:'filename':'/images/galery/small/'"
                         />
                         <source
                           media="(max-width: 991.98px) and (min-width: 768px)"
-                          [srcset]="'/images/galery/medium/' + image?.filename"
+                          [srcset]="image | galeryValues:'filename':'/images/galery/medium/'"
                         />
                         <source
                           media="(min-width: 992px)"
-                          [srcset]="'/images/galery/x-small/' + image?.filename"
+                          [srcset]="image | galeryValues:'filename':'/images/galery/x-small/'"
                         />
                         <img
-                          [src]="'/images/galery/large/' + image?.filename"
+                          [src]="image | galeryValues:'filename':'/images/galery/large/'"
                           [title]="item | attrTitle:'title'"
                           [attr.data-message]="item | attrTitle:'title'"
                           [alt]="'Imagem ' + item?.title"
@@ -89,8 +89,14 @@
                         <ion-card-title
                           [title]="item?.title"
                           [attr.data-message]="item?.title"
-                          >{{ item?.title | lnWords }}</ion-card-title
-                        >
+                          >{{ item?.title | lnWords }}
+                          <span
+                            *ngIf="category | isPriceCategoryAnnouncement"
+                            class="ion-float-right"
+                          >
+                            {{ item | isAnnouncementValuePrice }}</span
+                          >
+                        </ion-card-title>
                         <ion-card-subtitle>
                           <address
                             [title]="item | attrTitle:'citie'"

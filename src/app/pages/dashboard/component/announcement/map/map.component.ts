@@ -56,6 +56,10 @@ export class AnnouncementMapComponent implements OnInit {
     if (this.user?.plan?.type === 'free') {
       const modal = await this.modalController.create({
         component: PresentPlanComponent,
+        cssClass: 'modal-wrapper',
+        componentProps: {
+          announcement: this.announcement,
+        },
         enterAnimation: this.modalService.enterAnimation,
         leaveAnimation: this.modalService.leaveAnimation,
       });

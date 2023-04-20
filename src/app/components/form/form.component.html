@@ -83,6 +83,7 @@
                 input?.name !== 'city' &&
                 input?.name !== 'period' &&
                 input?.name !== 'blockade' &&
+                input?.name !== 'price' &&
                 input?.name !== 'type'
               "
               [type]="visiblePassword ? 'text' : input?.type"
@@ -122,6 +123,19 @@
               maxlength="15"
               minlength="15"
               mask="(**)***-***-***"
+            >
+            </ion-input>
+
+            <ion-input
+              *ngIf="input?.type === 'text' && input?.name === 'price'"
+              [type]="input?.type"
+              [formControlName]="input.name"
+              [inputmode]="input?.type"
+              [placeholder]="input?.placeholder"
+              [attr.aria-invalid]="submitted"
+              [attr.aria-placeholder]="input?.actionLabel"
+              maxlength="19"
+              mask="currency"
             >
             </ion-input>
 

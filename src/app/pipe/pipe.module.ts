@@ -49,6 +49,8 @@ import { TypePlanFreePipe } from './announcement/plan/type-plan-free/type-plan.p
 import { AdBlockedPipe } from './ad-blocked/ad-blocked.pipe';
 import { IsFeaturedImagePipe } from './announcement/galery/is-featured-image/is-featured-image.pipe';
 import { GaleryFindValuesPipe } from './announcement/galery/galery-find-values/galery-find-values.pipe';
+import { IsAnnouncementValuePricePipe } from './announcement/is-announcement-values-price/is-announcement-values-price.pipe';
+import { IsPriceCategoryAnnouncementPipe } from './category/is-price-category-announcement/is-price-category-announcement.pipe';
 
 @NgModule({
   declarations: [
@@ -102,6 +104,8 @@ import { GaleryFindValuesPipe } from './announcement/galery/galery-find-values/g
     AdBlockedPipe,
     IsFeaturedImagePipe,
     GaleryFindValuesPipe,
+    IsAnnouncementValuePricePipe,
+    IsPriceCategoryAnnouncementPipe,
   ],
   exports: [
     TimePipe,
@@ -154,6 +158,8 @@ import { GaleryFindValuesPipe } from './announcement/galery/galery-find-values/g
     AdBlockedPipe,
     IsFeaturedImagePipe,
     GaleryFindValuesPipe,
+    IsAnnouncementValuePricePipe,
+    IsPriceCategoryAnnouncementPipe,
   ],
   providers: [AddressService, AllowAdPipe, TimePipe],
 })

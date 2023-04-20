@@ -16,7 +16,13 @@
   <ion-card-title
     [title]="announcement | announcementValues : 'title'"
     [attr.data-message]="announcement | announcementValues : 'title'"
-    >{{ announcement | announcementValues : "title" }}</ion-card-title
+    >{{ announcement | announcementValues : "title" }}
+    <span
+      *ngIf="announcement | isAnnouncementValuePrice"
+      class="ion-float-right"
+    >
+      {{ announcement | isAnnouncementValuePrice }}</span
+    ></ion-card-title
   >
 
   <!-- Horario de trabalho -->

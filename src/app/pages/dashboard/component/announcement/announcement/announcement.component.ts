@@ -1,6 +1,6 @@
 import { AnnouncementFormComponent } from './form/form.component';
-import { Announcement, User } from 'src/app/interface';
-import { Component, Input, OnInit } from '@angular/core';
+import { Announcement, Category, User } from 'src/app/interface';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -8,13 +8,16 @@ import { ModalController } from '@ionic/angular';
   templateUrl: './announcement.component.html',
   styleUrls: ['./announcement.component.scss'],
 })
-export class AnnouncementComponent implements OnInit {
+export class AnnouncementOpenFormComponent implements OnInit {
   @Input() announcement!: Announcement | void;
   @Input() user!: Required<Pick<User, '_csrf' | 'id'>> | void;
+  @Output() category = new EventEmitter<Category>();
 
   constructor(private modalController: ModalController) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.announcement);
+  }
 
   public async open(): Promise<void> {
     const label = this.getLabel();
@@ -22,6 +25,7 @@ export class AnnouncementComponent implements OnInit {
 
     const modal = await this.modalController.create({
       component: AnnouncementFormComponent,
+      cssClass: 'modal-wrapper',
       componentProps: {
         action: 'announcement',
         label,
@@ -41,8 +45,9 @@ export class AnnouncementComponent implements OnInit {
 
   private getAnnouncement() {
     const _csrf = this.announcement?._csrf;
+    let result: { [key: string]: any };
     if (this.announcement?.id) {
-      return {
+      result = {
         _csrf,
         title: this.announcement?.title,
         description: this.announcement?.description,
@@ -50,7 +55,7 @@ export class AnnouncementComponent implements OnInit {
         id: this.announcement?.id,
       };
     } else {
-      return {
+      result = {
         _csrf,
         title: null,
         description: null,
@@ -58,5 +63,27 @@ export class AnnouncementComponent implements OnInit {
         userId: this.user?.id,
       };
     }
+
+    if (this.isClassified()) {
+      if (this.announcement?.price?.value) {
+        result['price'] = this.announcement?.price?.value;
+      } else {
+        result['price'] = null;
+      }
+    }
+
+    return result;
+  }
+
+  private isClassified(): boolean {
+    if (
+      this.announcement &&
+      this.announcement?.categoryAnnouncement?.category &&
+      (this.announcement?.categoryAnnouncement?.category?.slug ===
+        'classificados' ||
+        this.announcement?.categoryAnnouncement?.category?.slug === 'imoveis')
+    )
+      return true;
+    return false;
   }
 }

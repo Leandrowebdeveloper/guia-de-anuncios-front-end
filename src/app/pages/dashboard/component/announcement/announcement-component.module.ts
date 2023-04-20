@@ -28,7 +28,7 @@ import { AnnouncementSearchMenuComponent } from './search/filter/filter-menu.com
 import { SearchAnnouncementService } from './search/service/search.service';
 import { AnnouncementSearchComponent } from './search/search.component';
 import { StateAnnouncementService } from './state/service/state.service';
-import { AnnouncementComponent } from './announcement/announcement.component';
+import { AnnouncementOpenFormComponent } from './announcement/announcement.component';
 import { AnnouncementAdminButtonCreateComponent } from './button-create/admin/button-create.component';
 import { CoordinateAnnouncementService } from './map/service/map.service';
 import { AddressService } from './address/service/address.service';
@@ -82,7 +82,7 @@ import { SearchHomeAnnouncementService } from './search-home/service/search-home
     AnnouncementSearchMenuComponent,
     AnnouncementSearchComponent,
     AnnouncementFormComponent,
-    AnnouncementComponent,
+    AnnouncementOpenFormComponent,
     CardHeaderComponent,
     AnnouncementSearchHomeComponent,
   ],
@@ -103,7 +103,7 @@ import { SearchHomeAnnouncementService } from './search-home/service/search-home
     AnnouncementSearchMenuComponent,
     AnnouncementSearchComponent,
     AnnouncementFormComponent,
-    AnnouncementComponent,
+    AnnouncementOpenFormComponent,
     CardHeaderComponent,
     AnnouncementSearchHomeComponent,
   ],

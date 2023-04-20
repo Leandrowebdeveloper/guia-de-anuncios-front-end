@@ -18,10 +18,6 @@ export class LnWordsPipe implements PipeTransform {
 
       const response = lastWord && this.firstFilter(allWords, lastWord);
 
-      if (response && this.lastRegex.test(response)) {
-        return this.lastFilter(response);
-      }
-
       return `${response}...`;
     }
     return allWords;

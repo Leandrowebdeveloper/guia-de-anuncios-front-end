@@ -55,6 +55,7 @@ export class AnnouncementCityComponent implements OnInit, OnDestroy {
       const label = this.buildLabel(this.announcement);
       const modal = await this.modalController.create({
         component: AnnouncementFormCityComponent,
+        cssClass: 'modal-wrapper',
         componentProps: {
           label,
           citie,

@@ -269,6 +269,20 @@ export class ConfigForm {
         empty: 'obrigatório!',
       },
     },
+    price: {
+      name: 'price',
+      label: 'Preço',
+      placeholder: 'R$ 0,00',
+      type: 'text',
+      actionLabel: 'Entre com preço',
+      readonly: false,
+      msg: {
+        invalid: 'Digite apenas números.',
+        empty: 'obrigatório!',
+        min: null,
+        max: 'Máximo 19.',
+      },
+    },
     lastName: {
       name: 'lastName',
       label: 'Sobrenome',

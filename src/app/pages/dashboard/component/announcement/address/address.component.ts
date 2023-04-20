@@ -63,6 +63,7 @@ export class AnnouncementAddressComponent implements OnInit, OnDestroy {
 
       const modal = await this.modalController.create({
         component: AnnouncementFormAddressComponent,
+        cssClass: 'modal-wrapper',
         componentProps: {
           label,
           address,

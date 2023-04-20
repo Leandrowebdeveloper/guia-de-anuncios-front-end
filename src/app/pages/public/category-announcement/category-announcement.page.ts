@@ -176,6 +176,11 @@ export class CategoryAnnouncementPage implements OnInit, OnDestroy {
                   value.user = {
                     email: value?.announcement.user.email,
                   } as User;
+
+                  if (value.plan.type === 'free') {
+                    value.galery = [];
+                  }
+
                   delete value?.announcement;
                   return value;
                 }
@@ -250,6 +255,9 @@ export class CategoryAnnouncementPage implements OnInit, OnDestroy {
                 value.user = {
                   email: value?.announcement.user.email,
                 } as User;
+                if (value.plan.type === 'free') {
+                  value.galery = [];
+                }
                 delete value?.announcement;
                 return value;
               }

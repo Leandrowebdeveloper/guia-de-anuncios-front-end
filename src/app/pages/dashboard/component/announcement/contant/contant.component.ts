@@ -55,6 +55,7 @@ export class AnnouncementContactComponent implements OnInit, OnDestroy {
       const contact = this.buildDataContact(this.announcement);
       const modal = await this.modalController.create({
         component: AnnouncementFormContactComponent,
+        cssClass: 'modal-wrapper',
         componentProps: {
           action: 'contact',
           label,

@@ -64,6 +64,10 @@ export class AnnouncementSocialNetworkComponent implements OnInit, OnDestroy {
       if (this.announcement?.plan?.type === 'free') {
         modal = await this.modalController.create({
           component: PresentPlanComponent,
+          cssClass: 'modal-wrapper',
+          componentProps: {
+            announcement: this.announcement,
+          },
           enterAnimation: this.modalService.enterAnimation,
           leaveAnimation: this.modalService.leaveAnimation,
         });
@@ -73,6 +77,7 @@ export class AnnouncementSocialNetworkComponent implements OnInit, OnDestroy {
       const socialNetwork = this.getSocialNetwork(this.announcement);
       modal = await this.modalController.create({
         component: AnnouncementFormSocialNetworkComponent,
+        cssClass: 'modal-wrapper',
         componentProps: {
           label,
           socialNetwork,

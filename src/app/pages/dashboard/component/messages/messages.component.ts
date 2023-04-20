@@ -30,6 +30,7 @@ export class SendMessagesComponent {
     let data: DataMessage | void = this.getDataMessage();
     const modal = await this.modalController.create({
       component: FormSendMessagesComponent,
+      cssClass: 'modal-wrapper',
       componentProps: {
         label: 'Enviar menssagem',
         data,

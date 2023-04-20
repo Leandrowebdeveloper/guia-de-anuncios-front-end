@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +14,11 @@ import { animationRouter } from './utilities/animations/animation-router';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleDarkService } from './services/module-dark/module-dark.service';
+
+import ptBr from '@angular/common/locales/pt';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(ptBr);
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,6 +46,9 @@ import { ModuleDarkService } from './services/module-dark/module-dark.service';
       useClass: IonicRouteStrategy,
     },
     ModuleDarkService,
+    // ************************************
+    { provide: LOCALE_ID, useValue: 'pt' },
+    // ************************************
   ],
   bootstrap: [AppComponent],
 })

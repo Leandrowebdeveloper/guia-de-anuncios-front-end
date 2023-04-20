@@ -18,7 +18,10 @@ import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/anno
 })
 export class AnnouncementFormComponent implements OnInit {
   @Input() announcement!: Required<
-    Pick<Announcement, 'id' | '_csrf' | 'title' | 'description' | 'userId'>
+    Pick<
+      Announcement,
+      'id' | '_csrf' | 'title' | 'description' | 'userId' | 'price'
+    >
   >;
   @Input() action!: string;
   @Input() label!: string;

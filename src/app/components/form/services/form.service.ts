@@ -43,6 +43,14 @@ export class FormServices {
     zip_code: ['', [Validators.required]],
     district: ['', [Validators.required]],
     numberr: ['', [Validators.required]],
+    price: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/[0-9,.]/),
+        Validators.maxLength(19),
+      ],
+    ],
     complement: [''],
     mobilePhone: ['', [Validators.required]],
     phone: [''],

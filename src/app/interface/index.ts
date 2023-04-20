@@ -303,8 +303,12 @@ export interface Announcement {
   category?: Category;
   user?: User;
   authSocial?: AuthSocial;
+  price?: Price;
 }
-
+export interface Price {
+  announcementId?: number;
+  value?: string;
+}
 export interface CategoryAnnouncement {
   id: number;
   announcementId?: number;

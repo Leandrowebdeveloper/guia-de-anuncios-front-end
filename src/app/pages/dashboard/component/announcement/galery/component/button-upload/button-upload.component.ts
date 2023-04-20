@@ -39,6 +39,10 @@ export class GaleryButtonUploadComponent {
     if (this.announcement && this.announcement.plan?.type === 'free') {
       const modal = await this.modalController.create({
         component: PresentPlanComponent,
+        cssClass: 'modal-wrapper',
+        componentProps: {
+          announcement: this.announcement,
+        },
         enterAnimation: this.modalService.enterAnimation,
         leaveAnimation: this.modalService.leaveAnimation,
       });

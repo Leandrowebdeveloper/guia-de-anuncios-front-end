@@ -32,7 +32,7 @@ export class AnnouncementGuard {
               } as AuthSocial;
               delete data?.announcement;
               delete data?.categoryAnnouncement?.catAdId;
-              delete data?.categoryAnnouncement?.category;
+              // delete data?.categoryAnnouncement?.category;
               delete data?.categoryAnnouncement?.announcementId;
               delete data?.categoryAnnouncement?.message;
               this.managementAnnouncementService.setAnnouncement = data;

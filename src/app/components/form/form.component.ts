@@ -69,6 +69,7 @@ export class FormComponent implements OnInit, AfterContentChecked {
     this.orderImputsBlockade();
     this.orderImputsMessages();
     this.orderImputsAddress();
+    this.orderImputsAnnouncement();
   }
 
   public setPediod(period: '03' | '06' | '12') {
@@ -185,6 +186,16 @@ export class FormComponent implements OnInit, AfterContentChecked {
         this.buildInputs[2],
         this.buildInputs[0],
         this.buildInputs[3],
+      ];
+    }
+  }
+
+  private orderImputsAnnouncement(): void {
+    if (this.attrButton?.route === '/announcement' && this.buildInputs[2]) {
+      this.buildInputs = [
+        this.buildInputs[0],
+        this.buildInputs[2],
+        this.buildInputs[1],
       ];
     }
   }

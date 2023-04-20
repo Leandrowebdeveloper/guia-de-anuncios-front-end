@@ -31,6 +31,7 @@ export interface InputName {
   uf: Attributes;
   zip_code: Attributes;
   _csrf?: Attributes | null;
+  price: Attributes;
 }
 
 export interface Attributes {

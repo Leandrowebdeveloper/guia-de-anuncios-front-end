@@ -1,8 +1,59 @@
+<ion-header>
+  <ion-toolbar mode="ios" color="danger">
+    <ion-title>Saia do plano grátis</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon size="large" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
   <ion-grid fixed>
     <ion-row>
-      <ion-col size="6"> Plano Grátis </ion-col>
-      <ion-col size="6"> Plano Basico </ion-col>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Plano Comercial</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text>
+              <ul>
+                <li>Galeria de images</li>
+                <li>Engajamento com facebook e instagram</li>
+                <li>Mapa com serviço de rota</li>
+              </ul>
+            </ion-text>
+            <ion-item>
+              <ion-label position="floating">Adicione mais contas</ion-label>
+              <ion-input
+                (ionChange)="setAmount($event)"
+                min="0"
+                type="number"
+                required
+              ></ion-input>
+            </ion-item>
+            <ion-list mode="md">
+              <ion-radio-group (ionChange)="setPlan($event)">
+                <ion-item *ngFor="let item of typePlan" class="ion-no-padding">
+                  <ion-label>{{ item.label }}</ion-label>
+                  <ion-radio slot="end" [value]="item.value"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </ion-card-content>
+          <ion-card-content *ngIf="planDataValue">
+            <ion-button
+              (click)="pagSeguro()"
+              expand="block"
+              fill="clear"
+              shape="round"
+            >
+              Comprar
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
