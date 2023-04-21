@@ -18,7 +18,7 @@
         routerDirection="forward"
         [title]="breadcrumb?.label | titlecase"
       >
-        {{ breadcrumb?.label | titlecase }}
+        {{ breadcrumb?.label | titlecase | lnWords }}
         <!-- <br>
         {{ breadcrumb | json }} -->
         <ion-icon

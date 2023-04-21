@@ -58,7 +58,7 @@ export class AuthAnnouncementService extends HttpService<Announcement> {
 
   public createAnnouncement(
     announcement: Required<
-      Pick<Announcement, '_csrf' | 'description' | 'title' | 'userId'>
+      Pick<Announcement, '_csrf' | 'description' | 'title' | 'userId' | 'price'>
     >
   ): Observable<Announcement> {
     return this.create(announcement).pipe(

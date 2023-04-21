@@ -113,7 +113,7 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
   public set setTitleDescription(
     value: Pick<
       Announcement,
-      'title' | 'slug' | 'blockade' | 'description' | 'messages'
+      'title' | 'slug' | 'blockade' | 'description' | 'messages' | 'price'
     >
   ) {
     if (this.getAnnouncement?.messages && this.announcement.value) {
@@ -121,6 +121,12 @@ export class ManagementAnnouncementService extends HttpService<Announcement> {
       this.announcement.value.blockade = value?.blockade;
       this.announcement.value.description = value?.description;
       this.announcement.value.slug = value?.slug;
+      console.log(value);
+
+      if (this.announcement.value.price?.announcementId) {
+        this.announcement.value.price = value.price;
+      }
+
       value?.messages &&
         this.getAnnouncement?.messages.unshift(value.messages[0]);
       this.setAnnouncement = this.announcement?.value;

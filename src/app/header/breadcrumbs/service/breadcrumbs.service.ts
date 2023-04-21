@@ -17,7 +17,7 @@ export class BreadcrumbsService implements OnDestroy {
     this.init();
   }
 
-  public get breadcrumbs$() {
+  public get breadcrumbs$(): Observable<Breadcrumb[]> {
     return this.breadcrumb$;
   }
 
@@ -39,7 +39,8 @@ export class BreadcrumbsService implements OnDestroy {
 
   private convertUrlToArray(url: string): string[] {
     const size = this.urlSize(url);
-    return url.split(/[\/]/g).splice(1, size);
+    const result = url.split(/[\/]/g).splice(1, size);
+    return result;
   }
 
   private urlSize(url: string): number {
@@ -96,20 +97,21 @@ export class BreadcrumbsService implements OnDestroy {
           const rejected = item.split(' ').pop();
           if (rejected) item = item.replace(rejected, '').trim();
         }
-        return item;
       }
+      return item;
     };
   }
 
   private createBreadcrumbs(url: string): void {
     const breadcrumb: Breadcrumb[] = [];
-    this.convertUrlSlugToPhrase(url)?.forEach((item, i) => {
+    this.convertUrlSlugToPhrase(url)?.forEach((item, i, array) => {
       if (item)
         breadcrumb.push({
           label: this.filterLabel(item),
-          link: this.buildLink(url, i),
+          link: this.buildLink(url, i, array),
         });
     });
+
     breadcrumb.splice(3, 1);
     this.breadcrumbs(breadcrumb);
   }
@@ -127,26 +129,39 @@ export class BreadcrumbsService implements OnDestroy {
       case 'erro':
         return 'Erro';
       default:
-        return label;
+        return decodeURI(label);
     }
   }
 
-  private buildLink(url: string, index: number): string {
+  private buildLink(
+    url: string,
+    index: number,
+    array: (string | void)[]
+  ): string {
+    let result: string;
     const URL = url.split('/');
     if (URL.includes('')) {
       URL.shift();
     }
-    switch (index) {
-      case 0:
+
+    if (array) {
+      if (array.length === 1) {
         return `/${URL[0]}`;
-      case 1:
-        return `/${URL[0]}/${URL[1]}/${URL[2]}`;
-      case 2:
-        return `/${URL[0]}/${URL[1]}/${URL[2]}`;
-      case 3:
-        return url;
-      default:
-        return `/${this.convertUrlToArray(url)[index]}`;
+      } else if (array.length > 1 && array.length <= 2) {
+        return `/${URL[0]}/${URL[1]}`;
+      }
     }
+
+    switch (index) {
+      case 1:
+        result = `/${URL[0]}/${URL[1]}`;
+        break;
+      case 2:
+        result = `/${URL[0]}/${URL[1]}/${URL[2]}`;
+        break;
+      default:
+        result = `/${this.convertUrlToArray(url)[index]}`;
+    }
+    return result;
   }
 }

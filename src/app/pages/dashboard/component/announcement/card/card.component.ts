@@ -72,6 +72,7 @@ export class AnnouncementCardComponent implements OnInit, OnDestroy {
               this.announcement.citie = announcement.citie;
               this.announcement.address = announcement.address;
               this.announcement.contact = announcement.contact;
+              this.announcement.price = announcement.price;
             }
           }
         },
