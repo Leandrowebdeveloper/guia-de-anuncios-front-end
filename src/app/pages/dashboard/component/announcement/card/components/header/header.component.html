@@ -141,12 +141,20 @@
     </ul>
   </ion-card-subtitle>
 
-  <ion-card-subtitle>
-    <ion-chip color="primary" mode="ios" outline="true">
+  <ion-card-subtitle *ngIf="dark$ | async; let dark">
+    <ion-chip
+      [color]="dark.isDark ? 'none' : 'primary'"
+      mode="ios"
+      outline="true"
+    >
       <ion-icon name="thumbs-up"></ion-icon>
       <ion-label>{{ announcement.like ? announcement.like.yes : 0 }}</ion-label>
     </ion-chip>
-    <ion-chip color="primary" mode="ios" outline="true">
+    <ion-chip
+      [color]="dark.isDark ? 'none' : 'primary'"
+      mode="ios"
+      outline="true"
+    >
       <ion-label>{{ announcement.like ? announcement.like.not : 0 }}</ion-label>
       <ion-icon name="thumbs-down"></ion-icon>
     </ion-chip>

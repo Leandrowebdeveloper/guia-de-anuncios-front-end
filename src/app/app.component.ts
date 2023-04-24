@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar } from '@capacitor/status-bar';
 import * as moment from 'moment';
+
 moment.locale('pt-br');
 
 @Component({

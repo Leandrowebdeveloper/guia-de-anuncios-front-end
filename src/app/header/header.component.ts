@@ -13,7 +13,7 @@ import {
   Platform,
   IonPopover,
 } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { ModuleDarkService } from '../services/module-dark/module-dark.service';
 
@@ -29,9 +29,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   isOpen = false;
 
+  public dark$ = new Observable<{ isDark: boolean }>();
+
   public user$!: Observable<User | void>;
   public hasIos!: boolean;
-  public isDark!: boolean;
 
   constructor(
     private animationCtrl: AnimationController,
@@ -46,9 +47,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.getDark();
   }
 
-  getDark() {
-    const dark = this.moduleDarkService.isDark();
-    if (dark) this.isDark = dark;
+  private getDark(): void {
+    this.dark$ = this.moduleDarkService.darkAsObservable();
   }
 
   ngAfterViewInit(): void {
@@ -78,14 +78,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     return (this.hasIos = this.plt.is('ios'));
   }
 
-  public toggleTemplateLigthDark(): void {
-    this.moduleDarkService.toggleTemplateLigthDark();
-    const dark = this.moduleDarkService.isDark();
-    if (dark) {
-      this.isDark = true;
-      return this.moduleDarkService.setEvent(true);
-    }
-    this.isDark = false;
-    return this.moduleDarkService.setEvent(false);
+  public toggleTemplateLigthDark(dark: { isDark: boolean }): void {
+    this.moduleDarkService.dark = !dark.isDark;
   }
 }

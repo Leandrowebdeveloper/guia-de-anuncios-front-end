@@ -4,7 +4,8 @@
       <div class="dropdown">
         <div class="search">
           <ion-searchbar
-            [color]="isDark ? 'medium' : 'none'"
+            *ngIf="dark$ | async; let dark"
+            [color]="dark.isDark ? 'medium' : 'none'"
             #searchbar
             showClearButton="focus"
             [placeholder]="placeholder"

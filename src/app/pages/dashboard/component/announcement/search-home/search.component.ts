@@ -1,5 +1,5 @@
 import { ModuleDarkService } from 'src/app/services/module-dark/module-dark.service';
-import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
+import { EMPTY, Observable, Subject, Subscription, of } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { catchError, tap } from 'rxjs/operators';
@@ -11,15 +11,14 @@ import { Announcement } from 'src/app/interface';
   templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
 })
-export class AnnouncementSearchHomeComponent implements OnInit, OnDestroy {
+export class AnnouncementSearchHomeComponent implements OnInit {
   public search$ = new Observable<Announcement[]>();
   public show!: boolean;
   public error$ = new Subject<boolean>();
 
   public placeholder = 'Pesquiza';
 
-  public isDark!: boolean;
-  public $isDark!: Subscription;
+  public dark$ = new Observable<{ isDark: boolean }>();
 
   constructor(
     private navCtrl: NavController,
@@ -27,24 +26,12 @@ export class AnnouncementSearchHomeComponent implements OnInit, OnDestroy {
     private moduleDarkService: ModuleDarkService
   ) {}
 
-  ngOnDestroy(): void {
-    this.$isDark.unsubscribe();
-  }
-
   ngOnInit() {
     this.getDark();
-    this.loadDark();
   }
 
-  private getDark() {
-    const dark = this.moduleDarkService.isDark();
-    if (dark) this.isDark = dark;
-  }
-
-  private loadDark(): void {
-    this.$isDark = this.moduleDarkService
-      .toggleEvent()
-      .subscribe((dark: boolean) => (this.isDark = dark));
+  private getDark(): void {
+    this.dark$ = this.moduleDarkService.darkAsObservable();
   }
 
   public research(search: any): void {

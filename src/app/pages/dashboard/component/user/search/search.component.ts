@@ -23,18 +23,16 @@ import { Search } from 'src/app/interface';
   templateUrl: 'search.component.html',
   styleUrls: ['search.component.scss'],
 })
-export class SearchUserComponent implements OnInit, OnDestroy {
+export class SearchUserComponent implements OnInit {
   @Output() search = new EventEmitter<SearchbarCustomEvent>();
   public search$ = new Observable<any[]>();
+  public dark$ = new Observable<{ isDark: boolean }>();
   public triggerSearch$ = new Observable<Search | void>(undefined);
   public show!: boolean;
   public error$ = new Subject<boolean>();
 
   public placeholder = 'Digite nome';
   public filterLabel!: string;
-
-  public isDark!: boolean;
-  private $isDark!: Subscription;
 
   constructor(
     private navCtrl: NavController,
@@ -44,26 +42,14 @@ export class SearchUserComponent implements OnInit, OnDestroy {
     private moduleDarkService: ModuleDarkService
   ) {}
 
-  ngOnDestroy(): void {
-    this.$isDark.unsubscribe();
-  }
-
   ngOnInit() {
     this.searchList();
     this.setFilterLabelAndPlaceholder();
     this.getDark();
-    this.loadDark();
   }
 
   public getDark(): void {
-    const dark = this.moduleDarkService.isDark();
-    if (dark) this.isDark = dark;
-  }
-
-  public loadDark(): void {
-    this.$isDark = this.moduleDarkService
-      .toggleEvent()
-      .subscribe((dark: boolean) => (this.isDark = dark));
+    this.dark$ = this.moduleDarkService.darkAsObservable();
   }
 
   public research(search: any): void {

@@ -24,7 +24,7 @@ import { ModuleDarkService } from 'src/app/services/module-dark/module-dark.serv
   templateUrl: './category-announcement.page.html',
   styleUrls: ['./category-announcement.page.scss'],
 })
-export class CategoryAnnouncementPage implements OnInit, OnDestroy {
+export class CategoryAnnouncementPage implements OnInit {
   @ViewChild(IonReorderGroup) reorderGroup!: IonReorderGroup;
   public isOrder!: boolean;
   public sendOrder!: boolean;
@@ -45,7 +45,7 @@ export class CategoryAnnouncementPage implements OnInit, OnDestroy {
   public sizeSkeleton = [1, 2, 3, 4, 5, 6];
 
   public isAuth!: boolean;
-  public isModuleDark!: boolean;
+  public dark$ = new Observable<{ isDark: boolean }>();
 
   private limit = 12;
   private offset = 0;
@@ -53,7 +53,7 @@ export class CategoryAnnouncementPage implements OnInit, OnDestroy {
 
   private $categoryAnnouncement!: Subscription;
   private $order!: Subscription;
-  private $isModuleDark!: Subscription;
+
   constructor(
     private navCtrl: NavController,
     private authService: AuthService,
@@ -67,16 +67,15 @@ export class CategoryAnnouncementPage implements OnInit, OnDestroy {
     private moduleDarkService: ModuleDarkService
   ) {}
 
-  ngOnDestroy(): void {
-    this.$isModuleDark.unsubscribe();
-  }
-
   ngOnInit() {
     this.findCategory();
     this.getIsBtnOrder();
     this.setAuth();
-    this.setDarkValue();
-    this.isDark();
+    this.getDark();
+  }
+
+  private getDark(): void {
+    this.dark$ = this.moduleDarkService.darkAsObservable();
   }
 
   public back() {
@@ -201,18 +200,6 @@ export class CategoryAnnouncementPage implements OnInit, OnDestroy {
             ),
         }));
     }
-  }
-
-  private setDarkValue(): boolean {
-    const is = this.moduleDarkService.isDark();
-    if (is) return (this.isModuleDark = true);
-    return (this.isModuleDark = false);
-  }
-
-  private isDark(): void {
-    this.$isModuleDark = this.moduleDarkService
-      .toggleEvent()
-      .subscribe({ next: (isDark: boolean) => (this.isModuleDark = isDark) });
   }
 
   private findCategory(): Observable<{

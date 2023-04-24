@@ -1,6 +1,31 @@
-ion-card-header.ios {
-  display: flex;
-  flex-flow: column-reverse;
+ion-card-header {
+  font-size: 16px;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  ion-card-title {
+    margin-top: 0px !important;
+  }
+
+  ion-card-subtitle {
+    font-size: 13px;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    ion-card-title {
+      font-size: 15px;
+    }
+    ion-card-subtitle {
+      font-size: 15px;
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+  }
+  &.ios {
+    display: flex;
+    flex-flow: column-reverse;
+  }
 }
 
 .align-items {
@@ -122,4 +147,23 @@ ion-card-header.ios {
       border-radius: 50px;
     }
   }
+}
+
+.flex-1 {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+  span {
+    align-self: center;
+  }
+  ion-button {
+    align-self: center;
+    @media only screen and (max-width: 767.98px) {
+      align-self: flex-end;
+    }
+  }
+}
+address {
+  font-size: 12px;
 }

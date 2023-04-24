@@ -3,16 +3,19 @@
     <!-- BOTÃO MODULO ESCURO -->
     <ion-buttons slot="end">
       <ion-button
-        [title]="isDark ? 'Desativar modulo escuro' : 'Ativar modulo escuro'"
-        [attr.data-label]="
-          isDark ? 'Desativar modulo escuro' : 'Ativar modulo escuro'
+        *ngIf="dark$ | async; let dark"
+        [title]="
+          dark.isDark ? 'Desativar modulo escuro' : 'Ativar modulo escuro'
         "
-        (click)="toggleTemplateLigthDark()"
+        [attr.data-label]="
+          dark.isDark ? 'Desativar modulo escuro' : 'Ativar modulo escuro'
+        "
+        (click)="toggleTemplateLigthDark(dark)"
       >
         <ion-icon
           size="large"
           slot="icon-only"
-          [name]="isDark ? 'sunny' : 'moon'"
+          [name]="dark.isDark ? 'sunny' : 'moon'"
           color="light"
         ></ion-icon>
       </ion-button>

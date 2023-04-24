@@ -13,7 +13,6 @@ import { environment } from '../environments/environment';
 import { animationRouter } from './utilities/animations/animation-router';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
-import { ModuleDarkService } from './services/module-dark/module-dark.service';
 
 import ptBr from '@angular/common/locales/pt';
 import { registerLocaleData } from '@angular/common';
@@ -45,7 +44,6 @@ registerLocaleData(ptBr);
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy,
     },
-    ModuleDarkService,
     // ************************************
     { provide: LOCALE_ID, useValue: 'pt' },
     // ************************************

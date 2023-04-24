@@ -7,9 +7,10 @@
       <ion-col size="12">
         <ion-text class="d-flex">
           <ion-icon
+            *ngIf="dark$ | async; let dark"
             class="ion-margin-end"
             size="large"
-            [src]="category | announcementCategoryToggleIcon:isModuleDark"
+            [src]="category | announcementCategoryToggleIcon:dark.isDark"
           ></ion-icon>
           <h1
             [title]="category | attrTitle:'name'"
@@ -76,35 +77,63 @@
                         />
                       </picture>
                     </ion-col>
+
                     <!-- Dados do anúncio -->
                     <ion-col
                       size-xl="8"
                       size-lg="8"
                       size-md="8"
-                      size-sm="8"
+                      size-sm="12"
                       size="12"
                       class="ion-no-padding"
                     >
                       <ion-card-header>
+                        <!-- Card Title -->
+                        <ion-card-subtitle>
+                          <ion-text
+                            [color]="
+                        (item?.workDays | workDays) === 'Aberto'
+                          ? 'success'
+                          : 'danger'
+                      "
+                          >
+                            <span
+                              [title]="item | attrTitle:'workDays'"
+                              [attr.data-message]="item | attrTitle:'workDays'"
+                            >
+                              {{ item?.workDays | workDays }}
+                            </span>
+                          </ion-text>
+                        </ion-card-subtitle>
+
                         <ion-card-title
                           [title]="item?.title"
                           [attr.data-message]="item?.title"
-                          >{{ item?.title | lnWords }}
-                          <span
-                            *ngIf="category | isPriceCategoryAnnouncement"
-                            class="ion-float-right"
-                          >
-                            {{ item | isAnnouncementValuePrice }}</span
-                          >
+                          >{{ item?.title | lnWords:38 }}
                         </ion-card-title>
+                      </ion-card-header>
+
+                      <ion-card-content>
+                        <ion-card-title>
+                          <!-- PRICE -->
+                          <ion-text
+                            class="ion-hide-md-up"
+                            *ngIf="category | isPriceCategoryAnnouncement"
+                          >
+                            <span> {{ item | isAnnouncementValuePrice }}</span>
+                          </ion-text>
+                          <!-- PRICE -->
+                        </ion-card-title>
+
                         <ion-card-subtitle>
                           <address
                             [title]="item | attrTitle:'citie'"
                             [attr.data-message]="item | attrTitle:'citie'"
                           >
-                            {{ item?.citie | citie }}
+                            {{ item | citie }}
                           </address>
                         </ion-card-subtitle>
+
                         <ion-card-subtitle
                           ><address
                             [title]="item | attrTitle:'address'"
@@ -113,48 +142,26 @@
                             {{ item?.address | address }}
                           </address></ion-card-subtitle
                         >
-                        <ion-card-subtitle [hidden]="!item?.workDays">
-                          <ion-text
-                            [color]="
-                          (item?.workDays | workDays) === 'Aberto'
-                            ? 'success'
-                            : 'danger'
-                        "
-                            class="ion-hide-xl-up ion-hide-lg-up"
-                            [title]="item | attrTitle:'workDays'"
-                            [attr.data-message]="item | attrTitle:'workDays'"
-                          >
-                            {{ item?.workDays | workDays }}
-                          </ion-text>
-                        </ion-card-subtitle>
-                      </ion-card-header>
+                      </ion-card-content>
                     </ion-col>
+
                     <!-- Item com imagens -->
                     <ion-col
                       size-xl="2"
                       size-lg="2"
                       size-md="4"
-                      size-sm="4"
+                      size-sm="12"
                       size="12"
                       class="ion-no-padding"
                       [hidden]="item?.galery?.length === 0"
                     >
-                      <ion-card-content>
-                        <ion-text
-                          [color]="
-                        (item?.workDays | workDays) === 'Aberto'
-                          ? 'success'
-                          : 'danger'
-                      "
-                          class="ion-text-center ion-hide-lg-down"
+                      <ion-card-content class="flex-1">
+                        <span
+                          *ngIf="category | isPriceCategoryAnnouncement"
+                          class="ion-hide-md-down"
                         >
-                          <p
-                            [title]="item | attrTitle:'workDays'"
-                            [attr.data-message]="item | attrTitle:'workDays'"
-                          >
-                            {{ item?.workDays | workDays }}
-                          </p>
-                        </ion-text>
+                          {{ item | isAnnouncementValuePrice }}</span
+                        >
                         <ion-button
                           shape="round"
                           [routerLink]="['/pagina', item?.slug]"
@@ -165,35 +172,20 @@
                         </ion-button>
                       </ion-card-content>
                     </ion-col>
+
                     <!-- Item sem imagens -->
                     <ion-col
                       size-xl="4"
                       size-lg="4"
                       size-md="4"
-                      size-sm="4"
+                      size-sm="12"
                       size="12"
                       class="ion-no-padding"
                       [hidden]="item?.galery?.length !== 0"
                     >
                       <ion-card-content
-                        class="ion-float-xl-end ion-float-lg-end ion-float-md-end ion-float-sm-none ion-float-none"
+                        class="ion-float-xl-end ion-float-lg-end ion-float-md-end ion-float-sm-none ion-float-none flex-1"
                       >
-                        <ion-text
-                          [color]="
-                        (item?.workDays | workDays) === 'Aberto'
-                          ? 'success'
-                          : 'danger'
-                      "
-                          class="ion-text-center ion-hide-lg-down"
-                        >
-                          <p
-                            [hidden]="!item?.workDays"
-                            [title]="item | attrTitle:'workDays'"
-                            [attr.data-message]="item | attrTitle:'workDays'"
-                          >
-                            {{ item?.workDays | workDays }}
-                          </p>
-                        </ion-text>
                         <ion-button
                           shape="round"
                           [routerLink]="['/pagina', item?.slug]"

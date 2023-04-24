@@ -11,40 +11,16 @@ import { ModuleDarkService } from 'src/app/services/module-dark/module-dark.serv
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit, OnDestroy {
+export class HomePage implements OnInit {
   public category$!: Observable<Category[]>;
   public error$ = new Subject<boolean>();
   public isDesktop!: boolean;
-  public isDark!: boolean;
 
-  private $isDark!: Subscription;
-
-  constructor(
-    private homeService: HomeService,
-    private plt: Platform,
-    private moduleDarkService: ModuleDarkService
-  ) {}
-
-  ngOnDestroy(): void {
-    this.$isDark.unsubscribe();
-  }
+  constructor(private homeService: HomeService, private plt: Platform) {}
 
   ngOnInit(): void {
     this.init();
     this.isDesktop = this.plt.is('desktop');
-    this.getDark();
-    this.toggleDark();
-  }
-
-  private getDark(): void {
-    const dark = this.moduleDarkService.isDark();
-    if (dark) this.isDark = dark;
-  }
-
-  private toggleDark(): void {
-    this.$isDark = this.moduleDarkService
-      .toggleEvent()
-      .subscribe((dark: boolean) => (this.isDark = dark));
   }
 
   private init(): Observable<Category[]> {

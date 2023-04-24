@@ -3,6 +3,7 @@ import { Category } from 'src/app/interface';
 
 @Pipe({
   name: 'announcementCategoryToggleIcon',
+  pure: false,
 })
 export class AnnouncementCategoryToggleIconPipe implements PipeTransform {
   transform(value: unknown, args: boolean): string {
