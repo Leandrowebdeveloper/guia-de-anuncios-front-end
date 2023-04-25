@@ -185,6 +185,7 @@
                     >
                       <ion-card-content
                         class="ion-float-xl-end ion-float-lg-end ion-float-md-end ion-float-sm-none ion-float-none flex-1"
+                        [ngClass]="{'end': (item | typePlanFree)}"
                       >
                         <ion-button
                           shape="round"

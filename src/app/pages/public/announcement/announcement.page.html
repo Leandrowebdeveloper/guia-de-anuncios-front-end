@@ -86,10 +86,17 @@
           <!-- Titulo e descrição -->
           <ion-card-header>
             <ion-card-title
+              class="font-default"
               [title]="announcement | announcementValues:'title'"
               [attr.data-message]="announcement | announcementValues:'title'"
               >{{ announcement | announcementValues:'title' }}</ion-card-title
             >
+
+            <ion-card-title *ngIf="announcement | isAnnouncementValuePrice">
+              <!-- PRICE -->
+              <span> {{ announcement | isAnnouncementValuePrice }}</span>
+              <!-- PRICE -->
+            </ion-card-title>
 
             <ion-card-subtitle
               [innerHtml]="announcement | announcementValues:'description'"

@@ -1,3 +1,4 @@
+import { ModuleDarkService } from './../../../services/module-dark/module-dark.service';
 import { SystemAccessService } from './services/system-access.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -27,6 +28,7 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
   public config!: User;
   public attrButton!: AttrButton;
   public route!: string;
+  public dark$ = new Observable<{ isDark: boolean }>();
   private form!: FormGroup;
   private urlTree!: boolean;
   private systemAccess!: Subscription;
@@ -37,7 +39,8 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     private systemAccessService: SystemAccessService,
     private helpsService: HelpsService,
     private messageService: MessageService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private moduleDarkService: ModuleDarkService
   ) {}
 
   ngOnInit() {
@@ -45,6 +48,11 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     this.setConfig();
     this.hasDesable();
     this.initAttrButton();
+    this.initDark();
+  }
+
+  public initDark(): void {
+    this.dark$ = this.moduleDarkService.darkAsObservable();
   }
 
   public activeRoute(): void {

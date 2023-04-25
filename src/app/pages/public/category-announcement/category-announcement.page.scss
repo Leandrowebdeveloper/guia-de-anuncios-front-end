@@ -154,6 +154,9 @@ ion-card-header.ios {
   justify-content: space-between;
   flex-direction: column;
   height: 100%;
+  &.end {
+    justify-content: end;
+  }
   span {
     align-self: center;
   }
@@ -164,6 +167,7 @@ ion-card-header.ios {
     }
   }
 }
+
 address {
   font-size: 12px;
 }

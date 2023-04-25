@@ -2,36 +2,78 @@
 
 <ion-content fullscreen="true">
   <ion-grid fixed>
-    <div *ngIf="!desable; else Message">
-      <app-form
-        (submitDataForm)="onSubmit($event)"
-        (exportForm)="importForm($event)"
-        [inputConfig]="config"
-        [attrButton]="attrButton"
-      ></app-form>
-    </div>
+    <ion-row>
+      <ion-col size="12" *ngIf="dark$ | async; let dark">
+        <h1>
+          <span [ngSwitch]="route">
+            <span *ngSwitchCase="'cadastrar'" class="d-flex">
+              <ion-icon
+                [color]="dark.isDark && 'light'"
+                name="create"
+              ></ion-icon>
+              Cadastrar
+            </span>
+            <span *ngSwitchCase="'entrar'" class="d-flex">
+              <ion-icon
+                [color]="dark.isDark && 'light'"
+                name="log-in"
+              ></ion-icon>
+              Entrar
+            </span>
+            <span *ngSwitchCase="'recuperar-senha'" class="d-flex">
+              <ion-icon
+                [color]="dark.isDark && 'light'"
+                name="log-in"
+              ></ion-icon>
+              Recuperar Senha
+            </span>
+          </span>
+        </h1>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-xl="5" size-lg="5" size="12">
+        <ion-card>
+          <ion-card-content>
+            <ion-text>
+              <p class="ion-text-center">Use as rede sociais</p>
+            </ion-text>
 
-    <ng-template #Message>
-      <app-requisition-limit
-        [time]="time"
-        [route]="route"
-        (desable)="setDesable($event)"
-      ></app-requisition-limit>
-    </ng-template>
+            <!-- social buttons -->
+            <app-social-login
+              *ngIf="config._csrf"
+              [csrf]="config._csrf"
+            ></app-social-login>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
-    <app-buttons-sccess-component
-      [route]="route"
-    ></app-buttons-sccess-component>
+      <ion-col size-xl="6" size-lg="6" size="12" offset-xl="1" offset-lg="1">
+        <ion-card>
+          <ion-card-content class="ion-no-padding">
+            <div *ngIf="!desable; else Message">
+              <app-form
+                (submitDataForm)="onSubmit($event)"
+                (exportForm)="importForm($event)"
+                [inputConfig]="config"
+                [attrButton]="attrButton"
+              ></app-form>
+            </div>
 
-    <ion-text>
-      <p class="ion-text-center">Use as rede sociais</p>
-    </ion-text>
-
-    <!-- social buttons -->
-    <app-social-login
-      *ngIf="config._csrf"
-      [csrf]="config._csrf"
-    ></app-social-login>
+            <ng-template #Message>
+              <app-requisition-limit
+                [time]="time"
+                [route]="route"
+                (desable)="setDesable($event)"
+              ></app-requisition-limit>
+            </ng-template>
+            <app-buttons-sccess-component
+              [route]="route"
+            ></app-buttons-sccess-component>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>
 
