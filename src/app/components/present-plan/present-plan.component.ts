@@ -1,66 +1,138 @@
-import { ModalController, Platform } from '@ionic/angular';
-import { Component, Input, OnInit } from '@angular/core';
-import { HelpsService } from 'src/app/services/helps/helps.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
+import {
+  IonContent,
+  IonSegment,
+  ModalController,
+  SegmentCustomEvent,
+} from '@ionic/angular';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Announcement } from 'src/app/interface';
+import { Announcement, User } from 'src/app/interface';
 import { PagseguroService } from './services/pagseguro/pagseguro.service';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Browser } from '@capacitor/browser';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormCard } from './PagSeguro';
 import { PagSeguro } from './interface';
 
-declare let PagSeguroLightbox: any;
+declare let PagSeguroDirectPayment: any;
 
 @Component({
   selector: 'app-present-plan',
   templateUrl: './present-plan.component.html',
   styleUrls: ['./present-plan.component.scss'],
 })
-export class PresentPlanComponent implements OnInit {
+export class PresentPlanComponent implements OnInit, OnDestroy {
+  @ViewChild(IonContent, { static: true }) content!: IonContent;
   @Input() announcement!: Announcement;
+  @ViewChild(IonSegment, { static: true }) segment!: IonSegment;
+  public code!: string;
+
   public planDataValue!: string;
   public typePlan!: { label: string; value: string }[];
-  private amount!: number;
-  private valueBasic = 19.9;
-  private $pagSeguro!: Subscription;
-  private callback = {
-    success: (transactionCode: any) => {
-      //Insira os comandos para quando o usuário finalizar o pagamento.
-      //O código da transação estará na variável "transactionCode"
-      console.log(
-        'Compra feita com sucesso, código de transação: ' + transactionCode
-      );
-    },
-    abort: () => {
-      //Insira os comandos para quando o usuário abandonar a tela de pagamento.
-      console.log('abortado');
-    },
+  public purchaseSummary!: {
+    amount?: number;
+    payment_plan: string;
+    total: string;
   };
+  public formPlans!: FormGroup;
+
+  public toggle: boolean = true;
+  public typePlayment!: 'card' | 'pix' | 'ticket';
+  private segmentIonChange!: Subscription;
+  private $pagSeguro!: Subscription;
+
   constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private modalController: ModalController,
     private pagseguroService: PagseguroService,
-    private plt: Platform
+    private storageService: StorageService
   ) {}
 
+  ngOnDestroy(): void {
+    this.segmentIonChange.unsubscribe();
+  }
+
   ngOnInit() {
-    this.typePlan = this.createTypePlan();
+    this.typePlan = this.pagseguroService.createTypePlan();
+    this.toggleSegment();
+    this.initFormPlans();
+    this.setAmount();
+  }
+
+  public getFormCard(formPayment: FormCard): void | PagSeguro {
+    if (this.authService.getUser) {
+      const dataPagSeguro = this.pagseguroService.buildDataCard(
+        this.authService.getUser,
+        this.announcement,
+        this.purchaseSummary,
+        formPayment
+      );
+      console.log(dataPagSeguro);
+
+      this.pagseguroService
+        .payments(dataPagSeguro)
+        .subscribe((result) => console.log(result));
+    }
+  }
+
+  private initFormPlans(): void {
+    this.formPlans = this.fb.group({
+      amount: [''],
+      payment_plan: ['', [Validators.required]],
+    });
+    this.isCheckout();
+  }
+
+  private isCheckout(): void {
+    this.storageService
+      .find('checkout')
+      .then((checkout: { amount: number; payment_plan: number }) => {
+        if (checkout) {
+          this.formPlans.setValue({
+            amount: checkout.amount,
+            payment_plan: checkout.payment_plan,
+          });
+          this.openPayments();
+        }
+      });
+  }
+
+  public onSubmitPlan(): void {
+    this.openPayments();
+    this.updateCheckout();
+  }
+
+  private openPayments(): void {
+    this.segment.value = 'payments';
+    this.toggle = false;
+  }
+
+  private async updateCheckout(): Promise<void> {
+    await this.storageService.create('checkout', { ...this.formPlans.value });
+  }
+
+  public onTypePlayment(value: 'card' | 'pix' | 'ticket'): void {
+    this.typePlayment = value;
+    this.pagSeguro();
+    setTimeout(() => this.content.scrollToBottom(750), 1200);
+  }
+
+  private toggleSegment(): Subscription {
+    return (this.segmentIonChange = this.segment.ionChange.subscribe({
+      next: (segment: SegmentCustomEvent) => {
+        if (segment?.detail?.value === 'plans') return (this.toggle = true);
+        return (this.toggle = false);
+      },
+    }));
   }
 
   public pagSeguro(): void {
-    const data = this.buildData();
-    this.$pagSeguro = this.pagseguroService.getPagseguro(data).subscribe({
+    const _csrf = this.authService.getCsrf;
+    this.$pagSeguro = this.pagseguroService.getPagseguro({ _csrf }).subscribe({
       next: async (data: any) => {
-        if (data.code[0]) {
-          if (this.plt.is('desktop')) {
-            PagSeguroLightbox(data.code[0], this.callback);
-          } else {
-            await Browser.open({
-              url: `https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=${data.code[0]}`,
-              windowName: '_blank',
-            });
-          }
-        }
+        if (data.code[0]) this.code = data.code[0];
       },
       error: (error: HttpErrorResponse) => console.log(error),
       complete: () => {
@@ -69,37 +141,15 @@ export class PresentPlanComponent implements OnInit {
     });
   }
 
-  public createTypePlan(value?: number) {
-    const data = value || this.valueBasic;
-    return [
-      {
-        label: `30 dias ${HelpsService.numberFormat(data)}`,
-        value: data.toFixed(2),
-      },
-      {
-        label: `90 dias ${HelpsService.numberFormat(data * 3)}`,
-        value: (data * 3).toFixed(2),
-      },
-      {
-        label: `180 dias ${HelpsService.numberFormat(data * 6)}`,
-        value: (data * 6).toFixed(2),
-      },
-      {
-        label: `365 dias ${HelpsService.numberFormat(data * 12)}`,
-        value: (data * 12).toFixed(2),
-      },
-    ];
-  }
-
-  public updateTypePlan(value?: number) {
-    const data = value || this.valueBasic;
+  public updateTypePlan(value?: number): void {
+    const data = value || this.pagseguroService.valueBasic;
     this.typePlan.forEach((item, i) => {
-      item.value = this.createTypePlan(data)[i].value;
-      item.label = this.createTypePlan(data)[i].label;
+      item.value = this.pagseguroService.createTypePlan(data)[i].value;
+      item.label = this.pagseguroService.createTypePlan(data)[i].label;
     });
   }
 
-  public setPlan(event: Event) {
+  public setPlan(event: Event): void {
     const data = event as CustomEvent;
     const { value } = data.detail;
     if (value) {
@@ -107,68 +157,34 @@ export class PresentPlanComponent implements OnInit {
     }
   }
 
-  public setAmount(event: Event) {
-    const data = event as CustomEvent;
-    const { value } = data.detail;
-
-    if (Object.prototype.toString.call(data) === '[object String]') return;
-    this.amount = value;
-    const calc = Number((this.valueBasic / 3).toFixed(2)) * value;
-    const result = (calc + this.valueBasic).toFixed(2);
-    this.updateTypePlan(Number(result));
+  public setAmount(): void {
+    if (this.formPlans?.value)
+      this.formPlans.valueChanges.subscribe({
+        next: (data) => {
+          const {
+            amount,
+            payment_plan,
+          }: { amount: number; payment_plan: number } = data;
+          this.updateTypePlan(this.pagseguroService.calc(amount));
+          this.updatePurchaseSummary(payment_plan, amount);
+        },
+      });
   }
 
-  public buildData(): PagSeguro | void {
-    const user = this.authService.getUser;
-    if (
-      user &&
-      this.announcement.citie &&
-      this.announcement.contact &&
-      this.announcement.address
-    ) {
-      const { phone } = this.announcement.contact;
-      const type = this.typePlan.filter(
-        (item) => item.value === this.planDataValue
-      )[0];
-      const { name, email, slug, _csrf } = user;
-      const description = this.amount > 1 ? `com ${this.amount} contas.` : '';
-      const {
-        zip_code,
-        numberr,
-        district,
-        block,
-        allotment,
-        street,
-        complement,
-      } = this.announcement.address;
-      const { city, uf } = this.announcement.citie;
-
-      return {
-        senderEmail: email,
-        senderName: name,
-        reference: slug,
-        senderPhone: String(phone),
-
-        itemId1: String(type.label),
-        itemAmount1: type.value,
-        itemDescription1: `Plano ${type.label.split('R$')[0]} ${description}`,
-        itemQuantity1: 1,
-
-        shippingType: '3',
-        shippingAddressPostalCode: Number(zip_code),
-        shippingAddressNumber: String(numberr),
-        shippingAddressCity: String(city),
-        shippingAddressState: String(uf),
-        shippingAddressDistrict: String(district),
-        shippingAddressCountry: 'BRA',
-        shippingAddressStreet: `${street}, Qd ${block}, Lt ${allotment}`,
-        shippingAddressComplement: String(complement),
-        _csrf,
-      };
-    }
+  private updatePurchaseSummary(payment_plan: number, amount?: number): void {
+    this.purchaseSummary = {
+      amount,
+      payment_plan: this.typePlan[payment_plan].label,
+      total: this.typePlan[payment_plan].value,
+    };
   }
 
   public close() {
     this.modalController.dismiss();
+  }
+
+  public async removePaymentMethod() {
+    await this.storageService.destroy('checkout');
+    this.segment.value = 'plans';
   }
 }

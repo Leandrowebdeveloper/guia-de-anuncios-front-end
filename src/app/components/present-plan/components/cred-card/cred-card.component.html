@@ -1,0 +1,193 @@
+<ion-card-header class="flex">
+  <ion-icon size="large" name="card" class="ion-margin-end"></ion-icon>
+  <ion-card-title>Cartão</ion-card-title>
+</ion-card-header>
+
+<form
+  [formGroup]="formPayments"
+  (ngSubmit)="onSubmit()"
+  class="w-100"
+  *ngIf="code && !payments?.error"
+>
+  <ion-row>
+    <ion-col size-xl="6" size-lg="5" size-md="4" size-sm="12" size="12">
+      <ion-item>
+        <ion-label position="floating"
+          >Número do cartão
+          <span
+            *ngIf="
+              fPayments['card_number'].errors &&
+              fPayments['card_number'].touched &&
+              fPayments['card_number'].invalid
+            "
+          >
+            * não é válido.
+          </span>
+        </ion-label>
+        <ion-thumbnail slot="end" [hidden]="!brand">
+          <img [src]="brand | credCard" />
+        </ion-thumbnail>
+        <ion-input
+          cardNumbers
+          inputmode="numeric"
+          maxlength="16"
+          minlength="16"
+          formControlName="card_number"
+          type="text"
+          required
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col
+      size-xl="2"
+      size-lg="3"
+      size-md="4"
+      size-sm="6"
+      size="12"
+      offsetXl="2"
+      offsetLg="1"
+    >
+      <ion-item [disabled]="fPayments['card_number'].invalid">
+        <ion-label position="floating"
+          >Validade mes
+          <span
+            *ngIf="
+              fPayments['card_month'].errors &&
+              fPayments['card_month'].touched &&
+              fPayments['card_month'].invalid
+            "
+          >
+            * não é válido.
+          </span>
+        </ion-label>
+        <ion-input
+          cardMonth
+          inputmode="numeric"
+          formControlName="card_month"
+          type="text"
+          placeholder="MM"
+          maxlength="2"
+          minlength="2"
+          max="12"
+          required
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col size-xl="2" size-lg="3" size-md="4" size-sm="6" size="12">
+      <ion-item [disabled]="fPayments['card_number'].invalid">
+        <ion-label position="floating"
+          >Validade ano
+          <span
+            *ngIf="
+              fPayments['card_year'].errors &&
+              fPayments['card_year'].touched &&
+              fPayments['card_year'].invalid
+            "
+          >
+            * não é válido.
+          </span>
+        </ion-label>
+        <ion-input
+          cardYear
+          inputmode="numeric"
+          formControlName="card_year"
+          type="text"
+          placeholder="2056"
+          maxlength="4"
+          minlength="4"
+          required
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size-xl="6" size-lg="6" size-md="12" size-sm="12" size="12">
+      <ion-item [disabled]="fPayments['card_number'].invalid">
+        <ion-label position="floating"
+          >Nome do dono do cartão
+          <span
+            *ngIf="
+              fPayments['creditCardHolderName'].errors &&
+              fPayments['creditCardHolderName'].touched &&
+              fPayments['creditCardHolderName'].invalid
+            "
+          >
+            * não é válido.
+          </span>
+        </ion-label>
+        <ion-input
+          inputmode="text"
+          formControlName="creditCardHolderName"
+          type="text"
+          placeholder="Carlos Miranda de Paula"
+          required
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col size-xl="4" size-lg="5" offsetXl="2" offsetLg="1">
+      <ion-item [disabled]="fPayments['card_number'].invalid">
+        <ion-label position="floating"
+          >Código de segurança (CVV)
+          <span
+            *ngIf="
+              fPayments['card_cvv'].errors &&
+              fPayments['card_cvv'].touched &&
+              fPayments['card_cvv'].invalid
+            "
+          >
+            * não é válido.
+          </span>
+        </ion-label>
+        <ion-input
+          cardCvv
+          inputmode="numeric"
+          formControlName="card_cvv"
+          type="text"
+          [maxlength]="brand && brand.cvvSize"
+          [minlength]="brand && brand.cvvSize"
+          required
+        ></ion-input>
+      </ion-item>
+    </ion-col>
+
+    <ion-col size="12">
+      <ion-list>
+        <ion-item [disabled]="fPayments['card_number'].invalid">
+          <ion-select
+            interface="action-sheet"
+            aria-label="Parcele em até 12x"
+            placeholder="Parcele em até 12x"
+            formControlName="card_installment"
+            okText="ok"
+            cancelText="Cancelar"
+          >
+            <ion-select-option
+              *ngFor="let item of installment"
+              [value]="item | installment"
+            >
+              {{ item | installment }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+
+    <ion-col size="12">
+      <ion-button
+        expand="block"
+        shape="round"
+        color="primary"
+        type="submit"
+        [disabled]="formPayments.invalid"
+      >
+        Finalizar compras
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</form>
+
+<div *ngIf="brandError?.error">
+  <ion-text color="danger" class="ion-text-center">
+    <p>Erro ao solicitar o formulário de pagamento.</p>
+  </ion-text>
+</div>

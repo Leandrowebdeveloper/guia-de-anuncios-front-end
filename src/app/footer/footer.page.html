@@ -1,4 +1,4 @@
-<ion-footer>
+<ion-footer [ngClass]="{'ion-hide': isFooter}">
   <ion-toolbar color="primary" *ngIf="user$ | async;let user;">
     <ion-buttons class="footer">
       <!-- Home -->

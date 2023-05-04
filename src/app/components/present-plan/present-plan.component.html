@@ -1,57 +1,192 @@
 <ion-header>
-  <ion-toolbar mode="ios" color="danger">
-    <ion-title>Saia do plano grátis</ion-title>
+  <ion-toolbar mode="ios" color="primary">
+    <ion-title class="f-4"> Mais vantagens</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()">
-        <ion-icon size="large" name="close"></ion-icon>
+        <ion-icon color="light" size="large" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+
+<ion-content [scrollEvents]="true">
   <ion-grid fixed>
     <ion-row>
-      <ion-col size="12">
+      <ion-segment value="plans">
+        <ion-segment-button value="plans">
+          <ion-label>Planos</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="payments" [disabled]="toggle">
+          <ion-label>Pagamentos</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <!-- Plan -->
+      <ion-col size="12" *ngIf="toggle">
+        <ion-card>
+          <ion-card-content>
+            <!-- Slide -->
+            <app-slide></app-slide>
+
+            <!-- FormPlan -->
+            <form [formGroup]="formPlans" (ngSubmit)="onSubmitPlan()">
+              <ion-item class="ion-margin-vertical">
+                <ion-label position="floating"
+                  >Adicionar mais anúncios</ion-label
+                >
+                <ion-input
+                  formControlName="amount"
+                  min="0"
+                  type="number"
+                  inputmode="numeric"
+                ></ion-input>
+              </ion-item>
+              <ion-list mode="md" class="ion-margin-top">
+                <ion-item-divider color="primary">
+                  <ion-label color="light">Tipos de plano</ion-label>
+                </ion-item-divider>
+                <ion-radio-group formControlName="payment_plan">
+                  <ion-item
+                    *ngFor="let item of typePlan; let i = index"
+                    class="ion-no-padding"
+                  >
+                    <ion-label>{{ item.label }}</ion-label>
+                    <ion-radio slot="end" [value]="i"></ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+              </ion-list>
+
+              <ion-button
+                expand="block"
+                shape="round"
+                color="primary"
+                type="submit"
+                [disabled]="formPlans.invalid"
+              >
+                Comprar
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <!-- Payments -->
+      <ion-col size="12" *ngIf="!toggle">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Plano Comercial</ion-card-title>
+            <ion-card-subtitle>
+              <ion-img
+                class="log-pagseguro"
+                src="./../../../assets/ion-icon/Logonovo_pagseguro-cinza.png"
+              ></ion-img>
+            </ion-card-subtitle>
+            <ion-card-title class="ion-text-center"
+              >Formas de pagamento</ion-card-title
+            >
           </ion-card-header>
           <ion-card-content>
-            <ion-text>
-              <ul>
-                <li>Galeria de images</li>
-                <li>Engajamento com facebook e instagram</li>
-                <li>Mapa com serviço de rota</li>
-              </ul>
-            </ion-text>
-            <ion-item>
-              <ion-label position="floating">Adicione mais contas</ion-label>
-              <ion-input
-                (ionChange)="setAmount($event)"
-                min="0"
-                type="number"
-                required
-              ></ion-input>
-            </ion-item>
-            <ion-list mode="md">
-              <ion-radio-group (ionChange)="setPlan($event)">
-                <ion-item *ngFor="let item of typePlan" class="ion-no-padding">
-                  <ion-label>{{ item.label }}</ion-label>
-                  <ion-radio slot="end" [value]="item.value"></ion-radio>
-                </ion-item>
-              </ion-radio-group>
-            </ion-list>
+            <ion-row>
+              <ion-col size="4">
+                <ion-card
+                  class="ion-padding-vertical"
+                  (click)="onTypePlayment('card')"
+                  button
+                >
+                  <ion-text class="ion-text-center">
+                    <p><ion-icon size="large" name="card"></ion-icon></p>
+                    <p>Cartão</p>
+                  </ion-text>
+                </ion-card>
+              </ion-col>
+              <ion-col size="4">
+                <ion-card
+                  class="ion-padding-vertical"
+                  (click)="onTypePlayment('ticket')"
+                  button
+                >
+                  <ion-text class="ion-text-center">
+                    <p>
+                      <ion-icon
+                        size="large"
+                        src="./../../../assets/ion-icon/bar-code.svg"
+                      ></ion-icon>
+                    </p>
+                    <p>Boleto</p>
+                  </ion-text>
+                </ion-card>
+              </ion-col>
+              <ion-col size="4">
+                <ion-card
+                  class="ion-padding-vertical"
+                  (click)="onTypePlayment('pix')"
+                  button
+                >
+                  <ion-text class="ion-text-center">
+                    <p>
+                      <ion-icon
+                        size="large"
+                        src="./../../../assets/ion-icon/pix.svg"
+                      ></ion-icon>
+                    </p>
+                    <p>Pix</p>
+                  </ion-text>
+                </ion-card>
+              </ion-col>
+            </ion-row>
           </ion-card-content>
-          <ion-card-content *ngIf="planDataValue">
-            <ion-button
-              (click)="pagSeguro()"
-              expand="block"
-              fill="clear"
-              shape="round"
-            >
-              Comprar
-            </ion-button>
+
+          <ion-card-content>
+            <ion-card-header>
+              <ion-card-title class="flex justify-space-between">
+                <span>Resumo da compra</span>
+                <ion-button
+                  size="small"
+                  (click)="removePaymentMethod()"
+                  title="Excluir formas de pagamento"
+                  data-message="Excluir formas de pagamento"
+                >
+                  <ion-icon
+                    slot="icon-only"
+                    name="trash"
+                  ></ion-icon> </ion-button
+              ></ion-card-title>
+              <ion-card-subtitle>
+                <app-purchase-summary
+                  [purchaseSummary]="purchaseSummary"
+                ></app-purchase-summary>
+              </ion-card-subtitle>
+            </ion-card-header>
           </ion-card-content>
+
+          <div [ngSwitch]="typePlayment">
+            <ion-card-content *ngSwitchCase="'card'">
+              <app-cred-card
+                [code]="code"
+                [purchaseSummary]="purchaseSummary"
+                (data)="getFormCard($event)"
+              ></app-cred-card>
+            </ion-card-content>
+
+            <ion-card-content *ngSwitchCase="'ticket'">
+              <ion-card-header class="flex">
+                <ion-icon
+                  size="large"
+                  src="./../../../assets/ion-icon/bar-code.svg"
+                  class="ion-margin-end"
+                ></ion-icon>
+                <ion-card-title>Boleto</ion-card-title>
+              </ion-card-header>
+            </ion-card-content>
+
+            <ion-card-content *ngSwitchCase="'pix'">
+              <ion-card-header class="flex">
+                <ion-icon
+                  size="large"
+                  src="./../../../assets/ion-icon/pix.svg"
+                  class="ion-margin-end"
+                ></ion-icon>
+                <ion-card-title>Pix</ion-card-title>
+              </ion-card-header>
+            </ion-card-content>
+          </div>
         </ion-card>
       </ion-col>
     </ion-row>

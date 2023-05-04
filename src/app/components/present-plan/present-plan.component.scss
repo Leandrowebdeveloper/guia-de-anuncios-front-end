@@ -6,7 +6,54 @@ ion-text {
 .no-margin-top {
   margin-top: 0px;
 }
-// ul {
-//   //   margin-left: 0;
-//   padding-left: 16px;
-// }
+.f-4 {
+  font-size: 24px;
+}
+.log-pagseguro {
+  width: auto;
+  height: 36px;
+}
+
+ion-card-title {
+  &.ion-text-center {
+    margin-top: 24px;
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+table {
+  width: 100%;
+  border: 2px solid var(--ion-color-primary);
+  th {
+    background-color: var(--ion-color-primary);
+    color: aliceblue;
+    padding: 8px;
+    text-align: center;
+    &:first-child {
+      text-align: start;
+    }
+  }
+  tr {
+    font-weight: bold;
+    > td:last-child {
+      text-align: center;
+      background-color: var(--ion-color-light);
+    }
+  }
+  ul {
+    list-style-type: none;
+    padding: 0px 0px 0px 8px;
+  }
+}
+
+ion-thumbnail {
+  --size: auto;
+  --border-radius: 0px;
+}

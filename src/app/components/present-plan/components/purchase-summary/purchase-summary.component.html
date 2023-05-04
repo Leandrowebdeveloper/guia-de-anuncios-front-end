@@ -1,0 +1,19 @@
+<table>
+  <tr>
+    <th>Plano</th>
+    <th>Total</th>
+  </tr>
+  <tr>
+    <td>
+      <ul>
+        <li *ngIf="purchaseSummary?.amount">
+          Quantidade: {{ purchaseSummary.amount }}
+        </li>
+        <li>{{ purchaseSummary.payment_plan }}</li>
+      </ul>
+    </td>
+    <td>
+      {{ purchaseSummary.total | currency : "BRL" }}
+    </td>
+  </tr>
+</table>

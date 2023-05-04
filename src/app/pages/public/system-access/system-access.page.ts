@@ -13,6 +13,7 @@ import { HelpsService } from 'src/app/services/helps/helps.service';
 import attrButton from 'src/app/utilities/functions';
 import { MessageService } from 'src/app/utilities/message/message.service';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
+import { Platform, isPlatform } from '@ionic/angular';
 
 @Component({
   selector: 'app-system-access',
@@ -27,6 +28,7 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
   public time!: string;
   public config!: User;
   public attrButton!: AttrButton;
+  public isMobile!: boolean;
   public route!: string;
   public dark$ = new Observable<{ isDark: boolean }>();
   private form!: FormGroup;
@@ -40,7 +42,8 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     private helpsService: HelpsService,
     private messageService: MessageService,
     private loadingService: LoadingService,
-    private moduleDarkService: ModuleDarkService
+    private moduleDarkService: ModuleDarkService,
+    private plt: Platform
   ) {}
 
   ngOnInit() {
@@ -49,9 +52,14 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
     this.hasDesable();
     this.initAttrButton();
     this.initDark();
+    this.isPlt();
   }
 
-  public initDark(): void {
+  private isPlt() {
+    this.isMobile = this.plt.is('mobile');
+  }
+
+  private initDark(): void {
     this.dark$ = this.moduleDarkService.darkAsObservable();
   }
 

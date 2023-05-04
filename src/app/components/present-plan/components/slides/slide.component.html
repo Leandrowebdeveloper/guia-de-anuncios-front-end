@@ -1,0 +1,15 @@
+<ion-slides autoplay="5000" loop="true" pager="false" [options]="slideOpts">
+  <ion-slide *ngFor="let item of dataSlide" class="ion-padding-vertical">
+    <div>
+      <ion-icon
+        [hidden]="item.icon !== 'logo-instagram'"
+        size="large"
+        name="logo-facebook"
+      ></ion-icon>
+      <ion-icon size="large" [name]="item.icon"></ion-icon>
+      <h1 [title]="item" attr-data-message="item">
+        {{ item.title }}
+      </h1>
+    </div>
+  </ion-slide>
+</ion-slides>

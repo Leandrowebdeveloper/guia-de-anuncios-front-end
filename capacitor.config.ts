@@ -1,4 +1,5 @@
 import { CapacitorConfig } from '@capacitor/cli';
+import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   appId: 'app.montes.belos',
@@ -12,6 +13,11 @@ const config: CapacitorConfig = {
     cleartext: true,
   },
   plugins: {
+    Keyboard: {
+      resize: KeyboardResize.Native,
+      style: KeyboardStyle.Default,
+      resizeOnFullScreen: true,
+    },
     SplashScreen: {
       launchShowDuration: 5000,
       launchAutoHide: true,

@@ -1,4 +1,35 @@
 export interface PagSeguro {
+  paymentMode: string;
+  paymentMethod: 'creditCard' | 'boleto';
+  receiverEmail: string;
+  currency: 'BRL';
+  extraAmount: string;
+
+  notificationURL: string;
+
+  senderCPF?: number;
+
+  senderHash: string;
+  shippingAddressRequired: boolean;
+  shippingCost: string;
+  creditCardToken: string;
+  installmentQuantity: number;
+  installmentValue: number;
+  noInterestInstallmentQuantity: number;
+  creditCardHolderName: string;
+  creditCardHolderCPF: number | null;
+  creditCardHolderBirthDate: string;
+  creditCardHolderAreaCode: number;
+  creditCardHolderPhone: number;
+  billingAddressStreet: string;
+  billingAddressNumber: string;
+  billingAddressComplement: string;
+  billingAddressDistrict: string;
+  billingAddressPostalCode: number;
+  billingAddressCity: string;
+  billingAddressState: string;
+  billingAddressCountry: 'BRL';
+
   itemId1: string;
   itemDescription1: string; // s'PRODUTO 1'
   itemAmount1: string; //Sempre com decimais
@@ -6,8 +37,8 @@ export interface PagSeguro {
   itemWeight1?: string;
   reference: string; // 'REF1234'
   senderName: string; // 'NOME_DO_SEU_CLIENTE'
-  senderAreaCode?: string;
-  senderPhone: string; // 'LEFONE'
+  senderAreaCode: number;
+  senderPhone: number; // 'LEFONE'
   senderEmail: string; // 'EMAIL_DO_SEU_CLIENTE'
   shippingType?: string; // Formas de envio, consulte a documentacao
   shippingAddressStreet?: string; // 'ONDE_O_TOP_MORA'
@@ -19,4 +50,5 @@ export interface PagSeguro {
   shippingAddressState?: string; // 'ESTADO';
   shippingAddressCountry?: string; // 'BRA';
   _csrf: string;
+  code?: string;
 }
