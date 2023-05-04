@@ -51,6 +51,7 @@ import { IsFeaturedImagePipe } from './announcement/galery/is-featured-image/is-
 import { GaleryFindValuesPipe } from './announcement/galery/galery-find-values/galery-find-values.pipe';
 import { IsAnnouncementValuePricePipe } from './announcement/is-announcement-values-price/is-announcement-values-price.pipe';
 import { IsPriceCategoryAnnouncementPipe } from './category/is-price-category-announcement/is-price-category-announcement.pipe';
+import { pageViewsPipe } from './announcement/pageViews/page-views.pipe';
 
 @NgModule({
   declarations: [
@@ -106,6 +107,7 @@ import { IsPriceCategoryAnnouncementPipe } from './category/is-price-category-an
     GaleryFindValuesPipe,
     IsAnnouncementValuePricePipe,
     IsPriceCategoryAnnouncementPipe,
+    pageViewsPipe,
   ],
   exports: [
     TimePipe,
@@ -160,6 +162,7 @@ import { IsPriceCategoryAnnouncementPipe } from './category/is-price-category-an
     GaleryFindValuesPipe,
     IsAnnouncementValuePricePipe,
     IsPriceCategoryAnnouncementPipe,
+    pageViewsPipe,
   ],
   providers: [AddressService, AllowAdPipe, TimePipe],
 })

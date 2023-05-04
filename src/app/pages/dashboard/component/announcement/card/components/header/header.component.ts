@@ -23,6 +23,7 @@ export class CardHeaderComponent implements OnInit {
     | 'contact'
     | 'citie'
     | 'like'
+    | 'pageView'
   >;
   public dark$ = new Observable<{ isDark: boolean }>();
 

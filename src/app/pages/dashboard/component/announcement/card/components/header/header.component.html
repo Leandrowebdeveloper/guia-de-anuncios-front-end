@@ -25,6 +25,16 @@
     ></ion-card-title
   >
 
+  <!-- Page Views -->
+  <ion-card-subtitle>
+    <ion-text
+      [title]="announcement | pageViews"
+      [attr.data-message]="announcement | pageViews"
+    >
+      {{ announcement | pageViews }}
+    </ion-text>
+  </ion-card-subtitle>
+
   <!-- Horario de trabalho -->
   <ion-card-subtitle
     [hidden]="!announcement | isAnnouncementAttrValues : 'workDays'"

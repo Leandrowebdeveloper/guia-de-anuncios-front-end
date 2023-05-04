@@ -292,6 +292,7 @@ export interface Announcement {
   workDays?: WorkDays | null;
   socialNetwork?: SocialNetwork | null;
   like?: Like | null;
+  pageView?: PagView | null;
   contact?: Contact | null;
   address?: Address | null;
   citie?: Citie | null;
@@ -308,6 +309,10 @@ export interface Announcement {
 export interface Price {
   announcementId?: number;
   value?: string;
+}
+export interface PagView {
+  announcementId?: number;
+  views?: number;
 }
 export interface CategoryAnnouncement {
   id: number;
