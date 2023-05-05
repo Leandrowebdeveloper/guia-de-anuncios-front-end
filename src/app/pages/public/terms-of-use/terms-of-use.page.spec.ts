@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
-import { ServiceTermsPage } from './service-terms.page';
+import { TermsOfUsePage } from './terms-of-use.page';
 
-describe('ServiceTermsPage', () => {
-  let component: ServiceTermsPage;
-  let fixture: ComponentFixture<ServiceTermsPage>;
+describe('TermsOfUsePage', () => {
+  let component: TermsOfUsePage;
+  let fixture: ComponentFixture<TermsOfUsePage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ServiceTermsPage],
+      declarations: [TermsOfUsePage],
       imports: [IonicModule.forRoot(), RouterTestingModule],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ServiceTermsPage);
+    fixture = TestBed.createComponent(TermsOfUsePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

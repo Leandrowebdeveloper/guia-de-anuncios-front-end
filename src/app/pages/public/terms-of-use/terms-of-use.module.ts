@@ -4,21 +4,20 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ServiceTermsPageRoutingModule } from './service-terms-routing.module';
-
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
-import { ServiceTermsPage } from './service-terms.page';
+import { TermsOfUsePage } from './terms-of-use.page';
+import { TermsOfUsePageRoutingModule } from './terms-of-use-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ServiceTermsPageRoutingModule,
+    TermsOfUsePageRoutingModule,
     HeaderModule,
     FooterModule,
   ],
-  declarations: [ServiceTermsPage],
+  declarations: [TermsOfUsePage],
 })
-export class ServiceTermsPageModule {}
+export class TermsOfUsePageModule {}

@@ -117,10 +117,17 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'termos-de-serviço',
+    path: 'politica-de-privacidade',
     loadChildren: () =>
-      import('../pages/public/service-terms/service-terms.module').then(
-        (m) => m.ServiceTermsPageModule
+      import('../pages/public/privacy-policy/privacy-policy.module').then(
+        (m) => m.PrivacyPolicyPageModule
+      ),
+  },
+  {
+    path: 'termos-de-uso',
+    loadChildren: () =>
+      import('../pages/public/terms-of-use/terms-of-use.module').then(
+        (m) => m.TermsOfUsePageModule
       ),
   },
   {
