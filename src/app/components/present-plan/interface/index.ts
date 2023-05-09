@@ -11,7 +11,7 @@ export interface PagSeguro {
 
   senderHash: string;
   shippingAddressRequired: boolean;
-  shippingCost: string;
+  // shippingCost: string;
   creditCardToken: string;
   installmentQuantity: number;
   installmentValue: number;
@@ -40,15 +40,15 @@ export interface PagSeguro {
   senderAreaCode: number;
   senderPhone: number; // 'LEFONE'
   senderEmail: string; // 'EMAIL_DO_SEU_CLIENTE'
-  shippingType?: string; // Formas de envio, consulte a documentacao
-  shippingAddressStreet?: string; // 'ONDE_O_TOP_MORA'
-  shippingAddressNumber?: string; //     'NUMEROZIN'
-  shippingAddressComplement?: string; // 'COMPLEMENTO';
-  shippingAddressDistrict?: string; // 'DECIMO_TERCEIRO_DISTRITO';
-  shippingAddressPostalCode?: number; // 'CEP';
-  shippingAddressCity?: string; // 'CIDADE';
-  shippingAddressState?: string; // 'ESTADO';
-  shippingAddressCountry?: string; // 'BRA';
+  // shippingType?: string; // Formas de envio, consulte a documentacao
+  // shippingAddressStreet?: string; // 'ONDE_O_TOP_MORA'
+  // shippingAddressNumber?: string; //     'NUMEROZIN'
+  // shippingAddressComplement?: string; // 'COMPLEMENTO';
+  // shippingAddressDistrict?: string; // 'DECIMO_TERCEIRO_DISTRITO';
+  // shippingAddressPostalCode?: number; // 'CEP';
+  // shippingAddressCity?: string; // 'CIDADE';
+  // shippingAddressState?: string; // 'ESTADO';
+  // shippingAddressCountry?: string; // 'BRA';
   _csrf: string;
   code?: string;
 }

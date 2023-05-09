@@ -7,15 +7,13 @@ import {
 } from '@ionic/angular';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Announcement, User } from 'src/app/interface';
+import { Announcement } from 'src/app/interface';
 import { PagseguroService } from './services/pagseguro/pagseguro.service';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormCard } from './PagSeguro';
 import { PagSeguro } from './interface';
-
-declare let PagSeguroDirectPayment: any;
 
 @Component({
   selector: 'app-present-plan',
@@ -132,6 +130,8 @@ export class PresentPlanComponent implements OnInit, OnDestroy {
     const _csrf = this.authService.getCsrf;
     this.$pagSeguro = this.pagseguroService.getPagseguro({ _csrf }).subscribe({
       next: async (data: any) => {
+        console.log(data);
+
         if (data.code[0]) this.code = data.code[0];
       },
       error: (error: HttpErrorResponse) => console.log(error),
