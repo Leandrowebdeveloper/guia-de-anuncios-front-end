@@ -12,6 +12,6 @@ export class PurchaseSummaryComponent {
   @Input() purchaseSummary!: {
     amount?: number;
     payment_plan: string;
-    total: number;
+    total: string;
   };
 }

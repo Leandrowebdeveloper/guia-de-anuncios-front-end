@@ -32,7 +32,7 @@ export class CredCardComponent implements OnInit {
   @Input() purchaseSummary!: {
     amount?: number;
     payment_plan: string;
-    total: number;
+    total: string;
   };
   public formPayments!: FormGroup;
   public brandError!: { error: boolean };
