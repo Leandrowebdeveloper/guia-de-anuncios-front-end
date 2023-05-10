@@ -8,8 +8,12 @@ import { User } from 'src/app/interface';
 export class UserValuesImgAvatarPipe implements PipeTransform {
   transform(value: unknown): string {
     const user = value as Pick<User, 'image'>;
-    if (user && user?.image && user?.image?.filename)
+    if (user && user?.image && user?.image?.filename) {
+      if (user?.image?.filename.includes('https://')) {
+        return user?.image?.filename;
+      }
       return `/images/avatar/${user.image.filename}`;
+    }
     return './../../../../../../assets/avatar.svg';
   }
 }

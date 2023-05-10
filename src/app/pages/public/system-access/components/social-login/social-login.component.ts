@@ -62,12 +62,11 @@ export class SocialLoginComponent implements OnInit {
       this.loadUserData();
     } else if (result.accessToken && !result.accessToken.userId) {
       this.getCurrentToken();
-    } else {
     }
   }
 
   private getToken(result: any): void {
-    this.token = result?.accessToken;
+    if (result) this.token = result?.accessToken;
   }
 
   public async google(): Promise<void | Subscription> {
@@ -91,9 +90,11 @@ export class SocialLoginComponent implements OnInit {
       const url = `https://graph.facebook.com/${this.token?.userId}?fields=id,name,picture.width(720),birthday,email&access_token=${this.token.token}`;
       this.http.get(url).subscribe({
         next: (facebook) => {
-          const data: SocialLogin = { ...this.build(facebook) };
+          const data: SocialLogin = { ...this.build({ ...facebook }) };
           this.login(data);
         },
+        error: (error) =>
+          this.alertService.alert('Atenção', 'Falha ao efetuar login'),
       });
     }
   }
@@ -103,16 +104,13 @@ export class SocialLoginComponent implements OnInit {
       this.setRouter();
       this.systemAccessService.setStayConnected(true);
       const loading = this.loadingService.show('Acessar o sistema...');
-      const data: SocialLogin = { ...this.build(social) };
-      if (data) {
-        return (this.systemAccess = this.socialLoginService
-          .login(data)
-          .subscribe({
-            next: (user_: User | SocialLogin) =>
-              this.success(user_ as User, loading),
-            error: (error: HttpErrorResponse) => this.error(error, loading),
-          }));
-      }
+      return (this.systemAccess = this.socialLoginService
+        .login(social)
+        .subscribe({
+          next: (user_: User | SocialLogin) =>
+            this.success(user_ as User, loading),
+          error: (error: HttpErrorResponse) => this.error(error, loading),
+        }));
     }
   }
 
