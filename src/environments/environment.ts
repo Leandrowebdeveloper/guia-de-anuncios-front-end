@@ -1,6 +1,8 @@
 export const environment = {
   production: false,
-  // api: 'https://5fa1-2804-22b8-4010-200-b89f-6008-90d4-1265.sa.ngrok.io/',
   api: '/',
   mapsKey: '',
+  appIdFacebook: '967268348006627',
+  appIdGoogle:
+    '853585690486-1a17tk6dllhv04tkmd1haqvesh781dh2.apps.googleusercontent.com',
 };

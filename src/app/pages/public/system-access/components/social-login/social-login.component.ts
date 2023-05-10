@@ -2,13 +2,7 @@ import { SystemAccessPage } from './../../system-access.page';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';
 import { Subscription } from 'rxjs';
 import { SystemAccessService } from './../../services/system-access.service';
-import {
-  BuildSocialLogin,
-  Facebook,
-  Google,
-  SocialLogin,
-  User,
-} from 'src/app/interface';
+import { BuildSocialLogin, SocialLogin, User } from 'src/app/interface';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Platform } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
@@ -16,6 +10,8 @@ import { FacebookLogin } from '@capacitor-community/facebook-login';
 import { SocialLoginService } from '../../services/social-login/social-login.service';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { MessageService } from 'src/app/utilities/message/message.service';
+import { environment } from 'src/environments/environment';
+import { AlertService } from 'src/app/utilities/alert/alert.service';
 
 @Component({
   selector: 'app-social-login',
@@ -35,16 +31,19 @@ export class SocialLoginComponent implements OnInit {
     private socialLoginService: SocialLoginService,
     private systemAccessPage: SystemAccessPage,
     private messageService: MessageService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private alertService: AlertService
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    if (this.plt.is('desktop')) {
-      await this.fbLogin.initialize({ appId: '967268348006627' });
-    }
-    if (!this.plt.is('capacitor')) {
-      GoogleAuth.initialize();
-    }
+  ngOnInit(): void {
+    this.plt.ready().then(async () => {
+      await this.fbLogin.initialize({ appId: environment.appIdFacebook });
+      GoogleAuth.initialize({
+        clientId: environment.appIdGoogle,
+        scopes: ['profile', 'email'],
+        grantOfflineAccess: true,
+      });
+    });
   }
 
   public async facebook(): Promise<void> {
@@ -83,7 +82,7 @@ export class SocialLoginComponent implements OnInit {
       this.getToken(result);
       this.loadUserData();
     } else {
-      console.log('Login failed');
+      this.alertService.alert('Atenção', 'Falha ao efetuar login');
     }
   }
 

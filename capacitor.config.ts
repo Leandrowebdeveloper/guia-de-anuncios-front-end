@@ -7,9 +7,7 @@ const config: CapacitorConfig = {
   webDir: 'www',
   bundledWebRuntime: false,
   server: {
-    // url: 'https://localhost:8100',
-    // url: 'https://6def-2804-22b8-4015-500-5558-de4a-8ca0-342.sa.ngrok.io/',
-    url: 'http://192.168.1.15:8100/',
+    url: 'https://montesbelos.app/',
     cleartext: true,
   },
   plugins: {
@@ -31,7 +29,7 @@ const config: CapacitorConfig = {
     GoogleAuth: {
       scopes: ['profile', 'email'],
       serverClientId:
-        '19701562055-8t6haqdnnkb9ga38ssp4rq81qv2lv1d6.apps.googleusercontent.com',
+        '853585690486-1a17tk6dllhv04tkmd1haqvesh781dh2.apps.googleusercontent.com',
       forceCodeForRefreshToken: true,
     },
   },
