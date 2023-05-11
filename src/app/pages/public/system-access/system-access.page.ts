@@ -103,6 +103,8 @@ export class SystemAccessPage implements OnInit, OnComponentDeactivate {
 
   public disableCanDeactivate(user: User): boolean | null {
     if (user.auth) {
+      console.log('disableCanDeactivate', user.auth);
+
       return (this.urlTree = user.auth);
     }
     return null;
