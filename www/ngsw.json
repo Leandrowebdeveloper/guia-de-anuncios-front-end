@@ -1,6 +1,10 @@
 {
   "configVersion": 1,
+<<<<<<< HEAD
   "timestamp": 1683987083525,
+=======
+  "timestamp": 1683988301375,
+>>>>>>> master
   "index": "/index.html",
   "assetGroups": [
     {
