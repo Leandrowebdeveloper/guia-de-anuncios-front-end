@@ -1,6 +1,7 @@
 ion-card-header {
   display: flex;
   justify-content: center;
+  padding-bottom: 0px;
 }
 
 .no-padding-horizontal {
@@ -11,8 +12,16 @@ ion-card-header {
   margin-bottom: 0px;
   margin-top: 0px;
 }
+
+img {
+  width: 32px;
+  height: auto;
+  display: block;
+  margin: 5px auto 0 auto;
+}
+
 ion-text {
-  font-size: 18px;
+  font-size: 12px;
   // @media (min-width: 992px) and (max-width: 1199.98px) {
   //   font-size: 9px;
   // }
@@ -23,9 +32,9 @@ ion-text {
   //   font-size: 9px;
   // }
   @media (max-width: 575.98px) and (min-width: 375px) {
-    font-size: 14px;
+    font-size: 11px;
   }
   @media (max-width: 374.98px) {
-    font-size: 14px;
+    font-size: 11px;
   }
 }

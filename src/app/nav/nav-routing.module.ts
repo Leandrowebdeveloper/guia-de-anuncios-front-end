@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PrivateAutorizationGuard } from '../services/auth/guard/private-autorization/private-autorization.guard';
 import { PublicAutorizationGuard } from '../services/auth/guard/public-autorization/public-autorization.guard';
+import { RedefinePasswordResolver } from '../pages/public/redefine-password/guard/resolve.guard';
 
 const routes: Routes = [
   {
@@ -82,8 +83,6 @@ const routes: Routes = [
   },
   {
     path: 'redefinir-senha/:token',
-    canActivate: [PublicAutorizationGuard],
-    canLoad: [PublicAutorizationGuard],
     loadChildren: () =>
       import('../pages/public/redefine-password/redefine-password.module').then(
         (m) => m.RedefinePasswordPageModule

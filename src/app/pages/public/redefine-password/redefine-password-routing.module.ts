@@ -9,12 +9,12 @@ const routes: Routes = [
   {
     path: '',
     component: RedefinePasswordPage,
-    canActivate:[PublicAutorizationGuard],
-    canLoad: [PublicAutorizationGuard],
+    // canActivate:[PublicAutorizationGuard],
+    // canLoad: [PublicAutorizationGuard],
     resolve: {
-      redefinePassword: RedefinePasswordResolver
-    }
-  }
+      redefinePassword: RedefinePasswordResolver,
+    },
+  },
 ];
 
 @NgModule({
