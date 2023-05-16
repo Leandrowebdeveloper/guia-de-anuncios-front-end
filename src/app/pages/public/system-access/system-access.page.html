@@ -1,9 +1,9 @@
 <app-header-component></app-header-component>
 
 <ion-content fullscreen="true">
-  <ion-grid fixed>
+  <ion-grid *ngIf="dark$ | async; let dark" fixed>
     <ion-row>
-      <ion-col size="12" *ngIf="dark$ | async; let dark">
+      <ion-col size="12">
         <h1>
           <span [ngSwitch]="route">
             <span *ngSwitchCase="'cadastrar'" class="d-flex">
@@ -52,8 +52,17 @@
           </ion-card-content>
           <ion-text class="ion-text-center ion-margin-horizontal">
             <section>
-              <a [routerLink]="['/politica-de-privacidade']">Privacidade</a> e
-              <a [routerLink]="['/termos-de-uso']">Termos de Serviço</a>
+              <a
+                [routerLink]="['/politica-de-privacidade']"
+                [ngClass]="{'dark': dark.isDark}"
+                >Privacidade</a
+              >
+              e
+              <a
+                [routerLink]="['/termos-de-uso']"
+                [ngClass]="{'dark': dark.isDark}"
+                >Termos de uso</a
+              >
             </section>
           </ion-text>
         </ion-card>

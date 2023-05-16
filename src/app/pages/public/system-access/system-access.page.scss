@@ -65,4 +65,11 @@ p {
 .d-flex {
   display: flex;
   align-items: center;
+  font-size: 20px;
+}
+
+section {
+  a.dark {
+    color: var(--ion-color-light);
+  }
 }

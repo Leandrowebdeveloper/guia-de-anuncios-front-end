@@ -49,33 +49,35 @@
   src: url("./theme/fonts/faustina/static/Faustina-Regular.ttf");
 }
 
-ion-card-title {
-  font-family: Poppins-Regular !important;
-}
-
-ion-card-subtitle {
-  font-family: Faustina-Medium !important;
-  letter-spacing: 0.8px;
-}
-
-ion-breadcrumb {
-  font-family: Poppins-Regular;
-}
-
-small {
+p,
+address,
+small,
+ion-button,
+ion-breadcrumb,
+span,
+ion-input > ion-label {
   font-family: Poppins-Light !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ion-card-title,
+ion-card-subtitle {
+  font-family: Poppins-Regular !important;
 }
 
 ion-item-divider {
   ion-label {
     letter-spacing: 0.8px;
-    font-family: Faustina-Medium !important;
     font-size: large !important;
   }
 }
 
 ion-label {
-  font-family: Poppins-Regular !important;
   --color: var(--ion-color-medium-shade) !important;
 }
 
