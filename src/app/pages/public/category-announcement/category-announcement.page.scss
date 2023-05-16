@@ -1,15 +1,15 @@
 ion-card-header {
-  font-size: 16px;
   padding-top: 5px !important;
   padding-bottom: 5px !important;
   margin-top: 0px !important;
   margin-bottom: 0px !important;
   ion-card-title {
+    font-size: 14px;
     margin-top: 0px !important;
   }
 
   ion-card-subtitle {
-    font-size: 13px;
+    font-size: 11px;
   }
 
   @media only screen and (max-width: 767.98px) {
@@ -167,7 +167,11 @@ ion-card-header.ios {
     }
   }
 }
-
-address {
-  font-size: 12px;
+ion-card-content {
+  .address {
+    padding-bottom: 0px;
+  }
+  address {
+    font-size: 12px;
+  }
 }

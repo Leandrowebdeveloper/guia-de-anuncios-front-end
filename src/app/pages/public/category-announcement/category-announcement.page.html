@@ -5,7 +5,7 @@
     <ion-row *ngIf="categoryAnnouncement$ | async;else Error">
       <!-- Titulo da categoria  -->
       <ion-col size="12">
-        <ion-text class="d-flex">
+        <ion-text class="d-flex guide-title">
           <ion-icon
             *ngIf="dark$ | async; let dark"
             class="ion-margin-end"
@@ -125,7 +125,7 @@
                           <!-- PRICE -->
                         </ion-card-title>
 
-                        <ion-card-subtitle>
+                        <ion-card-subtitle class="ion-margin-top address">
                           <address
                             [title]="item | attrTitle:'citie'"
                             [attr.data-message]="item | attrTitle:'citie'"

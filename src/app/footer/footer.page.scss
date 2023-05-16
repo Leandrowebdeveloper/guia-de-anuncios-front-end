@@ -1,14 +1,15 @@
-ion-avatar {
-  width: 26px;
-  height: 26px;
-  margin: 0 auto;
+ion-icon {
+  width: 21px;
+  height: 21px;
 }
+
+ion-avatar {
+  width: 24px;
+  height: 24px;
+  margin: 6px auto auto auto;
+}
+
 ion-label {
   margin-bottom: 0;
-}
-@media only screen and (max-width: 600px) {
-  ion-label {
-    font-size: x-small;
-    margin-bottom: 0;
-  }
+  font-size: x-small;
 }
