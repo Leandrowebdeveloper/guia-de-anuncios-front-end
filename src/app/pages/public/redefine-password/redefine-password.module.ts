@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-
 import { RedefinePasswordPage } from './redefine-password.page';
 
 import { FormComponentModule } from 'src/app/components/form/form.module';
@@ -22,9 +21,9 @@ import { FooterModule } from 'src/app/footer/footer.module';
     RedefinePasswordPageRoutingModule,
     FormComponentModule,
     HeaderModule,
-    FooterModule
+    FooterModule,
   ],
   declarations: [RedefinePasswordPage],
-  providers: [RedefinePasswordResolver, RedefinePasswordService]
+  providers: [RedefinePasswordResolver, RedefinePasswordService],
 })
 export class RedefinePasswordPageModule {}

@@ -12,18 +12,14 @@ export class RedefinePasswordResolver {
     private redefineService: RedefinePasswordService
   ) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot & { params: { redefinePassword?: string } }
-  ): Observable<User> | UrlTree {
-    if (route.params?.redefinePassword) {
-      return this.redefineService
-        .requirement(route.params?.redefinePassword)
-        .pipe(
-          catchError((error): Observable<never> => {
-            this.router.parseUrl('/404');
-            return EMPTY;
-          })
-        );
+  resolve(route: ActivatedRouteSnapshot): Observable<User> | UrlTree {
+    if (route.params['token']) {
+      return this.redefineService.requirement(route.params['token']).pipe(
+        catchError((error): Observable<never> => {
+          this.router.parseUrl('/404');
+          return EMPTY;
+        })
+      );
     }
     return this.router.parseUrl('/');
   }
