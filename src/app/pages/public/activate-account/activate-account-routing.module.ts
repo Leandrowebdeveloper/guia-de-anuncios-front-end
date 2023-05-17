@@ -12,13 +12,14 @@ const routes: Routes = [
     canActivate: [PublicAutorizationGuard],
     canLoad: [PublicAutorizationGuard],
     resolve: {
-      activateAccount: ActivateAccountResolver
-    }
-  }
+      activateAccount: ActivateAccountResolver,
+    },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [ActivateAccountResolver],
 })
 export class ActivateAccountPageRoutingModule {}
