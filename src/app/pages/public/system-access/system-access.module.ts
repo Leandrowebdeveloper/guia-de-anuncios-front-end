@@ -17,6 +17,7 @@ import { SocialLoginComponent } from './components/social-login/social-login.com
 import { SocialLoginService } from './services/social-login/social-login.service';
 import { HeaderModule } from 'src/app/header/header.module';
 import { FooterModule } from 'src/app/footer/footer.module';
+import { ScrollHideModule } from 'src/app/utilities/hide-header-footer/scroll-hide.module';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { FooterModule } from 'src/app/footer/footer.module';
     RequisitionLimitComponentModule,
     HeaderModule,
     FooterModule,
+    ScrollHideModule,
   ],
   declarations: [
     SystemAccessPage,

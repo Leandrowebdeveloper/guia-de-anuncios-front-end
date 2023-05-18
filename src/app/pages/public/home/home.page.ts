@@ -1,10 +1,9 @@
 import { Platform } from '@ionic/angular';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EMPTY, Observable, Subject, Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { EMPTY, Observable, Subject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Category } from 'src/app/interface';
 import { HomeService } from './services/home.service';
-import { ModuleDarkService } from 'src/app/services/module-dark/module-dark.service';
 
 @Component({
   selector: 'app-home',

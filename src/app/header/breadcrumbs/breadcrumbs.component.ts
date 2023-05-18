@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { Breadcrumb } from 'src/app/interface';
@@ -12,6 +12,7 @@ import { BreadcrumbsService } from './service/breadcrumbs.service';
 export class BreadcrumpsComponent implements OnInit, OnDestroy {
   public breadcrumbs$: Observable<Breadcrumb[]>;
   public hasIos!: boolean;
+  @ViewChild('breadcrumb', { static: true }) breadcrumb!: any;
 
   private $breadcrumb!: Subscription;
   constructor(

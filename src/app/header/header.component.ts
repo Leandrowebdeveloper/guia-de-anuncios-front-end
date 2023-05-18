@@ -3,8 +3,10 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import {
@@ -13,7 +15,7 @@ import {
   Platform,
   IonPopover,
 } from '@ionic/angular';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth/auth.service';
 import { ModuleDarkService } from '../services/module-dark/module-dark.service';
 
@@ -22,10 +24,12 @@ import { ModuleDarkService } from '../services/module-dark/module-dark.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit, AfterViewInit {
+export class HeaderComponent implements OnInit {
   @Input() hidden?: boolean;
   @ViewChild('icons', { static: false }) figure!: ElementRef;
-  @ViewChild('popover') popover!: IonPopover;
+  @ViewChild('popover', { static: false }) popover!: IonPopover;
+  @ViewChild('header', { static: true }) header!: any;
+  @ViewChild('breadcrumb', { static: true }) breadcrumb!: any;
 
   isOpen = false;
 

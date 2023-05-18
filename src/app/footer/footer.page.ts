@@ -14,6 +14,7 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class FooterPage implements OnInit, OnDestroy {
   @ViewChild(IonSegment, { static: false }) segment!: IonSegment;
+  @ViewChild('footer', { static: false }) footer!: any;
   public user$!: Observable<User | void>;
   public isFooter!: boolean;
   private $router!: Subscription;

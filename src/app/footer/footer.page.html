@@ -1,4 +1,4 @@
-<ion-footer [ngClass]="{'ion-hide': isFooter}">
+<ion-footer [ngClass]="{'ion-hide': isFooter}" #footer>
   <ion-toolbar color="primary" *ngIf="user$ | async;let user;">
     <ion-segment mode="md">
       <ion-segment-button

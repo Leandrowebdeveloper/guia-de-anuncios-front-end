@@ -1,4 +1,8 @@
-<ion-header [collapse]="hasIos ? 'condense' : 'fade'" [translucent]="!hasIos">
+<ion-header
+  [collapse]="hasIos ? 'condense' : 'fade'"
+  [translucent]="!hasIos"
+  #header
+>
   <ion-toolbar color="primary" *ngIf="user$ | async; let user">
     <!-- BOTÃO MODULO ESCURO -->
     <ion-buttons slot="end">
@@ -148,4 +152,4 @@
   </ion-toolbar>
 </ion-header>
 
-<app-breadcrumbs></app-breadcrumbs>
+<app-breadcrumbs #breadcrumb></app-breadcrumbs>
