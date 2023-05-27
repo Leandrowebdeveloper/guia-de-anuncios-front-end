@@ -157,35 +157,55 @@
           </ion-card-content>
 
           <div [ngSwitch]="typePlayment">
-            <ion-card-content *ngSwitchCase="'card'">
-              <app-cred-card
-                [code]="code"
-                [purchaseSummary]="purchaseSummary"
-                (data)="getFormCard($event)"
-              ></app-cred-card>
-            </ion-card-content>
-
-            <ion-card-content *ngSwitchCase="'ticket'">
+            <ng-container *ngSwitchCase="'card'">
               <ion-card-header class="flex">
                 <ion-icon
                   size="large"
-                  src="./../../../assets/ion-icon/bar-code.svg"
+                  name="card"
                   class="ion-margin-end"
                 ></ion-icon>
-                <ion-card-title>Boleto</ion-card-title>
+                <ion-card-title>Cartão</ion-card-title>
               </ion-card-header>
-            </ion-card-content>
+              <ion-card-content>
+                <app-cred-card
+                  [paymentRoute]="'card'"
+                  [payments]="payments"
+                  [purchaseSummary]="purchaseSummary"
+                  (data)="getFormCard($event)"
+                ></app-cred-card>
+              </ion-card-content>
+            </ng-container>
+            <ng-container *ngSwitchCase="'ticket'">
+              <ion-card-content>
+                <ion-card-header class="flex">
+                  <ion-icon
+                    size="large"
+                    src="./../../../assets/ion-icon/bar-code.svg"
+                    class="ion-margin-end"
+                  ></ion-icon>
+                  <ion-card-title>Boleto</ion-card-title>
+                </ion-card-header>
+                <app-cred-card
+                  [paymentRoute]="'ticket'"
+                  [payments]="payments"
+                  [purchaseSummary]="purchaseSummary"
+                  (data)="getFormCard($event)"
+                ></app-cred-card>
+              </ion-card-content>
+            </ng-container>
 
-            <ion-card-content *ngSwitchCase="'pix'">
-              <ion-card-header class="flex">
-                <ion-icon
-                  size="large"
-                  src="./../../../assets/ion-icon/pix.svg"
-                  class="ion-margin-end"
-                ></ion-icon>
-                <ion-card-title>Pix</ion-card-title>
-              </ion-card-header>
-            </ion-card-content>
+            <ng-container *ngSwitchCase="'pix'">
+              <ion-card-content>
+                <ion-card-header class="flex">
+                  <ion-icon
+                    size="large"
+                    src="./../../../assets/ion-icon/pix.svg"
+                    class="ion-margin-end"
+                  ></ion-icon>
+                  <ion-card-title>Pix</ion-card-title>
+                </ion-card-header>
+              </ion-card-content>
+            </ng-container>
           </div>
         </ion-card>
       </ion-col>

@@ -12,8 +12,12 @@ import { PagseguroService } from './services/pagseguro/pagseguro.service';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FormCard } from './PagSeguro';
+import { FormCard, Root } from './PagSeguro';
 import { PagSeguro } from './interface';
+import { AlertService } from 'src/app/utilities/alert/alert.service';
+import { MessageService } from 'src/app/utilities/message/message.service';
+
+declare let PagSeguroDirectPayment: any;
 
 @Component({
   selector: 'app-present-plan',
@@ -24,7 +28,6 @@ export class PresentPlanComponent implements OnInit, OnDestroy {
   @ViewChild(IonContent, { static: true }) content!: IonContent;
   @Input() announcement!: Announcement;
   @ViewChild(IonSegment, { static: true }) segment!: IonSegment;
-  public code!: string;
 
   public planDataValue!: string;
   public typePlan!: { label: string; value: string }[];
@@ -35,6 +38,7 @@ export class PresentPlanComponent implements OnInit, OnDestroy {
   };
   public formPlans!: FormGroup;
 
+  public payments!: Root;
   public toggle: boolean = true;
   public typePlayment!: 'card' | 'pix' | 'ticket';
   private segmentIonChange!: Subscription;
@@ -45,7 +49,9 @@ export class PresentPlanComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private modalController: ModalController,
     private pagseguroService: PagseguroService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private alertService: AlertService,
+    private messgeService: MessageService
   ) {}
 
   ngOnDestroy(): void {
@@ -60,24 +66,23 @@ export class PresentPlanComponent implements OnInit, OnDestroy {
   }
 
   public getFormCard(formPayment: FormCard): void | PagSeguro {
-    if (this.authService.getUser) {
+    if (this.authService.getCsrf) {
       const dataPagSeguro = this.pagseguroService.buildDataCard(
-        this.authService.getUser,
-        this.announcement,
+        this.authService.getCsrf,
         this.purchaseSummary,
-        formPayment
+        formPayment,
+        'creditCard'
       );
-      console.log(dataPagSeguro);
-
-      this.pagseguroService
-        .payments(dataPagSeguro)
-        .subscribe((result) => console.log(result));
+      this.pagseguroService.payments(dataPagSeguro).subscribe({
+        next: (result) => console.log(result),
+        error: (error) => console.log(error),
+      });
     }
   }
 
   private initFormPlans(): void {
     this.formPlans = this.fb.group({
-      amount: [''],
+      amount: [0],
       payment_plan: ['', [Validators.required]],
     });
     this.isCheckout();
@@ -114,7 +119,7 @@ export class PresentPlanComponent implements OnInit, OnDestroy {
   public onTypePlayment(value: 'card' | 'pix' | 'ticket'): void {
     this.typePlayment = value;
     this.pagSeguro();
-    setTimeout(() => this.content.scrollToBottom(750), 1200);
+    // setTimeout(() => this.content.scrollToBottom(750), 1200);
   }
 
   private toggleSegment(): Subscription {
@@ -127,17 +132,39 @@ export class PresentPlanComponent implements OnInit, OnDestroy {
   }
 
   public pagSeguro(): void {
+    if (this.payments) {
+      return;
+    }
     const _csrf = this.authService.getCsrf;
     this.$pagSeguro = this.pagseguroService.getPagseguro({ _csrf }).subscribe({
       next: async (data: any) => {
-        console.log(data);
-
-        if (data.code[0]) this.code = data.code[0];
+        if (data.code[0]) {
+          PagSeguroDirectPayment.setSessionId(data.code[0]);
+          this.getPaymentMethods();
+        }
       },
-      error: (error: HttpErrorResponse) => console.log(error),
+      error: (error: HttpErrorResponse) =>
+        this.messgeService.error(error, undefined),
       complete: () => {
         setTimeout(() => this.$pagSeguro.unsubscribe(), 2000);
       },
+    });
+  }
+
+  private getPaymentMethods(): void {
+    PagSeguroDirectPayment.getPaymentMethods({
+      amount: Number(this.purchaseSummary.total),
+      success: (transactionCode: Root) => {
+        if (transactionCode.error) {
+          this.alertService.alert(
+            'Atenção',
+            'Um erro inesperado ocorreu. Aguarde e tente novamente.'
+          );
+        } else {
+          this.payments = transactionCode;
+        }
+      },
+      abort: () => console.log('abortado'),
     });
   }
 

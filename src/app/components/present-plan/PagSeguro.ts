@@ -145,6 +145,7 @@ export interface FormCard {
   card_installment: string;
   installmentValue: number;
   installmentTotal: number;
+  creditCardHolderCPF: number;
   senderHash: string;
   creditCardToken: string;
   installmentQuantity: number;

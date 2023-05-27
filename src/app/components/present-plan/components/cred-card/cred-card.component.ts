@@ -14,6 +14,7 @@ import {
   RootBrand,
   RootInstallments,
 } from './../../PagSeguro';
+import { AlertService } from 'src/app/utilities/alert/alert.service';
 
 declare let PagSeguroDirectPayment: any;
 
@@ -27,8 +28,8 @@ declare let PagSeguroDirectPayment: any;
 })
 export class CredCardComponent implements OnInit {
   @Output() data = new EventEmitter<FormCard>();
-  @Input() code!: string;
   @Input() valueBasic!: number;
+  @Input() paymentRoute!: 'card' | 'ticket' | 'pix';
   @Input() purchaseSummary!: {
     amount?: number;
     payment_plan: string;
@@ -37,7 +38,7 @@ export class CredCardComponent implements OnInit {
   public formPayments!: FormGroup;
   public brandError!: { error: boolean };
   public brand!: Brand;
-  public payments!: Root;
+  @Input() payments!: Root;
   public installment!: AttrOperator[];
 
   constructor(private fb: FormBuilder) {}
@@ -54,7 +55,7 @@ export class CredCardComponent implements OnInit {
   }
 
   public onSubmit() {
-    this.createCardToken();
+    this.sendFormPayments();
   }
 
   private initFormPayments(): void {
@@ -63,9 +64,11 @@ export class CredCardComponent implements OnInit {
       card_month: ['', [Validators.required]],
       card_year: ['', [Validators.required]],
       card_cvv: ['', [Validators.required]],
+      senderName: ['', [Validators.required]],
       creditCardHolderName: ['', [Validators.required]],
       card_installment: ['', [Validators.required]],
-      senderHash: ['', [Validators.required]],
+      creditCardHolderCPF: ['', [Validators.required]],
+      senderHash: [''],
       installmentValue: [''],
       installmentTotal: [''],
       installmentQuantity: [''],
@@ -77,12 +80,8 @@ export class CredCardComponent implements OnInit {
     if (this.formPayments?.value)
       this.formPayments.valueChanges.subscribe({
         next: (data: FormCard) => {
-          if (data && data.card_number.length >= 6 && !this.installment) {
-            PagSeguroDirectPayment.setSessionId(this.code);
-            this.getPaymentMethods();
+          if (data) {
             this.getBrand(data);
-            this.onSenderHashReady();
-            this.getInstallments();
           }
           if (data.card_installment) {
             this.installmentValue(data);
@@ -98,32 +97,25 @@ export class CredCardComponent implements OnInit {
     this.formPayments.value['installmentValue'] = dt.installmentAmount;
     this.formPayments.value['installmentTotal'] = dt.totalAmount;
     this.formPayments.value['installmentQuantity'] = dt.quantity;
-  }
-
-  private getPaymentMethods(): void {
-    PagSeguroDirectPayment.getPaymentMethods({
-      amount: this.purchaseSummary.total,
-      success: (transactionCode: Root) => (this.payments = transactionCode),
-      abort: () => console.log('abortado'),
-    });
+    this.createCardToken();
   }
 
   private getBrand(data: { card_number: string }): void {
-    PagSeguroDirectPayment.getBrand({
-      cardBin: data.card_number,
-      success: (success: RootBrand) => (this.brand = success.brand),
-      error: (error: any) => (this.brandError = error),
-      // complete: (complete: any) => {
-      //   console.log(complete);
-      // },
-    });
+    if (data.card_number.length >= 6) {
+      if (!this.brand)
+        PagSeguroDirectPayment.getBrand({
+          cardBin: data.card_number,
+          success: (success: RootBrand) => (this.brand = success.brand),
+          error: (error: any) => (this.brandError = error),
+          complete: () => this.getInstallments(),
+        });
+    }
   }
 
   private onSenderHashReady(): void {
     PagSeguroDirectPayment.onSenderHashReady(
       (response: any): void | boolean => {
         if (response.status == 'error') {
-          console.log(response.message);
           return false;
         }
         const { senderHash } = response; //Hash estará disponível nesta variável.
@@ -133,7 +125,7 @@ export class CredCardComponent implements OnInit {
   }
 
   private getInstallments(): void {
-    if (this.purchaseSummary?.total && this.brand) {
+    if (this.purchaseSummary?.total && this.brand.name) {
       PagSeguroDirectPayment.getInstallments({
         amount: this.purchaseSummary.total,
         maxInstallmentNoInterest: 2,
@@ -154,22 +146,33 @@ export class CredCardComponent implements OnInit {
   }
 
   private createCardToken(): void {
-    PagSeguroDirectPayment.createCardToken({
-      cardNumber: this.formPayments.value.card_number,
-      brand: this.brand.name,
-      cvv: this.formPayments.value.card_cvv,
-      expirationMonth: this.formPayments.value.card_month,
-      expirationYear: this.formPayments.value.card_year,
-      success: (success: CreditCardToken) => {
-        if (success) {
-          this.formPayments.patchValue({ creditCardToken: success.card.token });
-          this.sendFormPayments();
-        }
-      },
-      error: (error: any) => {
-        console.log(error);
-      },
-    });
+    if (
+      this.formPayments.value.card_number &&
+      this.brand.name &&
+      this.formPayments.value.card_cvv &&
+      this.formPayments.value.card_month &&
+      this.formPayments.value.card_year &&
+      !this.formPayments.value['creditCardToken']
+    ) {
+      PagSeguroDirectPayment.createCardToken({
+        cardNumber: this.formPayments.value.card_number,
+        brand: this.brand.name,
+        cvv: this.formPayments.value.card_cvv,
+        expirationMonth: this.formPayments.value.card_month,
+        expirationYear: this.formPayments.value.card_year,
+        success: (success: CreditCardToken) => {
+          if (success) {
+            this.formPayments.patchValue({
+              creditCardToken: success.card.token,
+            });
+            this.onSenderHashReady();
+          }
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+      });
+    }
   }
 
   private sendFormPayments() {

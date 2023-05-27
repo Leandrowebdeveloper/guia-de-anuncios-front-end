@@ -71,99 +71,42 @@ export class PagseguroService extends HttpService<PagSeguro> {
   }
 
   public buildDataCard(
-    user: User,
-    announcement: Announcement,
+    _csrf: string,
     purchaseSummary: {
       amount?: number;
       payment_plan: string;
       total: string;
     },
     dataCard: FormCard,
-    boleto?: { cpf: string }
+    paymentMethod: 'creditCard' | 'boleto'
   ): PagSeguro | void {
-    if (
-      user &&
-      announcement.citie &&
-      announcement.contact &&
-      announcement.address
-    ) {
-      const { mobilePhone } = announcement.contact;
-      // const type = plan.filter((item) => item.value === planDataValue)[0];
-      const { name, email, slug, _csrf } = user;
-      // const description = this.amount > 1 ? `com ${this.amount} contas.` : '';
-      const {
-        zip_code,
-        numberr,
-        district,
-        block,
-        allotment,
-        street,
-        complement,
-      } = announcement.address;
-      const { city, uf } = announcement.citie;
-
+    if (_csrf) {
       const {
         creditCardToken,
         creditCardHolderName,
         installmentQuantity,
         installmentValue,
-        installmentTotal,
+        creditCardHolderCPF,
       } = dataCard;
 
-      if (mobilePhone && dataCard) {
+      if (dataCard) {
         return {
-          paymentMode: 'default',
-          paymentMethod: 'creditCard',
-          receiverEmail: 'guiajussarago@gmail.com',
-          currency: 'BRL',
-          extraAmount: '1.00',
+          paymentMethod,
 
           itemId1: purchaseSummary.payment_plan,
           itemAmount1: purchaseSummary.total,
           itemDescription1: purchaseSummary.payment_plan,
           itemQuantity1: this.itemQuantity(purchaseSummary),
 
-          notificationURL: 'https://montesbelos.app/notificacoes',
-          reference: slug,
-          senderCPF: 22111944785,
-
           senderHash: dataCard.senderHash,
-          shippingAddressRequired: false,
-
-          senderName: name,
-          senderEmail: email,
-          senderAreaCode: this.getPreFix(mobilePhone),
-          senderPhone: this.getSuFix(mobilePhone),
-
-          // shippingType: '3',
-          // shippingCost: '0.00',
-          // shippingAddressPostalCode: Number(zip_code),
-          // shippingAddressNumber: String(numberr),
-          // shippingAddressCity: String(city),
-          // shippingAddressState: String(uf),
-          // shippingAddressDistrict: String(district),
-          // shippingAddressCountry: 'BRA',
-          // shippingAddressStreet: `${street}, Qd ${block}, Lt ${allotment}`,
-          // shippingAddressComplement: String(complement),
-          _csrf,
 
           creditCardToken,
           installmentQuantity,
-          installmentValue,
-          noInterestInstallmentQuantity: 2,
+          installmentValue: installmentValue.toFixed(2),
           creditCardHolderName,
-          creditCardHolderCPF: 22111944785,
-          creditCardHolderBirthDate: '10/08/1980',
-          creditCardHolderAreaCode: this.getPreFix(mobilePhone),
-          creditCardHolderPhone: this.getSuFix(mobilePhone),
-          billingAddressStreet: `${street}, Qd ${block}, Lt ${allotment}`,
-          billingAddressNumber: String(numberr),
-          billingAddressComplement: String(complement),
-          billingAddressDistrict: String(district),
-          billingAddressPostalCode: Number(zip_code),
-          billingAddressCity: String(city),
-          billingAddressState: String(uf),
-          billingAddressCountry: 'BRL',
+          creditCardHolderCPF,
+
+          _csrf,
         };
       }
     }
@@ -175,14 +118,5 @@ export class PagseguroService extends HttpService<PagSeguro> {
     total: string;
   }): number {
     return purchaseSummary.amount ? purchaseSummary.amount : 1;
-  }
-
-  private getPreFix(mobilePhone: number): number {
-    return Number(mobilePhone.toString()[0] + mobilePhone.toString()[1]);
-  }
-
-  private getSuFix(mobilePhone: number): number {
-    const suFix = mobilePhone.toString().slice(2);
-    return Number(suFix);
   }
 }

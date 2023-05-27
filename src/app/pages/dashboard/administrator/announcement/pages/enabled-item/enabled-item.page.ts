@@ -1,4 +1,3 @@
-import { ManagementAnnouncementService } from 'src/app/pages/dashboard/auth/announcement/management/service/management.service';
 import { catchError, tap, map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingService } from 'src/app/utilities/loading/loading.service';

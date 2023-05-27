@@ -1,45 +1,45 @@
 export interface PagSeguro {
-  paymentMode: string;
+  // paymentMode: string;
   paymentMethod: 'creditCard' | 'boleto';
-  receiverEmail: string;
-  currency: 'BRL';
-  extraAmount: string;
+  // receiverEmail: string;
+  // currency: 'BRL';s
+  // extraAmount: string;
 
-  notificationURL: string;
+  // notificationURL: string;
 
-  senderCPF?: number;
+  // senderCPF?: number;
 
   senderHash: string;
-  shippingAddressRequired: boolean;
+  // shippingAddressRequired: boolean;
   // shippingCost: string;
   creditCardToken: string;
   installmentQuantity: number;
-  installmentValue: number;
-  noInterestInstallmentQuantity: number;
+  installmentValue: string;
+  // noInterestInstallmentQuantity: number;
   creditCardHolderName: string;
-  creditCardHolderCPF: number | null;
-  creditCardHolderBirthDate: string;
-  creditCardHolderAreaCode: number;
-  creditCardHolderPhone: number;
-  billingAddressStreet: string;
-  billingAddressNumber: string;
-  billingAddressComplement: string;
-  billingAddressDistrict: string;
-  billingAddressPostalCode: number;
-  billingAddressCity: string;
-  billingAddressState: string;
-  billingAddressCountry: 'BRL';
+  creditCardHolderCPF: number;
+  // creditCardHolderBirthDate: string;
+  // creditCardHolderAreaCode: number;
+  // creditCardHolderPhone: number;
+  // billingAddressStreet: string;
+  // billingAddressNumber: string;
+  // billingAddressComplement: string;
+  // billingAddressDistrict: string;
+  // billingAddressPostalCode: number;
+  // billingAddressCity: string;
+  // billingAddressState: string;
+  // billingAddressCountry: 'BRL';
 
   itemId1: string;
   itemDescription1: string; // s'PRODUTO 1'
   itemAmount1: string; //Sempre com decimais
   itemQuantity1: number;
   itemWeight1?: string;
-  reference: string; // 'REF1234'
-  senderName: string; // 'NOME_DO_SEU_CLIENTE'
-  senderAreaCode: number;
-  senderPhone: number; // 'LEFONE'
-  senderEmail: string; // 'EMAIL_DO_SEU_CLIENTE'
+  // reference: string; // 'REF1234'
+  // senderName: string; // 'NOME_DO_SEU_CLIENTE'
+  // senderAreaCode: number;
+  // senderPhone: number; // 'LEFONE'
+  // senderEmail: string; // 'EMAIL_DO_SEU_CLIENTE'
   // shippingType?: string; // Formas de envio, consulte a documentacao
   // shippingAddressStreet?: string; // 'ONDE_O_TOP_MORA'
   // shippingAddressNumber?: string; //     'NUMEROZIN'
